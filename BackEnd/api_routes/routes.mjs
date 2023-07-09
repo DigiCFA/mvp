@@ -50,9 +50,36 @@ router.patch("/profile/add_contact",async(req,res)=>{
 
     let collection = await db.collection("users");
     let user_input = req.body;
-    await collection.updateOne({"_id":user_input.user_id},{$push:user_input.contact_id},async function(error,result){
+    await collection.updateOne({_id:user_input.user_id},{$push:user_input.contact_id},async function(error,result){
         if(!error){
-            await collection.updateOne({"_id":user_input.contact_id},{$push:user_input.contact_id},function(error,result){
+            await collection.updateOne({_id:user_input.contact_id},{$push:user_input.contact_id},function(error,result){
+                if(!error){
+                
+                    res.send({}).status(200);
+                }
+                else{
+                    console.error(error)
+                    res.send({}).status(400);
+                }
+            })            
+        }
+        else{
+            console.error(error)
+            res.send({}).status(400);
+        }
+    })
+
+
+})
+
+
+router.patch("/profile/remove_contact",async(req,res)=>{
+
+    let collection = await db.collection("users");
+    let user_input = req.body;
+    await collection.updateOne({_id:user_input.user_id},{$pull:user_input.contact_id},async function(error,result){
+        if(!error){
+            await collection.updateOne({_id:user_input.contact_id},{$pull:user_input.contact_id},function(error,result){
                 if(!error){
                 
                     res.send({}).status(200);
