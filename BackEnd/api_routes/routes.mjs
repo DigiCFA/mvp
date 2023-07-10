@@ -175,62 +175,85 @@ router.patch("/transaction/approve_transaction",async(req,res)=>{
     let transactionID = transaction_data._id;
     try{
         await session.withTransaction(async()=>{
-
             let transaction_collection = await db.collection("transactions");
             let users_collection = await db.collection("users");
-            await transaction_collection.findOne({
-                id:transactionID
-            },async function(error, result){
-
-                if(!error){
-                    let amount_transfered = result.amount_transfered;
-                    let transaction_sender = result.transaction_sender;
-                    let transaction_receiver = result.transaction_receiver;
-
-                    let current_user_balance;
-
-                    await users_collection.findOne(
-                        {id:
-
-                    })
-
-
-                    await users_collection.updateOne(
-                        {_id:transaction_receiver},
-                        {   
-                            $pull:{received_requests:transactionID},
-                            $push:{received_transactions:transactionID},
-                            $inc: {user_balance: amount_transfered}
-                        },
+            await collection.findOne({_id:transactionID},
+                async function(error,result){
+                    if(!error){
+                        
+                    
+                
+                        let amount_transfered = result.amount_transfered;
+                        let transaction_sender = result.transaction_sender;
+                        let transaction_receiver = result.transaction_receiver;
+                        await users_collection.findOne({_id:transaction_sender},
                         async function(error,result){
                             if(!error){
+
+                                let current_user_balance = result.user_balance;
+                                if(current_user_balance < amount_transfered){
+                                    res.send({}).status(400);
+                                    return;
+                                }
+
+                                await transaction_collection.updateOne(
+                                    {_id:transactionID},
+                                    {
+                                        $set:{transaction_approved:1}
+                                    },
+                                    async function(error,result){
+                                        if(error){
+                                            console.error(error)
+                                            res.send({}).status(400);
+                                        }
+                                })
                                 await users_collection.updateOne(
                                     {_id:transaction_sender},
-                                    {$pull:{sent_requests:transactionID},
-                                    $push:{sent_transactions:transactionID},
-                                    $inc: {user_balance: amount_transfered}
+                                    {
+                                        $pull:{sent_requests:transactionID},
+                                        $push:{sent_transactions:transactionID},
+                                        $inc: {user_balance: amount_transfered*(-1.0)}
+                                    },
+                                    async function(error,result){
+                                        if(error){
+                                            console.error(error)
+                                            res.send({}).status(400);
+                                        }
                                 })
-                                res.send({}).status(200);
+
+                                await users_collection.updateOne(
+                                    {_id:transaction_receiver},
+                                    {   
+                                        $pull:{received_requests:transactionID},
+                                        $push:{received_transactions:transactionID},
+                                        $inc: {user_balance: amount_transfered}
+                                    },
+                                    async function(error,result){
+                                        if(!error){
+                                            res.send({}).status(200);
+                                        }
+                                        else{
+                                            console.error(error)
+                                            res.send({}).status(400);
+                                        }
+                                })
+
                             }
                             else{
                                 console.error(error)
                                 res.send({}).status(400);
                             }
-                    })
+                            
 
-
-                    res.send({}).status(200);
-                }
-                else{
-                    console.error(error)
-                    res.send({}).status(400);
-                }
-
+                        })
+                    }
+                    else{
+                        console.error(error)
+                        res.send({}).status(400);
+                    }
             })
-
-
+            
         })
-
     }
     catch(error){
         console.error(error)
