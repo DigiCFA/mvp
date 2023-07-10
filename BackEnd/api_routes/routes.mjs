@@ -115,6 +115,7 @@ router.post("/transaction/create_transaction_request",async(req,res)=>{
                 transaction_sender:transaction_data.transaction_sender,
                 transaction_receiver:transaction_data.transaction_receiver,
                 transaction_date:Date.now(),
+                transaction_approved:0,
                 transaction_code:1,
                 transaction_message: transaction_data.transaction_message
             },async function(error,result){
@@ -122,23 +123,13 @@ router.post("/transaction/create_transaction_request",async(req,res)=>{
                     let transactionID = result.insertedId;
                     await users_collection.updateOne({_id:transaction_data.transaction_sender},
                         {$push:
-                            {requests:
-                                {
-                                    request_id: transactionID,
-                                    status: "sent"
-                                }
-                            }
+                            {sent_requests:transactionID}
                         },
                         async function(error,result){
                             if(!error){
                                 await collection.updateOne({_id:transaction_data.transaction_receiver},
                                     {$push:
-                                        {requests:
-                                            {
-                                                request_id: transactionID,
-                                                status: "received"
-                                            }
-                                        }
+                                        {received_requests:transactionID}
                                     },
                                     function(error,result){
                                     if(!error){
@@ -165,7 +156,8 @@ router.post("/transaction/create_transaction_request",async(req,res)=>{
         })
     }
     catch(error){
-        
+        console.error(error)
+        res.send({}).status(400);
     }
     finally{
         await session.endSession()
@@ -176,12 +168,77 @@ router.post("/transaction/create_transaction_request",async(req,res)=>{
 
 
 
-router.delete("/transaction/create_transaction",async(req,res)=>{
+router.patch("/transaction/approve_transaction",async(req,res)=>{
 
-    
+    const session = client.startSession();
+    let transaction_data = req.body;
+    let transactionID = transaction_data._id;
+    try{
+        await session.withTransaction(async()=>{
+
+            let transaction_collection = await db.collection("transactions");
+            let users_collection = await db.collection("users");
+            await transaction_collection.findOne({
+                id:transactionID
+            },async function(error, result){
+
+                if(!error){
+                    let amount_transfered = result.amount_transfered;
+                    let transaction_sender = result.transaction_sender;
+                    let transaction_receiver = result.transaction_receiver;
+
+                    let current_user_balance;
+
+                    await users_collection.findOne(
+                        {id:
+
+                    })
 
 
-    
+                    await users_collection.updateOne(
+                        {_id:transaction_receiver},
+                        {   
+                            $pull:{received_requests:transactionID},
+                            $push:{received_transactions:transactionID},
+                            $inc: {user_balance: amount_transfered}
+                        },
+                        async function(error,result){
+                            if(!error){
+                                await users_collection.updateOne(
+                                    {_id:transaction_sender},
+                                    {$pull:{sent_requests:transactionID},
+                                    $push:{sent_transactions:transactionID},
+                                    $inc: {user_balance: amount_transfered}
+                                })
+                                res.send({}).status(200);
+                            }
+                            else{
+                                console.error(error)
+                                res.send({}).status(400);
+                            }
+                    })
+
+
+                    res.send({}).status(200);
+                }
+                else{
+                    console.error(error)
+                    res.send({}).status(400);
+                }
+
+            })
+
+
+        })
+
+    }
+    catch(error){
+        console.error(error)
+        res.send({}).status(400);
+    }
+    finally{
+        await session.endSession()
+    }
 })
 
 

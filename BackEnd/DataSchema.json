@@ -17,20 +17,13 @@
         "privacy_preference":"str",
         "user_contacts":"array[str_user]",
         
-        "transactions":[{
-            "transaction_id": "str",
-            "status": "received or sent"
-        }],
-        "requests":[{
-            "request_id": "str",
-            "status": "received or sent"
-        }],
+        
 
-        // "transactions":{"data_type:":"array[str_transaction]"},
-        // "received_transactions":{"data_type:":"array[str_transaction]"},
-        // "sent_transactions":{"data_type:":"array[str_transaction]"},
-        // "received_requests": {"data_type": "array[str_transaction]"},
-        // "sent_requests": {"data_type": "array[str_transaction]"},
+        "transactions":{"data_type:":"array[str_transaction]"},
+        "received_transactions":{"data_type:":"array[str_transaction]"},
+        "sent_transactions":{"data_type:":"array[str_transaction]"},
+        "received_requests": {"data_type": "array[str_transaction]"},
+        "sent_requests": {"data_type": "array[str_transaction]"},
 
         "user_creation_date":"str"
     },
@@ -41,6 +34,7 @@
         "transaction_receiver":"str_user",
         "transaction_date":"str",
         "transaction_code":"int: 0 -> peer to peer, 1 -> request",
+        "transaction_approved":"int 0 -> not approved, 1-> approved",
         "message": "str"
     }
 
