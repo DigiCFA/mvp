@@ -122,24 +122,22 @@ router.post("/transaction/create_transaction_request",async(req,res)=>{
                 if(!error){
                     let transactionID = result.insertedId;
                     await users_collection.updateOne({_id:transaction_data.transaction_sender},
-                        {$push:
-                            {sent_requests:transactionID}
+                        {
+                            $push:{sent_requests:transactionID}
                         },
-                        async function(error,result){
+                        function(error,result){
+                            if(error){
+                                console.error(error)
+                                res.send({}).status(400);
+                            }
+                    })
+                    await collection.updateOne({_id:transaction_data.transaction_receiver},
+                        {
+                            $push:{received_requests:transactionID}
+                        },
+                        function(error,result){
                             if(!error){
-                                await collection.updateOne({_id:transaction_data.transaction_receiver},
-                                    {$push:
-                                        {received_requests:transactionID}
-                                    },
-                                    function(error,result){
-                                    if(!error){
-                                        res.send({}).status(200);
-                                    }
-                                    else{
-                                        console.error(error)
-                                        res.send({}).status(400);
-                                    }
-                                })            
+                                res.send({}).status(200);
                             }
                             else{
                                 console.error(error)
@@ -152,7 +150,6 @@ router.post("/transaction/create_transaction_request",async(req,res)=>{
                     res.send({}).status(400);
                 }
             })
-
         })
     }
     catch(error){
