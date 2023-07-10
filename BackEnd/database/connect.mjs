@@ -1,6 +1,5 @@
 import { MongoClient } from "mongodb";
 const connect_to_db = process.env.ATLAS_URI || "";
-console.log(`Server is running on port: ${connect_to_db}`)
 const client = new MongoClient(connect_to_db);
 
 
@@ -16,4 +15,9 @@ catch(error){
 }
 
 let db = connection.db();
-export default db;
+export function db(){
+    return db;
+}
+export function client(){
+    return client;
+};

@@ -17,14 +17,14 @@
         "privacy_preference":"str",
         "user_contacts":"array[str_user]",
         
-        "transactions":{
+        "transactions":[{
             "transaction_id": "str",
-            "type": "received or sent"
-        },
-        "requests":{
+            "status": "received or sent"
+        }],
+        "requests":[{
             "request_id": "str",
-            "type": "received or sent"
-        },
+            "status": "received or sent"
+        }],
 
         // "transactions":{"data_type:":"array[str_transaction]"},
         // "received_transactions":{"data_type:":"array[str_transaction]"},
