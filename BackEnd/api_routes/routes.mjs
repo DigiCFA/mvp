@@ -1,9 +1,11 @@
 import express from "express";
-import {db,client} from "../database/connect.mjs";
+import {db_ref,client_ref} from "../database/connect.mjs";
 import { ObjectId } from "mongodb";
 
 const router = express.Router();
 
+let db = db_ref()
+let client = client_ref()
 
 router.get("/",async(req,res) => {
     let collection = await db.collection("records");

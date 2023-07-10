@@ -15,9 +15,9 @@ catch(error){
 }
 
 let db = connection.db();
-export function db(){
+export function db_ref(){
     return db;
 }
-export function client(){
+export function client_ref(){
     return client;
 };
