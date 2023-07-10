@@ -15,17 +15,11 @@ import TransactionsColumn from "../components/TransactionsColumn";
 const HomeScreen = () => {
   const navigation = useNavigation();
 
-  // useLayoutEffect(() => {
-  //     navigation.setOptions({
-  //         headerShown: false,
-  //     });
-  // }, []);
-
   // Fetching Past Transactions
+  
   // useEffect(() => {
 
   // }, [])
-  // If [] empty, only runs once on mount
 
   return (
     <SafeAreaView className="bg-[#e9e7e2]">
@@ -53,12 +47,15 @@ const HomeScreen = () => {
 
         {/* Some Notices */}
         <View className="p-4 space-y-3">
+
+          {/* Getting rid of this button soon */}
           <TouchableOpacity
             onPress={() => navigation.navigate("Search")}
             className="p-4 bg-white rounded-lg items-center shadow"
           >
             <Text className="text-xl font-bold">Go to Search</Text>
           </TouchableOpacity>
+
 
           <TouchableOpacity className="py-3 px-4 bg-white rounded-lg flex-row space-x-4 shadow">
             <Ionicons name="flash" size={40} color="#7152C7" />

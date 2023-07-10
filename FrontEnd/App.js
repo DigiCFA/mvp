@@ -1,6 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  getFocusedRouteNameFromRoute,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import Icon from 'react-native-ionicons';
@@ -15,6 +18,7 @@ import HomeStackScreen from "./screens/HomeStackScreen";
 import CardsStackScreen from "./screens/CardsStackScreen";
 import PayRequestStackScreen from "./screens/PayRequestStackScreen";
 import MeStackScreen from "./screens/MeStackScreen";
+import ScanScreen from "./screens/ScanScreen";
 
 // const Stack = createNativeStackNavigator();
 const NavBar = createBottomTabNavigator();
@@ -32,34 +36,36 @@ export default function App() {
             if (route.name == "Home") {
               // iconName = focused ? 'ios-home' : 'ios-home-outline';
               iconName = "home";
-            } else if (route.name == "Cards") {
-              iconName = "card";
-            } else if (route.name == "Pay/Request") {
+            } else if (route.name == "Transfer") {
               iconName = "cart";
+            } else if (route.name == "Wallet") {
+              iconName = "card";
             } else if (route.name == "Me") {
               iconName = "body";
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarLabelStyle: { fontWeight: 'bold', fontSize: 12},
+          tabBarLabelStyle: { fontWeight: "bold", fontSize: 12 },
           tabBarActiveTintColor: "#3370E2",
           tabBarInactiveTintColor: "#192C88",
           headerStyle: { backgroundColor: "#e9e7e2" },
           headerTintColor: "#000000",
           headerTintStyle: { fontWeight: "bold" },
-          // tabBarStyle: ((route) => {
-          //   const routeName = getFocusedRouteNameFromRoute(route)
-          //   console.log(routeName)
-          //   if (routeName === 'Search') {
-          //     return { display: 'none' }
-          //   }
-          //   return
-          // }
-          // ) (route),
-          tabBarStyle: { 
-            height: 100, 
-            paddingTop: 10,}
+          // Deciding to hide the tab bar for which screens
+          tabBarStyle: ((route) => {
+            const routeName = getFocusedRouteNameFromRoute(route) ?? ""
+            if (routeName === 'User') {
+              return { 
+                display: 'none',
+              }
+            }
+            return {
+              // For routes which are not User
+              height: 100,
+              paddingTop: 10,
+            }
+          }) (route), 
         })}
       >
         <NavBar.Screen
@@ -68,15 +74,20 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <NavBar.Screen
-          name="Cards"
+          name="Transfer"
+          component={PayRequestStackScreen}
+          options={{
+            headerShown: false,
+            // tabBarStyle: { display: 'none'},
+          }}
+        />
+
+        <NavBar.Screen
+          name="Wallet"
           component={CardsStackScreen}
           options={{ headerShown: false }}
         />
-        <NavBar.Screen
-          name="Pay/Request"
-          component={PayRequestStackScreen}
-          options={{ headerShown: false }}
-        />
+
         <NavBar.Screen
           name="Me"
           component={MeStackScreen}

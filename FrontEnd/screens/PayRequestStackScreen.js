@@ -10,17 +10,23 @@ const PayRequestStack = createNativeStackNavigator();
 const PayRequestStackScreen = () => {
   return (
     <PayRequestStack.Navigator>
-      {/* <PayRequestStack.Screen name="PayRequestScreen" component={PayRequestScreen} /> */}
       <PayRequestStack.Screen
         name="Search"
         component={SearchScreen}
-        options={{ 
+        options={{
           headerShown: false,
-          // tabBarStyle: { display: 'none'},
-         }}
+          // presentation: 'presentationModal',
+        }}
       />
-      <PayRequestStack.Screen name="User" component={UserScreen} options={{ headerShown: false }}/>
-      <PayRequestStack.Screen name='Scan' component={ScanScreen} />
+      <PayRequestStack.Screen
+        name="User"
+        component={UserScreen}
+        options={{
+          headerShown: false,
+          tabBarStyle: { display: "none" },
+        }}
+      />
+      <PayRequestStack.Screen name="Scan" component={ScanScreen} />
     </PayRequestStack.Navigator>
   );
 };

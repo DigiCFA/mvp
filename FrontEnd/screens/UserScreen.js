@@ -76,6 +76,8 @@ const UserScreen = () => {
         <View className="m-1 flex-row space-x-2 justify-center">
           <TouchableOpacity className="bg-blue-500 rounded-full py-3 px-8">
             <Text className="text-white text-xl font-extrabold">Request</Text>
+
+            
           </TouchableOpacity>
           <TouchableOpacity className="bg-blue-500 rounded-full py-3 px-14">
             <Text className="text-white text-xl font-extrabold">Pay</Text>

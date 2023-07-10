@@ -62,12 +62,6 @@ const SearchScreen = () => {
         {/* List of top Users */}
         <UsersColumn />
 
-        {/* <TouchableOpacity
-          onPress={() => navigation.navigate("User")}
-          className="bg-white rounded-lg items-center shadow"
-        >
-          <Text className="text-xl font-bold">Go to User</Text>
-        </TouchableOpacity> */}
       </ScrollView>
     </SafeAreaView>
   );

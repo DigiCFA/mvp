@@ -7,7 +7,7 @@
         "user_password":"str_encrypted",
         "user_QRCode": "str",
         "user_balance": "float64",
-        "user_card_info":{"data_type:":"obj",
+        "user_cardInfo":{"data_type:":"obj",
                         "body":[{
                             "card_number":"str_encrypted",
                             "exp_date":"str_encrypted",
