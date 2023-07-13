@@ -5954,6 +5954,11 @@ react-native-ionicons@^4.x:
   resolved "https://registry.yarnpkg.com/react-native-ionicons/-/react-native-ionicons-4.6.5.tgz#b792ec8896381e67ff237eba955e38afe7ceb7a4"
   integrity sha512-s2Ia7M5t609LE9LWygMj3ALVPUlKhK7R9XcMb67fP4EYJv0oLcwg5pc+8ftv9XXaUuTW/WgL3zJlBYxAvtvMJg==
 
+react-native-keyboard-accessory@^0.1.16:
+  version "0.1.16"
+  resolved "https://registry.yarnpkg.com/react-native-keyboard-accessory/-/react-native-keyboard-accessory-0.1.16.tgz#f0babba9e6568c0c2c8f3fd774fcb2b90b8274ba"
+  integrity sha512-zpdaduoGjp/spLtM0XxxyxFpCqFQu3fospy/HeYpaIfsXTqGdT1MIajS8tahDxeG6fHLDrWvEIYA6zWM5jni0w==
+
 react-native-safe-area-context@4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-4.5.0.tgz#9208313236e8f49e1920ac1e2a2c975f03aed284"
