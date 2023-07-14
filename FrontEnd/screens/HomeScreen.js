@@ -36,7 +36,9 @@ const HomeScreen = () => {
             <Ionicons name="trophy" size={20} color="#192C88" />
           </TouchableOpacity> */}
 
-          <TouchableOpacity className="p-1.5 rounded-full bg-white">
+          <TouchableOpacity 
+          onPress={() => navigation.navigate("Scan")}
+          className="p-1.5 rounded-full bg-white">
             <Ionicons name="qr-code" size={40} color="#192C88" />
           </TouchableOpacity>
 

@@ -32,7 +32,7 @@ const UserScreen = () => {
 
         <Text className="text-lg font-semibold">{name}</Text>
 
-        <View className='flex-1'></View>
+        <View className="flex-1"></View>
 
         {/* <TouchableOpacity
           onPress={() => navigation.navigate("HomeScreen")}
@@ -42,12 +42,9 @@ const UserScreen = () => {
         </TouchableOpacity> */}
       </View>
 
-
-
       {/* Payment Amount */}
       <View className="flex-row h-20 mt-6 justify-center items-end border">
-
-        <View className='self-start'>
+        <View className="self-start">
           <Text className="text-5xl">$</Text>
         </View>
 
@@ -67,7 +64,10 @@ const UserScreen = () => {
             className="text-7xl border pt-8"
           />
         </View>
+      </View>
 
+      <View className="m-3 self-center bg-[#e9e7e2] rounded-lg">
+        <Text className="text-lg px-1">USD</Text>
       </View>
 
       {/* Comments + Request + Pay */}
@@ -88,7 +88,10 @@ const UserScreen = () => {
           <TouchableOpacity className="bg-blue-500 rounded-full py-3 px-8">
             <Text className="text-white text-xl font-extrabold">Request</Text>
           </TouchableOpacity>
-          <TouchableOpacity className="bg-blue-500 rounded-full py-3 px-14">
+          <TouchableOpacity
+            onPress={() => navigation.navigate("PaymentMethods")}
+            className="bg-blue-500 rounded-full py-3 px-14"
+          >
             <Text className="text-white text-xl font-extrabold">Pay</Text>
           </TouchableOpacity>
         </View>

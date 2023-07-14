@@ -52,14 +52,15 @@ export default function App() {
           headerStyle: { backgroundColor: "#e9e7e2" },
           headerTintColor: "#000000",
           headerTintStyle: { fontWeight: "bold" },
-          // Deciding to hide the tab bar for which screens
+
+          // Hide the tab bar for certain screens
           tabBarStyle: ((route) => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? ""
-            if (routeName === 'User') {
+            if (routeName === 'User' || routeName === 'PaymentMethods') {
               return { 
                 display: 'none',
               }
-            }
+            };
             return {
               // For routes which are not User
               height: 100,
