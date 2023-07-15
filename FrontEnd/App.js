@@ -19,6 +19,7 @@ import CardsStackScreen from "./screens/CardsStackScreen";
 import PayRequestStackScreen from "./screens/PayRequestStackScreen";
 import MeStackScreen from "./screens/MeStackScreen";
 import ScanScreen from "./screens/ScanScreen";
+import TESTScreen from "./screens/TESTScreen";
 
 // const Stack = createNativeStackNavigator();
 const NavBar = createBottomTabNavigator();
@@ -55,18 +56,18 @@ export default function App() {
 
           // Hide the tab bar for certain screens
           tabBarStyle: ((route) => {
-            const routeName = getFocusedRouteNameFromRoute(route) ?? ""
-            if (routeName === 'User' || routeName === 'PaymentMethods') {
-              return { 
-                display: 'none',
-              }
-            };
+            const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+            if (routeName === "User" || routeName === "PaymentMethods") {
+              return {
+                display: "none",
+              };
+            }
             return {
               // For routes which are not User
               height: 100,
               paddingTop: 10,
-            }
-          }) (route), 
+            };
+          })(route),
         })}
       >
         <NavBar.Screen
