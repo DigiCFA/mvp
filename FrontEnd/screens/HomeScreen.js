@@ -15,17 +15,11 @@ import TransactionsColumn from "../components/TransactionsColumn";
 const HomeScreen = () => {
   const navigation = useNavigation();
 
-  // useLayoutEffect(() => {
-  //     navigation.setOptions({
-  //         headerShown: false,
-  //     });
-  // }, []);
-
   // Fetching Past Transactions
+
   // useEffect(() => {
 
   // }, [])
-  // If [] empty, only runs once on mount
 
   return (
     <SafeAreaView className="bg-[#e9e7e2]">
@@ -33,32 +27,37 @@ const HomeScreen = () => {
         {/* Header */}
         <View className="flex-row px-4 pb-6 space-x-3">
           <View className="flex-1">
-            <TouchableOpacity className="p-1 rounded-full bg-white w-8">
+            {/* <TouchableOpacity className="p-1 rounded-full bg-white w-8">
               <Ionicons name="menu" size={24} color="#192C88" />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
-          <TouchableOpacity className="p-1.5 rounded-full bg-white">
+          {/* <TouchableOpacity className="p-1.5 rounded-full bg-white">
             <Ionicons name="trophy" size={20} color="#192C88" />
+          </TouchableOpacity> */}
+
+          <TouchableOpacity 
+          onPress={() => navigation.navigate("Scan")}
+          className="p-1.5 rounded-full bg-white">
+            <Ionicons name="qr-code" size={40} color="#192C88" />
           </TouchableOpacity>
 
-          <TouchableOpacity className="p-1.5 rounded-full bg-white">
-            <Ionicons name="qr-code" size={20} color="#192C88" />
-          </TouchableOpacity>
-
-          <TouchableOpacity className="p-1.5 rounded-full bg-white">
+          {/* <TouchableOpacity className="p-1.5 rounded-full bg-white">
             <Ionicons name="person" size={20} color="#192C88" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         {/* Some Notices */}
-        <View className="p-4 space-y-3">
+        <View className="px-4 pb-4 space-y-3">
+
+          {/* Getting rid of this button soon */}
           <TouchableOpacity
             onPress={() => navigation.navigate("Search")}
             className="p-4 bg-white rounded-lg items-center shadow"
           >
-            <Text className="text-xl font-bold">Go to Search</Text>
+            <Text className="text-xl font-bold">TransferScreen (Modal)</Text>
           </TouchableOpacity>
+
 
           <TouchableOpacity className="py-3 px-4 bg-white rounded-lg flex-row space-x-4 shadow">
             <Ionicons name="flash" size={40} color="#7152C7" />

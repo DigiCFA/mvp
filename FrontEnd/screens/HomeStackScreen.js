@@ -11,7 +11,12 @@ const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
         <HomeStack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }}/>
-        <HomeStack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
+        <HomeStack.Screen name="Search" component={SearchScreen} 
+        options={{ 
+          headerShown: false,
+          gestureDirection: 'vertical'
+          // presentation: 'presentationModal',
+          }} />
         <HomeStack.Screen name="Scan" component={ScanScreen} />
     </HomeStack.Navigator>
   )

@@ -3,9 +3,6 @@ const connect_to_db = process.env.ATLAS_URI || "";
 const client = new MongoClient(connect_to_db);
 
 
-
-
-
 let connection;
 try{
     connection = await client.connect();
