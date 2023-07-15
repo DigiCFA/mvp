@@ -83,11 +83,16 @@ const UserScreen = () => {
           className="text-base font-medium mx-4 p-3 border border-gray-500 rounded-lg"
         />
 
-        {/* Send / Receive */}
         <View className="m-1 flex-row space-x-2 justify-center">
-          <TouchableOpacity className="bg-blue-500 rounded-full py-3 px-8">
+          {/* Request */}
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Test")}
+            className="bg-blue-500 rounded-full py-3 px-8"
+          >
             <Text className="text-white text-xl font-extrabold">Request</Text>
           </TouchableOpacity>
+
+          {/* Send */}
           <TouchableOpacity
             onPress={() => navigation.navigate("PaymentMethods")}
             className="bg-blue-500 rounded-full py-3 px-14"
