@@ -8,6 +8,7 @@ MVP for the FinTech startup DigiCFA, a digital payment solution for Central Afri
 
 Prerequisite: make sure Expo is properly setup. https://docs.expo.dev/get-started/installation/
 
+1. 
 ```
 cd mvp/FrontEnd
 npx expo start
@@ -23,7 +24,7 @@ npx expo start
 
 ---
 
-- Have not tried on Andriod. That requires downloading Andriod Studio.
+- Have not tried on Andriod - requires downloading Andriod Studio.
   
 - If running multiple simulators, go to the Expo Go App home menu and copy in the >exp:// URL manually.
   
