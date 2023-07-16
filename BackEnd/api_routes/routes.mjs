@@ -18,7 +18,7 @@ router.get("/",async(req,res) => {
 router.post("/auth/create_user",async(req,res) => {
     let collection = await db.collection("users");
     let user_data = req.body;
-    collection.insertOne(
+    await collection.insertOne(
     {
             user_name:user_data.user_name,
             user_phone_number:user_data.user_phone_number,
@@ -31,6 +31,15 @@ router.post("/auth/create_user",async(req,res) => {
             transactions:[],
             requests:[],
             user_creation_date:Date.now()
+    })
+    .then(function(add_result,add_error){
+        if(!add_error){
+            res.send(add_result).status(200);
+        }
+        else{
+            console.error(add_error);
+            res.send(add_error).status(400);
+        }
     })
     res.send(results).status(200);
 })
@@ -52,22 +61,24 @@ router.patch("/profile/add_contact",async(req,res)=>{
 
     let collection = await db.collection("users");
     let user_input = req.body;
-    await collection.updateOne({_id:user_input.user_id},{$push:user_input.contact_id},async function(error,result){
-        if(!error){
-            await collection.updateOne({_id:user_input.contact_id},{$push:user_input.contact_id},function(error,result){
-                if(!error){
+    await collection.updateOne({_id:new ObjectId(user_input.user_id)},{$addToSet:{user_contacts:user_input.contact_id}})
+        .then(async function(update_result,update_error){
+        if(!update_error){
+            await collection.updateOne({_id:new ObjectId(user_input.contact_id)},{$addToSet:{user_contacts:user_input.user_id}})
+                .then(function(updatetwo_result,updatetwo_error){
+                if(!updatetwo_error){
                 
-                    res.send({}).status(200);
+                    res.send({update_result,updatetwo_result}).status(200);
                 }
                 else{
-                    console.error(error)
-                    res.send({}).status(400);
+                    console.error(updatetwo_error)
+                    res.send(updatetwo_error).status(400);
                 }
             })            
         }
         else{
-            console.error(error)
-            res.send({}).status(400);
+            console.error(update_error)
+            res.send({update_error}).status(400);
         }
     })
 
@@ -79,22 +90,24 @@ router.patch("/profile/remove_contact",async(req,res)=>{
 
     let collection = await db.collection("users");
     let user_input = req.body;
-    await collection.updateOne({_id:user_input.user_id},{$pull:user_input.contact_id},async function(error,result){
-        if(!error){
-            await collection.updateOne({_id:user_input.contact_id},{$pull:user_input.contact_id},function(error,result){
-                if(!error){
+    await collection.updateOne({_id:new ObjectId(user_input.user_id)},{$pull:{user_contacts:user_input.contact_id}})
+    .then(async function(pull_result,pull_error){
+        if(!pull_error){
+            await collection.updateOne({_id:new ObjectId(user_input.contact_id)},{$pull:{user_contacts:user_input.user_id}})
+            .then(function(pulltwo_result,pulltwo_error){
+                if(!pulltwo_error){
                 
-                    res.send({}).status(200);
+                    res.send({pull_result,pulltwo_result}).status(200);
                 }
                 else{
-                    console.error(error)
-                    res.send({}).status(400);
+                    console.error(pulltwo_error)
+                    res.send(pulltwo_error).status(400);
                 }
             })            
         }
         else{
-            console.error(error)
-            res.send({}).status(400);
+            console.error(pull_error);
+            res.send(pull_error).status(400);
         }
     })
 
