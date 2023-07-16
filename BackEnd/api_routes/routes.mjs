@@ -61,22 +61,24 @@ router.patch("/profile/add_contact",async(req,res)=>{
 
     let collection = await db.collection("users");
     let user_input = req.body;
-    await collection.updateOne({_id:user_input.user_id},{$push:user_input.contact_id},async function(error,result){
-        if(!error){
-            await collection.updateOne({_id:user_input.contact_id},{$push:user_input.contact_id},function(error,result){
-                if(!error){
+    await collection.updateOne({_id:new ObjectId(user_input.user_id)},{$addToSet:{user_contacts:user_input.contact_id}})
+        .then(async function(update_result,update_error){
+        if(!update_error){
+            await collection.updateOne({_id:new ObjectId(user_input.contact_id)},{$addToSet:{user_contacts:user_input.user_id}})
+                .then(function(updatetwo_result,updatetwo_error){
+                if(!updatetwo_error){
                 
-                    res.send({}).status(200);
+                    res.send({update_result,updatetwo_result}).status(200);
                 }
                 else{
-                    console.error(error)
-                    res.send({}).status(400);
+                    console.error(updatetwo_error)
+                    res.send(updatetwo_error).status(400);
                 }
             })            
         }
         else{
-            console.error(error)
-            res.send({}).status(400);
+            console.error(update_error)
+            res.send({update_error}).status(400);
         }
     })
 
