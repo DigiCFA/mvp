@@ -90,22 +90,24 @@ router.patch("/profile/remove_contact",async(req,res)=>{
 
     let collection = await db.collection("users");
     let user_input = req.body;
-    await collection.updateOne({_id:user_input.user_id},{$pull:user_input.contact_id},async function(error,result){
-        if(!error){
-            await collection.updateOne({_id:user_input.contact_id},{$pull:user_input.contact_id},function(error,result){
-                if(!error){
+    await collection.updateOne({_id:new ObjectId(user_input.user_id)},{$pull:{user_contacts:user_input.contact_id}})
+    .then(async function(pull_result,pull_error){
+        if(!pull_error){
+            await collection.updateOne({_id:new ObjectId(user_input.contact_id)},{$pull:{user_contacts:user_input.user_id}})
+            .then(function(pulltwo_result,pulltwo_error){
+                if(!pulltwo_error){
                 
-                    res.send({}).status(200);
+                    res.send({pull_result,pulltwo_result}).status(200);
                 }
                 else{
-                    console.error(error)
-                    res.send({}).status(400);
+                    console.error(pulltwo_error)
+                    res.send(pulltwo_error).status(400);
                 }
             })            
         }
         else{
-            console.error(error)
-            res.send({}).status(400);
+            console.error(pull_error);
+            res.send(pull_error).status(400);
         }
     })
 
