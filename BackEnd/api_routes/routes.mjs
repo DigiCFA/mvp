@@ -18,7 +18,7 @@ router.get("/",async(req,res) => {
 router.post("/auth/create_user",async(req,res) => {
     let collection = await db.collection("users");
     let user_data = req.body;
-    collection.insertOne(
+    await collection.insertOne(
     {
             user_name:user_data.user_name,
             user_phone_number:user_data.user_phone_number,
@@ -31,6 +31,15 @@ router.post("/auth/create_user",async(req,res) => {
             transactions:[],
             requests:[],
             user_creation_date:Date.now()
+    })
+    .then(function(add_result,add_error){
+        if(!add_error){
+            res.send(add_result).status(200);
+        }
+        else{
+            console.error(add_error);
+            res.send(add_error).status(400);
+        }
     })
     res.send(results).status(200);
 })
