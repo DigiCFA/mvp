@@ -7,9 +7,7 @@ const router = express.Router();
 let db = db_ref();
 let client = client_ref();
 
-router.get(
-  "/",
-  (req, res, next) => {
+router.get("/", (req, res, next) => {
     console.log("On /, displaying all transactions");
     next();
   },
