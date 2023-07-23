@@ -1,6 +1,12 @@
 import express from "express";
-import { db_ref, client_ref } from "../database/connect.mjs";
+import { db_ref } from "../database/connect.mjs";
 import { ObjectId } from "mongodb";
+
+// All ACID based transactions will not work for now, as Mongoose replaces MongoClient
+// Still learning Mongoose
+let client_ref = () => {};
+
+import Product from "../models/userModel.mjs";
 
 const router = express.Router();
 
@@ -26,18 +32,56 @@ router.get("/", (req, res, next) => {
   }
 );
 
+// MONGOOSE -> experimental
+router.get("/profile/get_user", async(req, res) => {
+  let id = req.body.user_id;
+  try {
+    let result = await Product.findById(id);
+
+    if (!result) res.send(`User with ID ${id} Not found`).status(404);
+    else res.send(result).status(200);
+  } catch(error) {
+    console.error(error)
+    res.send(error).status(400)
+  }
+})
+
 router.get("/profile/retrieve_user", async (req, res) => {
-  let user_id = req.body.user_id;
+  let id = req.body.user_id;
   let collection = db.collection("users");
   try {
-    let result = await collection.findOne({_id: new ObjectId(user_id)});
+    let result = await collection.findOne({_id: new ObjectId(id)});
     
-    if (!result) res.send("Not found").status(404);
+    if (!result) res.send(`User with ID ${id} Not found`).status(404);
     else res.send(result).status(200);
   } catch(error) {
     console.error(error);
     res.send(error).status(400);
   }
+})
+
+router.delete("/auth/delete_user", async(req, res) => {
+  let id = req.body.user_id;
+  try {
+    let result = await collection.findOne({_id: new ObjectId(id)});
+    
+    if (!result) res.send(`User with ID ${id} Not found`).status(404);
+    else res.send(result).status(200);
+  } catch (error) {
+    console.error(error);
+    res.send(error).status(400);
+  }
+})
+
+// MONGOOSE -> experimental
+router.post("/auth/create_user2", async(req, res) => {
+  try {
+    const result = await User.create(req.body);
+    res.send(result).status(200)
+  } catch(error) {
+    console.error(error);
+    res.send(error).status(400);
+    }
 })
 
 
