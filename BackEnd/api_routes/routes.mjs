@@ -39,8 +39,11 @@ router.post("/auth/create_user", async (req, res) => {
       user_card_info: [],
       privacy_preference: user_data.user_balance,
       user_contacts: [],
-      transactions: [],
-      requests: [],
+      transactions:[],
+      received_transactions:[],
+      sent_transactions:[],
+      received_requests: [],
+      sent_requests:[],
       user_creation_date: Date.now(),
     })
     .then(function (add_result, add_error) {
@@ -334,6 +337,28 @@ router.get("/profile/retrieve_all_transactions",async(req,res)=>{
       res.send(error).status(400);
 
     }
+  })
+
+
+
+})
+
+
+
+
+router.get("/profile/retrieve_user_data",async(req,res)=>{
+  let user_id = req.body.user_id;
+  let users_collection = db.collection("users");
+  await users_collection.findOne({_id:new ObjectId(user_id)}).then(async (result,error)=>{
+          if(!error){
+            res.send(result).status(200);
+          }
+          else{
+            console.error(error);
+            res.send(error).status(400);
+      
+          }
+      
   })
 
 
