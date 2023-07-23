@@ -1,18 +1,43 @@
 import { MongoClient } from "mongodb";
-const connect_to_db = process.env.ATLAS_URI || "";
-const client = new MongoClient(connect_to_db);
+import mongoose from "mongoose";
+const uri = process.env.ATLAS_URI || "";
 
-let connection;
+
+// const client = new MongoClient(connect_to_db);
+
+// let connection;
+// try {
+//   connection = await client.connect();
+// } catch (error) {
+//   console.error(error);
+// }
+
 try {
-  connection = await client.connect();
-} catch (error) {
+  mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+} catch(error) {
   console.error(error);
 }
 
-let db = connection.db();
+
+const db = mongoose.connection;
+
+// Different Lifecycle methods:
+db.on("error", console.error.bind(console, "MongoDB Connection error: "));
+db.once("open", function () {
+  console.log("Connected to MongoDB.");
+});
+
 export function db_ref() {
   return db;
 }
-export function client_ref() {
-  return client;
-}
+
+// let db = connection.db();
+// export function db_ref() {
+//   return db;
+// }
+// export function client_ref() {
+//   return client;
+// }

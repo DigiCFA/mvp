@@ -1,30 +1,90 @@
 import express from "express";
-import { db_ref, client_ref } from "../database/connect.mjs";
+import { db_ref } from "../database/connect.mjs";
 import { ObjectId } from "mongodb";
+
+// All ACID based transactions will not work for now, as Mongoose replaces MongoClient
+// Still learning Mongoose
+let client_ref = () => {};
+
+import Product from "../models/userModel.mjs";
 
 const router = express.Router();
 
 let db = db_ref();
 let client = client_ref();
 
-router.get(
-  "/",
-  (req, res, next) => {
-    console.log("On /, displaying all transactions");
+// Trying out middleware
+router.get("/", (req, res, next) => {
+    console.log("On /, displaying all transactions and users");
     next();
   },
   async (req, res) => {
-    let collection = db.collection("transactions");
-    let results = await collection.find({}).toArray();
+    let transactions = await db.collection("transactions").find({}).toArray();
+    let users = await db.collection("users").find({}).toArray();
     let text =
       `<div>
         <h1>Welcome to DigiCFA</h1>
         <h3>All transactions: </h3>
-       </div>` + JSON.stringify(results);
+       </div>` + JSON.stringify(transactions) + 
+       `<h3>All users: </h3>` + JSON.stringify(users);
 
     res.send(text).status(200);
   }
 );
+
+// MONGOOSE -> experimental
+router.get("/profile/get_user", async(req, res) => {
+  let id = req.body.user_id;
+  try {
+    let result = await Product.findById(id);
+
+    if (!result) res.send(`User with ID ${id} Not found`).status(404);
+    else res.send(result).status(200);
+  } catch(error) {
+    console.error(error)
+    res.send(error).status(400)
+  }
+})
+
+router.get("/profile/retrieve_user", async (req, res) => {
+  let id = req.body.user_id;
+  let collection = db.collection("users");
+  try {
+    let result = await collection.findOne({_id: new ObjectId(id)});
+    
+    if (!result) res.send(`User with ID ${id} Not found`).status(404);
+    else res.send(result).status(200);
+  } catch(error) {
+    console.error(error);
+    res.send(error).status(400);
+  }
+})
+
+// MONGOOSE -> experimental
+router.delete("/auth/delete_user", async(req, res) => {
+  let id = req.body.user_id;
+  try {
+    let result = await collection.findOne({_id: new ObjectId(id)});
+    
+    if (!result) res.send(`User with ID ${id} Not found`).status(404);
+    else res.send(result).status(200);
+  } catch (error) {
+    console.error(error);
+    res.send(error).status(400);
+  }
+})
+
+// MONGOOSE -> experimental
+router.post("/auth/create_user2", async(req, res) => {
+  try {
+    const result = await User.create(req.body);
+    res.send(result).status(200)
+  } catch(error) {
+    console.error(error);
+    res.send(error).status(400);
+    }
+})
+
 
 router.post("/auth/create_user", async (req, res) => {
   let collection = db.collection("users");
@@ -39,11 +99,11 @@ router.post("/auth/create_user", async (req, res) => {
       user_card_info: [],
       privacy_preference: user_data.user_balance,
       user_contacts: [],
-      transactions:[],
-      received_transactions:[],
-      sent_transactions:[],
+      transactions: [],
+      received_transactions: [],
+      sent_transactions: [],
       received_requests: [],
-      sent_requests:[],
+      sent_requests: [],
       user_creation_date: Date.now(),
     })
     .then(function (add_result, add_error) {
@@ -180,9 +240,10 @@ router.post("/transaction/create_transaction_request", async (req, res) => {
                   console.error(updatetwo_error);
                   res.send(updatetwo_error).status(400);
                 }
-              }).then(()=>{
-                res.send({"_id":transactionID}).status(200);
               })
+              .then(() => {
+                res.send({ _id: transactionID }).status(200);
+              });
           } else {
             console.error(add_error);
             res.send(add_error).status(400);
@@ -205,80 +266,87 @@ router.patch("/transaction/approve_transaction", async (req, res) => {
     await session.withTransaction(async () => {
       let transaction_collection = db.collection("transactions");
       let users_collection = db.collection("users");
-      await transaction_collection.findOne(
-        { _id: transactionID })
+      await transaction_collection
+        .findOne({ _id: transactionID })
         .then(async function (find_result, find_error) {
           if (!find_error) {
             let amount_transfered = find_result.amount_transfered;
-            let transaction_sender = new ObjectId(find_result.transaction_sender);
-            let transaction_receiver = new ObjectId(find_result.transaction_receiver);
-            await users_collection.findOne(
-              { _id: transaction_sender })
+            let transaction_sender = new ObjectId(
+              find_result.transaction_sender
+            );
+            let transaction_receiver = new ObjectId(
+              find_result.transaction_receiver
+            );
+            await users_collection
+              .findOne({ _id: transaction_sender })
               .then(async function (user_result, user_error) {
                 if (!user_error) {
                   let current_user_balance = user_result.user_balance;
                   if (current_user_balance < amount_transfered) {
-                    res.send({"balance too low":0}).status(400);
+                    res.send({ "balance too low": 0 }).status(400);
                     return;
                   }
 
-                  await transaction_collection.updateOne(
-                    { _id: transactionID },
-                    {
-                      $set: { transaction_approved: 1 },
-                    })
+                  await transaction_collection
+                    .updateOne(
+                      { _id: transactionID },
+                      {
+                        $set: { transaction_approved: 1 },
+                      }
+                    )
                     .then(async function (update_result, update_error) {
                       if (update_error) {
                         console.error(update_error);
                         res.send(update_error).status(400);
                         return;
                       }
-                    }
-                  );
-                  await users_collection.updateOne(
-                    { _id: transaction_sender },
-                    {
-                      $pull: { sent_requests: transactionID },
-                      $addToSet: { sent_transactions: transactionID },
-                      $inc: { user_balance: amount_transfered * -1.0 },
-                    })
+                    });
+                  await users_collection
+                    .updateOne(
+                      { _id: transaction_sender },
+                      {
+                        $pull: { sent_requests: transactionID },
+                        $addToSet: { sent_transactions: transactionID },
+                        $inc: { user_balance: amount_transfered * -1.0 },
+                      }
+                    )
                     .then(async function (update_result, update_error) {
                       if (update_error) {
                         console.error(update_error);
                         res.send(update_error).status(400);
                         return;
                       }
-                    })
+                    });
 
-                  await users_collection.updateOne(
-                    { _id: transaction_receiver },
-                    {
-                      $pull: { received_requests: transactionID },
-                      $addToSet: { received_transactions: transactionID },
-                      $inc: { user_balance: amount_transfered },
-                    })
+                  await users_collection
+                    .updateOne(
+                      { _id: transaction_receiver },
+                      {
+                        $pull: { received_requests: transactionID },
+                        $addToSet: { received_transactions: transactionID },
+                        $inc: { user_balance: amount_transfered },
+                      }
+                    )
                     .then(async function (update_result, update_error) {
                       if (!update_error) {
-                        
                       } else {
                         console.error(update_error);
                         res.send(update_error).status(400);
                         return;
                       }
-                  })
+                    });
                 } else {
                   console.error(user_error);
                   res.send(user_error).status(400);
                   return;
                 }
-              })
+              });
           } else {
             console.error(find_error);
             res.send(find_error).status(400);
           }
         })
-        .then(()=>
-        console.log("the request was approved"));
+        .then(() => console.log("the request was approved"));
     });
   } catch (error) {
     console.error(error);
@@ -289,125 +357,92 @@ router.patch("/transaction/approve_transaction", async (req, res) => {
   }
 });
 
-router.get("/transaction/transaction_data",async(req,res)=>{
+router.get("/transaction/transaction_data", async (req, res) => {
   let transaction_id = req.body.transaction_id;
   let transaction_collection = db.collection("transactions");
-  await transaction_collection.findOne({_id:new ObjectId(transaction_id)}).then(async (result,error)=>{
-    if(!error){
-      res.send(result).status(200);
-    }
-    else{
-      console.error(error);
-      res.send(error).status(400);
+  await transaction_collection
+    .findOne({ _id: new ObjectId(transaction_id) })
+    .then(async (result, error) => {
+      if (!error) {
+        res.send(result).status(200);
+      } else {
+        console.error(error);
+        res.send(error).status(400);
+      }
+    });
+});
 
-    }
-  })
-
-
-
-})
-
-
-
-router.get("/profile/retrieve_all_transactions",async(req,res)=>{
+router.get("/profile/retrieve_all_transactions", async (req, res) => {
   let user_id = req.body.user_id;
   let users_collection = db.collection("users");
   let transaction_collection = db.collection("transactions");
-  await users_collection.findOne({_id:new ObjectId(user_id)}).then(async (result,error)=>{
-    if(!error){
-      let transaction_ids = result.transactions;
-      let transaction_data = []
-      await Promise.all(transaction_ids.map(async (transaction_id)=>{
-        await transaction_collection.findOne({_id:new ObjectId(transaction_id)}).then(async (result,error)=>{
-          if(!error){
-            console.log(result);
-            transaction_data.push(result);
-          }
-          else{
-            console.error(error);
-            res.send(error).status(400);
-      
-          }
-        })
-      })).then(()=>{
-        console.log(transaction_data);
-        res.send(transaction_data).status(200);
+  await users_collection
+    .findOne({ _id: new ObjectId(user_id) })
+    .then(async (result, error) => {
+      if (!error) {
+        let transaction_ids = result.transactions;
+        let transaction_data = [];
+        await Promise.all(
+          transaction_ids.map(async (transaction_id) => {
+            await transaction_collection
+              .findOne({ _id: new ObjectId(transaction_id) })
+              .then(async (result, error) => {
+                if (!error) {
+                  console.log(result);
+                  transaction_data.push(result);
+                } else {
+                  console.error(error);
+                  res.send(error).status(400);
+                }
+              });
+          })
+        ).then(() => {
+          console.log(transaction_data);
+          res.send(transaction_data).status(200);
+        });
+      } else {
+        console.error(error);
+        res.send(error).status(400);
+      }
+    });
+});
 
-      })
-      
-    }
-    else{
-      console.error(error);
-      res.send(error).status(400);
-
-    }
-  })
-
-
-
-})
-
-
-router.get("/profile/retrieve_transactions/:transaction_status",async(req,res)=>{
-  let queryArray = req.params.transaction_status;
-  let user_id = req.body.user_id;
-  let users_collection = db.collection("users");
-  let transaction_collection = db.collection("transactions");
-  await users_collection.findOne({_id:new ObjectId(user_id)}).then(async (result,error)=>{
-    if(!error){
-      let transaction_ids = result[queryArray];
-      let transaction_data = []
-      await Promise.all(transaction_ids.map(async (transaction_id)=>{
-        await transaction_collection.findOne({_id:new ObjectId(transaction_id)}).then(async (result,error)=>{
-          if(!error){
-            transaction_data.push(result);
-          }
-          else{
-            console.error(error);
-            res.send(error).status(400);
-      
-          }
-        })
-      })).then(()=>{
-        console.log(transaction_data);
-        res.send(transaction_data).status(200);
-
-      })
-      
-    }
-    else{
-      console.error(error);
-      res.send(error).status(400);
-
-    }
-  })
-
-
-
-})
-
-
-
-
-
-router.get("/profile/retrieve_user_data",async(req,res)=>{
-  let user_id = req.body.user_id;
-  let users_collection = db.collection("users");
-  await users_collection.findOne({_id:new ObjectId(user_id)}).then(async (result,error)=>{
-          if(!error){
-            res.send(result).status(200);
-          }
-          else{
-            console.error(error);
-            res.send(error).status(400);
-      
-          }
-      
-  })
-
-
-
-})
+router.get(
+  "/profile/retrieve_transactions/:transaction_status",
+  async (req, res) => {
+    let queryArray = req.params.transaction_status;
+    let user_id = req.body.user_id;
+    let users_collection = db.collection("users");
+    let transaction_collection = db.collection("transactions");
+    await users_collection
+      .findOne({ _id: new ObjectId(user_id) })
+      .then(async (result, error) => {
+        if (!error) {
+          let transaction_ids = result[queryArray];
+          let transaction_data = [];
+          await Promise.all(
+            transaction_ids.map(async (transaction_id) => {
+              await transaction_collection
+                .findOne({ _id: new ObjectId(transaction_id) })
+                .then(async (result, error) => {
+                  if (!error) {
+                    transaction_data.push(result);
+                  } else {
+                    console.error(error);
+                    res.send(error).status(400);
+                  }
+                });
+            })
+          ).then(() => {
+            console.log(transaction_data);
+            res.send(transaction_data).status(200);
+          });
+        } else {
+          console.error(error);
+          res.send(error).status(400);
+        }
+      });
+  }
+);
 
 export default router;
-
