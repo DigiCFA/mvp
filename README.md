@@ -6,6 +6,15 @@ MVP for the FinTech startup DigiCFA, a digital payment solution for Central Afri
 
 # How to run 
 
+## BackEnd
+```
+cd mvp/BackEnd
+npm run dev
+```
+Will open at: localhost:5050/routes
+
+## FrontEnd
+
 Prerequisite: make sure Expo is properly setup. https://docs.expo.dev/get-started/installation/
 
 1. 
