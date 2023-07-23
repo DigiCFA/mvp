@@ -39,8 +39,11 @@ router.post("/auth/create_user", async (req, res) => {
       user_card_info: [],
       privacy_preference: user_data.user_balance,
       user_contacts: [],
-      transactions: [],
-      requests: [],
+      transactions:[],
+      received_transactions:[],
+      sent_transactions:[],
+      received_requests: [],
+      sent_requests:[],
       user_creation_date: Date.now(),
     })
     .then(function (add_result, add_error) {
@@ -51,7 +54,6 @@ router.post("/auth/create_user", async (req, res) => {
         res.send(add_error).status(400);
       }
     });
-  res.send(results).status(200);
 });
 
 router.post("/auth/user_login", async (req, res) => {
@@ -281,5 +283,125 @@ router.patch("/transaction/approve_transaction", async (req, res) => {
     await session.endSession();
   }
 });
+
+router.get("/transaction/transaction_data",async(req,res)=>{
+  let transaction_id = req.body.transaction_id;
+  let transaction_collection = db.collection("transactions");
+  await transaction_collection.findOne({_id:new ObjectId(transaction_id)}).then(async (result,error)=>{
+    if(!error){
+      res.send(result).status(200);
+    }
+    else{
+      console.error(error);
+      res.send(error).status(400);
+
+    }
+  })
+
+
+
+})
+
+
+
+router.get("/profile/retrieve_all_transactions",async(req,res)=>{
+  let user_id = req.body.user_id;
+  let users_collection = db.collection("users");
+  let transaction_collection = db.collection("transactions");
+  await users_collection.findOne({_id:new ObjectId(user_id)}).then(async (result,error)=>{
+    if(!error){
+      let transaction_ids = result.transactions;
+      let transaction_data = []
+      await Promise.all(transaction_ids.map(async (transaction_id)=>{
+        await transaction_collection.findOne({_id:new ObjectId(transaction_id)}).then(async (result,error)=>{
+          if(!error){
+            console.log(result);
+            transaction_data.push(result);
+          }
+          else{
+            console.error(error);
+            res.send(error).status(400);
+      
+          }
+        })
+      })).then(()=>{
+        console.log(transaction_data);
+        res.send(transaction_data).status(200);
+
+      })
+      
+    }
+    else{
+      console.error(error);
+      res.send(error).status(400);
+
+    }
+  })
+
+
+
+})
+
+
+router.get("/profile/retrieve_transactions/:transaction_status",async(req,res)=>{
+  let queryArray = req.params.transaction_status;
+  let user_id = req.body.user_id;
+  let users_collection = db.collection("users");
+  let transaction_collection = db.collection("transactions");
+  await users_collection.findOne({_id:new ObjectId(user_id)}).then(async (result,error)=>{
+    if(!error){
+      let transaction_ids = result[queryArray];
+      let transaction_data = []
+      await Promise.all(transaction_ids.map(async (transaction_id)=>{
+        await transaction_collection.findOne({_id:new ObjectId(transaction_id)}).then(async (result,error)=>{
+          if(!error){
+            transaction_data.push(result);
+          }
+          else{
+            console.error(error);
+            res.send(error).status(400);
+      
+          }
+        })
+      })).then(()=>{
+        console.log(transaction_data);
+        res.send(transaction_data).status(200);
+
+      })
+      
+    }
+    else{
+      console.error(error);
+      res.send(error).status(400);
+
+    }
+  })
+
+
+
+})
+
+
+
+
+
+router.get("/profile/retrieve_user_data",async(req,res)=>{
+  let user_id = req.body.user_id;
+  let users_collection = db.collection("users");
+  await users_collection.findOne({_id:new ObjectId(user_id)}).then(async (result,error)=>{
+          if(!error){
+            res.send(result).status(200);
+          }
+          else{
+            console.error(error);
+            res.send(error).status(400);
+      
+          }
+      
+  })
+
+
+
+})
 
 export default router;
