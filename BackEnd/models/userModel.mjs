@@ -3,17 +3,33 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
+    index: true,
     required: [true, "Please enter your name"],
   },
-  quantity: {
+  phoneNumber: {
     type: Number,
-    required: true,
-    default: 0,
+    index: true,
+    unique: true,
+    required: [true, "Please enter a phone number"]
   },
-  price: {
+  passWord: {
+    type: String,
+    required: [true, "Please enter a valid password"]
+  }, 
+  QRCode: String,
+  balance: {
     type: Number,
-    required: true,
+    default: 0
   },
+  // Look into cards
+  cards: [{}],
+  privacyPreferences: [String],
+  contacts: [ObjectId],
+  transactions: [ObjectId],
+  receivedTransactions: [ObjectId],
+  sentTransactions: [ObjectId],
+  receivedRequests: [ObjectId],
+  sentRequests: [ObjectId],
 });
 
 const User = mongoose.model("User", userSchema);

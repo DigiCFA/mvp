@@ -60,6 +60,7 @@ router.get("/profile/retrieve_user", async (req, res) => {
   }
 })
 
+// MONGOOSE -> experimental
 router.delete("/auth/delete_user", async(req, res) => {
   let id = req.body.user_id;
   try {
