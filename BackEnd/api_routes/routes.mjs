@@ -5,13 +5,15 @@ import { ObjectId } from "mongodb";
 // All ACID based transactions will not work for now, as Mongoose replaces MongoClient
 // Still learning Mongoose
 let client_ref = () => {};
+let client = client_ref();
 
-import Product from "../models/userModel.mjs";
+
+
+import User from "../models/userModel.mjs";
 
 const router = express.Router();
 
 let db = db_ref();
-let client = client_ref();
 
 // Trying out middleware
 router.get("/", (req, res, next) => {
@@ -32,19 +34,7 @@ router.get("/", (req, res, next) => {
   }
 );
 
-// MONGOOSE -> experimental
-router.get("/profile/get_user", async(req, res) => {
-  let id = req.body.user_id;
-  try {
-    let result = await Product.findById(id);
 
-    if (!result) res.send(`User with ID ${id} Not found`).status(404);
-    else res.send(result).status(200);
-  } catch(error) {
-    console.error(error)
-    res.send(error).status(400)
-  }
-})
 
 router.get("/profile/retrieve_user", async (req, res) => {
   let id = req.body.user_id;
@@ -60,11 +50,26 @@ router.get("/profile/retrieve_user", async (req, res) => {
   }
 })
 
-// MONGOOSE -> experimental
-router.delete("/auth/delete_user", async(req, res) => {
+// MONGOOSE
+router.get("/profile/mongoose_retrieve_user", async(req, res) => {
   let id = req.body.user_id;
   try {
-    let result = await collection.findOne({_id: new ObjectId(id)});
+    let result = await User.findById(id);
+
+    if (!result) res.send(`User with ID ${id} Not found`).status(404);
+    else res.send(result).status(200);
+  } catch(error) {
+    console.error(error)
+    res.send(error).status(400)
+  }
+})
+
+
+// MONGOOSE
+router.delete("/auth/mongoose_delete_user", async(req, res) => {
+  let id = req.body.user_id;
+  try {
+    let result = await User.findByIdAndDelete(id);
     
     if (!result) res.send(`User with ID ${id} Not found`).status(404);
     else res.send(result).status(200);
@@ -74,10 +79,15 @@ router.delete("/auth/delete_user", async(req, res) => {
   }
 })
 
-// MONGOOSE -> experimental
-router.post("/auth/create_user2", async(req, res) => {
+// MONGOOSE
+router.post("/auth/mongoose_create_user", async(req, res) => {
+  let user = req.body;
   try {
-    const result = await User.create(req.body);
+    const result = await User.create({
+      name: user.name,
+      
+    }
+      );
     res.send(result).status(200)
   } catch(error) {
     console.error(error);

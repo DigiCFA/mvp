@@ -12,8 +12,14 @@ const uri = process.env.ATLAS_URI || "";
 //   console.error(error);
 // }
 
+
+/* Mongoose has 2 types of errors:
+1. Upon initial connection, which we will use try/catch
+2. After initial connection has been established, which we listen for error events
+*/
+
 try {
-  mongoose.connect(uri, {
+  await mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
@@ -24,7 +30,6 @@ try {
 
 const db = mongoose.connection;
 
-// Different Lifecycle methods:
 db.on("error", console.error.bind(console, "MongoDB Connection error: "));
 db.once("open", function () {
   console.log("Connected to MongoDB.");
