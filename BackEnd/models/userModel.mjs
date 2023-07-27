@@ -38,7 +38,8 @@ const userSchema = new mongoose.Schema({
   QRCode: String,
   balance: {
     type: Number,
-    default: 0
+    default: 0,
+    min: 0
   },
   cards: [cardSchema],
   privacyPreferences: [String],
@@ -48,18 +49,45 @@ const userSchema = new mongoose.Schema({
     type: String,
     // GETTER - define root as where images are stored
     get: v => `${root}${v}`
-  }
+  },
+  creationDate: Date
 
-  /*
-  receivedTransactions: [mongoose.ObjectId],
+  /* Don't think they are useful -> can make aggregations very easily
+  receivedTransactions: [mongoose.ObjectId],  
   sentTransactions: [mongoose.ObjectId],
   receivedRequests: [mongoose.ObjectId],
   sentRequests: [mongoose.ObjectId],
   */
-});
+}, 
+// Useful if want to create Redacted User view
+// {autoCreate: false, autoIndex: false}
+);
 
 // for the 'users' collection
-// Mongoose automatically looks for the all-case/plural names in the database
+// Mongoose automatically looks for the all-case/plural nameed collection in the database
 const User = mongoose.model("User", userSchema);
+
+
+
+
+
+// < --------- Redacted User -------->
+// To hide sensitive information in the form of a 'view' of user model
+
+
+const RedactedUser = mongoose.model('RedactedUser', userSchema);
+
+// await RedactedUser.createCollection({
+//   viewOn: 'users',
+//   pipeline: [{
+//     $set: {
+//       name: { $concat: [{$substr: ['$name', 0, 3]}, '...']},
+//       phoneNumber: { $concat: [{$substr: ['$phoneNumber', 0, 3]}, '...']}
+//     }
+//   }]
+// })
+
+
+
 
 export default User;
