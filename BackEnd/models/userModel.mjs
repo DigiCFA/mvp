@@ -1,21 +1,32 @@
 import mongoose from "mongoose";
+// import Transaction from "transactionModel.mjs"
 
+
+// Subdocument
 const cardSchema = new mongoose.Schema({
   accountHolder: {
     type: String,
     required: true
   },
   cardNumber: {
-    type: Number,
+    type: String,
     required: true
   },
   expDate: {
     type: Date,
     required: true
+    // Validation: before Date.now()
   },
-  secCode: {
-    type: Number,
-    required: true
+  cvv: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function(str) {
+        return str.length > 2 && str.length < 5
+      },
+      message: "Must be 3 or 4 digits."
+    }
+    
   }
 })
 
@@ -26,7 +37,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please enter your name"],
   },
   phoneNumber: {
-    type: Number,
+    type: String,
     index: true,
     unique: true,
     required: [true, "Please enter a phone number"]
@@ -35,7 +46,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter a valid password"]
   }, 
-  QRCode: String,
+  QRCode: {
+    type: String,
+    unique: true
+  },
   balance: {
     type: Number,
     default: 0,
@@ -43,28 +57,42 @@ const userSchema = new mongoose.Schema({
   },
   cards: [cardSchema],
   privacyPreferences: [String],
-  contacts: [mongoose.ObjectId],
-  transactions: [mongoose.ObjectId],
+  contacts: [{
+    type: mongoose.ObjectId,
+    ref: 'User'
+  }],
+
+  // Doc suggested that in one-to-many relationships, don't keep two pointers (i.e. user->transaction + transaction->user) as they may get out of sync
+  // SHOULD just have a parent pointer from the 'many' side. Can add it as a virtual.
+  /*
+  transactions: [{
+    type: mongoose.ObjectId,
+    ref: 'Transaction'
+  }],
+  */
   profilePicture: {
     type: String,
     // GETTER - define root as where images are stored
     get: v => `${root}${v}`
   },
   creationDate: Date
-
-  /* Don't think they are useful -> can make aggregations very easily
-  receivedTransactions: [mongoose.ObjectId],  
-  sentTransactions: [mongoose.ObjectId],
-  receivedRequests: [mongoose.ObjectId],
-  sentRequests: [mongoose.ObjectId],
-  */
 }, 
 // Useful if want to create Redacted User view
 // {autoCreate: false, autoIndex: false}
 );
 
+
+// userSchema.virtual('transactions', {
+//   ref: 'Transactions',
+//   localField: '_id',
+//   foreignField: 'user'
+// })
+
+
+
+
 // for the 'users' collection
-// Mongoose automatically looks for the all-case/plural nameed collection in the database
+// Mongoose automatically looks for the all-case/plural named collection in the database
 const User = mongoose.model("User", userSchema);
 
 

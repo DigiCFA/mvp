@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+// import User from "userModel.mjs";
 
 
 const transactionSchema = new mongoose.Schema({
@@ -7,17 +8,22 @@ const transactionSchema = new mongoose.Schema({
         min: 0.01
     },
     sender: {
-        type: mongoose.ObjectID,
+        type: mongoose.ObjectId,
+        ref: 'User',
         required: true
     },
     receiver: {
-        type: mongoose.ObjectID,
+        type: mongoose.ObjectId,
+        ref: 'User',
         required: true
     },
-    transactionDate: Date, // 0 request, 1 payment
-    isPayment: Boolean, // 0 not approved, 1 approved
-    isApproved: Boolean,
+    transactionDate: Date, 
+    isPayment: Boolean, // 0 request, 1 payment
+    isApproved: Boolean,  // 0 not approved, 1 approved
     message: String
 })
 
+const Transaction = mongoose.model("Transaction", transactionSchema);
+
+export default Transaction;
 
