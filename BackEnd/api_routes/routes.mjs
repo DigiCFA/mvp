@@ -55,19 +55,7 @@ router.get("/profile/retrieve_user", async (req, res) => {
 router.get("/profile/mongoose_retrieve_user", async (req, res) => {
   let id = req.body.userId;
   try {
-    let result = await User.findById(id).populate({
-      // 5 most recent contacts
-      path: "contacts",
-      perDocumentLimit: 5
-    })
-
-    // Find all transactions within 2 months
-    let transactions = await Transaction.find(
-      { $or: [{sender: id}, {receiver: id}],
-        isApproved: true,
-      });
-
-    // How to combine the User and Transaction objects?
+    let result = await User.findById(id)
     if (!result) res.send(`User with ID ${id} Not found`).status(404);
     else res.send(result).status(200);
   } catch (error) {
@@ -82,7 +70,19 @@ router.get(
   async (req, res) => {
     let id = req.body.userId;
     try {
-      let result = await User.findOne({ _id: id }, "");
+      let result = await User.findById(id).populate({
+        // 5 most recent contacts
+        path: "contacts",
+        perDocumentLimit: 5
+      })
+  
+      // Find all transactions within 2 months
+      let transactions = await Transaction.find(
+        { $or: [{sender: id}, {receiver: id}],
+          isApproved: true,
+        });
+
+      // How to combine the User and Transaction objects?
 
       if (!result) res.send(`User with ID ${id} Not found`).status(404);
       else res.send(result).status(200);
@@ -93,6 +93,22 @@ router.get(
   }
 );
 
+
+// MONGOOSE
+router.delete("/auth/mongoose_delete_user", async (req, res) => {
+  let id = req.body.userId;
+  try {
+    let result = await User.deleteOne({_id: id})
+    if (result.deletedCount == 0) res.send(`User with ID ${id} Not found`).status(404);
+    else res.send(result).status(200);
+  } catch (error) {
+    console.error(error);
+    res.send(error).status(400);
+  }
+});
+
+
+
 // MONGOOSE
 router.patch("/profile/mongoose_add_card", async (req, res) => {
   let id = req.body.userId;
@@ -100,7 +116,7 @@ router.patch("/profile/mongoose_add_card", async (req, res) => {
     let user = await User.findById(id);
     const newCard = user.cards.create({
       accountHolder: user.name,
-      cardNumber: parseInt(req.body.cardNumber.replace('/\s\g', "")),
+      cardNumber: req.body.cardNumber.replace('/\s\g', ""),
       expDate: req.body.expDate,
       cvv: req.body.cvv,
     });
@@ -148,7 +164,9 @@ router.post("/auth/mongoose_create_user", async (req, res) => {
   try {
     const result = await User.create({
       name: user.name,
-      phoneNumber: user.phoneNumber
+      phoneNumber: user.phoneNumber,
+      password: user.password,
+      // create a QR Code on creation
     });
     res.send(result).status(200);
   } catch (error) {
