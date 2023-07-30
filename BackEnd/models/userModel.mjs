@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
+import uniqueValidator from 'mongoose-unique-validator'
 // import Transaction from "transactionModel.mjs"
 
+// var uniqueValidator = require('mongoose-unique-validator');
 
 // Subdocument
 const cardSchema = new mongoose.Schema({
@@ -10,11 +12,13 @@ const cardSchema = new mongoose.Schema({
   },
   cardNumber: {
     type: String,
+    unique: true,
     required: true
   },
   expDate: {
     type: Date,
-    required: true
+    required: true,
+    min: Date.now()
     // Validation: before Date.now()
   },
   cvv: {
@@ -39,8 +43,8 @@ const userSchema = new mongoose.Schema({
   phoneNumber: {
     type: String,
     index: true,
-    unique: true,
-    required: [true, "Please enter a phone number"]
+    required: [true, "Please enter a phone number"],
+    unique: true
   },
   password: {
     type: String,
@@ -48,7 +52,8 @@ const userSchema = new mongoose.Schema({
   }, 
   QRCode: {
     type: String,
-    unique: true
+    // GETTER - define root as where images are stored
+    get: val => `{root}${val}`
   },
   balance: {
     type: Number,
@@ -62,18 +67,15 @@ const userSchema = new mongoose.Schema({
     ref: 'User'
   }],
 
-  // Doc suggested that in one-to-many relationships, don't keep two pointers (i.e. user->transaction + transaction->user) as they may get out of sync
-  // SHOULD just have a parent pointer from the 'many' side. Can add it as a virtual.
   /*
-  transactions: [{
-    type: mongoose.ObjectId,
-    ref: 'Transaction'
-  }],
+  - NO TRANSACTIONS POINTER
+  - Doc suggested that in one-to-many relationships, don't keep two pointers (i.e. user->transaction && transaction->user) as they may get out of sync or unusually large
+  - SHOULD just have a parent pointer from the 'many' side. Can add it as a virtual.
   */
+
   profilePicture: {
     type: String,
-    // GETTER - define root as where images are stored
-    get: v => `${root}${v}`
+    get: val => `${root}${val}`
   },
   creationDate: Date
 }, 
@@ -88,6 +90,9 @@ const userSchema = new mongoose.Schema({
 //   foreignField: 'user'
 // })
 
+
+userSchema.plugin(uniqueValidator);
+cardSchema.plugin(uniqueValidator);
 
 
 

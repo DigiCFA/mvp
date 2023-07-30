@@ -94,29 +94,17 @@ router.get(
 );
 
 
-// MONGOOSE
-router.delete("/auth/mongoose_delete_user", async (req, res) => {
-  let id = req.body.userId;
-  try {
-    let result = await User.deleteOne({_id: id})
-    if (result.deletedCount == 0) res.send(`User with ID ${id} Not found`).status(404);
-    else res.send(result).status(200);
-  } catch (error) {
-    console.error(error);
-    res.send(error).status(400);
-  }
-});
-
-
 
 // MONGOOSE
 router.patch("/profile/mongoose_add_card", async (req, res) => {
   let id = req.body.userId;
   try {
     let user = await User.findById(id);
+    if (!user) res.send(`User with ID ${id} Not found`).status(404);
+    
     const newCard = user.cards.create({
       accountHolder: user.name,
-      cardNumber: req.body.cardNumber.replace('/\s\g', ""),
+      cardNumber: req.body.cardNumber.replace(/\s/g, ''),
       expDate: req.body.expDate,
       cvv: req.body.cvv,
     });
@@ -145,20 +133,6 @@ router.patch("/profile/mongoose_add_card", async (req, res) => {
 // })
 
 // MONGOOSE
-router.delete("/auth/mongoose_delete_user", async (req, res) => {
-  let id = req.body.userId;
-  try {
-    let result = await User.findByIdAndDelete(id);
-
-    if (!result) res.send(`User with ID ${id} Not found`).status(404);
-    else res.send(result).status(200);
-  } catch (error) {
-    console.error(error);
-    res.send(error).status(400);
-  }
-});
-
-// MONGOOSE
 router.post("/auth/mongoose_create_user", async (req, res) => {
   let user = req.body;
   try {
@@ -166,6 +140,7 @@ router.post("/auth/mongoose_create_user", async (req, res) => {
       name: user.name,
       phoneNumber: user.phoneNumber,
       password: user.password,
+      creationDate: Date.now()
       // create a QR Code on creation
     });
     res.send(result).status(200);
@@ -204,6 +179,24 @@ router.post("/auth/create_user", async (req, res) => {
       }
     });
 });
+
+
+// MONGOOSE
+router.delete("/auth/mongoose_delete_user", async (req, res) => {
+  let id = req.body.userId;
+  try {
+    let result = await User.findByIdAndDelete(id);
+
+    if (!result) res.send(`User with ID ${id} Not found`).status(404);
+    else res.send(result).status(200);
+  } catch (error) {
+    console.error(error);
+    res.send(error).status(400);
+  }
+});
+
+
+
 
 router.post("/auth/user_login", async (req, res) => {
   let collection = db.collection("users");
