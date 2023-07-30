@@ -20,7 +20,10 @@ const transactionSchema = new mongoose.Schema({
     transactionDate: Date, 
     isPayment: Boolean, // 0 request, 1 payment
     isApproved: Boolean,  // 0 not approved, 1 approved
-    message: String
+    message: {
+        type: String,
+        trim: true
+    }
 })
 
 const Transaction = mongoose.model("Transaction", transactionSchema);

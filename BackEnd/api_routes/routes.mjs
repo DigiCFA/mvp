@@ -24,14 +24,21 @@ router.get(
   async (req, res) => {
     let transactions = await db.collection("transactions").find({}).toArray();
     let users = await db.collection("users").find({}).toArray();
+    let indexes = await User.collection.getIndexes({full: true});
     let text =
       `<div>
         <h1>Welcome to DigiCFA</h1>
-        <h3>All transactions: </h3>
+        <h3>All Transactions: </h3>
        </div>` +
       JSON.stringify(transactions) +
-      `<h3>All users: </h3>` +
-      JSON.stringify(users);
+      `<h3>All Users: </h3>` +
+      JSON.stringify(users) + 
+      `<h3>All Indexes: </h3>` +
+      JSON.stringify(indexes);
+
+    User.collection.getIndexes({full: true}).then(indexes => {
+      console.log("indexes: ", indexes);
+    })
 
     res.send(text).status(200);
   }
@@ -108,7 +115,7 @@ router.patch("/profile/mongoose_add_card", async (req, res) => {
       expDate: req.body.expDate,
       cvv: req.body.cvv,
     });
-    user.cards.push(newCard);
+    user.cards.addToSet(newCard);
     await user.save();
 
     res.send(newCard).status(200);
@@ -137,7 +144,9 @@ router.post("/auth/mongoose_create_user", async (req, res) => {
   let user = req.body;
   try {
     const result = await User.create({
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      fullName: user.firstName + ' ' + user.lastName,
       phoneNumber: user.phoneNumber,
       password: user.password,
       creationDate: Date.now()
@@ -526,5 +535,26 @@ router.get(
       });
   }
 );
+
+
+// MONGOOSE
+router.delete("/transaction/mongoose_delete_transaction", async (req, res) => {
+  let id = req.body.transactionId;
+  try {
+    let result = await Transaction.findByIdAndDelete(id);
+
+    if (!result) res.send(`Transaction with ID ${id} Not found`).status(404);
+    else res.send(result).status(200);
+  } catch (error) {
+    console.error(error);
+    res.send(error).status(400);
+  }
+});
+
+
+
+
+
+
 
 export default router;
