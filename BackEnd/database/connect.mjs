@@ -35,7 +35,7 @@ db.once("open", function () {
   console.log("Connected to MongoDB.");
 });
 
-export function db_ref() {
+export function dbRef() {
   return db;
 }
 

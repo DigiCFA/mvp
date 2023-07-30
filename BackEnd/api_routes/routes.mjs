@@ -1,100 +1,161 @@
 import express from "express";
-import { db_ref } from "../database/connect.mjs";
+import { dbRef } from "../database/connect.mjs";
 import { ObjectId } from "mongodb";
 
 // All ACID based transactions will not work for now, as Mongoose replaces MongoClient
 // Still learning Mongoose
-let client_ref = () => {};
-let client = client_ref();
-
-
+let clientRef = () => {};
+let client = clientRef();
 
 import User from "../models/userModel.mjs";
+import Transaction from "../models/transactionModel.mjs";
 
 const router = express.Router();
 
-let db = db_ref();
+let db = dbRef();
 
 // Trying out middleware
-router.get("/", (req, res, next) => {
+router.get(
+  "/",
+  (req, res, next) => {
     console.log("On /, displaying all transactions and users");
     next();
   },
   async (req, res) => {
     let transactions = await db.collection("transactions").find({}).toArray();
     let users = await db.collection("users").find({}).toArray();
+    let indexes = await User.collection.getIndexes({full: true});
     let text =
       `<div>
         <h1>Welcome to DigiCFA</h1>
-        <h3>All transactions: </h3>
-       </div>` + JSON.stringify(transactions) + 
-       `<h3>All users: </h3>` + JSON.stringify(users);
+        <h3>All Transactions: </h3>
+       </div>` +
+      JSON.stringify(transactions) +
+      `<h3>All Users: </h3>` +
+      JSON.stringify(users) + 
+      `<h3>All Indexes: </h3>` +
+      JSON.stringify(indexes);
 
     res.send(text).status(200);
   }
 );
 
-
-
 router.get("/profile/retrieve_user", async (req, res) => {
-  let id = req.body.user_id;
+  let id = req.body.userId;
   let collection = db.collection("users");
   try {
-    let result = await collection.findOne({_id: new ObjectId(id)});
-    
-    if (!result) res.send(`User with ID ${id} Not found`).status(404);
-    else res.send(result).status(200);
-  } catch(error) {
-    console.error(error);
-    res.send(error).status(400);
-  }
-})
+    let result = await collection.findOne({ _id: new ObjectId(id) });
 
-// MONGOOSE
-router.get("/profile/mongoose_retrieve_user", async(req, res) => {
-  let id = req.body.user_id;
-  try {
-    let result = await User.findById(id);
-
-    if (!result) res.send(`User with ID ${id} Not found`).status(404);
-    else res.send(result).status(200);
-  } catch(error) {
-    console.error(error)
-    res.send(error).status(400)
-  }
-})
-
-
-// MONGOOSE
-router.delete("/auth/mongoose_delete_user", async(req, res) => {
-  let id = req.body.user_id;
-  try {
-    let result = await User.findByIdAndDelete(id);
-    
     if (!result) res.send(`User with ID ${id} Not found`).status(404);
     else res.send(result).status(200);
   } catch (error) {
     console.error(error);
     res.send(error).status(400);
   }
-})
+});
 
 // MONGOOSE
-router.post("/auth/mongoose_create_user", async(req, res) => {
+router.get("/profile/mongoose_retrieve_user", async (req, res) => {
+  let id = req.body.userId;
+  try {
+    let result = await User.findById(id)
+    if (!result) res.send(`User with ID ${id} Not found`).status(404);
+    else res.send(result).status(200);
+  } catch (error) {
+    console.error(error);
+    res.send(error).status(400);
+  }
+});
+
+// MONGOOSE
+router.get(
+  "/profile/mongoose_retrieve_user_with_certain_fields",
+  async (req, res) => {
+    let id = req.body.userId;
+    try {
+      let result = await User.findById(id).populate({
+        // 5 most recent contacts
+        path: "contacts",
+        perDocumentLimit: 2
+      })
+  
+      // Find all transactions within 2 months
+      let transactions = await Transaction.find(
+        { $or: [{sender: id}, {receiver: id}],
+          isApproved: true,
+        });
+
+      // How to combine the User and Transaction objects?
+
+      if (!result) res.send(`User with ID ${id} Not found`).status(404);
+      else res.send(result).status(200);
+    } catch (error) {
+      console.error(error);
+      res.send(error).status(400);
+    }
+  }
+);
+
+
+
+// MONGOOSE
+router.patch("/profile/mongoose_add_card", async (req, res) => {
+  let id = req.body.userId;
+  try {
+    let user = await User.findById(id);
+    if (!user) res.send(`User with ID ${id} Not found`).status(404);
+    
+    const newCard = user.cards.create({
+      accountHolder: user.fullName,
+      cardNumber: req.body.cardNumber.replace(/\s/g, ''),
+      expDate: req.body.expDate,
+      cvv: req.body.cvv,
+    });
+    user.cards.addToSet(newCard);
+    await user.save();
+
+    res.send(newCard).status(200);
+  } catch (error) {
+    console.error(error);
+    res.send(error).status(400);
+  }
+});
+
+// Yet to get this to work
+
+// router.patch("/profile/remove_card", async(req, res) => {
+//   let id = req.body.userId;
+//   try {
+//     let user = await User.findById(id);
+//     user.cards.push(newCard);
+//     await user.save();
+
+//     res.send(newCard).status(200);
+//   } catch(error) {
+//     console.error(error);
+//     res.send(error).status(400)
+//   }
+// })
+
+// MONGOOSE
+router.post("/auth/mongoose_create_user", async (req, res) => {
   let user = req.body;
   try {
     const result = await User.create({
-      name: user.name,
-      
-    }
-      );
-    res.send(result).status(200)
-  } catch(error) {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      fullName: user.firstName + ' ' + user.lastName,
+      phoneNumber: user.phoneNumber,
+      password: user.password,
+      creationDate: Date.now()
+      // create a QR Code on creation
+    });
+    res.send(result).status(200);
+  } catch (error) {
     console.error(error);
     res.send(error).status(400);
-    }
-})
-
+  }
+});
 
 router.post("/auth/create_user", async (req, res) => {
   let collection = db.collection("users");
@@ -126,6 +187,23 @@ router.post("/auth/create_user", async (req, res) => {
     });
 });
 
+
+// MONGOOSE
+router.delete("/auth/mongoose_delete_user", async (req, res) => {
+  let id = req.body.userId;
+  try {
+    let result = await User.findByIdAndDelete(id);
+
+    if (!result) res.send(`User with ID ${id} Not found`).status(404);
+    else res.send(result).status(200);
+  } catch (error) {
+    console.error(error);
+    res.send(error).status(400);
+  }
+});
+
+
+
 router.post("/auth/user_login", async (req, res) => {
   let collection = db.collection("users");
   let user_input = req.body;
@@ -141,6 +219,34 @@ router.post("/auth/user_login", async (req, res) => {
     }
   );
 });
+
+
+// DON'T need the contact functionality -> FOR TESTING PURPOSES ONLY
+
+
+// MONGOOSE
+router.patch("/testing/mongoose_add_contact", async (req, res) => {
+  let id = req.body.userId;
+  let contactId = req.body.contactId;
+  try {
+    let user = await User.findById(id);
+    if (!user) res.send(`User with ID ${id} Not found`).status(404);
+
+    let otherUser = await User.findById(contactId);
+    if (!otherUser) res.send(`User with ID ${contactId} Not found`).status(404);
+
+    user.contacts.addToSet(contactId);
+    let result = await user.save();
+    otherUser.contacts.addToSet(id);
+    let result2 = await otherUser.save();
+
+    res.send(result).status(200);
+  } catch (error) {
+    console.error(error);
+    res.send(error).status(400);
+  }
+});
+
 
 router.patch("/profile/add_contact", async (req, res) => {
   let collection = db.collection("users");
@@ -454,5 +560,26 @@ router.get(
       });
   }
 );
+
+
+// MONGOOSE
+router.delete("/transaction/mongoose_delete_transaction", async (req, res) => {
+  let id = req.body.transactionId;
+  try {
+    let result = await Transaction.findByIdAndDelete(id);
+
+    if (!result) res.send(`Transaction with ID ${id} Not found`).status(404);
+    else res.send(result).status(200);
+  } catch (error) {
+    console.error(error);
+    res.send(error).status(400);
+  }
+});
+
+
+
+
+
+
 
 export default router;
