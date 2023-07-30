@@ -36,10 +36,6 @@ router.get(
       `<h3>All Indexes: </h3>` +
       JSON.stringify(indexes);
 
-    User.collection.getIndexes({full: true}).then(indexes => {
-      console.log("indexes: ", indexes);
-    })
-
     res.send(text).status(200);
   }
 );
@@ -80,7 +76,7 @@ router.get(
       let result = await User.findById(id).populate({
         // 5 most recent contacts
         path: "contacts",
-        perDocumentLimit: 5
+        perDocumentLimit: 2
       })
   
       // Find all transactions within 2 months
@@ -110,7 +106,7 @@ router.patch("/profile/mongoose_add_card", async (req, res) => {
     if (!user) res.send(`User with ID ${id} Not found`).status(404);
     
     const newCard = user.cards.create({
-      accountHolder: user.name,
+      accountHolder: user.fullName,
       cardNumber: req.body.cardNumber.replace(/\s/g, ''),
       expDate: req.body.expDate,
       cvv: req.body.cvv,
@@ -124,6 +120,8 @@ router.patch("/profile/mongoose_add_card", async (req, res) => {
     res.send(error).status(400);
   }
 });
+
+// Yet to get this to work
 
 // router.patch("/profile/remove_card", async(req, res) => {
 //   let id = req.body.userId;
@@ -206,7 +204,6 @@ router.delete("/auth/mongoose_delete_user", async (req, res) => {
 
 
 
-
 router.post("/auth/user_login", async (req, res) => {
   let collection = db.collection("users");
   let user_input = req.body;
@@ -222,6 +219,34 @@ router.post("/auth/user_login", async (req, res) => {
     }
   );
 });
+
+
+// DON'T need the contact functionality -> FOR TESTING PURPOSES ONLY
+
+
+// MONGOOSE
+router.patch("/testing/mongoose_add_contact", async (req, res) => {
+  let id = req.body.userId;
+  let contactId = req.body.contactId;
+  try {
+    let user = await User.findById(id);
+    if (!user) res.send(`User with ID ${id} Not found`).status(404);
+
+    let otherUser = await User.findById(contactId);
+    if (!otherUser) res.send(`User with ID ${contactId} Not found`).status(404);
+
+    user.contacts.addToSet(contactId);
+    let result = await user.save();
+    otherUser.contacts.addToSet(id);
+    let result2 = await otherUser.save();
+
+    res.send(result).status(200);
+  } catch (error) {
+    console.error(error);
+    res.send(error).status(400);
+  }
+});
+
 
 router.patch("/profile/add_contact", async (req, res) => {
   let collection = db.collection("users");
