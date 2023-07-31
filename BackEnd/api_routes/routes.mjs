@@ -311,6 +311,47 @@ router.patch("/profile/remove_contact", async (req, res) => {
     });
 });
 
+
+
+router.post("/transaction/create_direct_transaction", async (req, res) => {
+  
+  const session = await mongoose.startSession();
+  let transactionDataRequest = req.body;
+
+  let transactions = db.collection("transactions");
+  try {
+    await session.withTransaction(async () => {
+
+      const transactionData = new Transaction(transactionDataRequest)
+      const sendUser = await User.findById({ _id: transactionData.sender});
+      const receiveUser = await User.findById({ _id: transactionData.receiver});
+      let user_balance = sendUser.balance
+      let amountTransfered = transactionData.amountTransfered;
+      if (user_balance < amountTransfered) {
+        await res.send({ "balance too low": 0 }).status(400);
+        return;
+      }
+      await sendUser.$inc('balance',-1.0*amountTransfered)
+      await receiveUser.$inc('balance',amountTransfered)
+      console.log("the");
+      console.log(transactionData);
+      await transactions.insertOne(transactionData)
+      await sendUser.save()
+      await receiveUser.save()
+    });
+  } catch (transact_error) {
+    console.error(transact_error);
+    await res.send(transact_error).status(400);
+
+
+  }
+  finally{
+    await res.send(transactionDataRequest).status(200);
+    await session.endSession();
+
+  }
+})
+
 router.post("/transaction/create_transaction_request", async (req, res) => {
   const session = client.startSession();
   let transaction_data = req.body;
