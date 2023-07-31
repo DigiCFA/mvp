@@ -1,6 +1,7 @@
 import express from "express";
 import { dbRef } from "../database/connect.mjs";
 import { ObjectId } from "mongodb";
+import mongoose from 'mongoose';
 
 // All ACID based transactions will not work for now, as Mongoose replaces MongoClient
 // Still learning Mongoose
@@ -106,12 +107,12 @@ router.patch("/profile/mongoose_add_card", async (req, res) => {
     if (!user) res.send(`User with ID ${id} Not found`).status(404);
     
     const newCard = user.cards.create({
-      accountHolder: user.fullName,
+      accountHolder: req.body.fullName,
       cardNumber: req.body.cardNumber.replace(/\s/g, ''),
       expDate: req.body.expDate,
       cvv: req.body.cvv,
     });
-    user.cards.addToSet(newCard);
+    await user.cards.addToSet(newCard);
     await user.save();
 
     res.send(newCard).status(200);
@@ -123,19 +124,22 @@ router.patch("/profile/mongoose_add_card", async (req, res) => {
 
 // Yet to get this to work
 
-// router.patch("/profile/remove_card", async(req, res) => {
-//   let id = req.body.userId;
-//   try {
-//     let user = await User.findById(id);
-//     user.cards.push(newCard);
-//     await user.save();
+router.patch("/profile/remove_card", async(req, res) => {
+  let id = req.body.userId;
+  let cardNumber = req.body.cardNumber;
+  //card.expDate = Date(card.expDate);
+  console.log(cardNumber);
+  try {
+    let user = await User.findById(id);
+    await user.cards.pull({cardNumber:cardNumber});
+    await user.save()
 
-//     res.send(newCard).status(200);
-//   } catch(error) {
-//     console.error(error);
-//     res.send(error).status(400)
-//   }
-// })
+    await res.send(user).status(200);
+  } catch(error) {
+    console.error(error);
+    res.send(error).status(400)
+  }
+})
 
 // MONGOOSE
 router.post("/auth/mongoose_create_user", async (req, res) => {
@@ -307,6 +311,47 @@ router.patch("/profile/remove_contact", async (req, res) => {
       }
     });
 });
+
+
+
+router.post("/transaction/create_direct_transaction", async (req, res) => {
+  
+  const session = await mongoose.startSession();
+  let transactionDataRequest = req.body;
+
+  let transactions = db.collection("transactions");
+  try {
+    await session.withTransaction(async () => {
+
+      const transactionData = new Transaction(transactionDataRequest)
+      const sendUser = await User.findById({ _id: transactionData.sender});
+      const receiveUser = await User.findById({ _id: transactionData.receiver});
+      let user_balance = sendUser.balance
+      let amountTransfered = transactionData.amountTransfered;
+      if (user_balance < amountTransfered) {
+        await res.send({ "balance too low": 0 }).status(400);
+        return;
+      }
+      await sendUser.$inc('balance',-1.0*amountTransfered)
+      await receiveUser.$inc('balance',amountTransfered)
+      console.log("the");
+      console.log(transactionData);
+      await transactions.insertOne(transactionData)
+      await sendUser.save()
+      await receiveUser.save()
+    });
+  } catch (transact_error) {
+    console.error(transact_error);
+    await res.send(transact_error).status(400);
+
+
+  }
+  finally{
+    await res.send(transactionDataRequest).status(200);
+    await session.endSession();
+
+  }
+})
 
 router.post("/transaction/create_transaction_request", async (req, res) => {
   const session = client.startSession();

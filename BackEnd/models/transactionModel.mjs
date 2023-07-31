@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 
 const transactionSchema = new mongoose.Schema({
-    amountTransferred: {
+    amountTransfered: {
         type: Number,
         min: 0.01
     },
