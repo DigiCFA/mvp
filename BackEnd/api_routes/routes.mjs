@@ -106,12 +106,12 @@ router.patch("/profile/mongoose_add_card", async (req, res) => {
     if (!user) res.send(`User with ID ${id} Not found`).status(404);
     
     const newCard = user.cards.create({
-      accountHolder: user.fullName,
+      accountHolder: req.body.fullName,
       cardNumber: req.body.cardNumber.replace(/\s/g, ''),
       expDate: req.body.expDate,
       cvv: req.body.cvv,
     });
-    user.cards.addToSet(newCard);
+    await user.cards.addToSet(newCard);
     await user.save();
 
     res.send(newCard).status(200);
@@ -123,19 +123,22 @@ router.patch("/profile/mongoose_add_card", async (req, res) => {
 
 // Yet to get this to work
 
-// router.patch("/profile/remove_card", async(req, res) => {
-//   let id = req.body.userId;
-//   try {
-//     let user = await User.findById(id);
-//     user.cards.push(newCard);
-//     await user.save();
+router.patch("/profile/remove_card", async(req, res) => {
+  let id = req.body.userId;
+  let cardNumber = req.body.cardNumber;
+  //card.expDate = Date(card.expDate);
+  console.log(cardNumber);
+  try {
+    let user = await User.findById(id);
+    await user.cards.pull({cardNumber:cardNumber});
+    await user.save()
 
-//     res.send(newCard).status(200);
-//   } catch(error) {
-//     console.error(error);
-//     res.send(error).status(400)
-//   }
-// })
+    await res.send(user).status(200);
+  } catch(error) {
+    console.error(error);
+    res.send(error).status(400)
+  }
+})
 
 // MONGOOSE
 router.post("/auth/mongoose_create_user", async (req, res) => {
