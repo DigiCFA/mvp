@@ -1,6 +1,7 @@
 import express from "express";
 import { dbRef } from "../database/connect.mjs";
 import { ObjectId } from "mongodb";
+import mongoose from 'mongoose';
 
 // All ACID based transactions will not work for now, as Mongoose replaces MongoClient
 // Still learning Mongoose
