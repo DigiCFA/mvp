@@ -81,10 +81,10 @@ const userSchema = new mongoose.Schema(
     ],
 
     /*
-  - NO TRANSACTIONS POINTER
-  - Doc suggested that in one-to-many relationships, don't keep two pointers (i.e. user->transaction && transaction->user) as they may get out of sync or unusually large
-  - SHOULD just have a parent pointer from the 'many' side. Can add it as a virtual.
-  */
+    - NO TRANSACTIONS POINTER
+    - Doc suggested that in one-to-many relationships, don't keep two pointers (i.e. user->transaction && transaction->user) as they may get out of sync or unusually large
+    - SHOULD just have a parent pointer from the 'many' side. Can add it as a virtual.
+    */
 
     profilePicture: {
       type: String,
