@@ -80,8 +80,9 @@ export default function App() {
                 routeName === "User" ||
                 routeName === "PaymentMethods" ||
                 routeName === "SendReview" ||
+                routeName === "SendConfirmation" ||
                 routeName === "RequestReview" ||
-                routeName === "SendConfirmation"
+                routeName === "RequestConfirmation"
               ) {
                 return {
                   display: "none",
