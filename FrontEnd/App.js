@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 
 import HomeStackScreen from "./screens/Home/HomeStackScreen";
 import CardsStackScreen from "./screens/Wallet/CardsStackScreen";
-import PayRequestStackScreen from "./screens/Transfer/PayRequestStackScreen";
+import TransferStackScreen from "./screens/Transfer/TransferStackScreen";
 import MeStackScreen from "./screens/Me/MeStackScreen";
 import LoginSignupStackScreen from "./screens/LoginSignup/LoginSignupStackScreen";
 import { store } from "./store"
@@ -34,7 +34,7 @@ export default function App() {
       />
     ) : (
       <NavBar.Group screenOptions={{ headerShown: false }}>
-        <NavBar.Screen name="Transfer" component={PayRequestStackScreen} />
+        <NavBar.Screen name="Transfer" component={TransferStackScreen} />
 
         <NavBar.Screen name="Home" component={HomeStackScreen} />
 
@@ -79,7 +79,10 @@ export default function App() {
               if (
                 routeName === "User" ||
                 routeName === "PaymentMethods" ||
-                routeName === "SendReview"
+                routeName === "SendReview" ||
+                routeName === "SendConfirmation" ||
+                routeName === "RequestReview" ||
+                routeName === "RequestConfirmation"
               ) {
                 return {
                   display: "none",

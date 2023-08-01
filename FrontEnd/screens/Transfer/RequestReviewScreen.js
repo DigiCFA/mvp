@@ -58,7 +58,7 @@ const SendReviewScreen = () => {
             {
               translateY: current.progress.interpolate({
                 inputRange: [0, 1],
-                outputRange: [height, height * 0.5],
+                outputRange: [height, height * 0.65],
                 extrapolate: "clamp",
               }),
             },
@@ -66,7 +66,7 @@ const SendReviewScreen = () => {
         }}
       >
         <View className="flex-1 p-4 bg-white rounded-3xl">
-          <View className="flex-col h-[45%]">
+          <View className="flex-col h-[30%]">
           
             {/* Top Portion */}
             <View className="flex-row mb-4">
@@ -82,15 +82,9 @@ const SendReviewScreen = () => {
               </TouchableOpacity>
             </View>
 
-            <PaymentMethodCard
-              cardID={cardID}
-              cardName={cardName}
-              cardType={cardType}
-              cardNumber={cardNumber}
-            />
 
             <Text className="text-lg mt-4">
-              Send <Text className="italic">{name}</Text>:
+              Request from <Text className="italic">{name}</Text>:
             </Text>
 
             <View className="flex-row mt-8">
@@ -112,10 +106,10 @@ const SendReviewScreen = () => {
 
             {/* Bottom Portion */}
             <TouchableOpacity
-              onPress={() => navigation.navigate("SendConfirmation", {name, amount, message})}
+              onPress={() => navigation.navigate("RequestConfirmation", {name, amount, message})}
               className="bg-blue-900 rounded-full py-3 px-14 items-center"
             >
-              <Text className="text-white text-xl font-extrabold">Send</Text>
+              <Text className="text-white text-xl font-extrabold">Request</Text>
             </TouchableOpacity>
           </View>
         </View>

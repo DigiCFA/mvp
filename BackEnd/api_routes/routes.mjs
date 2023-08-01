@@ -42,21 +42,6 @@ router.get(
 );
 
 router.get("/profile/retrieve_user", async (req, res) => {
-  let id = req.body.userId;
-  let collection = db.collection("users");
-  try {
-    let result = await collection.findOne({ _id: new ObjectId(id) });
-
-    if (!result) res.send(`User with ID ${id} Not found`).status(404);
-    else res.send(result).status(200);
-  } catch (error) {
-    console.error(error);
-    res.send(error).status(400);
-  }
-});
-
-// MONGOOSE
-router.get("/profile/mongoose_retrieve_user", async (req, res) => {
   let id = req.query.userId;
   try {
     // Top 5 contacts
@@ -74,9 +59,8 @@ router.get("/profile/mongoose_retrieve_user", async (req, res) => {
   }
 });
 
-// MONGOOSE
 router.get(
-  "/profile/mongoose_retrieve_user_with_certain_fields",
+  "/profile/retrieve_user_with_certain_fields",
   async (req, res) => {
     let id = req.body.userId;
     try {
@@ -122,9 +106,7 @@ router.get(
 );
 
 
-
-// MONGOOSE
-router.patch("/profile/mongoose_add_card", async (req, res) => {
+router.patch("/profile/add_card", async (req, res) => {
   let id = req.body.userId;
   try {
     let user = await User.findById(id);
@@ -146,7 +128,6 @@ router.patch("/profile/mongoose_add_card", async (req, res) => {
   }
 });
 
-// Yet to get this to work
 
 router.patch("/profile/remove_card", async(req, res) => {
   let id = req.body.userId;
@@ -155,18 +136,19 @@ router.patch("/profile/remove_card", async(req, res) => {
   console.log(cardNumber);
   try {
     let user = await User.findById(id);
+    if (!user) res.send(`User with ID ${id} Not found`).status(404);
+
     await user.cards.pull({cardNumber:cardNumber});
     await user.save()
 
-    await res.send(user).status(200);
+    res.send(user).status(200);
   } catch(error) {
     console.error(error);
     res.send(error).status(400)
   }
 })
 
-// MONGOOSE
-router.post("/auth/mongoose_create_user", async (req, res) => {
+router.post("/auth/create_user", async (req, res) => {
   let user = req.body;
   try {
     const result = await User.create({
@@ -185,39 +167,38 @@ router.post("/auth/mongoose_create_user", async (req, res) => {
   }
 });
 
-router.post("/auth/create_user", async (req, res) => {
-  let collection = db.collection("users");
-  let user_data = req.body;
-  await collection
-    .insertOne({
-      user_name: user_data.user_name,
-      user_phone_number: user_data.user_phone_number,
-      user_password: user_data.user_password,
-      user_QRCode: user_data.user_QRCode,
-      user_balance: 0,
-      user_card_info: [],
-      privacy_preference: user_data.user_balance,
-      user_contacts: [],
-      transactions: [],
-      received_transactions: [],
-      sent_transactions: [],
-      received_requests: [],
-      sent_requests: [],
-      user_creation_date: Date.now(),
-    })
-    .then(function (add_result, add_error) {
-      if (!add_error) {
-        res.send(add_result).status(200);
-      } else {
-        console.error(add_error);
-        res.send(add_error).status(400);
-      }
-    });
-});
+// router.post("/auth/create_user", async (req, res) => {
+//   let collection = db.collection("users");
+//   let user_data = req.body;
+//   await collection
+//     .insertOne({
+//       user_name: user_data.user_name,
+//       user_phone_number: user_data.user_phone_number,
+//       user_password: user_data.user_password,
+//       user_QRCode: user_data.user_QRCode,
+//       user_balance: 0,
+//       user_card_info: [],
+//       privacy_preference: user_data.user_balance,
+//       user_contacts: [],
+//       transactions: [],
+//       received_transactions: [],
+//       sent_transactions: [],
+//       received_requests: [],
+//       sent_requests: [],
+//       user_creation_date: Date.now(),
+//     })
+//     .then(function (add_result, add_error) {
+//       if (!add_error) {
+//         res.send(add_result).status(200);
+//       } else {
+//         console.error(add_error);
+//         res.send(add_error).status(400);
+//       }
+//     });
+// });
 
 
-// MONGOOSE
-router.delete("/auth/mongoose_delete_user", async (req, res) => {
+router.delete("/auth/delete_user", async (req, res) => {
   let id = req.body.userId;
   try {
     let result = await User.findByIdAndDelete(id);
@@ -350,9 +331,9 @@ router.post("/transaction/create_direct_transaction", async (req, res) => {
       const transactionData = new Transaction(transactionDataRequest)
       const sendUser = await User.findById({ _id: transactionData.sender});
       const receiveUser = await User.findById({ _id: transactionData.receiver});
-      let user_balance = sendUser.balance
+      let userBalance = sendUser.balance
       let amountTransfered = transactionData.amountTransfered;
-      if (user_balance < amountTransfered) {
+      if (userBalance < amountTransfered) {
         await res.send({ "balance too low": 0 }).status(400);
         return;
       }

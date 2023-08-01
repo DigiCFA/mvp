@@ -61,7 +61,7 @@ export const selfSlice = createSlice({
 export const fetchUserById = userId => {
   return async (dispatch, getState) => {
     try {
-      const response = await axios.get("/profile/mongoose_retrieve_user", {
+      const response = await axios.get("/profile/retrieve_user", {
         params: {
           userId: userId,
         },
