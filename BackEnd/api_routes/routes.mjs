@@ -57,9 +57,15 @@ router.get("/profile/retrieve_user", async (req, res) => {
 
 // MONGOOSE
 router.get("/profile/mongoose_retrieve_user", async (req, res) => {
-  let id = req.body.userId;
+  let id = req.query.userId;
   try {
-    let result = await User.findById(id)
+    // Top 5 contacts
+    let result = await User.findById(id).populate({
+      path: "contacts",
+      perDocumentLimit: 5,
+      select: ["fullName", "phoneNumber"]
+    })
+
     if (!result) res.send(`User with ID ${id} Not found`).status(404);
     else res.send(result).status(200);
   } catch (error) {
@@ -74,11 +80,14 @@ router.get(
   async (req, res) => {
     let id = req.body.userId;
     try {
-      let result = await User.findById(id).populate({
+      let user = await User.findById(id).populate({
         // 5 most recent contacts
         path: "contacts",
-        perDocumentLimit: 2
+        perDocumentLimit: 5,
+        select: ["fullName", "phoneNumber"]
       })
+
+      if (!user) res.send(`User with ID ${id} Not found`).status(404);
   
       // Find all transactions within 2 months
       let transactions = await Transaction.find(
@@ -86,10 +95,25 @@ router.get(
           isApproved: true,
         });
 
-      // How to combine the User and Transaction objects?
 
-      if (!result) res.send(`User with ID ${id} Not found`).status(404);
-      else res.send(result).status(200);
+      // Aggregating the two together is more complicated
+      let result = db.users.aggregate([
+        {
+          "$lookup": {
+            "from": "transactions",
+            "localField": "_id",
+            "foreignField": {$or: ["sender", "receiver"]},
+            "as": "transactions"
+          }
+        }, {
+          "$lookup": {
+            "from": "users",
+            "localField": "_id",
+          }
+        }
+      ])
+
+      res.send(user).status(200);
     } catch (error) {
       console.error(error);
       res.send(error).status(400);
