@@ -1,9 +1,10 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSelf, setSelf } from "../../features/selfSlice";
 import { Ionicons } from "@expo/vector-icons"
+import SettingsColumn from "../../components/SettingsColumn";
 
 
 const MeScreen = () => {
@@ -32,7 +33,7 @@ const MeScreen = () => {
   // dispatch()
 
   return (
-    <View>
+    <ScrollView>
       <View className='mt-10'>
         <Text>First Name: {self.firstName}</Text>
         <Text>Last Name: {self.lastName}</Text>
@@ -46,16 +47,8 @@ const MeScreen = () => {
         <Text>Profile Picture: {self.profilePicture}</Text>
       </View>
 
-
-
-
-      <TouchableOpacity
-            onPress={() => navigation.navigate("AccountInfo")}
-            className="mt-10 p-4 bg-white rounded-lg items-center shadow"
-          >
-        <Text className="text-xl font-bold">Account info</Text>
-      </TouchableOpacity>
-    </View>
+      <SettingsColumn />
+    </ScrollView>
 
     
   );
