@@ -27,7 +27,7 @@ const SendReviewScreen = () => {
   const {
     params: {
       name,
-      paymentAmount,
+      amount,
       message,
       cardID,
       cardName,
@@ -90,7 +90,7 @@ const SendReviewScreen = () => {
             <View className="flex-row mt-8">
               <Text className='text-lg font-bold flex-1'>Total</Text>
               <Text className="text-lg font-bold">
-                <Currency quantity={paymentAmount} currency="USD"/> USD
+                <Currency quantity={amount} currency="USD"/> USD
               </Text>
             </View>
 
@@ -101,7 +101,7 @@ const SendReviewScreen = () => {
               <UserCard />
               <ScrollView>
                 <CardsColumn />
-                <Text>{name}, {paymentAmount}, {message}</Text>
+                <Text>{name}, {amount}, {message}</Text>
               </ScrollView> */}
 
             {/* Bottom Portion */}
