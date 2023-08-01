@@ -10,7 +10,7 @@ const MeStack = createNativeStackNavigator();
 
 const MeStackScreen = () => {
   return (
-    <MeStack.Navigator>
+    <MeStack.Navigator screenOptions={{headerShown: false}} >
         <MeStack.Screen name="MeScreen" component={MeScreen} />
         <MeStack.Screen name="AccountInfo" component={AccountInfoScreen} />
         <MeStack.Screen name="MessageCenter" component={MessageCenterScreen} />

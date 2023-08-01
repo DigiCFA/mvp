@@ -9,23 +9,23 @@ import TESTScreen from "../TESTScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import SendReviewScreen from "./SendReviewScreen";
 
-const PayRequestStack = createStackNavigator();
+const TransferStack = createStackNavigator();
 
-const PayRequestStackScreen = () => {
+const TransferStackScreen = () => {
   return (
-    <PayRequestStack.Navigator screenOptions={{ headerShown: false }}>
-      <PayRequestStack.Screen
+    <TransferStack.Navigator screenOptions={{ headerShown: false }}>
+      <TransferStack.Screen
         name="Search"
         component={SearchScreen}
       />
-      <PayRequestStack.Screen name="Scan" component={ScanScreen} />
+      <TransferStack.Screen name="Scan" component={ScanScreen} />
 
-      <PayRequestStack.Group
+      <TransferStack.Group
         screenOptions={{ tabBayStyle: { display: "None" } }}
       >
-        <PayRequestStack.Screen name="User" component={UserScreen} />
+        <TransferStack.Screen name="User" component={UserScreen} />
 
-        <PayRequestStack.Group
+        <TransferStack.Group
           screenOptions={{
             presentation: "transparentModal",
             // cardStyle: {
@@ -34,13 +34,13 @@ const PayRequestStackScreen = () => {
             // cardOverlayEnabled: true,
           }}
         >
-          <PayRequestStack.Screen name="PaymentMethods" component={PaymentMethodsScreen}/>
-          <PayRequestStack.Screen name="SendReview" component={SendReviewScreen}/>
-          <PayRequestStack.Screen name="Test" component={TESTScreen} />
-        </PayRequestStack.Group>
-      </PayRequestStack.Group>
-    </PayRequestStack.Navigator>
+          <TransferStack.Screen name="PaymentMethods" component={PaymentMethodsScreen}/>
+          <TransferStack.Screen name="SendReview" component={SendReviewScreen}/>
+          <TransferStack.Screen name="Test" component={TESTScreen} />
+        </TransferStack.Group>
+      </TransferStack.Group>
+    </TransferStack.Navigator>
   );
 };
 
-export default PayRequestStackScreen;
+export default TransferStackScreen;
