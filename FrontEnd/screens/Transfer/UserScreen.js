@@ -14,7 +14,7 @@ import Currency from "react-currency-formatter";
 const UserScreen = () => {
   const navigation = useNavigation();
 
-  const [paymentAmount, onChangeAmount] = useState("0.00");
+  const [amount, onChangeAmount] = useState("0.00");
   const [message, onChangeMessage] = useState("");
 
   const {
@@ -62,7 +62,7 @@ const UserScreen = () => {
               placeholder="0.00"
               contextMenuHidden={true}
               onChangeText={(newAmount) => onChangeAmount(newAmount)}
-              value={paymentAmount}
+              value={amount}
               className="text-7xl font-medium pt-8"
             />
           </View>
@@ -72,28 +72,34 @@ const UserScreen = () => {
           <Text className="text-lg px-1">USD</Text>
         </View>
       </View>
-      
 
       {/* Comments + Request + Pay */}
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <View className="mt-auto">
           {/* Comments associated with the transaction */}
-            <TextInput
-              placeholder="What's this for?"
-              placeholderTextColor="gray"
-              keyboardType="default"
-              multiline={true}
-              onChangeText={(newMessage) => onChangeMessage(newMessage)}
-              value={message}
-              className="text-base font-medium mx-4 p-3 bg-[#e9e7e2] rounded-3xl"
-            />
-          
+          <TextInput
+            placeholder="What's this for?"
+            placeholderTextColor="gray"
+            keyboardType="default"
+            multiline={true}
+            onChangeText={(newMessage) => onChangeMessage(newMessage)}
+            value={message}
+            className="text-base font-medium mx-4 p-3 bg-[#e9e7e2] rounded-3xl"
+          />
+
           <View className="m-4 flex-row space-x-4 justify-center">
             {/* Request */}
             <TouchableOpacity
-              onPress={() => navigation.navigate("Test")}
-              className="bg-blue-900 rounded-full py-3 px-8"
+              onPress={() => {
+                navigation.navigate("RequestReview", {
+                  name,
+                  amount,
+                  message,
+                });
+              }}
+              className='bg-blue-900 rounded-full py-3 px-8'
             >
               <Text className="text-white text-xl font-extrabold">Request</Text>
             </TouchableOpacity>
@@ -103,7 +109,7 @@ const UserScreen = () => {
               onPress={() => {
                 navigation.navigate("PaymentMethods", {
                   name,
-                  paymentAmount,
+                  amount,
                   message,
                 });
               }}
@@ -113,7 +119,6 @@ const UserScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
-
       </KeyboardAvoidingView>
 
       {/* Search */}

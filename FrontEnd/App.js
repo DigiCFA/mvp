@@ -79,7 +79,8 @@ export default function App() {
               if (
                 routeName === "User" ||
                 routeName === "PaymentMethods" ||
-                routeName === "SendReview"
+                routeName === "SendReview" ||
+                routeName === "RequestReview"
               ) {
                 return {
                   display: "none",

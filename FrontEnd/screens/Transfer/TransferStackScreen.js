@@ -8,6 +8,7 @@ import PaymentMethodsScreen from "./PaymentMethodsScreen";
 import TESTScreen from "../TESTScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import SendReviewScreen from "./SendReviewScreen";
+import RequestReviewScreen from "./RequestReviewScreen";
 
 const TransferStack = createStackNavigator();
 
@@ -36,6 +37,7 @@ const TransferStackScreen = () => {
         >
           <TransferStack.Screen name="PaymentMethods" component={PaymentMethodsScreen}/>
           <TransferStack.Screen name="SendReview" component={SendReviewScreen}/>
+          <TransferStack.Screen name="RequestReview" component={RequestReviewScreen} />
           <TransferStack.Screen name="Test" component={TESTScreen} />
         </TransferStack.Group>
       </TransferStack.Group>
