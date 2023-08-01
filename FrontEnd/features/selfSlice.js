@@ -1,28 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
-const axios = require("axios");
 
+
+// SHOULD ALL BE PLACED IN THE LOGIN PAGE
+axios.defaults.baseURL = "http://localhost:5050/routes";
 
 // Maybe write a thunk to fetch user info. In which case user info is passed during login, in which case initialState should be null
 const initialState = {
-  user: {
-    user_id: '001',
-    user_name: "John Smith",
-    user_phone_number: "+1 123 456 7890",
-    user_password: "johnsmith123",
-    user_QRCode: null,
-    user_balance: 4096.08,
-    user_cardInfo: null,
+  self: {
+    // _id: "001",
+    firstName: "Default",
+    lastName: "User",
+    fullName: "Default User",
+    phoneNumber: "+1 123 456 7890",
+    // password: "johnsmith",
+    QRCode: null,
+    balance: 888.88,
+    cards: [],
+    // privacyPreferences: [],
+    contacts: [],
+    profilePicture: null,
+    // creationDate: null
 
-    // Not necessary to fetch at login (Eager Loading)
-
-    // user_contacts: null,
-    // transactions: null,
-    // received_transactions: null,
-    // sent_transactions: null,
-    // received_requests: null,
-    // sent_requests: null,
-    // user_creation_date: null
+    // Not necessary to fetch too much else at login (Eager Loading)
   },
 };
 
@@ -32,18 +33,64 @@ export const selfSlice = createSlice({
   reducers: {
     // Very arbitrary code here -> please change it as fit
     logInOut: (state, action) => {
-      if (action.type === 'login')
-        state.self = action.payload;
-      else if (action.type === 'logout')
-        state.self = null;
+      if (action.type === "login") state.self = action.payload;
+      else if (action.type === "logout") state.self = null;
     },
-  }
+    setSelf: (state, action) => {
 
+      // state.self = action.payload;
+
+      let newSelf = action.payload;
+      console.log("Newself: ", newSelf);
+      state.self.firstName = newSelf.firstName;
+      state.self.lastName = newSelf.lastName;
+      state.self.fullName = newSelf.fullName;
+      state.self.phoneNumber = newSelf.phoneNumber;
+      state.self.QRCode = newSelf.QRCode;
+      state.self.balance = newSelf.balance;
+      state.self.cards = newSelf.cards;
+      state.self.privacyPreferences = newSelf.privacyPreferences; 
+      state.self.contacts = newSelf.contacts;
+      state.self.profilePicture = newSelf.profilePicture;
+    }
+  },
 });
 
-export const { logInOut } = selfSlice.actions;
 
+// Thunk Action creator
+export const fetchUserById = userId => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await axios.get("/profile/mongoose_retrieve_user", {
+        params: {
+          userId: userId,
+        },
+      });
+      if (response.status == 200) console.log("SUCCESSFUL")
+      else console.log("ERROR")
 
-export const selectSelf = (state) => state.self.user
+      let user = {
+        firstName: response.data.firstName, 
+        lastName: response.data.lastName,
+        fullName: response.data.fullName, 
+        phoneNumber: response.data.phoneNumber, 
+        QRCode: response.data.QRCode, 
+        balance: response.data.balance, 
+        cards: response.data.cards, 
+        privacyPreferences: response.data.privacyPreferences, 
+        contacts: response.data.contacts, 
+        profilePicture: response.data.profilePicture
+      }
+      dispatch(setSelf(user));
+
+    } catch(error) {
+      console.error(error)
+    }
+  }
+}
+
+export const { logInOut, setSelf } = selfSlice.actions;
+
+export const selectSelf = (state) => state.self.self;
 
 export default selfSlice.reducer;

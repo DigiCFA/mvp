@@ -56,7 +56,7 @@ router.get("/profile/retrieve_user", async (req, res) => {
 
 // MONGOOSE
 router.get("/profile/mongoose_retrieve_user", async (req, res) => {
-  let id = req.body.userId;
+  let id = req.query.userId;
   try {
     // Top 5 contacts
     let result = await User.findById(id).populate({
