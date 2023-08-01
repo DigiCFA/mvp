@@ -1,11 +1,16 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+} from "react-native";
 import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSelf, setSelf } from "../../features/selfSlice";
-import { Ionicons } from "@expo/vector-icons"
+import { Ionicons } from "@expo/vector-icons";
 import SettingsColumn from "../../components/SettingsColumn";
-
 
 const MeScreen = () => {
   const navigation = useNavigation();
@@ -33,44 +38,38 @@ const MeScreen = () => {
   // dispatch()
 
   return (
-    <View>
+    <View className='grow'>
       {/* Top Bar */}
-      <View className="flex-row items-center space-x-2 pt-2 pb-6 mx-4">
+      <View className="flex-row self-center items-center space-x-2 pt-12 pb-6 px-4 bg-[#3370E2]">
         {/* <TouchableOpacity onPress={() => navigation.navigate("Home")} className="">
           <Ionicons name="arrow-back" size={30} color="grey" />
         </TouchableOpacity> */}
-        <Text></Text>
-
-        {/* <TouchableOpacity
+        <View className="flex-1"></View>
+        <Text className="font-medium text-lg text-white">Profile</Text>
+        <TouchableOpacity
           onPress={() => navigation.navigate("Scan")}
-          className=""
+          className="flex-1 items-end"
         >
-          <Ionicons name="qr-code" size={24} color="#192C88" />
-        </TouchableOpacity> */}
+          <Ionicons name="notifications" size={24} color="white" />
+        </TouchableOpacity>
       </View>
 
-      <ScrollView>
-        <View className='mt-10'>
-          <Text>First Name: {self.firstName}</Text>
-          <Text>Last Name: {self.lastName}</Text>
-          <Text>Full Name: {self.fullName}</Text>
-          <Text>Phone Number: {self.phoneNumber}</Text>
-          <Text>Password: {self.password}</Text>
-          <Text>QRCode: {self.QRCode}</Text>
-          <Text>Balance: {self.balance}</Text>
-          {/* <Text>Cards: {self.cards}</Text> */}
-          {/* <Text>Contacts: {self.contacts}</Text> */}
-          <Text>Profile Picture: {self.profilePicture}</Text>
+      <ScrollView >
+        {/* Profile Area */}
+        <View className="bg-white flex-col items-start space-y-1 pb-4">
+          {/* Replace this with the actual profile picture!! */}
+          <Ionicons name="person-circle" size={125} color="#192C88" />
+
+          <Text className="px-4 font-medium text-3xl">{self.fullName}</Text>
+          <Text className="px-4 font-medium">{self.phoneNumber}</Text>
+
+          <Text className="px-4 font-medium">QRCode: {self.QRCode}</Text>
+          <Text className="px-4 font-medium">Balance: {self.balance}</Text>
         </View>
 
         <SettingsColumn />
       </ScrollView>
     </View>
-
-
-
-
-    
   );
 };
 

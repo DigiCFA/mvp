@@ -7,7 +7,7 @@ const SettingsColumn = () => {
   const navigation = useNavigation();
 
   return (
-    <View className="mt-10">
+    <View className="mt-2">
       <TouchableOpacity
         onPress={() => navigation.navigate("AccountInfo")}
         className="py-5 px-4 bg-white rounded-lg items-start flex-row space-x-4"
