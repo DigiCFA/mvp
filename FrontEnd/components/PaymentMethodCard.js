@@ -31,7 +31,7 @@ const PaymentMethodCard = ({cardID, cardName, cardType, cardNumber}) => {
             </View>
           </View>
 
-          {cardType==='Balance' && <Text className='font-medium text-gray-500'>Balance: <Currency quantity={self.user_balance} currency="USD"/></Text>}
+          {cardType==='Balance' && <Text className='font-medium text-gray-500'>Balance: <Currency quantity={Number(self.balance)} currency="USD"/></Text>}
           
           {cardType!='Balance' && <Text className="font-medium text-gray-500">{cardType} ••••{cardNumber}</Text>}
         </View>
