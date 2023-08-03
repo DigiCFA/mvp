@@ -21,8 +21,9 @@ const initialState = {
     // privacyPreferences: [],
     contacts: [],
     profilePicture: null,
-    // creationDate: null
-
+    transactions: [
+      {"_id":"64c7598b38949334596c929f","amountTransfered":1,"sender":"64c680183a2629add8d876bc","receiver":"64c67fce7c692097808e21c5"}
+    ]
     // Not necessary to fetch too much else at login (Eager Loading)
   },
 };
@@ -92,5 +93,9 @@ export const fetchUserById = userId => {
 export const { logInOut, setSelf } = selfSlice.actions;
 
 export const selectSelf = (state) => state.self.self;
+export const selectBalance = (state) => state.self.self.balance;
+export const selectCards = (state) => state.self.self.cards;
+export const selectContacts = (state) => state.self.self.contacts;
+export const selectTransactions = (state) => state.self.self.transactions;
 
 export default selfSlice.reducer;

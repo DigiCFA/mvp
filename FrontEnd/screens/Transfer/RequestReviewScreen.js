@@ -90,7 +90,7 @@ const SendReviewScreen = () => {
             <View className="flex-row mt-8">
               <Text className='text-lg font-bold flex-1'>Total</Text>
               <Text className="text-lg font-bold">
-                <Currency quantity={amount} currency="USD"/> USD
+                <Currency quantity={Number(amount)} currency="USD"/> USD
               </Text>
             </View>
 

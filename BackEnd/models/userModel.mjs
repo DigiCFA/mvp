@@ -6,14 +6,38 @@ import uniqueValidator from "mongoose-unique-validator";
 
 // Subdocument
 const cardSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    index: true,
+    trim: true
+  },
   accountHolder: {
     type: String,
     required: true,
+    trim: true
   },
   cardNumber: {
     type: String,
     required: true,
+    index: true,
     trim: true,
+    validate: {
+      validator: function(v) {
+        return /^[0-9 ]+$/.test(v);
+      },
+      message: props =>`${props.value} is not a valid card number!`
+    }
+  },
+  cardType: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: {
+      validator: function(v) {
+        return /^(savings|credit|debit)+$/.test(v);
+      }
+    }
   },
   expDate: {
     type: Date,
@@ -25,8 +49,8 @@ const cardSchema = new mongoose.Schema({
     required: true,
     trim: true,
     validate: {
-      validator: function (str) {
-        return str.length > 2 && str.length < 5;
+      validator: function (v) {
+        return /^\d{3,4}$/.test(v);
       },
       message: "Must be 3 or 4 digits.",
     },
@@ -39,11 +63,23 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter your first name"],
       trim: true,
+      validate: {
+        validator: function(v) {
+          return /^[a-zA-Z ]*$/.test(v);
+        },
+        message: "Must be all characters"
+      }
     },
     lastName: {
       type: String,
       required: [true, "Please enter your last name"],
       trim: true,
+      validate: {
+        validator: function(v) {
+          return /^[a-zA-Z ]*$/.test(v);
+        },
+        message: "Must be all characters"
+      }
     },
     fullName: {
       type: String,
@@ -55,6 +91,12 @@ const userSchema = new mongoose.Schema(
       unique: true,
       required: [true, "Please enter a phone number"],
       trim: true,
+      validate: {
+        validator: function(v) {
+          return /^[0-9 +]+$/.test(v);
+        },
+        message: "Must be all numbers (or plus)"
+      }
     },
     password: {
       type: String,

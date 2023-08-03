@@ -112,18 +112,39 @@ router.patch("/profile/add_card", async (req, res) => {
     let user = await User.findById(id);
     if (!user) res.send(`User with ID ${id} Not found`).status(404);
     
-    const newCard = user.cards.create({
-      accountHolder: req.body.fullName,
+    const newCard = await user.cards.create({
+      name: req.body.name,
+      accountHolder: req.body.accountHolder,
       cardNumber: req.body.cardNumber.replace(/\s/g, ''),
+      cardType: req.body.cardType.toLowerCase(),
       expDate: req.body.expDate,
       cvv: req.body.cvv,
     });
-    await user.cards.addToSet(newCard);
-    await user.save();
 
-    res.send(newCard).status(200);
+    // Check if card number already exists
+    const card = await User.findOne({
+      "_id": id
+    }, {
+      "cards": {
+        "$elemMatch": {
+          "$or":[
+          {"cardNumber": req.body.cardNumber},
+          {"name": req.body.name}
+          ]
+        }
+      }
+    })
+
+    if (card.cards.length != 0) {
+      console.log(card);
+      res.send("This card number or name has already been added.").status(422);
+    } else {
+      await user.cards.addToSet(newCard);
+      await user.save();
+      res.send(newCard).status(200);
+    }
+
   } catch (error) {
-    console.error(error);
     res.send(error).status(400);
   }
 });
@@ -131,14 +152,15 @@ router.patch("/profile/add_card", async (req, res) => {
 
 router.patch("/profile/remove_card", async(req, res) => {
   let id = req.body.userId;
-  let cardNumber = req.body.cardNumber;
+  let cardId = req.body.cardId;
+  // let cardNumber = req.body.cardNumber;
   //card.expDate = Date(card.expDate);
-  console.log(cardNumber);
+  // console.log(cardNumber);
   try {
     let user = await User.findById(id);
     if (!user) res.send(`User with ID ${id} Not found`).status(404);
 
-    await user.cards.pull({cardNumber:cardNumber});
+    await user.cards.pull(cardId);
     await user.save()
 
     res.send(user).status(200);

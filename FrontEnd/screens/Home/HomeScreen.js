@@ -58,10 +58,6 @@ const HomeScreen = () => {
           >
             <Ionicons name="qr-code" size={40} color="#192C88" />
           </TouchableOpacity>
-
-          {/* <TouchableOpacity className="p-1.5 rounded-full bg-white">
-            <Ionicons name="person" size={20} color="#192C88" />
-          </TouchableOpacity> */}
         </View>
 
         {/* Some Notices */}
@@ -97,6 +93,7 @@ const HomeScreen = () => {
             </TouchableOpacity>
           </TouchableOpacity>
         </View>
+        
 
         {/* Transactions */}
         <View className="bg-white mt-2 py-6 px-4">

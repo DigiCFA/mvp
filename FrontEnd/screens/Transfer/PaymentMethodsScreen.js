@@ -15,6 +15,8 @@ import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import CardsColumn from "../../components/CardsColumn";
+import { useSelector } from "react-redux";
+import { selectCards } from "../../features/selfSlice";
 
 const PaymentMethodsScreen = () => {
 
@@ -24,14 +26,12 @@ const PaymentMethodsScreen = () => {
   const cardType = 'Balance'
   const cardNumber = 'N/A'
 
-
-
   const { height } = useWindowDimensions();
   const { current } = useCardAnimation();
   const navigation = useNavigation();
 
   const {
-    params: { name, paymentAmount, message },
+    params: { name, amount, message },
   } = useRoute();
 
   return (
@@ -77,7 +77,7 @@ const PaymentMethodsScreen = () => {
             {/* Cards */}
             <ScrollView>
               <CardsColumn />
-              <Text>{name}, {paymentAmount}, {message}</Text>
+              <Text>{name}, {amount}, {message}</Text>
             </ScrollView>
 
             {/* Bottom Portion */}
@@ -85,7 +85,7 @@ const PaymentMethodsScreen = () => {
               onPress={() => {
                 navigation.goBack();
                 navigation.navigate("SendReview", {
-                name, paymentAmount, message, cardID, cardName, cardType, cardNumber
+                name, amount, message, cardID, cardName, cardType, cardNumber
               })}}
               className="bg-blue-900 rounded-full py-3 px-14 items-center"
             >
