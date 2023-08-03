@@ -93,8 +93,9 @@ export const fetchUserById = userId => {
 export const { logInOut, setSelf } = selfSlice.actions;
 
 export const selectSelf = (state) => state.self.self;
-export const selectCards = (state) => state.self.cards;
-export const selectContacts = (state) => state.self.contacts;
+export const selectBalance = (state) => state.self.self.balance;
+export const selectCards = (state) => state.self.self.cards;
+export const selectContacts = (state) => state.self.self.contacts;
 export const selectTransactions = (state) => state.self.self.transactions;
 
 export default selfSlice.reducer;

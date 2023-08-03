@@ -26,8 +26,6 @@ const PaymentMethodsScreen = () => {
   const cardType = 'Balance'
   const cardNumber = 'N/A'
 
-  const cards = useSelector(selectCards);
-
   const { height } = useWindowDimensions();
   const { current } = useCardAnimation();
   const navigation = useNavigation();

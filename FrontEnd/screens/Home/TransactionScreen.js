@@ -38,7 +38,7 @@ const TransactionScreen = () => {
               </View>
               <Text className={`text-xl font-medium ${isPaying ? 'text-black' : 'text-green-800'}`}>
                 {isPaying ? "-" : "+"}
-                <Currency quantity={amount} currency="USD" />
+                <Currency quantity={Number(amount)} currency="USD" />
               </Text>
             </View>
             <Text className="font-medium">{date}</Text>
