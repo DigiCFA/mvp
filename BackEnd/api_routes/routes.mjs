@@ -113,7 +113,8 @@ router.patch("/profile/add_card", async (req, res) => {
     if (!user) res.send(`User with ID ${id} Not found`).status(404);
     
     const newCard = user.cards.create({
-      accountHolder: req.body.fullName,
+      name: req.body.name,
+      accountHolder: req.body.accountHolder,
       cardNumber: req.body.cardNumber.replace(/\s/g, ''),
       expDate: req.body.expDate,
       cvv: req.body.cvv,
@@ -131,14 +132,15 @@ router.patch("/profile/add_card", async (req, res) => {
 
 router.patch("/profile/remove_card", async(req, res) => {
   let id = req.body.userId;
-  let cardNumber = req.body.cardNumber;
+  let cardId = req.body.cardId;
+  // let cardNumber = req.body.cardNumber;
   //card.expDate = Date(card.expDate);
-  console.log(cardNumber);
+  // console.log(cardNumber);
   try {
     let user = await User.findById(id);
     if (!user) res.send(`User with ID ${id} Not found`).status(404);
 
-    await user.cards.pull({cardNumber:cardNumber});
+    await user.cards.pull(cardId);
     await user.save()
 
     res.send(user).status(200);

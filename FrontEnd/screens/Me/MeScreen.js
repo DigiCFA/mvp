@@ -38,7 +38,7 @@ const MeScreen = () => {
   // dispatch()
 
   return (
-    <View className='grow'>
+    <View className="grow">
       {/* Top Bar */}
       <View className="flex-row self-center items-center space-x-2 pt-12 pb-6 px-4 bg-[#3370E2]">
         {/* <TouchableOpacity onPress={() => navigation.navigate("Home")} className="">
@@ -54,7 +54,7 @@ const MeScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <ScrollView >
+      <ScrollView>
         {/* Profile Area */}
         <View className="bg-white flex-col items-start space-y-1 pb-4">
           {/* Replace this with the actual profile picture!! */}
@@ -65,6 +65,24 @@ const MeScreen = () => {
 
           <Text className="px-4 font-medium">QRCode: {self.QRCode}</Text>
           <Text className="px-4 font-medium">Balance: {self.balance}</Text>
+
+          {self.cards?.map((card) => (
+            <View key={card._id}>
+              <Text>Card: </Text>
+              <Text>accountHolder: {card.accountHolder}</Text>
+              <Text>cardNumber: {card.cardNumber}</Text>
+              <Text>expDate: {card.expDate}</Text>
+              <Text>cvv: {card.cvv}</Text>
+            </View>
+          ))}
+
+          {self.contacts?.map((contact) => (
+            <View key={contact._id}>
+              <Text>Contact: </Text>
+              <Text>fullName: {contact.fullName}</Text>
+              <Text>phoneNumber: {contact.phoneNumber}</Text>
+            </View>
+          ))}
         </View>
 
         <SettingsColumn />
