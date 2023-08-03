@@ -34,9 +34,9 @@ export default function App() {
       />
     ) : (
       <NavBar.Group screenOptions={{ headerShown: false }}>
-        <NavBar.Screen name="Transfer" component={TransferStackScreen} />
-
         <NavBar.Screen name="Home" component={HomeStackScreen} />
+
+        <NavBar.Screen name="Transfer" component={TransferStackScreen} />
 
         <NavBar.Screen name="Wallet" component={CardsStackScreen} />
 
@@ -82,7 +82,8 @@ export default function App() {
                 routeName === "SendReview" ||
                 routeName === "SendConfirmation" ||
                 routeName === "RequestReview" ||
-                routeName === "RequestConfirmation"
+                routeName === "RequestConfirmation" ||
+                routeName === "Transaction"
               ) {
                 return {
                   display: "none",

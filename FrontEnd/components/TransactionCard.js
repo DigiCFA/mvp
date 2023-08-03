@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
 import Currency from "react-currency-formatter";
+import { useNavigation } from "@react-navigation/native";
 
 const TransactionCard = ({
   id,
@@ -11,8 +12,13 @@ const TransactionCard = ({
   description,
   amount,
 }) => {
+
+  const navigation = useNavigation();
+
   return (
-    <TouchableOpacity className="my-2 p-4 bg-white rounded-lg flex-row space-x-4 shadow">
+    <TouchableOpacity 
+    onPress={() => {navigation.navigate("Transaction", { isPaying, title,  date, description, amount })}}
+    className="my-2 p-4 bg-white rounded-lg flex-row space-x-4 shadow">
       <View className='h-12 p-2 bg-[#192C88] border rounded-full'>
         <FontAwesome5 name="store-alt" size={24} color="white" />
       </View>
