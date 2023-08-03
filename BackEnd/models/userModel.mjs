@@ -9,6 +9,7 @@ const cardSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    index: true,
     trim: true
   },
   accountHolder: {
@@ -19,12 +20,23 @@ const cardSchema = new mongoose.Schema({
   cardNumber: {
     type: String,
     required: true,
+    index: true,
     trim: true,
     validate: {
       validator: function(v) {
-        return /^[0-9 ]+$/.test(v)
+        return /^[0-9 ]+$/.test(v);
       },
       message: props =>`${props.value} is not a valid card number!`
+    }
+  },
+  cardType: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: {
+      validator: function(v) {
+        return /^(savings|credit|debit)+$/.test(v);
+      }
     }
   },
   expDate: {
