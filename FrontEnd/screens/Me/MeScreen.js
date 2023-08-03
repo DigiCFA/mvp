@@ -15,7 +15,6 @@ import SettingsColumn from "../../components/SettingsColumn";
 const MeScreen = () => {
   const navigation = useNavigation();
   const self = useSelector(selectSelf);
-  const dispatch = useDispatch();
 
   // useEffect(() => {
 

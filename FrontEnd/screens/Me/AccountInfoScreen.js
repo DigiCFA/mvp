@@ -18,6 +18,7 @@ const AccountInfoScreen = () => {
   return (
     <View>
       <Text>AccountInfoScreen</Text>
+      <Text>Upon entering this screen, Redux calls the fetchUserById thunk and modifies the global store by fetching the user information from MongoDB. The user information across the app is updated. This should happen at the login screen but for convenience's sake is implemented here.</Text>
     </View>
   );
 };

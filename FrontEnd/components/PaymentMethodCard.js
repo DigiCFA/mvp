@@ -6,19 +6,19 @@ import Currency from 'react-currency-formatter'
 import { useSelector } from "react-redux";
 import { selectSelf } from "../features/selfSlice";
 
-const PaymentMethodCard = ({cardID, cardName, cardType, cardNumber}) => {
+const PaymentMethodCard = ({cardID, cardName, cardType, cardNumber, isActive, onPress}) => {
 
     // More efficient way of only selecting the balance?
     const self = useSelector(selectSelf)
 
-    const [isPressed, setIsPressed] = useState(() => {
-        if (cardType==='Balance') return true;
-        return false;
-    });
+    // const [isPressed, setIsPressed] = useState(() => {
+    //     if (cardType==='Balance') return true;
+    //     return false;
+    // });
 
     return (
       <TouchableOpacity 
-      onPress={() => setIsPressed(!isPressed)}
+      onPress={onPress}
       className="py-4 pl-4 rounded-lg flex-row space-x-4 border-b border-gray-200 shadow-xl">
         <View className='shadow'>
             {cardType==='Balance' ? <MaterialCommunityIcons name="gold" size={48} color="#D4AF37"/> : <Ionicons name="card-outline" size={48} color="#0ABAB5" />}
@@ -37,7 +37,7 @@ const PaymentMethodCard = ({cardID, cardName, cardType, cardNumber}) => {
         </View>
 
         <View className='w-8'>
-            {isPressed && (
+            {isActive && (
                 <View>
                     <Ionicons name='checkmark-sharp' size={30} color='green'/>
                 </View>

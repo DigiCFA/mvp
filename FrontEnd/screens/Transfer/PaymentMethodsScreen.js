@@ -15,6 +15,8 @@ import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import CardsColumn from "../../components/CardsColumn";
+import { useSelector } from "react-redux";
+import { selectCards } from "../../features/selfSlice";
 
 const PaymentMethodsScreen = () => {
 
@@ -24,7 +26,7 @@ const PaymentMethodsScreen = () => {
   const cardType = 'Balance'
   const cardNumber = 'N/A'
 
-
+  const cards = useSelector(selectCards);
 
   const { height } = useWindowDimensions();
   const { current } = useCardAnimation();
