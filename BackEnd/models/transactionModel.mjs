@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 
 const transactionSchema = new mongoose.Schema({
-    amountTransfered: {
+    amountTransferred: {
         type: Number,
         min: 0.01
     },
@@ -18,8 +18,19 @@ const transactionSchema = new mongoose.Schema({
         required: true
     },
     transactionDate: Date, 
-    isPayment: Boolean, // 0 request, 1 payment
-    isApproved: Boolean,  // 0 not approved, 1 approved
+    isPayment: {
+        type: Boolean,
+        default: 1
+        // 0 request, 1 payment
+    }, 
+    isFulfilled: {
+        type: Boolean, 
+        default: function() {
+            if (this.isPayment) return 1;
+            else return 0;
+        }
+        // If payment, default to fulfilled. If request, default to unfulfilled. 
+    }, 
     message: {
         type: String,
         trim: true

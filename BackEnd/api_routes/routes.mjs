@@ -71,8 +71,10 @@ router.get(
         select: ["fullName", "phoneNumber"]
       })
 
-      if (!user) res.send(`User with ID ${id} Not found`).status(404);
-  
+      if (!user) {
+        res.send(`User with ID ${id} Not found`).status(404);
+        return;
+      }
       // Find all transactions within 2 months
       let transactions = await Transaction.find(
         { $or: [{sender: id}, {receiver: id}],
@@ -110,8 +112,10 @@ router.patch("/profile/add_card", async (req, res) => {
   let id = req.body.userId;
   try {
     let user = await User.findById(id);
-    if (!user) res.send(`User with ID ${id} Not found`).status(404);
-    
+    if (!user) {
+      res.send(`User with ID ${id} Not found`).status(404);
+      return;
+    }
     const newCard = await user.cards.create({
       name: req.body.name,
       accountHolder: req.body.accountHolder,
@@ -352,44 +356,93 @@ router.patch("/profile/remove_contact", async (req, res) => {
     });
 });
 
+router.patch("/profile/add_balance", async(req, res) => {
+  let id = req.body.userID;
+  try {
+    let user = await User.findById(id);
+    if (!user) {
+      res.send(`User with ID ${id} Not found`).status(404);
+      return;
+    }
+
+    user.balance += req.body.amount;
+    
+    await user.save();
+    res.send(user).status(200);
+  } catch (error) {
+    res.send(error).status(400);
+  }
+})
+
 
 
 router.post("/transaction/create_direct_transaction", async (req, res) => {
   
   const session = await mongoose.startSession();
-  let transactionDataRequest = req.body;
+
+  let newTransaction = req.body;
+
+  let sendID = newTransaction.sender;
+  let receiveID = newTransaction.receiver;
 
   let transactions = db.collection("transactions");
   try {
     await session.withTransaction(async () => {
 
-      const transactionData = new Transaction(transactionDataRequest)
-      const sendUser = await User.findById({ _id: transactionData.sender});
-      const receiveUser = await User.findById({ _id: transactionData.receiver});
-      let userBalance = sendUser.balance
-      let amountTransfered = transactionData.amountTransfered;
-      if (userBalance < amountTransfered) {
-        await res.send({ "balance too low": 0 }).status(400);
+      // const transactionData = new Transaction({
+      //   amountTransferred: newTransaction.amountTransfered,
+      //   sender: newTransaction.sender,
+      //   receiver: newTransaction.receiver,
+      //   isPayment: newTransaction.isPayment,
+      //   isApproved: newTransaction.isApproved,
+      //   message: newTransaction.message,
+      //   transactionDate: Date.now()
+      // });
+      const transactionData = new Transaction(newTransaction);
+      transactionData.transationDate = Date.now();
+
+      const sendUser = await User.findById(sendID);
+      if (!sendUser) {
+        res.send(`User with ID ${sendID} Not found`).status(404);
         return;
       }
-      await sendUser.$inc('balance',-1.0*amountTransfered)
-      await receiveUser.$inc('balance',amountTransfered)
-      console.log("the");
+
+      const receiveUser = await User.findById(receiveID);
+      if (!receiveUser) {
+        res.send(`User with ID ${receiveID} Not found`).status(404);
+        return;
+      }
+
+      if (sendID === receiveID) {
+        res.send("Cannot send transaction to self").status(400);
+        return;
+      }
+      
+      let userBalance = sendUser.balance
+      let amountTransferred = newTransaction.amountTransferred;
+      if (userBalance < amountTransferred) {
+        res.send({ "Balance insufficient": 0 }).status(400);
+        return;
+      }
+
+      await sendUser.$inc('balance', -1.0*amountTransferred);
+      await receiveUser.$inc('balance', amountTransferred);
+      console.log("Amount should be: ", newTransaction.amountTransferred);
+      console.log("Actual amount: ", transactionData.amountTransferred);
       console.log(transactionData);
+
       await transactions.insertOne(transactionData)
-      await sendUser.save()
-      await receiveUser.save()
+
+      await sendUser.save();
+      await receiveUser.save();
     });
-  } catch (transact_error) {
-    console.error(transact_error);
-    await res.send(transact_error).status(400);
-
-
+  } catch (transactError) {
+    // console.error(transactError);
+    res.send(transactError).status(400);
   }
   finally{
-    await res.send(transactionDataRequest).status(200);
+    res.send(newTransaction).status(200);
     await session.endSession();
-
   }
 })
 
