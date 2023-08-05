@@ -55,6 +55,11 @@ const cardSchema = new mongoose.Schema({
       message: "Must be 3 or 4 digits.",
     },
   },
+  billingAddress: {
+    type: String,
+    required: true,
+    trim: true,
+  }
 });
 
 const userSchema = new mongoose.Schema(

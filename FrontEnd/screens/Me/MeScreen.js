@@ -44,7 +44,7 @@ const MeScreen = () => {
           <Ionicons name="arrow-back" size={30} color="grey" />
         </TouchableOpacity> */}
         <View className="flex-1"></View>
-        <Text className="font-medium text-lg text-white">Profile</Text>
+        <Text className="font-extrabold text-lg text-white">Profile</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate("Scan")}
           className="flex-1 items-end"
@@ -65,7 +65,7 @@ const MeScreen = () => {
           <Text className="px-4 font-medium">QRCode: {self.QRCode}</Text>
           <Text className="px-4 font-medium">Balance: {self.balance}</Text>
 
-          {self.cards?.map((card) => (
+          {/* {self.cards?.map((card) => (
             <View key={card._id}>
               <Text>Card: </Text>
               <Text>accountHolder: {card.accountHolder}</Text>
@@ -81,7 +81,7 @@ const MeScreen = () => {
               <Text>fullName: {contact.fullName}</Text>
               <Text>phoneNumber: {contact.phoneNumber}</Text>
             </View>
-          ))}
+          ))} */}
         </View>
 
         <SettingsColumn />

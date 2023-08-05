@@ -17,7 +17,16 @@ const initialState = {
     // password: "johnsmith",
     QRCode: null,
     balance: 888.88,
-    cards: [],
+    cards: [{
+      "name": "Default Card 1",
+      "accountHolder": "Default User",
+      "cardNumber": "0000 0000 0000 0000",
+      "cardType": "bank",
+      "expDate": "2099-99-99T00:00:00.000Z",
+      "cvv": "999",
+      "billingAddress": "Some Location",
+      "_id": "888"
+    }],
     // privacyPreferences: [],
     contacts: [],
     profilePicture: null,

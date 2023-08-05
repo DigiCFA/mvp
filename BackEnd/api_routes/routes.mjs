@@ -115,10 +115,11 @@ router.patch("/profile/add_card", async (req, res) => {
     const newCard = await user.cards.create({
       name: req.body.name,
       accountHolder: req.body.accountHolder,
-      cardNumber: req.body.cardNumber.replace(/\s/g, ''),
+      cardNumber: req.body.cardNumber,
       cardType: req.body.cardType.toLowerCase(),
       expDate: req.body.expDate,
       cvv: req.body.cvv,
+      billingAddress: req.body.billingAddress
     });
 
     // Check if card number already exists
