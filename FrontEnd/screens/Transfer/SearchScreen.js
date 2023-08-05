@@ -62,6 +62,9 @@ const SearchScreen = () => {
 
         {/* List of top Users */}
         <UsersColumn />
+
+
+        
       </ScrollView>
     </SafeAreaView>
   );

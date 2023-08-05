@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 
 import HomeStackScreen from "./screens/Home/HomeStackScreen";
-import CardsStackScreen from "./screens/Wallet/CardsStackScreen";
+import WalletStackScreen from "./screens/Wallet/WalletStackScreen";
 import TransferStackScreen from "./screens/Transfer/TransferStackScreen";
 import MeStackScreen from "./screens/Me/MeStackScreen";
 import LoginSignupStackScreen from "./screens/LoginSignup/LoginSignupStackScreen";
@@ -38,7 +38,7 @@ export default function App() {
 
         <NavBar.Screen name="Transfer" component={TransferStackScreen} />
 
-        <NavBar.Screen name="Wallet" component={CardsStackScreen} />
+        <NavBar.Screen name="Wallet" component={WalletStackScreen} />
 
         <NavBar.Screen name="Me" component={MeStackScreen} />
       </NavBar.Group>

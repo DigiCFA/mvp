@@ -48,6 +48,7 @@ const CardsColumn = () => {
 
       {cards?.map((card, index) => (
         <PaymentMethodCard
+          key={card._id}
           cardID={card._id}
           cardName={card.name}
           cardNumber={card.cardNumber}

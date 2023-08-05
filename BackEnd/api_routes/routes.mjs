@@ -115,10 +115,11 @@ router.patch("/profile/add_card", async (req, res) => {
     const newCard = await user.cards.create({
       name: req.body.name,
       accountHolder: req.body.accountHolder,
-      cardNumber: req.body.cardNumber.replace(/\s/g, ''),
+      cardNumber: req.body.cardNumber,
       cardType: req.body.cardType.toLowerCase(),
       expDate: req.body.expDate,
       cvv: req.body.cvv,
+      billingAddress: req.body.billingAddress
     });
 
     // Check if card number already exists
@@ -259,12 +260,24 @@ router.post("/auth/user_login", async (req, res) => {
 router.patch("/testing/mongoose_add_contact", async (req, res) => {
   let id = req.body.userId;
   let contactId = req.body.contactId;
+
   try {
     let user = await User.findById(id);
-    if (!user) res.send(`User with ID ${id} Not found`).status(404);
+    if (!user) {
+      res.send(`User with ID ${id} Not found`).status(404);
+      return;
+    }
+
+    if (id === contactId) {
+      res.send("Cannot add self as contact").status(400);
+      return;
+    }
 
     let otherUser = await User.findById(contactId);
-    if (!otherUser) res.send(`User with ID ${contactId} Not found`).status(404);
+    if (!otherUser) {
+      res.send(`User with ID ${contactId} Not found`).status(404);
+      return;
+    }
 
     user.contacts.addToSet(contactId);
     let result = await user.save();
