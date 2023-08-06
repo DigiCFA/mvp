@@ -11,6 +11,7 @@ const TransactionCard = ({
   title,
   date,
   message,
+  paymentMethod,
   amount,
 }) => {
 
@@ -34,9 +35,12 @@ const TransactionCard = ({
   }
   const navigation = useNavigation();
 
+  const displayDate = toMonth(Number(date.substring(5, 7))) + ' ' + date.substring(8, 10);
+  const fullDate = displayDate + ', ' + date.substring(0, 4);
+
   return (
     <TouchableOpacity 
-    onPress={() => {navigation.navigate("Transaction", { userPays, title,  date, message, amount })}}
+    onPress={() => {navigation.navigate("Transaction", { id, userPays, title,  fullDate, message, paymentMethod, amount })}}
     className="my-2 p-4 bg-white rounded-lg flex-row space-x-4 shadow">
       <View className='h-12 p-2 bg-[#192C88] border rounded-full'>
         <FontAwesome5 name="store-alt" size={24} color="white" />
@@ -53,7 +57,7 @@ const TransactionCard = ({
           </Text>
         </View>
         
-        <Text className="font-medium">{toMonth(Number(date.substring(5, 7)))} {date.substring(8, 10)}</Text>
+        <Text className="font-medium">{displayDate}</Text>
         <Text className="font-medium">{message}</Text>
       </View>
     </TouchableOpacity>

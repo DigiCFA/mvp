@@ -13,6 +13,10 @@ const transactionSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    paymentMethod: {
+        type: String,
+        required: true
+    },
     receiver: {
         type: mongoose.ObjectId,
         ref: 'User',

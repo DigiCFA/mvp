@@ -441,6 +441,7 @@ router.post("/transaction/create_direct_transaction", async (req, res) => {
         amountTransferred: newTransaction.amountTransferred,
         sender: newTransaction.sender,
         receiver: newTransaction.receiver,
+        paymentMethod: "balance",
         isPayment: newTransaction.isPayment,
         isApproved: newTransaction.isApproved,
         message: newTransaction.message,

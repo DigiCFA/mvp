@@ -115,6 +115,7 @@ const HomeScreen = () => {
               title={(transaction.sender._id === id) ? transaction.receiver.fullName : transaction.sender.fullName}
               date={transaction.transactionDate}
               message={transaction.message}
+              paymentMethod={transaction.paymentMethod}
               amount={transaction.amountTransferred}
             />
           ))}
