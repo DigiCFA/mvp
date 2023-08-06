@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const TransactionCard = ({
   id,
-  isPayment,
+  userPays,
   title,
   date,
   message,
@@ -36,7 +36,7 @@ const TransactionCard = ({
 
   return (
     <TouchableOpacity 
-    onPress={() => {navigation.navigate("Transaction", { isPayment, title,  date, message, amount })}}
+    onPress={() => {navigation.navigate("Transaction", { userPays, title,  date, message, amount })}}
     className="my-2 p-4 bg-white rounded-lg flex-row space-x-4 shadow">
       <View className='h-12 p-2 bg-[#192C88] border rounded-full'>
         <FontAwesome5 name="store-alt" size={24} color="white" />
@@ -47,14 +47,13 @@ const TransactionCard = ({
           <View className="flex-1">
             <Text className="text-xl font-medium">{title}</Text>
           </View>
-          <Text className={`text-xl font-medium ${isPayment ? 'text-black' : 'text-green-800'}`}>
-            {isPayment ? "-" : "+"}
+          <Text className={`text-xl font-medium ${userPays ? 'text-black' : 'text-green-800'}`}>
+            {userPays ? "-" : "+"}
             <Currency quantity={Number(amount)} currency="USD" />
           </Text>
         </View>
         
         <Text className="font-medium">{toMonth(Number(date.substring(5, 7)))} {date.substring(8, 10)}</Text>
-        <Text className="font-medium">{date}</Text>
         <Text className="font-medium">{message}</Text>
       </View>
     </TouchableOpacity>

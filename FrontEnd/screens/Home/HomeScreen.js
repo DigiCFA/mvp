@@ -111,15 +111,15 @@ const HomeScreen = () => {
             <TransactionCard
               key={transaction._id}
               id={transaction._id}
-              isPayment={transaction.isPayment}
-              title={(transaction.receiver._id === id) ? transaction.sender.fullName : transaction.receiver.fullName}
+              userPays={transaction.sender._id === id}
+              title={(transaction.sender._id === id) ? transaction.receiver.fullName : transaction.sender.fullName}
               date={transaction.transactionDate}
               message={transaction.message}
               amount={transaction.amountTransferred}
             />
           ))}
 
-          <TransactionsColumn />
+          {/* <TransactionsColumn /> */}
 
           <TouchableOpacity className="pt-4">
             <Text className="text-center text-lg font-bold text-blue-600">
