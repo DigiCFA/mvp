@@ -57,7 +57,7 @@ router.get(
       `<h3>All Indexes: </h3>` +
       JSON.stringify(indexes);
 
-    res.send(text).status(200);
+    res.status(200).send(text);
   }
 );
 
@@ -72,10 +72,10 @@ router.get("/profile/retrieve_user", async (req, res) => {
     })
 
     if (!result) res.send(`User with ID ${id} Not found`).status(404);
-    else res.send(result).status(200);
+    else res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.send(error).status(400);
+    res.status(400).send(error);
   }
 });
 
@@ -92,7 +92,7 @@ router.get(
       })
 
       if (!user) {
-        res.send(`User with ID ${id} Not found`).status(404);
+        res.status(404).send(`User with ID ${id} Not found`);
         return;
       }
       // Find all transactions within 2 months
@@ -119,10 +119,10 @@ router.get(
         }
       ])
 
-      res.send(user).status(200);
+      res.status(200).send(user);
     } catch (error) {
       console.error(error);
-      res.send(error).status(400);
+      res.status(400).send(error);
     }
   }
 );
@@ -133,7 +133,7 @@ router.patch("/profile/add_card", async (req, res) => {
   try {
     let user = await User.findById(id);
     if (!user) {
-      res.send(`User with ID ${id} Not found`).status(404);
+      res.status(404).send(`User with ID ${id} Not found`);
       return;
     }
     const newCard = await user.cards.create({
@@ -166,11 +166,11 @@ router.patch("/profile/add_card", async (req, res) => {
     } else {
       await user.cards.addToSet(newCard);
       await user.save();
-      res.send(newCard).status(200);
+      res.status(200).send(newCard);
     }
 
   } catch (error) {
-    res.send(error).status(400);
+    res.status(400).send(error);
   }
 });
 
@@ -184,17 +184,17 @@ router.patch("/profile/remove_card", async(req, res) => {
   try {
     let user = await User.findById(id);
     if (!user) {
-      res.send(`User with ID ${id} Not found`).status(404);
+      res.status(404).send(`User with ID ${id} Not found`);
       return;
     }
 
     await user.cards.pull(cardId);
     await user.save()
 
-    res.send(user).status(200);
+    res.status(200).send(user);
   } catch(error) {
     console.error(error);
-    res.send(error).status(400)
+    res.status(400).send(error);
   }
 })
 
@@ -210,10 +210,10 @@ router.post("/auth/create_user", async (req, res) => {
       creationDate: Date.now()
       // create a QR Code on creation
     });
-    res.send(result).status(200);
+    res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.send(error).status(400);
+    res.status(400).send(error);
   }
 });
 
@@ -253,11 +253,11 @@ router.delete("/auth/delete_user", async (req, res) => {
   try {
     let result = await User.findByIdAndDelete(id);
 
-    if (!result) res.send(`User with ID ${id} Not found`).status(404);
-    else res.send(result).status(200);
+    if (!result) res.status(404).send(`User with ID ${id} Not found`);
+    else res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.send(error).status(400);
+    res.status(400).send(error);
   }
 });
 
@@ -291,18 +291,18 @@ router.patch("/testing/mongoose_add_contact", async (req, res) => {
   try {
     let user = await User.findById(id);
     if (!user) {
-      res.send(`User with ID ${id} Not found`).status(404);
+      res.status(404).send(`User with ID ${id} Not found`);
       return;
     }
 
     if (id === contactId) {
-      res.send("Cannot add self as contact").status(400);
+      res.status(400).send("Cannot add self as contact");
       return;
     }
     
     let otherUser = await User.findById(contactId);
     if (!otherUser) {
-      res.send(`User with ID ${contactId} Not found`).status(404);
+      res.status(404).send(`User with ID ${contactId} Not found`);
       return;
     }
 
@@ -311,15 +311,15 @@ router.patch("/testing/mongoose_add_contact", async (req, res) => {
     otherUser.contacts.addToSet(id);
     let result2 = await otherUser.save();
 
-    res.send(result).status(200);
+    res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.send(error).status(400);
+    res.status(400).send(error);
   }
 });
 
 
-// OLD
+// OBSOLETE
 router.patch("/profile/add_contact", async (req, res) => {
   let collection = db.collection("users");
   let user_input = req.body;
@@ -350,7 +350,7 @@ router.patch("/profile/add_contact", async (req, res) => {
     });
 });
 
-// OLD
+// OBSOLETE
 router.patch("/profile/remove_contact", async (req, res) => {
   let collection = db.collection("users");
   let user_input = req.body;
@@ -394,9 +394,9 @@ router.patch("/profile/add_balance", async(req, res) => {
     user.balance += req.body.amount;
     
     await user.save();
-    res.send(user).status(200);
+    res.status(200).send(user);
   } catch (error) {
-    res.send(error).status(400);
+    res.status(400).send(error);
   }
 })
 
@@ -468,13 +468,22 @@ router.post("/transaction/create_direct_transaction", async (req, res) => {
     });
   } catch (transactError) {
     // console.error(transactError);
-    res.send(transactError).status(400);
+    res.status(400).send(transactError);
     await session.abortTransaction();
   }
   finally{
     await session.endSession();
   }
 })
+
+
+
+
+
+
+
+
+// OBSOLETE
 
 router.post("/transaction/create_transaction_request", async (req, res) => {
   const session = client.startSession();
@@ -542,6 +551,8 @@ router.post("/transaction/create_transaction_request", async (req, res) => {
   }
 });
 
+
+// OBSOLETE
 router.patch("/transaction/approve_transaction", async (req, res) => {
   const session = client.startSession();
   let transactionData = req.body;
@@ -641,6 +652,8 @@ router.patch("/transaction/approve_transaction", async (req, res) => {
   }
 });
 
+
+// OBSOLEE
 router.get("/transaction/transaction_data", async (req, res) => {
   let transaction_id = req.body.transaction_id;
   let transaction_collection = db.collection("transactions");
@@ -656,6 +669,7 @@ router.get("/transaction/transaction_data", async (req, res) => {
     });
 });
 
+// OBSOLETE
 router.get("/profile/retrieve_all_transactions", async (req, res) => {
   let user_id = req.body.user_id;
   let users_collection = db.collection("users");
@@ -691,6 +705,8 @@ router.get("/profile/retrieve_all_transactions", async (req, res) => {
     });
 });
 
+
+// OBSOLETE
 router.get(
   "/profile/retrieve_transactions/:transaction_status",
   async (req, res) => {
@@ -730,17 +746,20 @@ router.get(
 );
 
 
+
+
+
 // MONGOOSE
 router.delete("/transaction/mongoose_delete_transaction", async (req, res) => {
   let id = req.body.transactionId;
   try {
     let result = await Transaction.findByIdAndDelete(id);
 
-    if (!result) res.send(`Transaction with ID ${id} Not found`).status(404);
-    else res.send(result).status(200);
+    if (!result) res.status(404).send(`Transaction with ID ${id} Not found`);
+    else res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.send(error).status(400);
+    res.status(400).send(error);
   }
 });
 
