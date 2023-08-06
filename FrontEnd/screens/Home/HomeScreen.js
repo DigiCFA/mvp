@@ -45,7 +45,7 @@ const HomeScreen = () => {
   // }, []);
 
   return (
-    <SafeAreaView className="bg-[#e9e7e2]">
+    <SafeAreaView className="bg-[#e9e7e2] flex-1">
       <ScrollView>
         {/* Header */}
         <View className="flex-row px-4 pb-6 space-x-3">
@@ -103,7 +103,7 @@ const HomeScreen = () => {
         
 
         {/* Transactions */}
-        <View className="bg-white mt-2 py-6 px-4">
+        <View className="bg-white mt-2 py-6 px-4 flex-1">
           <Text className="text-xl text-gray-800">Recent activity</Text>
 
 

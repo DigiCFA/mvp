@@ -67,6 +67,8 @@ const MeScreen = () => {
           <Text className="px-4 font-medium">QRCode: {self.QRCode}</Text>
           <Text className="px-4 font-medium">Balance: {self.balance}</Text>
 
+
+          {/* Just for checks */}
           {/* {self.cards?.map((card) => (
             <View key={card._id}>
               <Text>Card: </Text>
@@ -84,7 +86,7 @@ const MeScreen = () => {
               <Text>phoneNumber: {contact.phoneNumber}</Text>
             </View>
           ))} */}
-
+{/* 
           {self.contacts?.map((contact) => (
             <View key={contact._id}>
               <Text>Contact: </Text>
@@ -100,7 +102,8 @@ const MeScreen = () => {
               <Text>Receiver: {transaction.receiver.fullName}</Text>
               <Text>amountTransferred: {transaction.amountTransferred}</Text>
             </View>
-          ))}
+          ))} */}
+
         </View>
 
         <SettingsColumn />
