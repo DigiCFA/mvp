@@ -71,7 +71,7 @@ router.get("/profile/retrieve_user", async (req, res) => {
       select: ["fullName", "phoneNumber"]
     })
 
-    if (!result) res.send(`User with ID ${id} Not found`).status(404);
+    if (!result) res.status(404).send(`User with ID ${id} not found`);
     else res.status(200).send(result);
   } catch (error) {
     console.error(error);
@@ -79,10 +79,28 @@ router.get("/profile/retrieve_user", async (req, res) => {
   }
 });
 
+router.get("/profile/retrieve_user_transactions", async (req, res) => {
+  let id = req.query.userId;
+  try {
+    // all transactions
+    let result = await Transaction.find(
+      { $or: [{sender: id}, {receiver: id}],
+        isFulfilled: true,
+      });
+
+    if (result.length===0) res.status(404).send(`User with ID ${id} has no transactions`);
+    else res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(400).send(error);
+  }
+});
+
+
 router.get(
   "/profile/retrieve_user_with_certain_fields",
   async (req, res) => {
-    let id = req.body.userId;
+    let id = req.query.userId;
     try {
       let user = await User.findById(id).populate({
         // 5 most recent contacts
@@ -98,34 +116,36 @@ router.get(
       // Find all transactions within 2 months
       let transactions = await Transaction.find(
         { $or: [{sender: id}, {receiver: id}],
-          isApproved: true,
+          isFulfilled: true,
         });
 
 
-      // Aggregating the two together is more complicated
-      let result = db.users.aggregate([
-        {
-          "$lookup": {
-            "from": "transactions",
-            "localField": "_id",
-            "foreignField": {$or: ["sender", "receiver"]},
-            "as": "transactions"
-          }
-        }, {
-          "$lookup": {
-            "from": "users",
-            "localField": "_id",
-          }
-        }
-      ])
+      // // Aggregating the two together is more complicated
+      // let result = db.users.aggregate([
+      //   {
+      //     "$lookup": {
+      //       "from": "transactions",
+      //       "localField": "_id",
+      //       "foreignField": {$or: ["sender", "receiver"]},
+      //       "as": "transactions"
+      //     }
+      //   }, {
+      //     "$lookup": {
+      //       "from": "users",
+      //       "localField": "_id",
+      //     }
+      //   }
+      // ])
 
       res.status(200).send(user);
+      // res.status(200).send(transactions);
     } catch (error) {
       console.error(error);
       res.status(400).send(error);
     }
   }
 );
+
 
 
 router.patch("/profile/add_card", async (req, res) => {

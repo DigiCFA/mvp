@@ -82,6 +82,23 @@ const MeScreen = () => {
               <Text>phoneNumber: {contact.phoneNumber}</Text>
             </View>
           ))} */}
+
+          {self.contacts?.map((contact) => (
+            <View key={contact._id}>
+              <Text>Contact: </Text>
+              <Text>fullName: {contact.fullName}</Text>
+              <Text>phoneNumber: {contact.phoneNumber}</Text>
+            </View>
+          ))} 
+
+          {self.transactions?.map((transaction) => (
+            <View key={transaction._id}>
+              <Text className='font-bold'>Transaction: </Text>
+              <Text>Sender: {transaction.sender}</Text>
+              <Text>Receiver: {transaction.receiver}</Text>
+              <Text>amountTransferred: {transaction.amountTransferred}</Text>
+            </View>
+          ))}
         </View>
 
         <SettingsColumn />

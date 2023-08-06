@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React, { useEffect } from "react";
 
 import { useDispatch } from "react-redux";
-import { fetchUserById } from "../../features/selfSlice";
+import { fetchTransactionsById, fetchUserById } from "../../features/selfSlice";
 
 const ID = "64c673c724782ec4c7fb2d8f";
 
@@ -12,6 +12,7 @@ const AccountInfoScreen = () => {
 
   useEffect(() => {
     dispatch(fetchUserById(ID))
+    dispatch(fetchTransactionsById(ID))
 
   }, []);
 
