@@ -86,7 +86,9 @@ router.get("/profile/retrieve_user_transactions", async (req, res) => {
     let result = await Transaction.find(
       { $or: [{sender: id}, {receiver: id}],
         isFulfilled: true,
-      });
+      })
+      .populate({path: "sender", select: ["fullName", "_id"]})
+      .populate({path: "receiver", select: ["fullName", "_id"]});
 
     if (result.length===0) res.status(404).send(`User with ID ${id} has no transactions`);
     else res.status(200).send(result);

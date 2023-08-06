@@ -59,7 +59,9 @@ const MeScreen = () => {
           {/* Replace this with the actual profile picture!! */}
           <Ionicons name="person-circle" size={125} color="#192C88" />
 
+
           <Text className="px-4 font-medium text-3xl">{self.fullName}</Text>
+          <Text className="px-4 font-medium">{self._id}</Text>
           <Text className="px-4 font-medium">{self.phoneNumber}</Text>
 
           <Text className="px-4 font-medium">QRCode: {self.QRCode}</Text>
@@ -94,8 +96,8 @@ const MeScreen = () => {
           {self.transactions?.map((transaction) => (
             <View key={transaction._id}>
               <Text className='font-bold'>Transaction: </Text>
-              <Text>Sender: {transaction.sender}</Text>
-              <Text>Receiver: {transaction.receiver}</Text>
+              <Text>Sender: {transaction.sender.fullName}</Text>
+              <Text>Receiver: {transaction.receiver.fullName}</Text>
               <Text>amountTransferred: {transaction.amountTransferred}</Text>
             </View>
           ))}

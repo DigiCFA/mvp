@@ -9,7 +9,7 @@ axios.defaults.baseURL = "http://localhost:5050/routes";
 // Maybe write a thunk to fetch user info. In which case user info is passed during login, in which case initialState should be null
 const initialState = {
   self: {
-    // _id: "001",
+    _id: "001",
     firstName: "Default",
     lastName: "User",
     fullName: "Default User",
@@ -31,7 +31,22 @@ const initialState = {
     contacts: [],
     profilePicture: null,
     transactions: [
-      {"_id":"64c7598b38949334596c929f","amountTransferred":1,"sender":"64c680183a2629add8d876bc","receiver":"64c67fce7c692097808e21c5"}
+      {
+        "_id": "64cef2e74a0615d28fc4b58a",
+        "amountTransferred": 0.04,
+        "sender": {
+          "_id": "64c66df647cc118b6eba8b26",
+          "fullName": "Henry Liu"
+        },
+        "receiver": {
+          "_id": "64c673c724782ec4c7fb2d8f",
+          "fullName": "Edmond Wang"
+        },
+        "transactionDate": "2023-08-06T01:09:59.848Z",
+        "isPayment": true,
+        "message": "Henry sends to Edmond",
+        "isFulfilled": true
+      }
     ]
     // Not necessary to fetch too much else at login (Eager Loading)
   },
@@ -52,6 +67,7 @@ export const selfSlice = createSlice({
 
       let newSelf = action.payload;
       console.log("Newself: ", newSelf);
+      state.self._id = newSelf._id;
       state.self.firstName = newSelf.firstName;
       state.self.lastName = newSelf.lastName;
       state.self.fullName = newSelf.fullName;
@@ -83,6 +99,7 @@ export const fetchUserById = userId => {
       else console.log("ERROR")
 
       let user = {
+        _id: response.data._id,
         firstName: response.data.firstName, 
         lastName: response.data.lastName,
         fullName: response.data.fullName, 
@@ -123,6 +140,7 @@ export const fetchTransactionsById = userId => {
 export const { logInOut, setSelf, setTransactions } = selfSlice.actions;
 
 export const selectSelf = (state) => state.self.self;
+export const selectId = (state) => state.self.self._id;
 export const selectBalance = (state) => state.self.self.balance;
 export const selectCards = (state) => state.self.self.cards;
 export const selectContacts = (state) => state.self.self.contacts;
