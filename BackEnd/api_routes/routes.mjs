@@ -15,6 +15,26 @@ const router = express.Router();
 
 let db = dbRef();
 
+// class HttpError extends Error {
+//   constructor (message, statusCode) {
+//       super(message);
+//       this.statusCode = statusCode;
+//   }
+// }
+
+
+
+// async function getUser(id) {
+//   let user = await User.findById(id);
+//   if (!user) {
+//     return { message: "NON_EXISTENT" }
+//     // return res.send(`User with ID ${id} not found`).status(404);
+//   }
+//   return user;
+// }
+
+
+
 // Trying out middleware
 router.get(
   "/",
@@ -163,7 +183,10 @@ router.patch("/profile/remove_card", async(req, res) => {
   // console.log(cardNumber);
   try {
     let user = await User.findById(id);
-    if (!user) res.send(`User with ID ${id} Not found`).status(404);
+    if (!user) {
+      res.send(`User with ID ${id} Not found`).status(404);
+      return;
+    }
 
     await user.cards.pull(cardId);
     await user.save()
@@ -276,7 +299,7 @@ router.patch("/testing/mongoose_add_contact", async (req, res) => {
       res.send("Cannot add self as contact").status(400);
       return;
     }
-
+    
     let otherUser = await User.findById(contactId);
     if (!otherUser) {
       res.send(`User with ID ${contactId} Not found`).status(404);
@@ -296,6 +319,7 @@ router.patch("/testing/mongoose_add_contact", async (req, res) => {
 });
 
 
+// OLD
 router.patch("/profile/add_contact", async (req, res) => {
   let collection = db.collection("users");
   let user_input = req.body;
@@ -326,6 +350,7 @@ router.patch("/profile/add_contact", async (req, res) => {
     });
 });
 
+// OLD
 router.patch("/profile/remove_contact", async (req, res) => {
   let collection = db.collection("users");
   let user_input = req.body;
@@ -356,12 +381,13 @@ router.patch("/profile/remove_contact", async (req, res) => {
     });
 });
 
+
 router.patch("/profile/add_balance", async(req, res) => {
   let id = req.body.userID;
   try {
     let user = await User.findById(id);
     if (!user) {
-      res.send(`User with ID ${id} Not found`).status(404);
+      res.status(404).send(`User with ID ${id} Not found`);
       return;
     }
 
@@ -388,60 +414,64 @@ router.post("/transaction/create_direct_transaction", async (req, res) => {
   let transactions = db.collection("transactions");
   try {
     await session.withTransaction(async () => {
-
-      // const transactionData = new Transaction({
-      //   amountTransferred: newTransaction.amountTransfered,
-      //   sender: newTransaction.sender,
-      //   receiver: newTransaction.receiver,
-      //   isPayment: newTransaction.isPayment,
-      //   isApproved: newTransaction.isApproved,
-      //   message: newTransaction.message,
-      //   transactionDate: Date.now()
-      // });
-      const transactionData = new Transaction(newTransaction);
-      transactionData.transationDate = Date.now();
+      
+      const transactionData = new Transaction({    
+        amountTransferred: newTransaction.amountTransferred,
+        sender: newTransaction.sender,
+        receiver: newTransaction.receiver,
+        isPayment: newTransaction.isPayment,
+        isApproved: newTransaction.isApproved,
+        message: newTransaction.message,
+        transactionDate: Date.now()
+      });
 
       const sendUser = await User.findById(sendID);
       if (!sendUser) {
-        res.send(`User with ID ${sendID} Not found`).status(404);
+        res.status(404).send(`User with ID ${sendID} Not found`);
         return;
       }
-
       const receiveUser = await User.findById(receiveID);
       if (!receiveUser) {
-        res.send(`User with ID ${receiveID} Not found`).status(404);
+        res.status(404).send(`User with ID ${receiveID} Not found`);
+        console.log("SHOULD TERMINATE");
         return;
       }
 
       if (sendID === receiveID) {
-        res.send("Cannot send transaction to self").status(400);
+        res.status(400).send("Cannot send transaction to self");
+        console.log("SHOULD TERMINATE");
         return;
       }
       
       let userBalance = sendUser.balance
       let amountTransferred = newTransaction.amountTransferred;
       if (userBalance < amountTransferred) {
-        res.send({ "Balance insufficient": 0 }).status(400);
+        res.status(400).send(`Balance ${userBalance} insufficient to send ${amountTransferred}`);
+        console.log("SHOULD TERMINATE");
         return;
       }
 
+      console.log("TRANSACTION STUFF");
       await sendUser.$inc('balance', -1.0*amountTransferred);
       await receiveUser.$inc('balance', amountTransferred);
       console.log("Amount should be: ", newTransaction.amountTransferred);
       console.log("Actual amount: ", transactionData.amountTransferred);
       console.log(transactionData);
 
-      await transactions.insertOne(transactionData)
+      await transactions.insertOne(transactionData);
 
       await sendUser.save();
       await receiveUser.save();
+      await session.commitTransaction();  
+
+      res.status(200).send(transactionData);
     });
   } catch (transactError) {
     // console.error(transactError);
     res.send(transactError).status(400);
+    await session.abortTransaction();
   }
   finally{
-    res.send(newTransaction).status(200);
     await session.endSession();
   }
 })
@@ -715,7 +745,14 @@ router.delete("/transaction/mongoose_delete_transaction", async (req, res) => {
 });
 
 
-
+router.delete("/transaction/mongoose_delete_all_transactions", async(req, res) => {
+  try{
+    let result = await Transaction.deleteMany({});
+    res.status(200).send(result);
+  } catch(error) {
+  res.status(400).send(error);
+  }
+});
 
 
 

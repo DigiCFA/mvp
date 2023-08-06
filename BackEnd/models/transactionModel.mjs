@@ -5,7 +5,8 @@ import mongoose from "mongoose";
 const transactionSchema = new mongoose.Schema({
     amountTransferred: {
         type: Number,
-        min: 0.01
+        min: 0.01,
+        required: true
     },
     sender: {
         type: mongoose.ObjectId,
