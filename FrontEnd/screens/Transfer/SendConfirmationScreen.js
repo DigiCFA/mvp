@@ -1,5 +1,5 @@
 import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -7,6 +7,27 @@ const SendConfirmationScreen = () => {
   const {
     params: { name, amount, message },
   } = useRoute();
+
+  useEffect(() => {
+    
+  })
+
+    // useEffect(() => {
+  //   axios
+  //     .get("localhost:5050/routes/transaction/transaction_data", {
+  //       params: {
+  //         ID: "64b851f72736819c427e0708",
+  //       },
+  //     })
+  //     .then((data) => {
+  //       setTransactionHistory(data);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }, []);
+
+
   const navigation = useNavigation();
 
   let firstName = name.substring(0, name.indexOf(" "));

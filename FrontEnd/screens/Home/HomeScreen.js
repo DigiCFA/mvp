@@ -13,7 +13,7 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import TransactionsColumn from "../../components/TransactionsColumn";
 import TransactionCard from "../../components/TransactionCard";
 import { useSelector } from "react-redux";
-import { selectId, selectTransactions } from "../../features/selfSlice";
+import { selectID, selectTransactions } from "../../features/selfSlice";
 
 const HomeScreen = () => {
 
@@ -24,7 +24,7 @@ const HomeScreen = () => {
   const [transactionHistory, setTransactionHistory] = useState([]);
 
   const transactions = useSelector(selectTransactions);
-  const id = useSelector(selectId);
+  const id = useSelector(selectID);
   
 
   // Fetching Past Transactions

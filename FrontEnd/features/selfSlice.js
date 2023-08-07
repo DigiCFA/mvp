@@ -64,7 +64,6 @@ export const selfSlice = createSlice({
     setSelf: (state, action) => {
 
       // state.self = action.payload;
-
       let newSelf = action.payload;
       console.log("Newself: ", newSelf);
       state.self._id = newSelf._id;
@@ -95,8 +94,8 @@ export const fetchUserById = userId => {
           userId: userId,
         },
       });
-      if (response.status == 200) console.log("SUCCESSFUL")
-      else console.log("ERROR")
+      if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED USER")
+      else console.log("ERROR RETRIEVING USER")
 
       let user = {
         _id: response.data._id,
@@ -140,7 +139,7 @@ export const fetchTransactionsById = userId => {
 export const { logInOut, setSelf, setTransactions } = selfSlice.actions;
 
 export const selectSelf = (state) => state.self.self;
-export const selectId = (state) => state.self.self._id;
+export const selectID = (state) => state.self.self._id;
 export const selectBalance = (state) => state.self.self.balance;
 export const selectCards = (state) => state.self.self.cards;
 export const selectContacts = (state) => state.self.self.contacts;

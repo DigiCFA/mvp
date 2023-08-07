@@ -10,7 +10,7 @@ const PaymentMethodCard = ({cardID, cardName, cardNumber, cardType, isActive, on
     return (
       <TouchableOpacity 
       onPress={onPress}
-      className="py-4 pl-4 rounded-lg flex-row space-x-4 border-b border-gray-200 shadow-xl">
+      className="py-4 pl-4 rounded-lg flex-row space-x-4 border-b border-gray-200">
         <View className='shadow'>
             <Ionicons name="card-outline" size={48} color="#0ABAB5" />
         </View>
