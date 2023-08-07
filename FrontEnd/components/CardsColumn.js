@@ -6,15 +6,12 @@ import { useSelector } from "react-redux";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
 
-const CardsColumn = () => {
+const CardsColumn = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const cards = useSelector(selectCards);
   const balance = useSelector(selectBalance);
 
-  // Fetching the top cards
-  // useEffect(() => {
 
-  // })
   return (
     <View>
       <TouchableOpacity
@@ -54,7 +51,15 @@ const CardsColumn = () => {
           cardNumber={card.cardNumber}
           cardType={card.cardType}
           isActive={activeIndex === (index+1)}
-          onPress={() => setActiveIndex(index+1)}
+          onPress={() => {
+            setActiveIndex(index+1);
+            props.sendSelectedCard({
+              cardID: card._id,
+              cardName: card.name,
+              cardType: card.cardType,
+              cardNumber: card.cardNumber
+            });
+          }}
         />
       ))}
 
