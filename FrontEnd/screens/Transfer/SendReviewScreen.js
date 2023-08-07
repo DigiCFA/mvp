@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
+import axios from "axios";
 
 import { useCardAnimation } from "@react-navigation/stack";
 import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
@@ -18,23 +19,53 @@ import CardsColumn from "../../components/CardsColumn";
 import Currency from "react-currency-formatter";
 import UserCard from "../../components/UserCard";
 import PaymentMethodCard from "../../components/PaymentMethodCard";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTransactionsById, selectId } from "../../features/selfSlice";
+
+const createDirectTransaction = async (
+  amountTransferred,
+  sender,
+  receiver,
+  paymentMethod,
+  isPayment,
+  isApproved,
+  message
+) => {
+  try {
+    const response = await axios.post(
+      "/transaction/create_direct_transaction",
+      {
+        amountTransferred: amountTransferred,
+        sender: sender,
+        receiver: receiver,
+        paymentMethod: paymentMethod,
+        isPayment: isPayment,
+        isApproved: isApproved,
+        message: message,
+      }
+    );
+    if (response.status == 200) console.log("Successfully created transaction");
+    else console.log("Error creating transaction");
+  } catch (error) {
+    console.error(error.response.data);
+  }
+};
 
 const SendReviewScreen = () => {
   const { height } = useWindowDimensions();
   const { current } = useCardAnimation();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const senderId = useSelector(selectId);
 
   const {
-    params: {
-      name,
-      amount,
-      message,
-      cardID,
-      cardName,
-      cardType,
-      cardNumber,
-    },
+    params: { receiverId, name, amount, message, cardID, cardName, cardType, cardNumber },
   } = useRoute();
+
+  const paymentMethod = (cardType.toLowerCase() === 'balance') ? "balance" : (cardType.charAt(0).toUpperCase() + cardType.slice(1) + " " + cardNumber.slice(-4));
+
+
 
   // const preferredCard
 
@@ -67,7 +98,6 @@ const SendReviewScreen = () => {
       >
         <View className="flex-1 p-4 bg-white rounded-3xl">
           <View className="flex-col h-[45%]">
-          
             {/* Top Portion */}
             <View className="flex-row mb-4">
               <View className="flex-1"></View>
@@ -90,19 +120,22 @@ const SendReviewScreen = () => {
             />
 
             <Text className="text-lg mt-4">
-              Send <Text className="italic">{name}</Text>:
+              <Text className="font-bold">
+                Send <Text className="italic">{name}</Text>:{" "}
+              </Text>
+              "{message}"
             </Text>
 
             <View className="flex-row mt-8">
-              <Text className='text-lg font-bold flex-1'>Total</Text>
+              <Text className="text-lg font-bold flex-1">Total</Text>
               <Text className="text-lg font-bold">
-                <Currency quantity={Number(amount)} currency="USD"/> USD
+                <Currency quantity={Number(amount)} currency="USD" /> USD
               </Text>
             </View>
 
             {/* Preferred Method of Payment */}
 
-            <View className='flex-1'></View>
+            <View className="flex-1"></View>
             {/* Cards
               <UserCard />
               <ScrollView>
@@ -112,10 +145,17 @@ const SendReviewScreen = () => {
 
             {/* Bottom Portion */}
             <TouchableOpacity
-              onPress={() => navigation.navigate("SendConfirmation", {name, amount, message})}
+              onPress={async () => 
+                {
+                  navigation.navigate("SendConfirmation", {name, amount,message});
+                  await createDirectTransaction(amount, senderId, receiverId, paymentMethod, true, true, message);
+                  dispatch(fetchTransactionsById(senderId));
+                }
+              }
               className="bg-blue-900 rounded-full py-3 px-14 items-center"
             >
               <Text className="text-white text-xl font-extrabold">Send</Text>
+              {/* <Text>{senderId} + {receiverId}</Text> */}
             </TouchableOpacity>
           </View>
         </View>

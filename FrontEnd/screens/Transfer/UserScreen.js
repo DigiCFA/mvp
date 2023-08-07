@@ -94,6 +94,7 @@ const UserScreen = () => {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("RequestReview", {
+                  id,
                   name,
                   amount,
                   message,
@@ -108,6 +109,7 @@ const UserScreen = () => {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("PaymentMethods", {
+                  receiverId: id,
                   name,
                   amount,
                   message,

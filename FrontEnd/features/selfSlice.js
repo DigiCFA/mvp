@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { fetchTransactions, fetchUser } from "../api/api";
 
 
 
 // SHOULD ALL BE PLACED IN THE LOGIN PAGE
-axios.defaults.baseURL = "http://localhost:5050/routes";
 
 // Maybe write a thunk to fetch user info. In which case user info is passed during login, in which case initialState should be null
 const initialState = {
@@ -64,7 +64,6 @@ export const selfSlice = createSlice({
     setSelf: (state, action) => {
 
       // state.self = action.payload;
-
       let newSelf = action.payload;
       console.log("Newself: ", newSelf);
       state.self._id = newSelf._id;
@@ -90,13 +89,14 @@ export const selfSlice = createSlice({
 export const fetchUserById = userId => {
   return async (dispatch, getState) => {
     try {
-      const response = await axios.get("/profile/retrieve_user", {
-        params: {
-          userId: userId,
-        },
-      });
-      if (response.status == 200) console.log("SUCCESSFUL")
-      else console.log("ERROR")
+      const response = await fetchUser(userId);
+      // const response = await axios.get("/profile/retrieve_user", {
+      //   params: {
+      //     userId: userId,
+      //   },
+      // });
+      if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED USER")
+      else console.log("ERROR RETRIEVING USER")
 
       let user = {
         _id: response.data._id,
@@ -121,11 +121,7 @@ export const fetchUserById = userId => {
 export const fetchTransactionsById = userId => {
   return async (dispatch, getState) => {
     try {
-      const response = await axios.get("/profile/retrieve_user_transactions", {
-        params: {
-          userId: userId,
-        },
-      });
+      const response = await fetchTransactions(userId);
       if (response.status == 200) console.log("SUCCESSFUL")
       else console.log("ERROR")
 

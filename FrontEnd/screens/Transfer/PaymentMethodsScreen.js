@@ -8,7 +8,7 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
 import { useCardAnimation } from "@react-navigation/stack";
 import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
@@ -21,17 +21,30 @@ import { selectCards } from "../../features/selfSlice";
 const PaymentMethodsScreen = () => {
 
   // Need to update this Screen on which card we ended up choosing!!
-  const cardID = 0
-  const cardName = 'DigiCFA Balance'
-  const cardType = 'Balance'
-  const cardNumber = 'N/A'
+
+
+  const [selectedCard, setSelectedCard] = useState({
+    cardID: '0',
+    cardName: 'DigiCFA Balance',
+    cardType: 'Balance',
+    cardNumber: 'N/A'
+  })
+
+  const cardID = selectedCard.cardID;
+  const cardName = selectedCard.cardName;
+  const cardType = selectedCard.cardType;
+  const cardNumber = selectedCard.cardNumber;
+
+  const sendSelectedCard = (card) => {
+    setSelectedCard(card)
+  }
 
   const { height } = useWindowDimensions();
   const { current } = useCardAnimation();
   const navigation = useNavigation();
 
   const {
-    params: { name, amount, message },
+    params: { receiverId, name, amount, message },
   } = useRoute();
 
   return (
@@ -76,8 +89,9 @@ const PaymentMethodsScreen = () => {
 
             {/* Cards */}
             <ScrollView>
-              <CardsColumn />
-              <Text>{name}, {amount}, {message}</Text>
+              <CardsColumn sendSelectedCard={sendSelectedCard}/>
+              <Text>{receiverId}, {name}, {amount}, {message}</Text>
+              <Text>{selectedCard.cardID}, {selectedCard.cardName}, {selectedCard.cardNumber}</Text>
             </ScrollView>
 
             {/* Bottom Portion */}
@@ -85,11 +99,11 @@ const PaymentMethodsScreen = () => {
               onPress={() => {
                 navigation.goBack();
                 navigation.navigate("SendReview", {
-                name, amount, message, cardID, cardName, cardType, cardNumber
+                receiverId, name, amount, message, cardID, cardName, cardType,cardNumber
               })}}
               className="bg-blue-900 rounded-full py-3 px-14 items-center"
             >
-              <Text className="text-white text-xl font-extrabold">Next</Text>
+              <Text className="text-white text-xl font-extrabold">Send</Text>
             </TouchableOpacity>
           </View>
         </View>
