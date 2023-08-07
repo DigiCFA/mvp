@@ -14,14 +14,14 @@ const PaymentMethodCard = ({cardID, cardName, cardNumber, cardType, isActive, on
         <View className='shadow'>
             <Ionicons name="card-outline" size={48} color="#0ABAB5" />
         </View>
-        <View className="flex-col space-y-2 flex-1">
+        <View className="flex-col flex-1">
           {/* Row of Title + Transaction amount*/}
           <View className="flex-row">
             <View className="flex-1">
               <Text className="text-lg font-medium">{cardName}</Text>
             </View>
           </View>          
-          <Text className="font-medium text-gray-500">{cardType} ••••{cardNumber}</Text>
+          <Text className="font-medium text-gray-500">{cardType.charAt(0).toUpperCase()+cardType.slice(1)} ({cardNumber.slice(-4)})</Text>
         </View>
 
         <View className='w-8'>

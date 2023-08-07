@@ -90,7 +90,8 @@ const SendReviewScreen = () => {
             />
 
             <Text className="text-lg mt-4">
-              Send <Text className="italic">{name}</Text>:
+              <Text className='font-bold'>Send <Text className="italic">{name}</Text>: </Text>
+              "{message}"
             </Text>
 
             <View className="flex-row mt-8">
