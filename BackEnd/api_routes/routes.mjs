@@ -15,6 +15,26 @@ const router = express.Router();
 
 let db = dbRef();
 
+// class HttpError extends Error {
+//   constructor (message, statusCode) {
+//       super(message);
+//       this.statusCode = statusCode;
+//   }
+// }
+
+
+
+// async function getUser(id) {
+//   let user = await User.findById(id);
+//   if (!user) {
+//     return { message: "NON_EXISTENT" }
+//     // return res.send(`User with ID ${id} not found`).status(404);
+//   }
+//   return user;
+// }
+
+
+
 // Trying out middleware
 router.get(
   "/",
@@ -37,7 +57,7 @@ router.get(
       `<h3>All Indexes: </h3>` +
       JSON.stringify(indexes);
 
-    res.send(text).status(200);
+    res.status(200).send(text);
   }
 );
 
@@ -51,18 +71,38 @@ router.get("/profile/retrieve_user", async (req, res) => {
       select: ["fullName", "phoneNumber"]
     })
 
-    if (!result) res.send(`User with ID ${id} Not found`).status(404);
-    else res.send(result).status(200);
+    if (!result) res.status(404).send(`User with ID ${id} not found`);
+    else res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.send(error).status(400);
+    res.status(400).send(error);
   }
 });
+
+router.get("/profile/retrieve_user_transactions", async (req, res) => {
+  let id = req.query.userId;
+  try {
+    // all transactions
+    let result = await Transaction.find(
+      { $or: [{sender: id}, {receiver: id}],
+        isFulfilled: true,
+      })
+      .populate({path: "sender", select: ["fullName", "_id"]})
+      .populate({path: "receiver", select: ["fullName", "_id"]});
+
+    if (result.length===0) res.status(404).send(`User with ID ${id} has no transactions`);
+    else res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(400).send(error);
+  }
+});
+
 
 router.get(
   "/profile/retrieve_user_with_certain_fields",
   async (req, res) => {
-    let id = req.body.userId;
+    let id = req.query.userId;
     try {
       let user = await User.findById(id).populate({
         // 5 most recent contacts
@@ -71,47 +111,53 @@ router.get(
         select: ["fullName", "phoneNumber"]
       })
 
-      if (!user) res.send(`User with ID ${id} Not found`).status(404);
-  
+      if (!user) {
+        res.status(404).send(`User with ID ${id} Not found`);
+        return;
+      }
       // Find all transactions within 2 months
       let transactions = await Transaction.find(
         { $or: [{sender: id}, {receiver: id}],
-          isApproved: true,
+          isFulfilled: true,
         });
 
 
-      // Aggregating the two together is more complicated
-      let result = db.users.aggregate([
-        {
-          "$lookup": {
-            "from": "transactions",
-            "localField": "_id",
-            "foreignField": {$or: ["sender", "receiver"]},
-            "as": "transactions"
-          }
-        }, {
-          "$lookup": {
-            "from": "users",
-            "localField": "_id",
-          }
-        }
-      ])
+      // // Aggregating the two together is more complicated
+      // let result = db.users.aggregate([
+      //   {
+      //     "$lookup": {
+      //       "from": "transactions",
+      //       "localField": "_id",
+      //       "foreignField": {$or: ["sender", "receiver"]},
+      //       "as": "transactions"
+      //     }
+      //   }, {
+      //     "$lookup": {
+      //       "from": "users",
+      //       "localField": "_id",
+      //     }
+      //   }
+      // ])
 
-      res.send(user).status(200);
+      res.status(200).send(user);
+      // res.status(200).send(transactions);
     } catch (error) {
       console.error(error);
-      res.send(error).status(400);
+      res.status(400).send(error);
     }
   }
 );
+
 
 
 router.patch("/profile/add_card", async (req, res) => {
   let id = req.body.userId;
   try {
     let user = await User.findById(id);
-    if (!user) res.send(`User with ID ${id} Not found`).status(404);
-    
+    if (!user) {
+      res.status(404).send(`User with ID ${id} Not found`);
+      return;
+    }
     const newCard = await user.cards.create({
       name: req.body.name,
       accountHolder: req.body.accountHolder,
@@ -142,11 +188,11 @@ router.patch("/profile/add_card", async (req, res) => {
     } else {
       await user.cards.addToSet(newCard);
       await user.save();
-      res.send(newCard).status(200);
+      res.status(200).send(newCard);
     }
 
   } catch (error) {
-    res.send(error).status(400);
+    res.status(400).send(error);
   }
 });
 
@@ -159,15 +205,18 @@ router.patch("/profile/remove_card", async(req, res) => {
   // console.log(cardNumber);
   try {
     let user = await User.findById(id);
-    if (!user) res.send(`User with ID ${id} Not found`).status(404);
+    if (!user) {
+      res.status(404).send(`User with ID ${id} Not found`);
+      return;
+    }
 
     await user.cards.pull(cardId);
     await user.save()
 
-    res.send(user).status(200);
+    res.status(200).send(user);
   } catch(error) {
     console.error(error);
-    res.send(error).status(400)
+    res.status(400).send(error);
   }
 })
 
@@ -183,10 +232,10 @@ router.post("/auth/create_user", async (req, res) => {
       creationDate: Date.now()
       // create a QR Code on creation
     });
-    res.send(result).status(200);
+    res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.send(error).status(400);
+    res.status(400).send(error);
   }
 });
 
@@ -226,11 +275,11 @@ router.delete("/auth/delete_user", async (req, res) => {
   try {
     let result = await User.findByIdAndDelete(id);
 
-    if (!result) res.send(`User with ID ${id} Not found`).status(404);
-    else res.send(result).status(200);
+    if (!result) res.status(404).send(`User with ID ${id} Not found`);
+    else res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.send(error).status(400);
+    res.status(400).send(error);
   }
 });
 
@@ -264,18 +313,18 @@ router.patch("/testing/mongoose_add_contact", async (req, res) => {
   try {
     let user = await User.findById(id);
     if (!user) {
-      res.send(`User with ID ${id} Not found`).status(404);
+      res.status(404).send(`User with ID ${id} Not found`);
       return;
     }
 
     if (id === contactId) {
-      res.send("Cannot add self as contact").status(400);
+      res.status(400).send("Cannot add self as contact");
       return;
     }
-
+    
     let otherUser = await User.findById(contactId);
     if (!otherUser) {
-      res.send(`User with ID ${contactId} Not found`).status(404);
+      res.status(404).send(`User with ID ${contactId} Not found`);
       return;
     }
 
@@ -284,14 +333,15 @@ router.patch("/testing/mongoose_add_contact", async (req, res) => {
     otherUser.contacts.addToSet(id);
     let result2 = await otherUser.save();
 
-    res.send(result).status(200);
+    res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.send(error).status(400);
+    res.status(400).send(error);
   }
 });
 
 
+// OBSOLETE
 router.patch("/profile/add_contact", async (req, res) => {
   let collection = db.collection("users");
   let user_input = req.body;
@@ -322,6 +372,7 @@ router.patch("/profile/add_contact", async (req, res) => {
     });
 });
 
+// OBSOLETE
 router.patch("/profile/remove_contact", async (req, res) => {
   let collection = db.collection("users");
   let user_input = req.body;
@@ -353,45 +404,109 @@ router.patch("/profile/remove_contact", async (req, res) => {
 });
 
 
+router.patch("/profile/add_balance", async(req, res) => {
+  let id = req.body.userID;
+  try {
+    let user = await User.findById(id);
+    if (!user) {
+      res.status(404).send(`User with ID ${id} Not found`);
+      return;
+    }
+
+    user.balance += req.body.amount;
+    
+    await user.save();
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+})
+
+
 
 router.post("/transaction/create_direct_transaction", async (req, res) => {
   
   const session = await mongoose.startSession();
-  let transactionDataRequest = req.body;
+
+  let newTransaction = req.body;
+
+  let sendID = newTransaction.sender;
+  let receiveID = newTransaction.receiver;
 
   let transactions = db.collection("transactions");
   try {
     await session.withTransaction(async () => {
+      
+      const transactionData = new Transaction({    
+        amountTransferred: newTransaction.amountTransferred,
+        sender: newTransaction.sender,
+        receiver: newTransaction.receiver,
+        paymentMethod: "balance",
+        isPayment: newTransaction.isPayment,
+        isApproved: newTransaction.isApproved,
+        message: newTransaction.message,
+        transactionDate: Date.now()
+      });
 
-      const transactionData = new Transaction(transactionDataRequest)
-      const sendUser = await User.findById({ _id: transactionData.sender});
-      const receiveUser = await User.findById({ _id: transactionData.receiver});
-      let userBalance = sendUser.balance
-      let amountTransfered = transactionData.amountTransfered;
-      if (userBalance < amountTransfered) {
-        await res.send({ "balance too low": 0 }).status(400);
+      const sendUser = await User.findById(sendID);
+      if (!sendUser) {
+        res.status(404).send(`User with ID ${sendID} Not found`);
         return;
       }
-      await sendUser.$inc('balance',-1.0*amountTransfered)
-      await receiveUser.$inc('balance',amountTransfered)
-      console.log("the");
+      const receiveUser = await User.findById(receiveID);
+      if (!receiveUser) {
+        res.status(404).send(`User with ID ${receiveID} Not found`);
+        console.log("SHOULD TERMINATE");
+        return;
+      }
+
+      if (sendID === receiveID) {
+        res.status(400).send("Cannot send transaction to self");
+        console.log("SHOULD TERMINATE");
+        return;
+      }
+      
+      let userBalance = sendUser.balance
+      let amountTransferred = newTransaction.amountTransferred;
+      if (userBalance < amountTransferred) {
+        res.status(400).send(`Balance ${userBalance} insufficient to send ${amountTransferred}`);
+        console.log("SHOULD TERMINATE");
+        return;
+      }
+
+      console.log("TRANSACTION STUFF");
+      await sendUser.$inc('balance', -1.0*amountTransferred);
+      await receiveUser.$inc('balance', amountTransferred);
+      console.log("Amount should be: ", newTransaction.amountTransferred);
+      console.log("Actual amount: ", transactionData.amountTransferred);
       console.log(transactionData);
-      await transactions.insertOne(transactionData)
-      await sendUser.save()
-      await receiveUser.save()
+
+      await transactions.insertOne(transactionData);
+
+      await sendUser.save();
+      await receiveUser.save();
+      await session.commitTransaction();  
+
+      res.status(200).send(transactionData);
     });
-  } catch (transact_error) {
-    console.error(transact_error);
-    await res.send(transact_error).status(400);
-
-
+  } catch (transactError) {
+    // console.error(transactError);
+    res.status(400).send(transactError);
+    await session.abortTransaction();
   }
   finally{
-    await res.send(transactionDataRequest).status(200);
     await session.endSession();
-
   }
 })
+
+
+
+
+
+
+
+
+// OBSOLETE
 
 router.post("/transaction/create_transaction_request", async (req, res) => {
   const session = client.startSession();
@@ -459,6 +574,8 @@ router.post("/transaction/create_transaction_request", async (req, res) => {
   }
 });
 
+
+// OBSOLETE
 router.patch("/transaction/approve_transaction", async (req, res) => {
   const session = client.startSession();
   let transactionData = req.body;
@@ -558,6 +675,8 @@ router.patch("/transaction/approve_transaction", async (req, res) => {
   }
 });
 
+
+// OBSOLEE
 router.get("/transaction/transaction_data", async (req, res) => {
   let transaction_id = req.body.transaction_id;
   let transaction_collection = db.collection("transactions");
@@ -573,6 +692,7 @@ router.get("/transaction/transaction_data", async (req, res) => {
     });
 });
 
+// OBSOLETE
 router.get("/profile/retrieve_all_transactions", async (req, res) => {
   let user_id = req.body.user_id;
   let users_collection = db.collection("users");
@@ -608,6 +728,8 @@ router.get("/profile/retrieve_all_transactions", async (req, res) => {
     });
 });
 
+
+// OBSOLETE
 router.get(
   "/profile/retrieve_transactions/:transaction_status",
   async (req, res) => {
@@ -647,22 +769,32 @@ router.get(
 );
 
 
+
+
+
 // MONGOOSE
 router.delete("/transaction/mongoose_delete_transaction", async (req, res) => {
   let id = req.body.transactionId;
   try {
     let result = await Transaction.findByIdAndDelete(id);
 
-    if (!result) res.send(`Transaction with ID ${id} Not found`).status(404);
-    else res.send(result).status(200);
+    if (!result) res.status(404).send(`Transaction with ID ${id} Not found`);
+    else res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.send(error).status(400);
+    res.status(400).send(error);
   }
 });
 
 
-
+router.delete("/transaction/mongoose_delete_all_transactions", async(req, res) => {
+  try{
+    let result = await Transaction.deleteMany({});
+    res.status(200).send(result);
+  } catch(error) {
+  res.status(400).send(error);
+  }
+});
 
 
 

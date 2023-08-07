@@ -7,7 +7,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 
 const TransactionScreen = () => {
 
-  const { params: {isPaying, title,  date, description, amount}} = useRoute();
+  const { params: {id, userPays, title,  fullDate, message, paymentMethod, amount}} = useRoute();
   const navigation = useNavigation();
 
   return (
@@ -18,7 +18,7 @@ const TransactionScreen = () => {
         <TouchableOpacity onPress={navigation.goBack} className="flex-1">
           <Ionicons name="arrow-back" size={30} color="grey" />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold">Money {isPaying ? "sent" : "received"}</Text>
+        <Text className="text-lg font-semibold">Money {userPays ? "sent" : "received"}</Text>
 
         <View className="flex-1"></View>
       </View>
@@ -36,12 +36,12 @@ const TransactionScreen = () => {
               <View className="flex-1">
                 <Text className="text-xl font-bold">{title}</Text>
               </View>
-              <Text className={`text-xl font-medium ${isPaying ? 'text-black' : 'text-green-800'}`}>
-                {isPaying ? "-" : "+"}
+              <Text className={`text-xl font-medium ${userPays ? 'text-black' : 'text-green-800'}`}>
+                {userPays ? "-" : "+"}
                 <Currency quantity={Number(amount)} currency="USD" />
               </Text>
             </View>
-            <Text className="font-medium">{date}</Text>
+            <Text className="font-medium">{fullDate}</Text>
             <TouchableOpacity>
               <Text className='font-bold text-blue-600'>Show history</Text>
             </TouchableOpacity>
@@ -50,18 +50,30 @@ const TransactionScreen = () => {
         </View>
 
         <View className='p-4 bg-white space-y-2'>
-          <Text className='text-base font-medium'>{description}</Text>
+          <Text className='text-base font-medium'>{message}</Text>
           <TouchableOpacity>
             <Text className='font-bold text-blue-600'>Show story</Text>
           </TouchableOpacity>
         </View>
 
+
         <View className='mt-2 p-4 bg-white space-y-2'>
-          <Text>From</Text>
+          <Text className='text-base font-bold'>{userPays ? "From" : "To"}</Text>
+          <Text className='text-base font-medium'>{paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1)}</Text>
+        </View>
+        
+
+        <View className='mt-2 p-4 bg-white space-y-2'>
+          <Text className='text-base font-bold'>Transaction ID</Text>
+          <Text className='text-base font-medium'>{id}</Text>
         </View>
 
         <View className='mt-2 p-4 bg-white space-y-2'>
-          <Text>Transaction ID</Text>
+          <Text className='text-base font-bold'>Need help?</Text>
+          <TouchableOpacity className='flex-row space-x-2'>
+            <Ionicons name="warning" size={24} color="#192C88"/>
+            <Text className='text-base font-medium'>Report a Problem</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
 

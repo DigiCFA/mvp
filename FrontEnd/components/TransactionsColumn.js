@@ -14,34 +14,34 @@ const TransactionsColumn = () => {
     <View>
       <TransactionCard
         id={0}
-        isPaying={true}
+        isPayment={true}
         title={"Apple Services"}
-        date={"Jun 21"}
-        description={"Automatic Payment"}
+        date={"2022-06-21T01:09:59.848Z"}
+        message={"Automatic Payment"}
         amount={2.99}
       />
       <TransactionCard
         id={1}
-        isPaying={true}
+        isPayment={true}
         title={"Apple Services"}
-        date={"May 21"}
-        description={"Automatic Payment"}
+        date={"2022-05-21T01:09:59.848Z"}
+        message={"Automatic Payment"}
         amount={2.99}
       />
       <TransactionCard
         id={2}
-        isPaying={true}
+        isPayment={true}
         title={"Apple Services"}
-        date={"Apr 21"}
-        description={"Automatic Payment"}
+        date={"2022-04-21T01:09:59.848Z"}
+        message={"Automatic Payment"}
         amount={2.99}
       />
       <TransactionCard
         id={3}
-        isPaying={false}
+        isPayment={false}
         title={"cleverbridge Inc."}
-        date={"Jan 12"}
-        description={"Refund"}
+        date={"2022-01-12T01:09:59.848Z"}
+        message={"Refund"}
         amount={53.28}
       />
     </View>

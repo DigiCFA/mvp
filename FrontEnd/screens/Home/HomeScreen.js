@@ -12,13 +12,20 @@ import SearchScreen from "../Transfer/SearchScreen";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import TransactionsColumn from "../../components/TransactionsColumn";
 import TransactionCard from "../../components/TransactionCard";
+import { useSelector } from "react-redux";
+import { selectId, selectTransactions } from "../../features/selfSlice";
 
 const HomeScreen = () => {
+
   const navigation = useNavigation();
 
   const axios = require("axios");
 
   const [transactionHistory, setTransactionHistory] = useState([]);
+
+  const transactions = useSelector(selectTransactions);
+  const id = useSelector(selectId);
+  
 
   // Fetching Past Transactions
 
@@ -38,7 +45,7 @@ const HomeScreen = () => {
   // }, []);
 
   return (
-    <SafeAreaView className="bg-[#e9e7e2]">
+    <SafeAreaView className="bg-[#e9e7e2] flex-1">
       <ScrollView>
         {/* Header */}
         <View className="flex-row px-4 pb-6 space-x-3">
@@ -96,21 +103,24 @@ const HomeScreen = () => {
         
 
         {/* Transactions */}
-        <View className="bg-white mt-2 py-6 px-4">
+        <View className="bg-white mt-2 py-6 px-4 flex-1">
           <Text className="text-xl text-gray-800">Recent activity</Text>
 
-          <TransactionsColumn />
 
-          {transactionHistory?.map((transaction) => (
+          {transactions?.map((transaction) => (
             <TransactionCard
-              id={transaction.transaction_id}
-              isPaying={transaction_code}
-              title={transaction.transaction_sender}
-              date={transaction.transaction_date}
-              description={transaction.transaction_date}
-              amount={transaction.amount_transferred}
+              key={transaction._id}
+              id={transaction._id}
+              userPays={transaction.sender._id === id}
+              title={(transaction.sender._id === id) ? transaction.receiver.fullName : transaction.sender.fullName}
+              date={transaction.transactionDate}
+              message={transaction.message}
+              paymentMethod={transaction.paymentMethod}
+              amount={transaction.amountTransferred}
             />
           ))}
+
+          {/* <TransactionsColumn /> */}
 
           <TouchableOpacity className="pt-4">
             <Text className="text-center text-lg font-bold text-blue-600">
