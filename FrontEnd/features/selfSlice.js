@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { fetchTransactions, fetchUser } from "../api/api";
 
 
 
 // SHOULD ALL BE PLACED IN THE LOGIN PAGE
-axios.defaults.baseURL = "http://localhost:5050/routes";
 
 // Maybe write a thunk to fetch user info. In which case user info is passed during login, in which case initialState should be null
 const initialState = {
@@ -89,11 +89,12 @@ export const selfSlice = createSlice({
 export const fetchUserById = userId => {
   return async (dispatch, getState) => {
     try {
-      const response = await axios.get("/profile/retrieve_user", {
-        params: {
-          userId: userId,
-        },
-      });
+      const response = await fetchUser(userId);
+      // const response = await axios.get("/profile/retrieve_user", {
+      //   params: {
+      //     userId: userId,
+      //   },
+      // });
       if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED USER")
       else console.log("ERROR RETRIEVING USER")
 
@@ -120,11 +121,7 @@ export const fetchUserById = userId => {
 export const fetchTransactionsById = userId => {
   return async (dispatch, getState) => {
     try {
-      const response = await axios.get("/profile/retrieve_user_transactions", {
-        params: {
-          userId: userId,
-        },
-      });
+      const response = await fetchTransactions(userId);
       if (response.status == 200) console.log("SUCCESSFUL")
       else console.log("ERROR")
 
@@ -139,7 +136,7 @@ export const fetchTransactionsById = userId => {
 export const { logInOut, setSelf, setTransactions } = selfSlice.actions;
 
 export const selectSelf = (state) => state.self.self;
-export const selectID = (state) => state.self.self._id;
+export const selectId = (state) => state.self.self._id;
 export const selectBalance = (state) => state.self.self.balance;
 export const selectCards = (state) => state.self.self.cards;
 export const selectContacts = (state) => state.self.self.contacts;

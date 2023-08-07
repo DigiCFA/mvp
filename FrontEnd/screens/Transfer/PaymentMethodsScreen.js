@@ -44,7 +44,7 @@ const PaymentMethodsScreen = () => {
   const navigation = useNavigation();
 
   const {
-    params: { receiverID, name, amount, message },
+    params: { receiverId, name, amount, message },
   } = useRoute();
 
   return (
@@ -90,7 +90,7 @@ const PaymentMethodsScreen = () => {
             {/* Cards */}
             <ScrollView>
               <CardsColumn sendSelectedCard={sendSelectedCard}/>
-              <Text>{receiverID}, {name}, {amount}, {message}</Text>
+              <Text>{receiverId}, {name}, {amount}, {message}</Text>
               <Text>{selectedCard.cardID}, {selectedCard.cardName}, {selectedCard.cardNumber}</Text>
             </ScrollView>
 
@@ -99,7 +99,7 @@ const PaymentMethodsScreen = () => {
               onPress={() => {
                 navigation.goBack();
                 navigation.navigate("SendReview", {
-                receiverID, name, amount, message, cardID, cardName, cardType,cardNumber
+                receiverId, name, amount, message, cardID, cardName, cardType,cardNumber
               })}}
               className="bg-blue-900 rounded-full py-3 px-14 items-center"
             >

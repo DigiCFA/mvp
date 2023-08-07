@@ -19,8 +19,8 @@ import CardsColumn from "../../components/CardsColumn";
 import Currency from "react-currency-formatter";
 import UserCard from "../../components/UserCard";
 import PaymentMethodCard from "../../components/PaymentMethodCard";
-import { useSelector } from "react-redux";
-import { selectID } from "../../features/selfSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTransactionsById, selectId } from "../../features/selfSlice";
 
 const createDirectTransaction = async (
   amountTransferred,
@@ -55,11 +55,12 @@ const SendReviewScreen = () => {
   const { height } = useWindowDimensions();
   const { current } = useCardAnimation();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-  const senderID = useSelector(selectID);
+  const senderId = useSelector(selectId);
 
   const {
-    params: { receiverID, name, amount, message, cardID, cardName, cardType, cardNumber },
+    params: { receiverId, name, amount, message, cardID, cardName, cardType, cardNumber },
   } = useRoute();
 
   const paymentMethod = (cardType.toLowerCase() === 'balance') ? "balance" : (cardType.charAt(0).toUpperCase() + cardType.slice(1) + " " + cardNumber.slice(-4));
@@ -144,16 +145,17 @@ const SendReviewScreen = () => {
 
             {/* Bottom Portion */}
             <TouchableOpacity
-              onPress={() =>
+              onPress={async () => 
                 {
                   navigation.navigate("SendConfirmation", {name, amount,message});
-                  createDirectTransaction(amount, senderID, receiverID, paymentMethod, true, true, message);
+                  await createDirectTransaction(amount, senderId, receiverId, paymentMethod, true, true, message);
+                  dispatch(fetchTransactionsById(senderId));
                 }
               }
               className="bg-blue-900 rounded-full py-3 px-14 items-center"
             >
               <Text className="text-white text-xl font-extrabold">Send</Text>
-              {/* <Text>{senderID} + {receiverID}</Text> */}
+              {/* <Text>{senderId} + {receiverId}</Text> */}
             </TouchableOpacity>
           </View>
         </View>
