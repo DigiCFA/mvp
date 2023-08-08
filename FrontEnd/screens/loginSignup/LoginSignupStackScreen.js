@@ -4,6 +4,8 @@ import React from 'react'
 
 import LoginSignupLandingScreen from './LoginSignupLandingScreen'
 import SignupPhoneNumberScreen from './SignupPhoneNumberScreen'
+import PhoneVerificationScreen from './PhoneVerificationScreen'
+import SetPasswordScreen from './SetPasswordScreen'
 
 const LoginSignupStackScreen = () => {
 
@@ -20,6 +22,12 @@ const LoginSignupStackScreen = () => {
                     name="PhoneNumber"
                     component={SignupPhoneNumberScreen}
                 />
+                <Stack.Screen
+                    name="PhoneVerification"
+                    component={PhoneVerificationScreen} />
+                <Stack.Screen 
+                    name="Password"
+                    component={SetPasswordScreen} />
             </Stack.Group>
         </Stack.Navigator>
     )

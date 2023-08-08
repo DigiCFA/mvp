@@ -9,31 +9,36 @@ import { useNavigation } from '@react-navigation/native'
 
 const LoginSignupLandingScreen = () => {
 
-    [password, setPassword] = useState('')
+    const [password, setPassword] = useState('')
+    const [isPhoneNumberInputFocused, setIsPhoneNumberInputFocused] = useState(false)
 
     const navigation = useNavigation()
 
     return (
-        <HideKeyboardView>
-            <SafeAreaView className="items-center bg-white flex-1" >
+        <SafeAreaView className="items-center bg-white flex-1" >
 
-                <View className="mt-5">
+            <HideKeyboardView>
+                <View className="mt-5 w-full items-center">
                     <FontAwesome name="paypal" size={50} color="blue" />
                 </View>
+            </HideKeyboardView>
 
-                <View className="w-full px-10">
-                    <TextInput placeholder='Phone number' 
-                        style={{fontSize: 18}} className="border px-3 py-4 rounded-md border-gray-400 mt-10" 
-                        keyboardType='numeric'/>
-                    
-                    <PasswordTextInput onChangeText={(text) => {setPassword(text)}} />
-                    
-                    <TouchableOpacity className="mt-1.5">
-                        <Text className=" text-blue-800 font-bold">Forgotten your password?</Text>
-                    </TouchableOpacity>
-                </View>
+            <View className="w-full px-10">
+                <TextInput placeholder='Phone number' 
+                    style={{fontSize: 18}} 
+                    className={`border px-3 py-4 rounded-md ${isPhoneNumberInputFocused ? 'border-blue-500' : 'border-gray-500'} mt-10`} 
+                    keyboardType='numeric' onFocus={() => {setIsPhoneNumberInputFocused(true)}} 
+                    onBlur={() => {setIsPhoneNumberInputFocused(false)}} />
+                
+                <PasswordTextInput onChangeText={(text) => {setPassword(text)}} />
+                
+                <TouchableOpacity className="mt-1.5">
+                    <Text className=" text-blue-800 font-bold">Forgotten your password?</Text>
+                </TouchableOpacity>
+            </View>
 
-                <View className="w-full space-y-3 mt-10 px-10">
+            <HideKeyboardView>
+                <View className="w-full space-y-3 mt-10 px-10 flex-1">
                     <TouchableOpacity className="rounded-full bg-blue-800 py-3">
                         <Text style={{fontSize: 18}} className="text-center text-white font-bold">Log In</Text>
                     </TouchableOpacity>
@@ -42,9 +47,9 @@ const LoginSignupLandingScreen = () => {
                         <Text style={{fontSize: 18}} className="text-center font-bold text-blue-800">Sign Up</Text>
                     </TouchableOpacity>
                 </View>
+            </HideKeyboardView>
 
-            </SafeAreaView>
-        </HideKeyboardView>
+        </SafeAreaView>
     )
 }
 
