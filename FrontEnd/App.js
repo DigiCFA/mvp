@@ -12,7 +12,7 @@ import HomeStackScreen from "./screens/Home/HomeStackScreen";
 import WalletStackScreen from "./screens/Wallet/WalletStackScreen";
 import TransferStackScreen from "./screens/Transfer/TransferStackScreen";
 import MeStackScreen from "./screens/Me/MeStackScreen";
-import LoginSignupStackScreen from "./screens/LoginSignup/LoginSignupStackScreen";
+import LoginSignupStackScreen from "./screens/LoginSigup/LoginSignupStackScreen";
 import { store } from "./store"
 import { Provider } from "react-redux";
 
@@ -20,7 +20,7 @@ const NavBar = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 
 export default function App() {
-  [userToken, setUserToken] = useState("");
+  [userToken, setUserToken] = useState(null);
 
   const navigationScreens =
     userToken == null ? (

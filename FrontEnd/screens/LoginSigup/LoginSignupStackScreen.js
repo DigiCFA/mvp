@@ -6,6 +6,7 @@ import LoginSignupLandingScreen from './LoginSignupLandingScreen'
 import SignupPhoneNumberScreen from './SignupPhoneNumberScreen'
 import PhoneVerificationScreen from './PhoneVerificationScreen'
 import SetPasswordScreen from './SetPasswordScreen'
+import SetProfileScreen from './SetProfileScreen'
 
 const LoginSignupStackScreen = () => {
 
@@ -28,6 +29,9 @@ const LoginSignupStackScreen = () => {
                 <Stack.Screen 
                     name="Password"
                     component={SetPasswordScreen} />
+                <Stack.Screen 
+                    name="Profile"
+                    component={SetProfileScreen} />
             </Stack.Group>
         </Stack.Navigator>
     )

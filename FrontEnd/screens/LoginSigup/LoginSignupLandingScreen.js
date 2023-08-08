@@ -26,11 +26,11 @@ const LoginSignupLandingScreen = () => {
             <View className="w-full px-10">
                 <TextInput placeholder='Phone number' 
                     style={{fontSize: 18}} 
-                    className={`border px-3 py-4 rounded-md ${isPhoneNumberInputFocused ? 'border-blue-500' : 'border-gray-500'} mt-10`} 
+                    className={`border px-3 py-5 rounded-md ${isPhoneNumberInputFocused ? 'border-blue-500' : 'border-gray-500'} mt-10`} 
                     keyboardType='numeric' onFocus={() => {setIsPhoneNumberInputFocused(true)}} 
                     onBlur={() => {setIsPhoneNumberInputFocused(false)}} />
                 
-                <PasswordTextInput onChangeText={(text) => {setPassword(text)}} />
+                <PasswordTextInput placeHolder={"Password"} onChangeText={(text) => {setPassword(text)}} />
                 
                 <TouchableOpacity className="mt-1.5">
                     <Text className=" text-blue-800 font-bold">Forgotten your password?</Text>

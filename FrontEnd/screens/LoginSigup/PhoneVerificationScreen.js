@@ -19,7 +19,7 @@ const PhoneVerificationScreen = () => {
 
     return (
         <HideKeyboardView>
-            <SafeAreaView className="flex-1 "> 
+            <SafeAreaView className="flex-1 bg-white"> 
                 <View className="mx-3 my-4 w-6">
                     <TouchableOpacity onPress={()=>{navigation.goBack()}}>
                         <Ionicons name="arrow-back-outline" size={24} color="gray" />
