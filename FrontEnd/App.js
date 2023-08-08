@@ -24,7 +24,7 @@ const HomeStack = createNativeStackNavigator();
 
 export default function App() {
 
-  [userToken, setUserToken] = useState("hi")
+  [userToken, setUserToken] = useState(null)
 
   const navigationScreens = (userToken == null) ? (
     <NavBar.Screen 
