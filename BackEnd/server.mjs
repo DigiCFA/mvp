@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import "./loadEnvironment.mjs";
-import routes from "./api_routes/routes.mjs";
+import routes from "./routes/routes.mjs";
 
 const PORT = process.env.PORT || 5050;
 const app = express();
