@@ -1,0 +1,167 @@
+import {
+  View,
+  Text,
+  useWindowDimensions,
+  Pressable,
+  StyleSheet,
+  Animated,
+  Button,
+  TouchableOpacity,
+} from "react-native";
+import React from "react";
+import axios from "axios";
+
+import { useCardAnimation } from "@react-navigation/stack";
+import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { ScrollView } from "react-native-gesture-handler";
+import CardsColumn from "../../components/CardsColumn";
+import Currency from "react-currency-formatter";
+import UserCard from "../../components/UserCard";
+import PaymentMethodCard from "../../components/PaymentMethodCard";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTransactionsById, selectId } from "../../features/selfSlice";
+
+const createDirectTransaction = async (
+  amountTransferred,
+  sender,
+  receiver,
+  paymentMethod,
+  isPayment,
+  isApproved,
+  message
+) => {
+  try {
+    const response = await axios.post(
+      "/transaction/create_direct_transaction",
+      {
+        amountTransferred: amountTransferred,
+        sender: sender,
+        receiver: receiver,
+        paymentMethod: paymentMethod,
+        isPayment: isPayment,
+        isApproved: isApproved,
+        message: message,
+      }
+    );
+    if (response.status == 200) console.log("Successfully created transaction");
+    else console.log("Error creating transaction");
+  } catch (error) {
+    console.error(error.response.data);
+  }
+};
+
+const SendReviewScreen = () => {
+  const { height } = useWindowDimensions();
+  const { current } = useCardAnimation();
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const senderId = useSelector(selectId);
+
+  const {
+    params: { receiverId, name, amount, message, cardID, cardName, cardType, cardNumber },
+  } = useRoute();
+
+  const paymentMethod = (cardType.toLowerCase() === 'balance') ? "balance" : (cardType.charAt(0).toUpperCase() + cardType.slice(1) + " " + cardNumber.slice(-4));
+
+
+
+  // const preferredCard
+
+  return (
+    <View className="flex-1 items-center justify-center">
+      <Pressable
+        // Convert this to tailwind, probably not hard
+        style={[
+          StyleSheet.absoluteFill,
+          { backgroundColor: "rgba(0,0,0,0.5)" },
+        ]}
+        onPress={navigation.goBack}
+      />
+
+      {/* Responsible for modal */}
+      <Animated.View
+        style={{
+          height: height,
+          width: "100%",
+          transform: [
+            {
+              translateY: current.progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [height, height * 0.5],
+                extrapolate: "clamp",
+              }),
+            },
+          ],
+        }}
+      >
+        <View className="flex-1 p-4 bg-white rounded-3xl">
+          <View className="flex-col h-[45%]">
+            {/* Top Portion */}
+            <View className="flex-row mb-4">
+              <View className="flex-1"></View>
+
+              <Text className="text-lg font-semibold">Review</Text>
+
+              <TouchableOpacity
+                onPress={navigation.goBack}
+                className="flex-1 items-end"
+              >
+                <Ionicons name="close" size={30} color="grey" />
+              </TouchableOpacity>
+            </View>
+
+            <PaymentMethodCard
+              cardID={cardID}
+              cardName={cardName}
+              cardType={cardType}
+              cardNumber={cardNumber}
+            />
+
+            <Text className="text-lg mt-4">
+              <Text className="font-bold">
+                Send <Text className="italic">{name}</Text>:{" "}
+              </Text>
+              "{message}"
+            </Text>
+
+            <View className="flex-row mt-8">
+              <Text className="text-lg font-bold flex-1">Total</Text>
+              <Text className="text-lg font-bold">
+                <Currency quantity={Number(amount)} currency="USD" /> USD
+              </Text>
+            </View>
+
+            {/* Preferred Method of Payment */}
+
+            <View className="flex-1"></View>
+            {/* Cards
+              <UserCard />
+              <ScrollView>
+                <CardsColumn />
+                <Text>{name}, {amount}, {message}</Text>
+              </ScrollView> */}
+
+            {/* Bottom Portion */}
+            <TouchableOpacity
+              onPress={async () => 
+                {
+                  navigation.navigate("SendConfirmation", {name, amount,message});
+                  await createDirectTransaction(amount, senderId, receiverId, paymentMethod, true, true, message);
+                  dispatch(fetchTransactionsById(senderId));
+                }
+              }
+              className="bg-blue-900 rounded-full py-3 px-14 items-center"
+            >
+              <Text className="text-white text-xl font-extrabold">Send</Text>
+              {/* <Text>{senderId} + {receiverId}</Text> */}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Animated.View>
+    </View>
+  );
+};
+
+export default SendReviewScreen;
