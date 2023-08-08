@@ -3,8 +3,9 @@ import { dbRef } from "../database/connect.mjs";
 import { ObjectId } from "mongodb";
 import mongoose from 'mongoose';
 
-// All ACID based transactions will not work for now, as Mongoose replaces MongoClient
-// Still learning Mongoose
+import awsController from "../controllers/awsController.mjs";
+
+// IGNORE THESE - delete soon
 let clientRef = () => {};
 let client = clientRef();
 
@@ -12,27 +13,7 @@ import User from "../models/userModel.mjs";
 import Transaction from "../models/transactionModel.mjs";
 
 const router = express.Router();
-
 let db = dbRef();
-
-// class HttpError extends Error {
-//   constructor (message, statusCode) {
-//       super(message);
-//       this.statusCode = statusCode;
-//   }
-// }
-
-
-
-// async function getUser(id) {
-//   let user = await User.findById(id);
-//   if (!user) {
-//     return { message: "NON_EXISTENT" }
-//     // return res.send(`User with ID ${id} not found`).status(404);
-//   }
-//   return user;
-// }
-
 
 
 // Trying out middleware
