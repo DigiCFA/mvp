@@ -133,10 +133,7 @@ const userSchema = new mongoose.Schema(
     - SHOULD just have a parent pointer from the 'many' side. Can add it as a virtual.
     */
 
-    profilePicture: {
-      type: String,
-      get: (val) => `${root}${val}`,
-    },
+    profilePicture: String,
     creationDate: Date,
   }
   // Useful if want to create Redacted User view
@@ -154,6 +151,12 @@ userSchema.plugin(uniqueValidator);
 // for the 'users' collection
 // Mongoose automatically looks for the all-case/plural named collection in the database
 const User = mongoose.model("User", userSchema);
+
+
+
+
+
+// OBSOLETE
 
 // < --------- Redacted User -------->
 // To hide sensitive information in the form of a 'view' of user model

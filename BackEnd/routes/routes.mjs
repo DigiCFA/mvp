@@ -3,7 +3,7 @@ import { dbRef } from "../database/connect.mjs";
 import { ObjectId } from "mongodb";
 import mongoose from 'mongoose';
 
-import awsController from "../controllers/awsController.mjs";
+import { uploadToS3 } from "../controllers/awsController.mjs";
 
 // IGNORE THESE - delete soon
 let clientRef = () => {};
@@ -11,6 +11,7 @@ let client = clientRef();
 
 import User from "../models/userModel.mjs";
 import Transaction from "../models/transactionModel.mjs";
+import { upload } from "../middleware/multer.mjs";
 
 const router = express.Router();
 let db = dbRef();
@@ -200,6 +201,30 @@ router.patch("/profile/remove_card", async(req, res) => {
     res.status(400).send(error);
   }
 })
+
+router.patch("/profile/add_profile_pic", upload.single('profilePicture'), async(req, res) => {
+  let id = req.body.userId;
+  const { originalname, buffer } = req.file;
+  try {
+    let user = await User.findById(id);
+    if (!user) {
+      res.status(404).send(`User with ID ${id} Not found`);
+      return;
+    }
+
+    const result = await uploadToS3(buffer, 'digicfa-profilepics', originalname);
+    console.log("Unique key: ", result.Key);
+    user.profilePicture = result.Key;
+    await user.save();
+
+    res.status(200).send(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error uploading pic")
+  }
+})
+
+
 
 router.post("/auth/create_user", async (req, res) => {
   let user = req.body;
