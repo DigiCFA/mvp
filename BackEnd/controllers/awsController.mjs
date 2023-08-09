@@ -16,7 +16,7 @@ export const uploadToS3 = async(buffer, bucketName, key) => {
     try {
         const response = await client.send(command);
         console.log("Successfully created " + params.Key + " and uploaded to " + params.Bucket + "/" + params.Key);
-        console.log(response)
+        // console.log(response)
         return response;
     } catch (error) {
         console.error(error);

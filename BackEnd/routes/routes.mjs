@@ -213,8 +213,8 @@ router.patch("/profile/add_profile_pic", upload.single('profilePicture'), async(
     }
 
     const result = await uploadToS3(buffer, 'digicfa-profilepics', originalname);
-    console.log("Unique key: ", result.Key);
-    user.profilePicture = result.Key;
+    console.log("Unique key: ", originalname);
+    user.profilePicture = originalname;
     await user.save();
 
     res.status(200).send(user);
