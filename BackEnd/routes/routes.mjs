@@ -80,28 +80,28 @@ router.get("/profile/retrieve_transactions", async (req, res) => {
   }
 });
 
-router.get("/profile/retrieve_profile_pic", async (req, res) => {
-  let id = req.query.userId;
-  try {
-    // Top 5 contacts
-    let result = await User.findById(id);
-    if (!result) {
-      res.status(404).send(`User with ID ${id} not found`);
-      return;
-    }
-    if (!result.profilePicture) {
-      res.status(404).send("User does not have profile pic");
-      return;
-    }
-    console.log("Image key: ", result.profilePicture);
-    const imageBuffer = await retrieveFromS3("digicfa-profilepics", result.profilePicture);
-    res.set('Content-Type', 'image/jpeg');
-    res.status(200).send(imageBuffer);
-  } catch (error) {
-    console.error(error);
-    res.status(400).send(error);
-  }
-});
+// router.get("/profile/retrieve_profile_pic", async (req, res) => {
+//   let id = req.query.userId;
+//   try {
+//     // Top 5 contacts
+//     let result = await User.findById(id);
+//     if (!result) {
+//       res.status(404).send(`User with ID ${id} not found`);
+//       return;
+//     }
+//     if (!result.profilePicture) {
+//       res.status(404).send("User does not have profile pic");
+//       return;
+//     }
+//     console.log("Image key: ", result.profilePicture);
+//     const imageBuffer = await retrieveFromS3("digicfa-profilepics", result.profilePicture);
+//     res.set('Content-Type', 'image/jpeg');
+//     res.status(200).send(imageBuffer);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(400).send(error);
+//   }
+// });
 
 
 router.get(
