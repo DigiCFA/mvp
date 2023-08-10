@@ -21,35 +21,8 @@ import UserCard from "../../components/UserCard";
 import PaymentMethodCard from "../../components/PaymentMethodCard";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTransactionsById, selectId } from "../../features/selfSlice";
+import { createDirectTransaction } from "../../api/api"
 
-const createDirectTransaction = async (
-  amountTransferred,
-  sender,
-  receiver,
-  paymentMethod,
-  isPayment,
-  isApproved,
-  message
-) => {
-  try {
-    const response = await axios.post(
-      "/transaction/create_direct_transaction",
-      {
-        amountTransferred: amountTransferred,
-        sender: sender,
-        receiver: receiver,
-        paymentMethod: paymentMethod,
-        isPayment: isPayment,
-        isApproved: isApproved,
-        message: message,
-      }
-    );
-    if (response.status == 200) console.log("Successfully created transaction");
-    else console.log("Error creating transaction");
-  } catch (error) {
-    console.error(error.response.data);
-  }
-};
 
 const SendReviewScreen = () => {
   const { height } = useWindowDimensions();
@@ -64,8 +37,6 @@ const SendReviewScreen = () => {
   } = useRoute();
 
   const paymentMethod = (cardType.toLowerCase() === 'balance') ? "balance" : (cardType.charAt(0).toUpperCase() + cardType.slice(1) + " " + cardNumber.slice(-4));
-
-
 
   // const preferredCard
 

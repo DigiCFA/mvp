@@ -1,10 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { fetchTransactions, fetchUser } from "../api/api";
+import { fetchProfilePic, fetchTransactions, fetchUser } from "../api/api";
 
 
+// const storeImageData = (image) => {
+//   return {
+//     type: 'STORE_IMAGE_DATA',
+//     payload: image,
+//   }
+// }
 
-// SHOULD ALL BE PLACED IN THE LOGIN PAGE
+const profilePicBaseURI = "https://digicfa-profilepics.s3.us-west-1.amazonaws.com/";
+
 
 // Maybe write a thunk to fetch user info. In which case user info is passed during login, in which case initialState should be null
 const initialState = {
@@ -29,7 +36,7 @@ const initialState = {
     }],
     // privacyPreferences: [],
     contacts: [],
-    profilePicture: null,
+    profilePicture: profilePicBaseURI + 'default.png',
     transactions: [
       {
         "_id": "64cef2e74a0615d28fc4b58a",
@@ -56,11 +63,6 @@ export const selfSlice = createSlice({
   name: "self",
   initialState,
   reducers: {
-    // Very arbitrary code here -> please change it as fit
-    logInOut: (state, action) => {
-      if (action.type === "login") state.self = action.payload;
-      else if (action.type === "logout") state.self = null;
-    },
     setSelf: (state, action) => {
 
       // state.self = action.payload;
@@ -76,11 +78,15 @@ export const selfSlice = createSlice({
       state.self.cards = newSelf.cards;
       state.self.privacyPreferences = newSelf.privacyPreferences; 
       state.self.contacts = newSelf.contacts;
-      state.self.profilePicture = newSelf.profilePicture;
+      state.self.profilePicture = profilePicBaseURI + newSelf.profilePicture;
     },
     setTransactions: (state, action) => {
       state.self.transactions = action.payload;
-    }
+    },
+    // setProfilePic: (state, action) => {
+    //   console.log("New profile pic: ", action.payload);
+    //   state.self.profilePicture = action.payload;
+    // },
   },
 });
 
@@ -122,7 +128,7 @@ export const fetchTransactionsById = userId => {
   return async (dispatch, getState) => {
     try {
       const response = await fetchTransactions(userId);
-      if (response.status == 200) console.log("SUCCESSFUL")
+      if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED TRANSACTIONS")
       else console.log("ERROR")
 
       dispatch(setTransactions(response.data));
@@ -133,7 +139,46 @@ export const fetchTransactionsById = userId => {
   }
 }
 
-export const { logInOut, setSelf, setTransactions } = selfSlice.actions;
+
+// OBSOLETE APPROACH
+
+// export const fetchProfilePicById = userId => {
+//   return async (dispatch, getState) => {
+//     try {
+//       const response = await fetchProfilePic(userId);
+//       if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED PROFILE PIC")
+//       else console.log("ERROR")
+
+//       const image = response.data.toString('base64');
+//       dispatch(setProfilePic(storeImageData(image)));
+
+//     } catch(error) {
+//       console.error(error)
+//     }
+//   }
+// }
+
+// export const fetchProfilePicById = userId => {
+//   return async (dispatch, getState) => {
+//     try {
+//       const response = await fetchProfilePic(userId);
+//       if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED PROFILE PIC")
+//       else console.log("ERROR")
+
+//       // const base64 = btoa(new Uint8Array(response.data).reduce(
+//       //   (data, byte) => data + String.fromCharCode(byte),
+//       //   ''
+//       // ))
+
+//       dispatch(setProfilePic(profilePicBaseURI+response));
+
+//     } catch(error) {
+//       console.error(error)
+//     }
+//   }
+// }
+
+export const { setSelf, setTransactions } = selfSlice.actions;
 
 export const selectSelf = (state) => state.self.self;
 export const selectId = (state) => state.self.self._id;
@@ -141,5 +186,6 @@ export const selectBalance = (state) => state.self.self.balance;
 export const selectCards = (state) => state.self.self.cards;
 export const selectContacts = (state) => state.self.self.contacts;
 export const selectTransactions = (state) => state.self.self.transactions;
+export const selectProfilePic = (state) => state.self.self.profilePicture;
 
 export default selfSlice.reducer;
