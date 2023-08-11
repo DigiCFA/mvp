@@ -18,7 +18,7 @@ export const fetchTransactions = (userId) => {
   });
 };
 
-// Not necessary to have a stand alont function
+// Not necessary to have a stand alone function
 
 // export const fetchProfilePic = (userId) => {
 //   return axios.get("/profile/retrieve_profile_pic", {

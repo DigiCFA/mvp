@@ -20,7 +20,7 @@ const NavBar = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 
 export default function App() {
-  [userToken, setUserToken] = useState(null);
+  [userToken, setUserToken] = useState(0);
 
   const navigationScreens =
     userToken == null ? (

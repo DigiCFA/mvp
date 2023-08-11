@@ -37,6 +37,12 @@ const initialState = {
     // privacyPreferences: [],
     contacts: [],
     profilePicture: profilePicBaseURI + 'default.png',
+    currentAddress: {
+      "lineOne": "Not set",
+      "lineTwo": "",
+      "city": "",
+      "zipCode": ""
+    },
     transactions: [
       {
         "_id": "64cef2e74a0615d28fc4b58a",
