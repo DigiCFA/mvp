@@ -4,8 +4,9 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  Image,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSelf, setSelf } from "../../features/selfSlice";
@@ -13,6 +14,8 @@ import { Ionicons } from "@expo/vector-icons";
 import SettingsColumn from "../../components/SettingsColumn";
 
 const MeScreen = () => {
+  // [loggedIn, setLoggedIn] = useState(false);
+
   const navigation = useNavigation();
   const self = useSelector(selectSelf);
 
@@ -57,7 +60,15 @@ const MeScreen = () => {
         {/* Profile Area */}
         <View className="bg-white flex-col items-start space-y-1 pb-4">
           {/* Replace this with the actual profile picture!! */}
-          <Ionicons name="person-circle" size={125} color="#192C88" />
+          {/* <Ionicons name="person-circle" size={125} color="#192C88" /> */}
+
+          <View className='px-4 pt-4'>
+            <Image 
+              source={{uri: self.profilePicture}}
+              className='h-24 w-24 rounded-full'
+              // style={{width: 100, height: 100}}
+            />
+          </View>
 
 
           <Text className="px-4 font-medium text-3xl">{self.fullName}</Text>
@@ -66,7 +77,6 @@ const MeScreen = () => {
 
           <Text className="px-4 font-medium">QRCode: {self.QRCode}</Text>
           <Text className="px-4 font-medium">Balance: {self.balance.toFixed(2)}</Text>
-
 
           {/* Just for checks */}
           {/* {self.cards?.map((card) => (
@@ -86,7 +96,7 @@ const MeScreen = () => {
               <Text>phoneNumber: {contact.phoneNumber}</Text>
             </View>
           ))} */}
-{/* 
+          {/* 
           {self.contacts?.map((contact) => (
             <View key={contact._id}>
               <Text>Contact: </Text>
@@ -103,6 +113,12 @@ const MeScreen = () => {
               <Text>amountTransferred: {transaction.amountTransferred}</Text>
             </View>
           ))} */}
+{/* 
+          <TouchableOpacity onPress={() => setLoggedIn(!loggedIn)}>
+            <Text>Press to Log In</Text>
+          </TouchableOpacity> */}
+
+
 
         </View>
 
