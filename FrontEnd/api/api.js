@@ -1,4 +1,9 @@
 import axios from "axios";
+// import {fileFromPath} from "formdata-node/file-from-path";
+
+import {FormData, Blob} from "formdata-node"
+// import {fileFromPath} from "formdata-node/file-from-path"
+
 
 axios.defaults.baseURL = "http://localhost:5050/routes";
 
@@ -57,3 +62,31 @@ export const createDirectTransaction = async (
     console.error(error.response.data);
   }
 };
+
+
+export const handleUploadPhoto = async (userId, profilePicture) => {
+
+  const form = new FormData();
+  form.append('userId', userId);
+  form.append("profilePicture", {
+    // name: profilePicture.fileName,
+    name: "randomPhoto",
+    type: profilePicture.type,
+    uri: Platform.OS === "ios" ? profilePicture.uri.replace("file://", "") : profilePicture.uri,
+  });
+
+  const blob = new Blob(profilePicture)
+
+  console.log(form.profilePicture.name)
+
+  // const file = await fileFromPath(profilePicture.uri.replace("file://", ""))
+  // console.log(file)
+
+  try {
+    const response = await axios.post("/profile/add_profile_pic", form)
+    if (response.status == 200) console.log("Successfully uploaded profile picture");
+    else console.log("Error uploading photo");
+  } catch (error) {
+    console.error(error.response.data);
+  }
+}
