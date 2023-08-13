@@ -65,7 +65,7 @@ const MeScreen = () => {
           <Text className="px-4 font-medium">{self.phoneNumber}</Text>
 
           <Text className="px-4 font-medium">QRCode: {self.QRCode}</Text>
-          <Text className="px-4 font-medium">Balance: {self.balance}</Text>
+          <Text className="px-4 font-medium">Balance: {self.balance.toFixed(2)}</Text>
 
 
           {/* Just for checks */}

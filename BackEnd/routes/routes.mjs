@@ -98,7 +98,6 @@ router.get("/profile/retrieve_user_transactions", async (req, res) => {
   }
 });
 
-
 router.get(
   "/profile/retrieve_user_with_certain_fields",
   async (req, res) => {
@@ -147,8 +146,6 @@ router.get(
     }
   }
 );
-
-
 
 router.patch("/profile/add_card", async (req, res) => {
   let id = req.body.userId;
@@ -282,8 +279,6 @@ router.delete("/auth/delete_user", async (req, res) => {
     res.status(400).send(error);
   }
 });
-
-
 
 router.post("/auth/user_login", async (req, res) => {
   let collection = db.collection("users");

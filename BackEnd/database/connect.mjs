@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 import mongoose from "mongoose";
-const uri = process.env.ATLAS_URI || "";
+import { ATLAS_URI } from "../config.mjs";
 
 
 // const client = new MongoClient(connect_to_db);
@@ -19,7 +19,7 @@ const uri = process.env.ATLAS_URI || "";
 */
 
 try {
-  await mongoose.connect(uri, {
+  await mongoose.connect(ATLAS_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
