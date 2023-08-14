@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 // import User from "userModel.mjs";
 
-
 const transactionSchema = new mongoose.Schema({
     amountTransferred: {
         type: Number,
