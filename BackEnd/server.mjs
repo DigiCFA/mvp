@@ -16,8 +16,6 @@ app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api", routes);
-
 app.use(session({
   name: SESSION_NAME,
   secret: SESSION_SECRETE,
@@ -34,6 +32,8 @@ app.use(session({
     maxAge: parseInt(SESSION_LIFETIME)
   }
 }))
+
+app.use("/api", routes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
