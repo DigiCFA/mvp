@@ -17,7 +17,7 @@ const WalletScreen = () => {
   const balance = useSelector(selectBalance);
 
   return (
-    <SafeAreaView className='grow'>
+    <SafeAreaView className='flex-1'>
       <View className="flex-row p-4 items-center">
         <TouchableOpacity className="bg-white py-2 px-4 rounded-full">
           <Text className="text-lg font-extrabold text-[#192C88]">Wallet</Text>
@@ -29,7 +29,7 @@ const WalletScreen = () => {
       </View>
 
       <ScrollView>
-        <View className="p-4 shadow flex-1">
+        <View className="p-4 shadow-sm flex-1">
           <TouchableOpacity className="bg-white h-60 rounded-2xl">
             <View className="flex-col flex-1">
               <View className="flex-row p-4 space-x-4 flex-1">

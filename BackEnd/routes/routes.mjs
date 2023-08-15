@@ -12,6 +12,9 @@ let client = clientRef();
 import User from "../models/userModel.mjs";
 import Transaction from "../models/transactionModel.mjs";
 import { upload } from "../middleware/multer.mjs";
+import { loginValidation, signUpValidation } from "../validation/userValidation.mjs";
+import { parseError, sessionizeUser } from "../utils/helper.mjs";
+import { SESSION_NAME } from "../config.mjs";
 
 const router = express.Router();
 let db = dbRef();
@@ -80,30 +83,6 @@ router.get("/profile/retrieve_transactions", async (req, res) => {
   }
 });
 
-// router.get("/profile/retrieve_profile_pic", async (req, res) => {
-//   let id = req.query.userId;
-//   try {
-//     // Top 5 contacts
-//     let result = await User.findById(id);
-//     if (!result) {
-//       res.status(404).send(`User with ID ${id} not found`);
-//       return;
-//     }
-//     if (!result.profilePicture) {
-//       res.status(404).send("User does not have profile pic");
-//       return;
-//     }
-//     console.log("Image key: ", result.profilePicture);
-//     const imageBuffer = await retrieveFromS3("digicfa-profilepics", result.profilePicture);
-//     res.set('Content-Type', 'image/jpeg');
-//     res.status(200).send(imageBuffer);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(400).send(error);
-//   }
-// });
-
-
 router.get(
   "/profile/retrieve_user_with_certain_fields",
   async (req, res) => {
@@ -152,8 +131,6 @@ router.get(
     }
   }
 );
-
-
 
 router.patch("/profile/add_card", async (req, res) => {
   let id = req.body.userId;
@@ -250,24 +227,90 @@ router.patch("/profile/add_profile_pic", upload.single('profilePicture'), async(
 
 
 
-router.post("/auth/create_user", async (req, res) => {
-  let user = req.body;
+router.post("/auth/signup", async (req, res) => {
+
   try {
-    const result = await User.create({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      fullName: user.firstName + ' ' + user.lastName,
-      phoneNumber: user.phoneNumber,
-      password: user.password,
+
+    const {
+      firstName,
+      lastName,
+      phoneNumber,
+      password,
+    } = req.body
+
+    await signUpValidation.validateAsync({phoneNumber, password, 
+      firstName, lastName})
+
+    const newUser = new User({
+      firstName: firstName,
+      lastName: lastName,
+      fullName: firstName + ' ' + lastName,
+      phoneNumber: phoneNumber,
+      password: password,
       creationDate: Date.now()
       // create a QR Code on creation
-    });
-    res.status(200).send(result);
+    })
+    console.log(req.session)
+    const sessionUser = sessionizeUser(newUser)
+    await newUser.save()
+
+    console.log(sessionUser)
+    console.log(req.session)
+    req.session.user = sessionUser
+    console.log(req.session)
+    
+    res.status(200).send(newUser);
+
   } catch (error) {
-    console.error(error);
-    res.status(400).send(error);
+    console.log(parseError(error));
+    res.status(400).send(parseError(error));
   }
 });
+
+router.post("/auth/login", async (req, res) => {
+  try{
+    const {phoneNumber, password} = req.body
+
+    await loginValidation.validateAsync({phoneNumber, password})
+
+    const user = await User.findOne({phoneNumber})
+    if(user && user.comparePasswords(password)){
+      const sessionUser = sessionizeUser(user)
+
+      req.session.user = sessionUser 
+      res.send(sessionUser)
+    } else {
+      throw new Error('Invalid Login Credentials')
+    }
+
+  } catch (error) {
+    console.log(error)
+    res.status(401).send(parseError(error))
+  }
+})
+
+router.delete("/auth/logout", ({session}, res) => {
+  try{
+    const user = session.user 
+    if(user){
+      session.destroy(err => {
+        if(err){
+          throw err
+        }
+        res.clearCookie(SESSION_NAME)
+        res.send(user)
+      })
+    } else {
+      throw new Error('Something went wrong')
+    }
+  } catch (error) {
+    res.status(422).send(parseError(err))
+  }
+})
+
+router.get("/auth/obtainSession", ({session: {user}}, res) => {
+  res.send({user})
+})
 
 // router.post("/auth/create_user", async (req, res) => {
 //   let collection = db.collection("users");
@@ -312,8 +355,6 @@ router.delete("/auth/delete_user", async (req, res) => {
     res.status(400).send(error);
   }
 });
-
-
 
 router.post("/auth/user_login", async (req, res) => {
   let collection = db.collection("users");

@@ -9,7 +9,7 @@ import * as FileSystem from 'expo-file-system';
 // import {fileFromPath} from "formdata-node/file-from-path"
 
 
-axios.defaults.baseURL = "http://localhost:5050/routes";
+axios.defaults.baseURL = "http://192.168.3.106:5050/routes";
 
 export const fetchUser = (userId) => {
   return axios.get("/profile/retrieve_user", {

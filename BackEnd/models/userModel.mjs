@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
+import pkg from 'bcryptjs'
+
+const {hashSync, compareSync} = pkg
 // import Transaction from "transactionModel.mjs"
 
 // var uniqueValidator = require('mongoose-unique-validator');
@@ -175,13 +178,23 @@ const userSchema = new mongoose.Schema(
 
 userSchema.plugin(uniqueValidator);
 
+userSchema.pre('save', function () {
+  if(this.isModified('password')){
+    this.password = hashSync(this.password, 10)
+  }
+})
+
+userSchema.statics.fieldDoesNotExist = async function (field) {
+  return await this.where(field).countDocuments() === 0
+}
+
+userSchema.methods.comparePasswords = function (password) {
+  return compareSync(password, this.password)
+}
+
 // for the 'users' collection
 // Mongoose automatically looks for the all-case/plural named collection in the database
 const User = mongoose.model("User", userSchema);
-
-
-
-
 
 // OBSOLETE
 
