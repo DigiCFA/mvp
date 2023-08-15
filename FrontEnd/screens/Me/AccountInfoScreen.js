@@ -19,7 +19,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { launchImageLibrary } from "react-native-image-picker";
-import { handleUploadPhoto } from "../../api/api.js";
+import { handleUploadPhoto, handleUploadProfilePicture } from "../../api/api.js";
 
 import * as ImagePicker from "expo-image-picker";
 
@@ -62,11 +62,11 @@ const AccountInfoScreen = () => {
       quality: 1,
     });
 
-    console.log("PHOTO PICKED: ", result);
+    console.log("PHOTO: ", result);
 
     if (!result.canceled) {
       setPhoto(result.assets[0].uri);
-      await handleUploadPhoto(userId=self._id, profilePicture=photo);
+      await handleUploadProfilePicture(self._id, result.assets[0].uri);
     }
   };
 

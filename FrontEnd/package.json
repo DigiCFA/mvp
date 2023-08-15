@@ -17,6 +17,7 @@
     "axios": "^1.4.0",
     "base-64": "^1.0.0",
     "expo": "~48.0.18",
+    "expo-file-system": "^15.4.3",
     "expo-image-picker": "~14.1.1",
     "expo-status-bar": "~1.4.4",
     "fetch-blob": "^4.0.0",

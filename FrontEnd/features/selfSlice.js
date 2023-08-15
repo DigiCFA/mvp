@@ -73,7 +73,7 @@ export const selfSlice = createSlice({
     setSelf: (state, action) => {
       // state.self = action.payload;
       let newSelf = action.payload;
-      console.log("Newself: ", newSelf);
+      // console.log("Newself: ", newSelf);
       state.self._id = newSelf._id;
       state.self.firstName = newSelf.firstName;
       state.self.lastName = newSelf.lastName;
