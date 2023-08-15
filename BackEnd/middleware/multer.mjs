@@ -11,24 +11,26 @@ const storage = multer.memoryStorage({
     }
 });
 
-const storage2 = multer.diskStorage({
-    destination(req, file, callback) {
+// Not necessary -> will come back. Also look into muilter-s3
+const storageDisk = multer.diskStorage({
+    destination: function(req, file, callback) {
         callback(null, "");
     },
-    filename(req, file, callback) {
+    filename: function(req, file, callback) {
         callback(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
     },
 });
 
-
 // Only photos
 const fileFilter = (req, file, callback) => {
     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'image/png') {
+        console.log("VALID FILE FORMAT")
         callback(null, true)
     } else {
+        console.log("INVALID FILE FORMAT")
         callback(null, false)
     }
 }
 
-export const upload = multer({ storage: storage2, fileFilter: fileFilter });
+export const upload = multer({ storage: storage, fileFilter: fileFilter });
 

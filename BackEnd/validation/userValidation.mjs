@@ -3,7 +3,7 @@ import Joi from 'joi'
 const passwordErrorMessage = 'Must be between 6 - 16 characters, have at least one capital letter, one lowercase letter, one digit, and one special character'
 
 const phoneNumber = Joi.string()
-    .regex(/^[0-9]{8,16}$/)
+    .regex(/^[0-9 ]{8,16}$/)
     .required()
     .messages({
         'string.pattern.base': "Please enter a valid phone number"

@@ -202,17 +202,25 @@ router.patch("/profile/remove_card", async(req, res) => {
   }
 })
 
-router.patch("/profile/add_profile_pic", upload.single('profilePicture'), async(req, res) => {
+router.patch("/profile/set_profile_pic", upload.single('profilePicture'), async(req, res) => {
   let id = req.body.userId;
   const { originalname, buffer } = req.file;
+
+  const params = {
+    Bucket: 'digicfa-profilepics',
+    Key: req.file.originalname,
+    Body: req.file.buffer,
+  }
+
   try {
     let user = await User.findById(id);
     if (!user) {
       res.status(404).send(`User with ID ${id} Not found`);
       return;
     }
+    // const result = await uploadToS3(buffer, 'digicfa-profilepics', originalname);
 
-    const result = await uploadToS3(buffer, 'digicfa-profilepics', originalname);
+    const result = await uploadToS3(params);
     console.log("Unique key: ", originalname);
     user.profilePicture = originalname;
     await user.save();

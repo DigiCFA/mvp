@@ -9,7 +9,9 @@ import * as FileSystem from 'expo-file-system';
 // import {fileFromPath} from "formdata-node/file-from-path"
 
 
-axios.defaults.baseURL = "http://192.168.3.106:5050/routes";
+// axios.defaults.baseURL = "http://192.168.3.106:5050/api";
+axios.defaults.baseURL = "http://localhost:5050/api";
+
 
 export const fetchUser = (userId) => {
   return axios.get("/profile/retrieve_user", {
@@ -149,16 +151,22 @@ const imageUploading = async () => {
 export const handleUploadProfilePicture2 = async (userId, imageURI) => {
   try {
     const response = await FileSystem.uploadAsync(
-      "http://localhost:5050/routes/profile/add_profile_pic",
+      "http://localhost:5050/api/profile/add_profile_pic",
       imageURI,
       {
         httpMethod: 'POST',
+        sessionType: FileSystem.FileSystemSessionType.BACKGROUND,
         uploadType: FileSystem.FileSystemUploadType.MULTIPART,
         fieldName: 'profilePicture',
+        parameters: {
+          userId: userId
+        }
       },
     )
     if (response.status == 200) console.log("Successfully uploaded profile picture");
     else console.log("Error uploading photo");
+
+    console.log(response);
   } catch (error) {
     console.error(error.response.data);
   }

@@ -19,7 +19,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { launchImageLibrary } from "react-native-image-picker";
-import { handleUploadPhoto, handleUploadProfilePicture } from "../../api/api.js";
+import { handleUploadPhoto, handleUploadProfilePicture, handleUploadProfilePicture2 } from "../../api/api.js";
 
 import * as ImagePicker from "expo-image-picker";
 
@@ -55,8 +55,11 @@ const AccountInfoScreen = () => {
   const [photo, setPhoto] = useState(null);
 
   const pickPhoto = async () => {
+
+    await ImagePicker.requestCameraPermissionsAsync();
+
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -66,7 +69,7 @@ const AccountInfoScreen = () => {
 
     if (!result.canceled) {
       setPhoto(result.assets[0].uri);
-      await handleUploadProfilePicture(self._id, result.assets[0].uri);
+      await handleUploadProfilePicture2(self._id, result.assets[0].uri);
     }
   };
 
