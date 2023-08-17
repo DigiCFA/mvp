@@ -14,10 +14,9 @@ const router = express.Router();
 router.post("/create_direct_transaction", async (req, res) => {
   const session = await mongoose.startSession();
 
-  let newTransaction = req.body;
-
-  let sendID = newTransaction.sender;
-  let receiveID = newTransaction.receiver;
+  const newTransaction = req.body;
+  const sendID = newTransaction.sender;
+  const receiveID = newTransaction.receiver;
 
   try {
     await session.withTransaction(async () => {
@@ -40,13 +39,11 @@ router.post("/create_direct_transaction", async (req, res) => {
       const receiveUser = await User.findById(receiveID);
       if (!receiveUser) {
         res.status(404).send(`User with ID ${receiveID} Not found`);
-        console.log("SHOULD TERMINATE");
         return;
       }
 
       if (sendID === receiveID) {
         res.status(400).send("Cannot send transaction to self");
-        console.log("SHOULD TERMINATE");
         return;
       }
 
@@ -58,7 +55,7 @@ router.post("/create_direct_transaction", async (req, res) => {
           .send(
             `Balance ${userBalance} insufficient to send ${amountTransferred}`
           );
-        console.log("SHOULD TERMINATE");
+        // console.log("SHOULD TERMINATE");
         return;
       }
 
@@ -69,7 +66,14 @@ router.post("/create_direct_transaction", async (req, res) => {
       console.log("Actual amount: ", transactionData.amountTransferred);
       console.log(transactionData);
 
-      await Transaction.insertOne(transactionData);
+      await transactionData.save();
+      //   await Transaction.insertOne(transactionData);
+      console.log("Inserted transaction");
+
+      console.log("Supposed to add: ", receiveID);
+      let addedUser = sendUser.contacts.addToSet(receiveID);
+      receiveUser.contacts.addToSet(sendID);
+      console.log("Added contact: ", addedUser);
 
       await sendUser.save();
       await receiveUser.save();
@@ -85,6 +89,7 @@ router.post("/create_direct_transaction", async (req, res) => {
     await session.endSession();
   }
 });
+
 
 
 
@@ -260,19 +265,6 @@ router.patch("/approve_transaction", async (req, res) => {
   }
 });
 
-// MONGOOSE
-router.delete("/transaction/mongoose_delete_transaction", async (req, res) => {
-  let id = req.body.transactionId;
-  try {
-    let result = await Transaction.findByIdAndDelete(id);
-
-    if (!result) res.status(404).send(`Transaction with ID ${id} Not found`);
-    else res.status(200).send(result);
-  } catch (error) {
-    console.error(error);
-    res.status(400).send(error);
-  }
-});
 
 router.delete(
   "/transaction/mongoose_delete_all_transactions",

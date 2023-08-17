@@ -15,7 +15,7 @@ router.get("/retrieve_user", async (req, res) => {
     // Top 5 contacts
     let result = await User.findById(id).populate({
       path: "contacts",
-      perDocumentLimit: 5,
+      perDocumentLimit: 10,
       select: ["fullName", "phoneNumber"],
     });
 
@@ -180,7 +180,7 @@ router.patch(
         return;
       }
 
-      const result = await uploadToS3(params);
+      await uploadToS3(params);
 
       // console.log("Unique key: ", originalname);
       user.profilePicture = originalname;
