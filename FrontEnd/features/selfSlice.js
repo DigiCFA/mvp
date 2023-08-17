@@ -89,10 +89,10 @@ export const selfSlice = createSlice({
     setTransactions: (state, action) => {
       state.self.transactions = action.payload;
     },
-    // setProfilePic: (state, action) => {
-    //   console.log("New profile pic: ", action.payload);
-    //   state.self.profilePicture = action.payload;
-    // },
+    setProfilePic: (state, action) => {
+      console.log("New profile pic: ", action.payload);
+      state.self.profilePicture = action.payload;
+    },
   },
 });
 
@@ -174,27 +174,22 @@ export const fetchTransactionsById = (userId) => {
 //   }
 // }
 
-// export const fetchProfilePicById = userId => {
-//   return async (dispatch, getState) => {
-//     try {
-//       const response = await fetchProfilePic(userId);
-//       if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED PROFILE PIC")
-//       else console.log("ERROR")
+export const fetchProfilePicById = userId => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await fetchUser(userId);
+      if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED USER TO UPDATE PROFILE PIC")
+      else console.log("ERROR")
 
-//       // const base64 = btoa(new Uint8Array(response.data).reduce(
-//       //   (data, byte) => data + String.fromCharCode(byte),
-//       //   ''
-//       // ))
+      dispatch(setProfilePic(profilePicBaseURI+response.data.profilePicture));
 
-//       dispatch(setProfilePic(profilePicBaseURI+response));
+    } catch(error) {
+      console.error(error)
+    }
+  }
+}
 
-//     } catch(error) {
-//       console.error(error)
-//     }
-//   }
-// }
-
-export const { setSelf, setTransactions } = selfSlice.actions;
+export const { setSelf, setTransactions, setProfilePic } = selfSlice.actions;
 
 export const selectSelf = (state) => state.self.self;
 export const selectId = (state) => state.self.self._id;

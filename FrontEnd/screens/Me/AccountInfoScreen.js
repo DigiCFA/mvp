@@ -15,6 +15,7 @@ import {
   fetchUserById,
   selectProfilePic,
   selectSelf,
+  setProfilePic,
 } from "../../features/selfSlice";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -38,8 +39,7 @@ const AccountInfoScreen = () => {
   }, []);
 
   const self = useSelector(selectSelf);
-
-  const [photo, setPhoto] = useState(null);
+  // const [photo, setPhoto] = useState(null);
 
   const pickPhoto = async () => {
 
@@ -51,14 +51,12 @@ const AccountInfoScreen = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
-    // console.log("PHOTO: ", result);
-
-    const imageURI = result.assets[0].uri;
+    console.log("Selected Photo: ", result);
 
     if (!result.canceled) {
-      setPhoto(imageURI);
+      // setPhoto(imageURI);
       await uploadProfilePicture(self._id, result.assets[0].uri);
+      dispatch(fetchProfilePicById(ID));
     }
   };
 
@@ -89,11 +87,11 @@ const AccountInfoScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {photo && (
+      {/* {photo && (
         <View>
           <Image source={{ uri: photo }} className="h-24 w-24 rounded-full" />
         </View>
-      )}
+      )} */}
 
       <View className="bg-white p-4 mt-8">
         <View className="flex-row items-center pb-4 border-b border-gray-300">

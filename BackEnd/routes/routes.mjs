@@ -208,8 +208,8 @@ router.patch("/profile/set_profile_pic", upload.single('profilePicture'), async(
 
   const params = {
     Bucket: 'digicfa-profilepics',
-    Key: req.file.originalname,
-    Body: req.file.buffer,
+    Key: originalname,
+    Body: buffer,
   }
 
   try {

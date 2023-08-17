@@ -32,7 +32,7 @@ export const fetchTransactions = (userId) => {
 // Not necessary to have a stand alone function
 
 // export const fetchProfilePic = (userId) => {
-//   return axios.get("/profile/retrieve_profile_pic", {
+//   return axios.get("/profile/retrieve_user", {
 //     params: { 
 //       userId: userId 
 //     },
@@ -122,7 +122,7 @@ export const uploadProfilePicture = async (userId, imageURI) => {
     if (result.status === 200) console.log("Successfully uploaded profile picture");
     else console.log("Error uploading photo");
 
-    console.log(result);
+    // console.log(result);
   } catch (error) {
     console.error(error);
   }
