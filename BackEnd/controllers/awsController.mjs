@@ -3,13 +3,14 @@ import { client } from "../config/awsConfig.mjs";
 
 const BUCKET_NAME = "digicfa-profilepics";
 
-export const uploadToS3 = async (buffer, bucketName, key) => {
-  const params = {
-    Bucket: bucketName,
-    Key: key,
-    Body: buffer,
-  };
+export const uploadToS3 = async (params) => {
+  // const params = {
+  //   Bucket: bucketName,
+  //   Key: key,
+  //   Body: buffer,
+  // };
   const command = new PutObjectCommand(params);
+  console.log(params);
 
   try {
     const response = await client.send(command);

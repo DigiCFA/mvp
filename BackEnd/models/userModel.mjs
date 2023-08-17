@@ -65,6 +65,31 @@ const cardSchema = new mongoose.Schema({
   }
 });
 
+
+
+const addressSchema = new mongoose.Schema(
+  {
+    lineOne: {
+      type: String,
+      required: true
+    },
+    lineTwo: {
+      type: String,
+      required: true
+    },
+    city: {
+      type: String,
+      required: true
+    },
+    zipCode: {
+      type: String,
+      required: true
+    }
+  }
+)
+
+
+
 const userSchema = new mongoose.Schema(
   {
     firstName: {
@@ -137,6 +162,8 @@ const userSchema = new mongoose.Schema(
     */
 
     profilePicture: String,
+    addresses: [addressSchema],
+    primaryAddress: Number,
     creationDate: Date,
   }
   // Useful if want to create Redacted User view

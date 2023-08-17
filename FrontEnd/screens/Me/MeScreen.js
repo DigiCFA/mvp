@@ -72,11 +72,11 @@ const MeScreen = () => {
 
 
           <Text className="px-4 font-medium text-3xl">{self.fullName}</Text>
-          <Text className="px-4 font-medium">{self._id}</Text>
+          {/* <Text className="px-4 font-medium">{self._id}</Text>
           <Text className="px-4 font-medium">{self.phoneNumber}</Text>
 
-          <Text className="px-4 font-medium">QRCode: {self.QRCode}</Text>
-          <Text className="px-4 font-medium">Balance: {self.balance.toFixed(2)}</Text>
+          <Text className="px-4 font-medium">QRCode: {self.QRCode}</Text> */}
+          <Text className="px-4 font-medium">Balance: {self.balance}</Text>
 
           {/* Just for checks */}
           {/* {self.cards?.map((card) => (

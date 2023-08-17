@@ -11,8 +11,10 @@ const MeStack = createNativeStackNavigator();
 const MeStackScreen = () => {
   return (
     <MeStack.Navigator >
-        <MeStack.Screen name="MeScreen" component={MeScreen} options={{ headerShown: false }} />
-        <MeStack.Screen name="AccountInfo" component={AccountInfoScreen} />
+        <MeStack.Group screenOptions={{ headerShown: false }}>
+          <MeStack.Screen name="MeScreen" component={MeScreen}/>
+          <MeStack.Screen name="AccountInfo" component={AccountInfoScreen}/>
+        </MeStack.Group>
         <MeStack.Screen name="MessageCenter" component={MessageCenterScreen} />
         <MeStack.Screen name="Security" component={SecurityScreen} />
     </MeStack.Navigator>

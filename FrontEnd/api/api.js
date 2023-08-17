@@ -1,6 +1,17 @@
 import axios from "axios";
+// import {fileFromPath} from "formdata-node/file-from-path";
 
-axios.defaults.baseURL = "http://192.168.3.106:5050/routes";
+// import {FormData, Blob} from "formdata-node"
+
+import * as FileSystem from 'expo-file-system';
+
+// import RNFetchBlob from "rn-fetch-blob";
+// import {fileFromPath} from "formdata-node/file-from-path"
+
+
+// axios.defaults.baseURL = "http://192.168.3.106:5050/api";
+axios.defaults.baseURL = "http://localhost:5050/api";
+
 
 export const fetchUser = (userId) => {
   return axios.get("/profile/retrieve_user", {
@@ -18,10 +29,10 @@ export const fetchTransactions = (userId) => {
   });
 };
 
-// Not necessary to have a stand alont function
+// Not necessary to have a stand alone function
 
 // export const fetchProfilePic = (userId) => {
-//   return axios.get("/profile/retrieve_profile_pic", {
+//   return axios.get("/profile/retrieve_user", {
 //     params: { 
 //       userId: userId 
 //     },
@@ -57,3 +68,64 @@ export const createDirectTransaction = async (
     console.error(error.response.data);
   }
 };
+
+
+
+export const uploadProfilePicture = async (userId, imageURI) => {
+
+  console.log("URI: ", imageURI);
+  console.log("UserID: ", userId);
+
+
+  let uriArray = imageURI.split(".");
+  let fileType = "image/" + uriArray[uriArray.length - 1];
+  console.log(fileType)
+
+  try {
+
+    const result = await FileSystem.uploadAsync(
+      "http://localhost:5050/api/profile/set_profile_pic",
+      imageURI,
+      {
+        headers: {
+          'Content-Type': fileType,
+        },
+        httpMethod: 'PATCH',
+        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        fieldName: 'profilePicture',
+        parameters: {
+          userId: userId,
+        }
+      },
+    )
+
+
+    // const result = await FileSystem.uploadAsync(
+    //   "http://localhost:5050/api/profile/set_profile_pic",
+    //   imageURI,
+    //   {
+    //     headers: {
+    //       'Content-Type': 'image/jpg',
+    //       // 'Custom-Header': 'DASD',
+    //     },
+    //     httpMethod: 'POST',
+    //     sessionType: FileSystem.FileSystemSessionType.BACKGROUND,
+    //     uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+    //     fieldName: 'profilePicture',
+    //     mimeType: 'image/jpg',
+    //     parameters: {
+    //       userId: userId
+    //     }
+    //   },
+    // )
+
+    if (result.status === 200) console.log("Successfully uploaded profile picture");
+    else console.log("Error uploading photo");
+
+    // console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
