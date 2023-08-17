@@ -19,27 +19,14 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { launchImageLibrary } from "react-native-image-picker";
-import { handleUploadPhoto, handleUploadProfilePicture, handleUploadProfilePicture2 } from "../../api/api.js";
+import { handleUploadPhoto, handleUploadProfilePicture, handleUploadProfilePicture2, handleUploadProfilePicture3, uploadProfilePicture } from "../../api/api.js";
 
+import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from "expo-image-picker";
 
 const ID = "64c673c724782ec4c7fb2d8f";
 
-// const createFormData = (photo, body = {}) => {
-//   const data = new FormData();
 
-//   data.append("profilePicture", {
-//     name: photo.fileName,
-//     type: photo.type,
-//     uri: Platform.OS === "ios" ? photo.uri.replace("file://", "") : photo.uri,
-//   });
-
-//   Object.keys(body).forEach((key) => {
-//     data.append(key, body[key]);
-//   });
-
-//   return data;
-// };
 
 const AccountInfoScreen = () => {
   const navigation = useNavigation();
@@ -65,11 +52,13 @@ const AccountInfoScreen = () => {
       quality: 1,
     });
 
-    console.log("PHOTO: ", result);
+    // console.log("PHOTO: ", result);
+
+    const imageURI = result.assets[0].uri;
 
     if (!result.canceled) {
-      setPhoto(result.assets[0].uri);
-      await handleUploadProfilePicture2(self._id, result.assets[0].uri);
+      setPhoto(imageURI);
+      await uploadProfilePicture(self._id, result.assets[0].uri);
     }
   };
 

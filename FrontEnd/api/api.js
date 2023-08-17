@@ -70,104 +70,62 @@ export const createDirectTransaction = async (
 };
 
 
-export const handleUploadProfilePicture = async (userId, imageURI) => {
 
-  console.log("userID: ", userId);
+export const uploadProfilePicture = async (userId, imageURI) => {
+
   console.log("URI: ", imageURI);
-
-  const formData = new FormData();
-
-  formData.append('userId', userId);
-  formData.append('profilePicture', {
-    name: "profile.jpg",
-    type: 'jpg',
-    uri: Platform.OS === "ios" ? imageURI.replace("file://", "") : imageURI,
-})
-
-  console.log(formData);
-
-  // // Creating a blob instance
-  // const formData = new RNFetchBlob.polyfill.Blob();
-
-  // const imageBlob = await RNFetchBlob.fs.readFile(image.uri, 'base64');
-
-  // formData.append('userId', userId);
-  // formData.append('profilePicture', imageBlob, 'image.jpg');
+  console.log("UserID: ", userId);
 
 
-
-
-  // // formData
-  // const form = new FormData();
-  // form.append('userId', userId);
-  // form.append("profilePicture", {
-  //   // name: profilePicture.fileName,
-  //   name: "randomPhoto",
-  //   type: profilePicture.type,
-  //   uri: Platform.OS === "ios" ? profilePicture.uri.replace("file://", "") : profilePicture.uri,
-  // });
-
-  // const blob = new Blob(profilePicture)
-
-  // console.log(form.profilePicture.name)
-
-  // const file = await fileFromPath(profilePicture.uri.replace("file://", ""))
-  // console.log(file)
-
-
+  let uriArray = imageURI.split(".");
+  let fileType = "image/" + uriArray[uriArray.length - 1];
+  console.log(fileType)
 
   try {
-    const response = await axios.post("/profile/add_profile_pic", {
-      body: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-    if (response.status == 200) console.log("Successfully uploaded profile picture");
-    else console.log("Error uploading photo");
-  } catch (error) {
-    console.error(error.response.data);
-  }
-}
 
-
-
-
-// Apparently, cannot use AXIOS with Expo for image upload
-
-
-const imageUploading = async () => {
-    const data = await FileSystem.uploadAsync(
-      URL,
-      image, // uri of the image 
-      {
-        httpMethod: 'POST',
-        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-        fieldName: 'file',
-      },
-    );
-};
-
-export const handleUploadProfilePicture2 = async (userId, imageURI) => {
-  try {
-    const response = await FileSystem.uploadAsync(
-      "http://localhost:5050/api/profile/add_profile_pic",
+    const result = await FileSystem.uploadAsync(
+      "http://localhost:5050/api/profile/set_profile_pic",
       imageURI,
       {
-        httpMethod: 'POST',
-        sessionType: FileSystem.FileSystemSessionType.BACKGROUND,
+        headers: {
+          'Content-Type': fileType,
+        },
+        httpMethod: 'PATCH',
         uploadType: FileSystem.FileSystemUploadType.MULTIPART,
         fieldName: 'profilePicture',
         parameters: {
-          userId: userId
+          userId: userId,
         }
       },
     )
-    if (response.status == 200) console.log("Successfully uploaded profile picture");
+
+
+    // const result = await FileSystem.uploadAsync(
+    //   "http://localhost:5050/api/profile/set_profile_pic",
+    //   imageURI,
+    //   {
+    //     headers: {
+    //       'Content-Type': 'image/jpg',
+    //       // 'Custom-Header': 'DASD',
+    //     },
+    //     httpMethod: 'POST',
+    //     sessionType: FileSystem.FileSystemSessionType.BACKGROUND,
+    //     uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+    //     fieldName: 'profilePicture',
+    //     mimeType: 'image/jpg',
+    //     parameters: {
+    //       userId: userId
+    //     }
+    //   },
+    // )
+
+    if (result.status === 200) console.log("Successfully uploaded profile picture");
     else console.log("Error uploading photo");
 
-    console.log(response);
+    console.log(result);
   } catch (error) {
-    console.error(error.response.data);
+    console.error(error);
   }
 }
+
+
