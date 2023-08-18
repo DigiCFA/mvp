@@ -13,6 +13,7 @@ import SendConfirmationScreen from "./SendConfirmationScreen";
 import RequestConfirmationScreen from "./RequestConfirmationScreen";
 import HomeScreen from "../Home/HomeScreen";
 import HomeStackScreen from "../Home/HomeStackScreen";
+import QRErrorScreen from "./QRErrorScreen";
 
 const TransferStack = createStackNavigator();
 
@@ -47,6 +48,7 @@ const TransferStackScreen = () => {
 
         <TransferStack.Screen name="SendConfirmation" component={SendConfirmationScreen} />
         <TransferStack.Screen name="RequestConfirmation" component={RequestConfirmationScreen} />
+        <TransferStack.Screen name="QRError" component={QRErrorScreen} />
       </TransferStack.Group>
     </TransferStack.Navigator>
   );

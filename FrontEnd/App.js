@@ -1,3 +1,6 @@
+import { Text } from "react-native";
+import { store } from "./store"
+import { Provider } from "react-redux";
 import {
   NavigationContainer,
   getFocusedRouteNameFromRoute,
@@ -6,6 +9,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
+import * as Linking from "expo-linking";
 
 
 import HomeStackScreen from "./screens/Home/HomeStackScreen";
@@ -13,14 +17,51 @@ import WalletStackScreen from "./screens/Wallet/WalletStackScreen";
 import TransferStackScreen from "./screens/Transfer/TransferStackScreen";
 import MeStackScreen from "./screens/Me/MeStackScreen";
 import LoginSignupStackScreen from "./screens/LoginSigup/LoginSignupStackScreen";
-import { store } from "./store"
-import { Provider } from "react-redux";
+
 
 const NavBar = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 
+
+const prefix = Linking.createURL('/');
+
+
 export default function App() {
   [userToken, setUserToken] = useState(0);
+
+  const config = {
+      screens: {
+        Transfer: {
+          path: 'pay',
+          // initialRouteName: 'Search',
+          screens: {
+            User: {
+              path: 'user/:id/:name',
+              parse: {
+                name: (name) => {
+                  let firstName = name.split('_')[0];
+                  let lastName = name.split('_')[1];
+                  let fullName = firstName.charAt(0).toUpperCase() + firstName.slice(1) + ' ' + lastName.charAt(0).toUpperCase() + lastName.slice(1);
+
+                  return fullName;
+                }
+              }
+            },
+            // Catch all
+            QRError: '*',
+          }
+        },
+      },
+    }
+  
+  const linking = {
+    prefixes: [prefix],
+    config,
+  };
+
+  const fallback = `
+    <Text>Loading...</Text>
+  `
 
   const navigationScreens =
     userToken == null ? (
@@ -45,7 +86,7 @@ export default function App() {
     );
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
       <Provider store={store}>
         <NavBar.Navigator
           screenOptions={({ route }) => ({

@@ -5,6 +5,7 @@ import HomeScreen from "./HomeScreen";
 import SearchScreen from "../Transfer/SearchScreen";
 import ScanScreen from "../Transfer/ScanScreen";
 import TransactionScreen from "./TransactionScreen";
+import QRErrorScreen from "../Transfer/QRErrorScreen";
 
 const HomeStack = createNativeStackNavigator();
 

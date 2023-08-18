@@ -12,7 +12,6 @@ const UserCard = ({ id, name, phoneNumber }) => {
         navigation.navigate("User", {
           id,
           name,
-          phoneNumber,
         });
       }}
       className="py-0.5 bg-white rounded-lg flex-row space-x-2"
