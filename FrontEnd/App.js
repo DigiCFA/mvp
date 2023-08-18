@@ -1,5 +1,5 @@
 import { Text } from "react-native";
-import { store } from "./store"
+import { store } from "./store";
 import { Provider } from "react-redux";
 import {
   NavigationContainer,
@@ -11,49 +11,66 @@ import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import * as Linking from "expo-linking";
 
-
 import HomeStackScreen from "./screens/Home/HomeStackScreen";
 import WalletStackScreen from "./screens/Wallet/WalletStackScreen";
 import TransferStackScreen from "./screens/Transfer/TransferStackScreen";
 import MeStackScreen from "./screens/Me/MeStackScreen";
 import LoginSignupStackScreen from "./screens/LoginSigup/LoginSignupStackScreen";
 
-
 const NavBar = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 
+const tabHiddenRoutes = [
+  "User",
+  "PaymentMethods",
+  "SendReview",
+  "SendConfirmation",
+  "RequestReview",
+  "RequestConfirmation",
+  "Transaction",
+  "CardDetails",
+  "QRError",
+  "Scan",
+  "AccountInfo",
+  "MessageCenter",
+  "Security"
+];
 
-const prefix = Linking.createURL('/');
-
+const prefix = Linking.createURL("/");
 
 export default function App() {
   [userToken, setUserToken] = useState(0);
 
   const config = {
-      screens: {
-        Transfer: {
-          path: 'pay',
-          // initialRouteName: 'Search',
-          screens: {
-            User: {
-              path: 'user/:id/:name',
-              parse: {
-                name: (name) => {
-                  let firstName = name.split('_')[0];
-                  let lastName = name.split('_')[1];
-                  let fullName = firstName.charAt(0).toUpperCase() + firstName.slice(1) + ' ' + lastName.charAt(0).toUpperCase() + lastName.slice(1);
+    screens: {
+      Transfer: {
+        path: "pay",
+        // initialRouteName: 'Search',
+        screens: {
+          User: {
+            path: "user/:id/:name",
+            parse: {
+              name: (name) => {
+                let firstName = name.split("_")[0];
+                let lastName = name.split("_")[1];
+                let fullName =
+                  firstName.charAt(0).toUpperCase() +
+                  firstName.slice(1) +
+                  " " +
+                  lastName.charAt(0).toUpperCase() +
+                  lastName.slice(1);
 
-                  return fullName;
-                }
-              }
+                return fullName;
+              },
             },
-            // Catch all
-            QRError: '*',
-          }
+          },
+          // Catch all
+          QRError: "*",
         },
       },
-    }
-  
+    },
+  };
+
   const linking = {
     prefixes: [prefix],
     config,
@@ -61,7 +78,7 @@ export default function App() {
 
   const fallback = `
     <Text>Loading...</Text>
-  `
+  `;
 
   const navigationScreens =
     userToken == null ? (
@@ -94,14 +111,14 @@ export default function App() {
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
 
-              if (route.name == "Home") {
+              if (route.name === "Home") {
                 // iconName = focused ? 'ios-home' : 'ios-home-outline';
                 iconName = "home";
-              } else if (route.name == "Transfer") {
+              } else if (route.name === "Transfer") {
                 iconName = "cart";
-              } else if (route.name == "Wallet") {
+              } else if (route.name === "Wallet") {
                 iconName = "card";
-              } else if (route.name == "Me") {
+              } else if (route.name === "Me") {
                 iconName = "body";
               }
 
@@ -116,17 +133,8 @@ export default function App() {
 
             // Hide the tab bar for certain screens
             tabBarStyle: ((route) => {
-              const routeName = getFocusedRouteNameFromRoute(route);
-              if (
-                routeName === "User" ||
-                routeName === "PaymentMethods" ||
-                routeName === "SendReview" ||
-                routeName === "SendConfirmation" ||
-                routeName === "RequestReview" ||
-                routeName === "RequestConfirmation" ||
-                routeName === "Transaction" ||
-                routeName === "QRError"
-              ) {
+              const currentRoute = getFocusedRouteNameFromRoute(route);
+              if (tabHiddenRoutes.includes(currentRoute)) {
                 return {
                   display: "none",
                 };
