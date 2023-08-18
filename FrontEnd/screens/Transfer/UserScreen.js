@@ -13,12 +13,11 @@ import Currency from "react-currency-formatter";
 
 const UserScreen = () => {
   const navigation = useNavigation();
-
   const [amount, onChangeAmount] = useState("0.00");
   const [message, onChangeMessage] = useState("");
 
   const {
-    params: { id, name, phoneNumber },
+    params: { id, name },
   } = useRoute();
 
   return (

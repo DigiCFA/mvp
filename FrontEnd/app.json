@@ -3,6 +3,7 @@
     "name": "mvp",
     "slug": "mvp",
     "version": "1.0.0",
+    "scheme": "DigiCFA",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
