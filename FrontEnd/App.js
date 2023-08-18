@@ -124,7 +124,8 @@ export default function App() {
                 routeName === "SendConfirmation" ||
                 routeName === "RequestReview" ||
                 routeName === "RequestConfirmation" ||
-                routeName === "Transaction"
+                routeName === "Transaction" ||
+                routeName === "QRError"
               ) {
                 return {
                   display: "none",
