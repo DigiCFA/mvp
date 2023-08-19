@@ -6,7 +6,7 @@
   "config": {
     "s3BucketName": "digicfa-frontend",
     "region": "us-west-1",
-    "cloudFormationStackName": "ServerlessExpressStack",
+    "cloudFormationStackName": "DigiCFAStack",
     "functionName": "",
     "domain": ""
   },
@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "morgan": "^1.10.0",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "webpack-cli": "^5.1.4"
   }
 }
