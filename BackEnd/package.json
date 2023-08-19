@@ -3,20 +3,41 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "config": {
+    "s3BucketName": "digicfa-frontend",
+    "region": "us-west-1",
+    "cloudFormationStackName": "ServerlessExpressStack",
+    "functionName": "",
+    "domain": ""
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.mjs "
+    "dev": "nodemon server.mjs ",
+    "//explanation//": "below ones are for managing AWS serverless assets/API Gateway/Lambda",
+    "start": "node app.local.js",
+    "local": "node scripts/local",
+    "invoke-lambda": "cross-var aws lambda invoke --function-name $npm_package_config_functionName --region $npm_package_config_region --payload file://api-gateway-event.json lambda-invoke-response.json && cat lambda-invoke-response.json",
+    "create-bucket": "cross-var aws s3 mb s3://$npm_package_config_s3BucketName --region $npm_package_config_region",
+    "delete-bucket": "cross-var aws s3 rb s3://$npm_package_config_s3BucketName --region $npm_package_config_region",
+    "package": "cross-var aws cloudformation package --template ./sam-template.yaml --s3-bucket $npm_package_config_s3BucketName --output-template sam-template.packaged.yaml --region $npm_package_config_region",
+    "deploy": "cross-var aws cloudformation deploy --template-file sam-template.packaged.yaml --stack-name $npm_package_config_cloudFormationStackName --capabilities CAPABILITY_IAM --region $npm_package_config_region --parameter-overrides DomainName=$npm_package_config_domain",
+    "package-deploy": "npm run build && npm run package && npm run deploy",
+    "delete-stack": "cross-var aws cloudformation delete-stack --stack-name $npm_package_config_cloudFormationStackName --region $npm_package_config_region",
+    "setup": "npm install && (cross-var aws s3api get-bucket-location --bucket $npm_package_config_s3BucketName --region $npm_package_config_region || npm run create-bucket) && npm run package-deploy",
+    "build": "webpack-cli"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.386.0",
+    "@vendia/serverless-express": "^4.10.4",
     "bcryptjs": "^2.4.3",
     "connect-mongo": "^5.0.0",
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.0",
     "express-session": "^1.17.3",
@@ -25,7 +46,8 @@
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.0",
     "mongoose-unique-validator": "^4.0.0",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "serverless-http": "^3.2.0"
   },
   "devDependencies": {
     "morgan": "^1.10.0",
