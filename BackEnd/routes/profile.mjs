@@ -6,6 +6,8 @@ import { retrieveFromS3, uploadToS3 } from "../controllers/awsController.mjs";
 import User from "../models/userModel.mjs";
 import Transaction from "../models/transactionModel.mjs";
 
+import {mongoose_fuzzy_searching} from "mongoose-fuzzy-searching"
+
 const router = express.Router();
 
 
@@ -46,6 +48,31 @@ router.get("/retrieve_transactions", async (req, res) => {
     res.status(400).send(error);
   }
 });
+
+router.get("/search_users", async (req, res) => {
+  let query = req.body.query;
+  try {
+    // all transactions
+    let result = await User.fuzzy_search(query)
+      .project({firstName:1,lastName:1,fullName:1,phoneNumber:1,_id:1})
+
+    if (result.length === 0)
+      res.status(404).send(`User with ID ${id} has no transactions`);
+    else res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(400).send(error);
+  }
+});
+
+
+
+
+
+
+
+
+
 
 router.get("/retrieve_user_with_certain_fields", async (req, res) => {
   let id = req.query.userId;
