@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import pkg from 'bcryptjs'
 
+import search from "mongoose-fuzzy-searching"
+
+
+
 const {hashSync, compareSync} = pkg
 // import Transaction from "transactionModel.mjs"
 
@@ -177,6 +181,7 @@ const userSchema = new mongoose.Schema(
 // })
 
 userSchema.plugin(uniqueValidator);
+userSchema.plugin(search,{fields:['firstName','lastName','fullName,phoneNumber']});
 
 userSchema.pre('save', function () {
   if(this.isModified('password')){
