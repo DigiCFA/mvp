@@ -55,10 +55,7 @@ router.get("/search_users", async (req, res) => {
     // all transactions
     let result = await User.fuzzy_search(query)
       .project({firstName:1,lastName:1,fullName:1,phoneNumber:1,_id:1})
-
-    if (result.length === 0)
-      res.status(404).send(`User with ID ${id} has no transactions`);
-    else res.status(200).send(result);
+    res.status(200).send(result);
   } catch (error) {
     console.error(error);
     res.status(400).send(error);
