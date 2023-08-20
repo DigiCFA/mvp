@@ -53,8 +53,19 @@ router.get("/search_users", async (req, res) => {
   let query = req.body.query;
   try {
     // all transactions
-    let result = await User.fuzzy_search(query)
-      .project({firstName:1,lastName:1,fullName:1,phoneNumber:1,_id:1})
+    const result = await User.aggregate().
+    search({
+      text: {
+        query: query,
+      }
+    });
+   
+
+
+
+
+    //let result = await User.fuzzy_search(query)
+      //.project({firstName:1,lastName:1,fullName:1,phoneNumber:1,_id:1})
     res.status(200).send(result);
   } catch (error) {
     console.error(error);
