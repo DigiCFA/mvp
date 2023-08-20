@@ -1,6 +1,6 @@
 import express from "express";
 
-import { SESSION_NAME } from "../config.mjs";
+import { SESSION_NAME } from "../../config.mjs";
 import { loginValidation, signUpValidation } from "../validation/userValidation.mjs";
 import { parseError, sessionizeUser } from "../utils/helper.mjs";
 

@@ -3,9 +3,9 @@ import cors from "cors";
 import morgan from "morgan";
 import connectStore from "connect-mongo";
 import session from "express-session"
-import { ATLAS_URI, NODE_ENV, PORT, SESSION_LIFETIME, SESSION_NAME, SESSION_SECRETE } from "./config.mjs";
+import { ATLAS_URI, NODE_ENV, PORT, SESSION_LIFETIME, SESSION_NAME, SESSION_SECRETE } from "../config.mjs";
 
-import "./loadEnvironment.mjs";
+import "../loadEnvironment.mjs";
 import routes from "./routes/index.mjs";
 
 const app = express();
@@ -37,7 +37,7 @@ app.use("/api", routes);
 
 export default app;
 
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port: ${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`Server is running on port: ${PORT}`);
+});
  

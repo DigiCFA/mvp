@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 import mongoose from "mongoose";
-import { ATLAS_URI } from "../config.mjs";
+import { ATLAS_URI } from "../../config.mjs";
 
 
 // const client = new MongoClient(connect_to_db);

@@ -12,7 +12,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.mjs ",
+    "dev": "nodemon src/server.mjs ",
     "//explanation//": "below ones are for managing AWS serverless assets/API Gateway/Lambda",
     "start": "node app.local.js",
     "local": "node scripts/local",
@@ -31,10 +31,16 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.386.0",
+    "@aws-sdk/credential-provider-node": "^3.395.0",
+    "@aws-sdk/signature-v4-crt": "^3.391.0",
+    "@mongodb-js/zstd": "^1.1.0",
     "@vendia/serverless-express": "^4.10.4",
+    "aws-crt": "^1.18.0",
+    "aws4": "^1.12.0",
     "bcryptjs": "^2.4.3",
     "connect-mongo": "^5.0.0",
     "cors": "^2.8.5",
+    "cross-var": "^1.1.0",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
@@ -42,12 +48,15 @@
     "express-fileupload": "^1.4.0",
     "express-session": "^1.17.3",
     "joi": "^17.9.2",
+    "kerberos": "^2.0.1",
     "mongo-connect": "^0.0.6",
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.0",
     "mongoose-unique-validator": "^4.0.0",
     "multer": "^1.4.5-lts.1",
-    "serverless-http": "^3.2.0"
+    "serverless-http": "^3.2.0",
+    "snappy": "^7.2.2",
+    "webpack": "^5.88.2"
   },
   "devDependencies": {
     "morgan": "^1.10.0",
