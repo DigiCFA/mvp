@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import pkg from 'bcryptjs'
 
-import {mongoose_fuzzy_searching} from "mongoose-fuzzy-searching"
+import search from "mongoose-fuzzy-searching"
 
 
 
@@ -181,7 +181,7 @@ const userSchema = new mongoose.Schema(
 // })
 
 userSchema.plugin(uniqueValidator);
-userSchema.plugin(mongoose_fuzzy_searching,{fields:['firstName','lastName','fullName,phoneNumber']});
+userSchema.plugin(search,{fields:['firstName','lastName','fullName,phoneNumber']});
 
 userSchema.pre('save', function () {
   if(this.isModified('password')){

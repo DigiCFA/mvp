@@ -6,7 +6,7 @@ import { retrieveFromS3, uploadToS3 } from "../controllers/awsController.mjs";
 import User from "../models/userModel.mjs";
 import Transaction from "../models/transactionModel.mjs";
 
-import {mongoose_fuzzy_searching} from "mongoose-fuzzy-searching"
+//import {mongoose_fuzzy_searching} from "mongoose-fuzzy-searching"
 
 const router = express.Router();
 
