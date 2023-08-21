@@ -53,8 +53,48 @@ router.get("/search_users", async (req, res) => {
   let query = req.body.query;
   try {
     // all transactions
-    let result = await User.fuzzy_search(query)
-      .project({firstName:1,lastName:1,fullName:1,phoneNumber:1,_id:1})
+    const result = await User.aggregate().
+    search({
+      index:"default",
+      compound:{
+        should:[
+          {
+              autocomplete:{
+                 query: query,
+                 path:"firstName",
+                 fuzzy:{}
+
+              }
+          },
+          {
+              autocomplete:{
+                 query: query,
+                 path:"lastName",
+                 fuzzy:{}
+
+              }
+          },
+          {
+              autocomplete:{
+                 query: query,
+                 path:"fullName",
+                 fuzzy:{}
+
+              }
+          },
+          {
+              autocomplete:{
+                 query: query,
+                 path:"phoneNumber",
+                 fuzzy:{}
+
+              }
+          },
+
+        ]
+      }
+    })
+    .project({firstName:1,lastName:1,fullName:1,phoneNumber:1,_id:1})
     res.status(200).send(result);
   } catch (error) {
     console.error(error);
