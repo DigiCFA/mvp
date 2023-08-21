@@ -6,7 +6,7 @@ import session from "express-session"
 import { ATLAS_URI, NODE_ENV, PORT, SESSION_LIFETIME, SESSION_NAME, SESSION_SECRETE } from "../config.mjs";
 
 import "../loadEnvironment.mjs";
-import routes from "./routes/index.mjs";
+import routes from "./routes/index.js";
 
 const app = express();
 

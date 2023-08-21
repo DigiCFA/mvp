@@ -9,6 +9,10 @@ This file specifies how the backend should be bundled.
 import path from 'path'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
 // const path = require("path");
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 

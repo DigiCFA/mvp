@@ -1,10 +1,13 @@
 import express from "express";
 
 import { SESSION_NAME } from "../../config.mjs";
-import { loginValidation, signUpValidation } from "../validation/userValidation.mjs";
-import { parseError, sessionizeUser } from "../utils/helper.mjs";
+import {
+  loginValidation,
+  signUpValidation,
+} from "../validation/userValidation.js";
+import { parseError, sessionizeUser } from "../utils/helper.js";
 
-import User from "../models/userModel.mjs";
+import User from "../models/userModel.js";
 
 const router = express.Router();
 
@@ -146,7 +149,6 @@ router.post("/auth/user_login", async (req, res) => {
     }
   );
 });
-
 
 // ------------------------
 // OBSOLETE ONES

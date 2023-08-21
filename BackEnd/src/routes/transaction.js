@@ -2,8 +2,8 @@ import express from "express";
 import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 
-import User from "../models/userModel.mjs";
-import Transaction from "../models/transactionModel.mjs";
+import User from "../models/userModel.js";
+import Transaction from "../models/transactionModel.js";
 
 // Would get rid of this if not for obsolete functions
 import { dbRef } from "../database/connect.js";
@@ -89,10 +89,6 @@ router.post("/create_direct_transaction", async (req, res) => {
     await session.endSession();
   }
 });
-
-
-
-
 
 // ------------------------
 // OBSOLETE ONES
@@ -264,7 +260,6 @@ router.patch("/approve_transaction", async (req, res) => {
     res.send(transactionID).status(200);
   }
 });
-
 
 router.delete(
   "/transaction/mongoose_delete_all_transactions",

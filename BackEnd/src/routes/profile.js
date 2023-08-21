@@ -3,13 +3,12 @@ import express from "express";
 import { upload } from "../middleware/multer.js";
 import { retrieveFromS3, uploadToS3 } from "../controllers/awsController.js";
 
-import User from "../models/userModel.mjs";
-import Transaction from "../models/transactionModel.mjs";
+import User from "../models/userModel.js";
+import Transaction from "../models/transactionModel.js";
 
 //import {mongoose_fuzzy_searching} from "mongoose-fuzzy-searching"
 
 const router = express.Router();
-
 
 router.get("/retrieve_user", async (req, res) => {
   let id = req.query.userId;
@@ -53,63 +52,55 @@ router.get("/search_users", async (req, res) => {
   let query = req.body.query;
   try {
     // all transactions
-    const result = await User.aggregate().
-    search({
-      index:"default",
-      compound:{
-        should:[
-          {
-              autocomplete:{
-                 query: query,
-                 path:"firstName",
-                 fuzzy:{}
-
-              }
-          },
-          {
-              autocomplete:{
-                 query: query,
-                 path:"lastName",
-                 fuzzy:{}
-
-              }
-          },
-          {
-              autocomplete:{
-                 query: query,
-                 path:"fullName",
-                 fuzzy:{}
-
-              }
-          },
-          {
-              autocomplete:{
-                 query: query,
-                 path:"phoneNumber",
-                 fuzzy:{}
-
-              }
-          },
-
-        ]
-      }
-    })
-    .project({firstName:1,lastName:1,fullName:1,phoneNumber:1,_id:1})
+    const result = await User.aggregate()
+      .search({
+        index: "default",
+        compound: {
+          should: [
+            {
+              autocomplete: {
+                query: query,
+                path: "firstName",
+                fuzzy: {},
+              },
+            },
+            {
+              autocomplete: {
+                query: query,
+                path: "lastName",
+                fuzzy: {},
+              },
+            },
+            {
+              autocomplete: {
+                query: query,
+                path: "fullName",
+                fuzzy: {},
+              },
+            },
+            {
+              autocomplete: {
+                query: query,
+                path: "phoneNumber",
+                fuzzy: {},
+              },
+            },
+          ],
+        },
+      })
+      .project({
+        firstName: 1,
+        lastName: 1,
+        fullName: 1,
+        phoneNumber: 1,
+        _id: 1,
+      });
     res.status(200).send(result);
   } catch (error) {
     console.error(error);
     res.status(400).send(error);
   }
 });
-
-
-
-
-
-
-
-
-
 
 router.get("/retrieve_user_with_certain_fields", async (req, res) => {
   let id = req.query.userId;
@@ -259,26 +250,22 @@ router.patch(
 );
 
 router.patch("/add_balance", async (req, res) => {
-    let id = req.body.userID;
-    try {
-      let user = await User.findById(id);
-      if (!user) {
-        res.status(404).send(`User with ID ${id} Not found`);
-        return;
-      }
-  
-      user.balance += req.body.amount;
-  
-      await user.save();
-      res.status(200).send(user);
-    } catch (error) {
-      res.status(400).send(error);
+  let id = req.body.userID;
+  try {
+    let user = await User.findById(id);
+    if (!user) {
+      res.status(404).send(`User with ID ${id} Not found`);
+      return;
     }
-  });
 
+    user.balance += req.body.amount;
 
-
-
+    await user.save();
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
 
 // ------------------------
 // OBSOLETE ONES
@@ -321,121 +308,117 @@ router.get("/retrieve_all_transactions", async (req, res) => {
 });
 
 // OBSOLETE
-router.get(
-  "/retrieve_transactions/:transaction_status",
-  async (req, res) => {
-    let queryArray = req.params.transaction_status;
-    let user_id = req.body.user_id;
-    let users_collection = db.collection("users");
-    let transaction_collection = db.collection("transactions");
-    await users_collection
-      .findOne({ _id: new ObjectId(user_id) })
-      .then(async (result, error) => {
-        if (!error) {
-          let transaction_ids = result[queryArray];
-          let transaction_data = [];
-          await Promise.all(
-            transaction_ids.map(async (transaction_id) => {
-              await transaction_collection
-                .findOne({ _id: new ObjectId(transaction_id) })
-                .then(async (result, error) => {
-                  if (!error) {
-                    transaction_data.push(result);
-                  } else {
-                    console.error(error);
-                    res.send(error).status(400);
-                  }
-                });
-            })
-          ).then(() => {
-            console.log(transaction_data);
-            res.send(transaction_data).status(200);
-          });
-        } else {
-          console.error(error);
-          res.send(error).status(400);
-        }
-      });
-  }
-);
-
+router.get("/retrieve_transactions/:transaction_status", async (req, res) => {
+  let queryArray = req.params.transaction_status;
+  let user_id = req.body.user_id;
+  let users_collection = db.collection("users");
+  let transaction_collection = db.collection("transactions");
+  await users_collection
+    .findOne({ _id: new ObjectId(user_id) })
+    .then(async (result, error) => {
+      if (!error) {
+        let transaction_ids = result[queryArray];
+        let transaction_data = [];
+        await Promise.all(
+          transaction_ids.map(async (transaction_id) => {
+            await transaction_collection
+              .findOne({ _id: new ObjectId(transaction_id) })
+              .then(async (result, error) => {
+                if (!error) {
+                  transaction_data.push(result);
+                } else {
+                  console.error(error);
+                  res.send(error).status(400);
+                }
+              });
+          })
+        ).then(() => {
+          console.log(transaction_data);
+          res.send(transaction_data).status(200);
+        });
+      } else {
+        console.error(error);
+        res.send(error).status(400);
+      }
+    });
+});
 
 // OBSOLETE
 router.patch("/add_contact", async (req, res) => {
-    let collection = db.collection("users");
-    let user_input = req.body;
-    await collection
-      .updateOne(
-        { _id: new ObjectId(user_input.user_id) },
-        { $addToSet: { user_contacts: user_input.contact_id } }
-      )
-      .then(async function (update_result, update_error) {
-        if (!update_error) {
-          await collection
-            .updateOne(
-              { _id: new ObjectId(user_input.contact_id) },
-              { $addToSet: { user_contacts: user_input.user_id } }
-            )
-            .then(function (updatetwo_result, updatetwo_error) {
-              if (!updatetwo_error) {
-                res.send({ update_result, updatetwo_result }).status(200);
-              } else {
-                console.error(updatetwo_error);
-                res.send(updatetwo_error).status(400);
-              }
-            });
-        } else {
-          console.error(update_error);
-          res.send({ update_error }).status(400);
-        }
-      });
-  });
-  
-  // OBSOLETE
-  router.patch("/remove_contact", async (req, res) => {
-    let collection = db.collection("users");
-    let user_input = req.body;
-    await collection
-      .updateOne(
-        { _id: new ObjectId(user_input.user_id) },
-        { $pull: { user_contacts: user_input.contact_id } }
-      )
-      .then(async function (pull_result, pull_error) {
-        if (!pull_error) {
-          await collection
-            .updateOne(
-              { _id: new ObjectId(user_input.contact_id) },
-              { $pull: { user_contacts: user_input.user_id } }
-            )
-            .then(function (pulltwo_result, pulltwo_error) {
-              if (!pulltwo_error) {
-                res.send({ pull_result, pulltwo_result }).status(200);
-              } else {
-                console.error(pulltwo_error);
-                res.send(pulltwo_error).status(400);
-              }
-            });
-        } else {
-          console.error(pull_error);
-          res.send(pull_error).status(400);
-        }
-      });
-  });
-  
-  // OBSOLETE
-  router.get("/transaction_data", async (req, res) => {
-    let transaction_id = req.body.transaction_id;
-    let transaction_collection = db.collection("transactions");
-    await transaction_collection
-      .findOne({ _id: new ObjectId(transaction_id) })
-      .then(async (result, error) => {
-        if (!error) {
-          res.send(result).status(200);
-        } else {
-          console.error(error);
-          res.send(error).status(400);
-        }
-      });
-  });
+  let collection = db.collection("users");
+  let user_input = req.body;
+  await collection
+    .updateOne(
+      { _id: new ObjectId(user_input.user_id) },
+      { $addToSet: { user_contacts: user_input.contact_id } }
+    )
+    .then(async function (update_result, update_error) {
+      if (!update_error) {
+        await collection
+          .updateOne(
+            { _id: new ObjectId(user_input.contact_id) },
+            { $addToSet: { user_contacts: user_input.user_id } }
+          )
+          .then(function (updatetwo_result, updatetwo_error) {
+            if (!updatetwo_error) {
+              res.send({ update_result, updatetwo_result }).status(200);
+            } else {
+              console.error(updatetwo_error);
+              res.send(updatetwo_error).status(400);
+            }
+          });
+      } else {
+        console.error(update_error);
+        res.send({ update_error }).status(400);
+      }
+    });
+});
+
+// OBSOLETE
+router.patch("/remove_contact", async (req, res) => {
+  let collection = db.collection("users");
+  let user_input = req.body;
+  await collection
+    .updateOne(
+      { _id: new ObjectId(user_input.user_id) },
+      { $pull: { user_contacts: user_input.contact_id } }
+    )
+    .then(async function (pull_result, pull_error) {
+      if (!pull_error) {
+        await collection
+          .updateOne(
+            { _id: new ObjectId(user_input.contact_id) },
+            { $pull: { user_contacts: user_input.user_id } }
+          )
+          .then(function (pulltwo_result, pulltwo_error) {
+            if (!pulltwo_error) {
+              res.send({ pull_result, pulltwo_result }).status(200);
+            } else {
+              console.error(pulltwo_error);
+              res.send(pulltwo_error).status(400);
+            }
+          });
+      } else {
+        console.error(pull_error);
+        res.send(pull_error).status(400);
+      }
+    });
+});
+
+// OBSOLETE
+router.get("/transaction_data", async (req, res) => {
+  let transaction_id = req.body.transaction_id;
+  let transaction_collection = db.collection("transactions");
+  await transaction_collection
+    .findOne({ _id: new ObjectId(transaction_id) })
+    .then(async (result, error) => {
+      if (!error) {
+        res.send(result).status(200);
+      } else {
+        console.error(error);
+        res.send(error).status(400);
+      }
+    });
+});
 
 export default router;

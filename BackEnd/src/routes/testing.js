@@ -1,7 +1,7 @@
 import express from "express";
 
-import User from "../models/userModel.mjs";
-import Transaction from "../models/transactionModel.mjs";
+import User from "../models/userModel.js";
+import Transaction from "../models/transactionModel.js";
 
 const router = express.Router();
 
