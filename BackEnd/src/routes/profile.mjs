@@ -55,8 +55,30 @@ router.get("/search_users", async (req, res) => {
     // all transactions
     const result = await User.aggregate().
     search({
+      index:"default",
+      compound:{
+        should:[
+          {
+            
+              autocomplete:{
+                 query: query,
+                 path:"fullName"
+
+              }
+          },
+          {
+            
+              autocomplete:{
+                 query: query,
+                 path:"fullName"
+
+              }
+          },
+
+        ]
+      }
       text: {
-        query: query,
+       
       }
     });
    
