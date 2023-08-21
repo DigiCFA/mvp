@@ -51,7 +51,6 @@
     "mongo-connect": "^0.0.6",
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.0",
-    "mongoose-fuzzy-searching": "^2.0.2",
     "mongoose-unique-validator": "^4.0.0",
     "multer": "^1.4.5-lts.1",
     "serverless-http": "^3.2.0",
@@ -62,6 +61,7 @@
     "morgan": "^1.10.0",
     "node-loader": "^2.0.0",
     "nodemon": "^3.0.1",
+    "webpack-bundle-analyzer": "^4.9.0",
     "webpack-cli": "^5.1.4"
   }
 }

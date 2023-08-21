@@ -7,7 +7,8 @@ This file specifies how the backend should be bundled.
 */
 
 const path = require("path");
-// const CopyPlugin = require('copy-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 
 module.exports = {
   entry: "./src/lambda.js",
@@ -18,19 +19,14 @@ module.exports = {
     path: path.join(__dirname, "dist"),
     filename: "[name].js",
     // library: 'serverlessExpressEdge',
-    // libraryTarget: 'commonjs2'
+    libraryTarget: 'commonjs2'
   },
   module: {
     rules: [
         { test: /\.node$/, use: "node-loader"}
     ]
-  }
-  //   plugins: [
-  //     new CopyPlugin({
-  //       patterns: [
-  //         { from: './src/views', to: 'views' },
-  //         { from: './src/vendia-logo.png' }
-  //       ]
-  //     })
-  //   ]
+  },
+  plugins: [
+    // new BundleAnalyzerPlugin()
+  ]
 };
