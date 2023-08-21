@@ -1,7 +1,7 @@
 import express from "express";
 
-import { upload } from "../middleware/multer.mjs";
-import { retrieveFromS3, uploadToS3 } from "../controllers/awsController.mjs";
+import { upload } from "../middleware/multer.js";
+import { retrieveFromS3, uploadToS3 } from "../controllers/awsController.js";
 
 import User from "../models/userModel.mjs";
 import Transaction from "../models/transactionModel.mjs";

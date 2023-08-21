@@ -1,8 +1,10 @@
-require('source-map-support/register')
-const serverlessExpress = require('@vendia/serverless-express')
-// const app = require('./app')
 
+// Imported and automatically enables functionality; responsibile for enhancing stack traces in error messages 
+// HOWEVER DOESN'T WORK
+// import 'source-map-support/register'
 
-import app from "./server.mjs"
+import serverlessExpress from "@vendia/serverless-express"
 
-exports.handler = serverlessExpress({ app })
+import app from "./server.js"
+
+export const handler = serverlessExpress({ app })

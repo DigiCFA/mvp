@@ -6,7 +6,7 @@ import User from "../models/userModel.mjs";
 import Transaction from "../models/transactionModel.mjs";
 
 // Would get rid of this if not for obsolete functions
-import { dbRef } from "../database/connect.mjs";
+import { dbRef } from "../database/connect.js";
 let db = dbRef();
 
 const router = express.Router();

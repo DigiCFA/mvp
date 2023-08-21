@@ -6,11 +6,14 @@ Gateway.
 This file specifies how the backend should be bundled. 
 */
 
-const path = require("path");
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+import path from 'path'
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+
+// const path = require("path");
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
-module.exports = {
+export default {
   entry: "./src/lambda.js",
   target: "node",
   mode: "production",
