@@ -59,26 +59,39 @@ router.get("/search_users", async (req, res) => {
       compound:{
         should:[
           {
-            
               autocomplete:{
                  query: query,
-                 path:"fullName"
+                 path:"firstName",
+                 fuzzy:{}
 
               }
           },
           {
-            
               autocomplete:{
                  query: query,
-                 path:"fullName"
+                 path:"lastName",
+                 fuzzy:{}
+
+              }
+          },
+          {
+              autocomplete:{
+                 query: query,
+                 path:"fullName",
+                 fuzzy:{}
+
+              }
+          },
+          {
+              autocomplete:{
+                 query: query,
+                 path:"phoneNumber",
+                 fuzzy:{}
 
               }
           },
 
         ]
-      }
-      text: {
-       
       }
     });
    
