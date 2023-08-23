@@ -1,7 +1,7 @@
 {
   "resource": "/{proxy+}",
-  "path": "/users",
-  "httpMethod": "POST",
+  "path": "/profile/retrieve_user/",
+  "httpMethod": "GET",
   "headers": {
     "Accept": "*/*",
     "Accept-Encoding": "gzip, deflate, br",
@@ -97,7 +97,7 @@
   "queryStringParameters": null,
   "multiValueQueryStringParameters": null,
   "pathParameters": {
-    "proxy": "users"
+    "proxy": "api"
   },
   "stageVariables": {},
   "requestContext": {
@@ -106,7 +106,7 @@
     "httpMethod": "POST",
     "extendedRequestId": "Z2SQlEORIAMFjpA=",
     "requestTime": "17/May/2019:22:08:16 +0000",
-    "path": "/prod/users",
+    "path": "/prod/api/profile/retrieve_user/",
     "accountId": "xxxxxxxx",
     "protocol": "HTTP/1.1",
     "stage": "prod",
@@ -130,6 +130,6 @@
     "domainName": "xxxxxx.execute-api.us-east-1.amazonaws.com",
     "apiId": "xxxxxx"
   },
-  "body": "{\"name\": \"Sandy Samantha Salamander\"}",
+  "body": "{\"userId\": \"64c673c724782ec4c7fb2d8f\"}",
   "isBase64Encoded": false
 }

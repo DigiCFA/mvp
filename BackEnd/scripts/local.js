@@ -1,7 +1,11 @@
 // Testing Lambda/API Gateway locally
 
-const lambdaFunction = require('../src/lambda')
-const apiGatewayEvent = require('../api-gateway-event.json')
+
+import { handler } from "../src/lambda.js"
+import apiGatewayEvent from "../api-gateway-event.json" assert { type: "json" }
+
+// const handler = require('../src/lambda')
+// const apiGatewayEvent = require('../api-gateway-event.json')
 
 const context = {
   succeed: v => {
@@ -9,7 +13,8 @@ const context = {
     process.exit(0)
   }
 }
-const server = lambdaFunction.handler(apiGatewayEvent, context).then((e, v) => {
+
+const server = handler(apiGatewayEvent, context).then((e, v) => {
   if (e) console.error(e)
   if (v) console.info(v)
   process.exit(0)
