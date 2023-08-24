@@ -250,7 +250,7 @@ router.patch(
 );
 
 router.patch("/add_balance", async (req, res) => {
-  let id = req.body.userID;
+  let id = req.body.userId;
   try {
     let user = await User.findById(id);
     if (!user) {
