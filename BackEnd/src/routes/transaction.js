@@ -5,9 +5,6 @@ import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
 
-// Would get rid of this if not for obsolete functions
-import { dbRef } from "../database/connect.js";
-let db = dbRef();
 
 const router = express.Router();
 
@@ -89,6 +86,8 @@ router.post("/create_direct_transaction", async (req, res) => {
     await session.endSession();
   }
 });
+
+
 
 // ------------------------
 // OBSOLETE ONES

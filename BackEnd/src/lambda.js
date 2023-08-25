@@ -5,6 +5,6 @@
 
 import serverlessExpress from "@vendia/serverless-express"
 
-import app from "./server.js"
+import app from "./index.js"
 
 export const handler = serverlessExpress({ app })

@@ -3,6 +3,18 @@ import mongoose from "mongoose";
 import { ATLAS_URI } from "../../config.mjs";
 
 
+let conn = null;
+
+
+
+
+
+
+
+
+
+
+
 // const client = new MongoClient(connect_to_db);
 
 // let connection;
@@ -46,3 +58,7 @@ export function dbRef() {
 // export function client_ref() {
 //   return client;
 // }
+
+
+
+

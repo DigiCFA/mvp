@@ -3,10 +3,15 @@ import cors from "cors";
 import morgan from "morgan";
 import connectStore from "connect-mongo";
 import session from "express-session"
+import { dbRef } from "./database/connect.js";
 import { ATLAS_URI, NODE_ENV, PORT, SESSION_LIFETIME, SESSION_NAME, SESSION_SECRETE } from "../config.mjs";
 
-import "../loadEnvironment.mjs";
+// import "../loadEnvironment.mjs";
 import routes from "./routes/index.js";
+
+
+// Initialise the database
+const db = dbRef();
 
 const app = express();
 
