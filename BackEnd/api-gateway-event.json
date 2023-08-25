@@ -1,7 +1,7 @@
 {
   "resource": "/{proxy+}",
-  "path": "/api/profile/add_balance",
-  "httpMethod": "PATCH",
+  "path": "/api",
+  "httpMethod": "GET",
   "queryStringParameters": {
     "userId": "64c673c724782ec4c7fb2d8f"
   },
