@@ -1,6 +1,6 @@
 import express from "express";
 
-import { SESSION_NAME } from "../../config.mjs";
+// import { SESSION_NAME } from "../../config.mjs";
 import {
   loginValidation,
   signUpValidation,
@@ -76,7 +76,7 @@ router.delete("/auth/logout", ({ session }, res) => {
         if (err) {
           throw err;
         }
-        res.clearCookie(SESSION_NAME);
+        res.clearCookie(process.env.SESSION_NAME);
         res.send(user);
       });
     } else {
