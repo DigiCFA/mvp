@@ -10,7 +10,7 @@ import { fetchProfilePic, fetchTransactions, fetchUser } from "../api/api.js";
 // }
 
 const profilePicBaseURI =
-  "https://digicfa-profilepics.s3.us-west-1.amazonaws.com/";
+  "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
 
 // Maybe write a thunk to fetch user info. In which case user info is passed during login, in which case initialState should be null
 const initialState = {

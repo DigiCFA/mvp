@@ -3,7 +3,7 @@ import cors from "cors";
 import morgan from "morgan";
 import connectStore from "connect-mongo";
 import session from "express-session"
-// import { ATLAS_URI, NODE_ENV, PORT, SESSION_LIFETIME, SESSION_NAME, SESSION_SECRETE } from "../config.mjs";
+import { ATLAS_URI, NODE_ENV, PORT, SESSION_LIFETIME, SESSION_NAME, SESSION_SECRET } from "../config.mjs";
 
 import routes from "./routes/index.js";
 
@@ -17,7 +17,7 @@ app.use(express.json());
 
 // app.use(session({
 //   name: SESSION_NAME,
-//   secret: SESSION_SECRETE,
+//   secret: SESSION_SECRET,
 //   saveUninitialized: false,
 //   resave: false,
 //   store: connectStore.create({
@@ -53,7 +53,7 @@ app.use("/api", routes);
 
 export default app;
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port: ${PORT}`);
-});
+// app.listen(process.env.PORT, () => {
+//   console.log(`Server is running on port: ${PORT}`);
+// });
  

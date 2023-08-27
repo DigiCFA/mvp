@@ -6,7 +6,7 @@
   "type": "module",
   "config": {
     "s3BucketName": "digicfa-frontend",
-    "region": "us-west-1",
+    "region": "af-south-1",
     "cloudFormationStackName": "DigiCFAStack",
     "functionName": "",
     "domain": ""
