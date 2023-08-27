@@ -11,7 +11,7 @@ import User from "../models/userModel.js";
 
 const router = express.Router();
 
-router.post("/auth/signup", async (req, res) => {
+router.post("/signup", async (req, res) => {
   const { firstName, lastName, phoneNumber, password } = req.body;
 
   try {
@@ -47,7 +47,7 @@ router.post("/auth/signup", async (req, res) => {
   }
 });
 
-router.post("/auth/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const { phoneNumber, password } = req.body;
 
@@ -68,7 +68,7 @@ router.post("/auth/login", async (req, res) => {
   }
 });
 
-router.delete("/auth/logout", ({ session }, res) => {
+router.delete("/logout", ({ session }, res) => {
   try {
     const user = session.user;
     if (user) {
@@ -87,7 +87,7 @@ router.delete("/auth/logout", ({ session }, res) => {
   }
 });
 
-router.get("/auth/obtainSession", ({ session: { user } }, res) => {
+router.get("/obtainSession", ({ session: { user } }, res) => {
   res.send({ user });
 });
 
@@ -121,7 +121,7 @@ router.get("/auth/obtainSession", ({ session: { user } }, res) => {
 //     });
 // });
 
-router.delete("/auth/delete_user", async (req, res) => {
+router.delete("/delete_user", async (req, res) => {
   let id = req.body.userId;
   try {
     let result = await User.findByIdAndDelete(id);
@@ -134,7 +134,7 @@ router.delete("/auth/delete_user", async (req, res) => {
   }
 });
 
-router.post("/auth/user_login", async (req, res) => {
+router.post("/user_login", async (req, res) => {
   let collection = db.collection("users");
   let user_input = req.body;
   let findUser = await collection.findOne(
