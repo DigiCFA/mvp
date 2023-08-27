@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 import mongoose from "mongoose";
-// import { ATLAS_URI } from "../../config.mjs";
+import { ATLAS_URI } from "../../config.mjs";
 
 
 // Mongoose automatically manages connection pool underneath the hood
@@ -18,14 +18,14 @@ export async function createMongooseConnection() {
     conn = mongoose.connect(process.env.MONGODB_CONNECTION_STRING, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000
+      serverSelectionTimeoutMS: 15000
     }).then(() => mongoose);
 
     // avoid multiple function calls creating new connections
     await conn;
   }
 
-  console.log("Connected to MongoDB.");
+  console.log("Connected to MongoDB");
   return conn;
 }
 
