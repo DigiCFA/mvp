@@ -1,7 +1,15 @@
 {
   "resource": "/{proxy+}",
-  "path": "/users",
-  "httpMethod": "POST",
+  "path": "/api",
+  "httpMethod": "GET",
+  "queryStringParameters": {
+    "userId": "64c673c724782ec4c7fb2d8f"
+  },
+  "query": {
+    "userId": "64c673c724782ec4c7fb2d8f"
+  },
+  "pathParameters": {
+  },
   "headers": {
     "Accept": "*/*",
     "Accept-Encoding": "gzip, deflate, br",
@@ -94,19 +102,15 @@
       "https"
     ]
   },
-  "queryStringParameters": null,
   "multiValueQueryStringParameters": null,
-  "pathParameters": {
-    "proxy": "users"
-  },
   "stageVariables": {},
   "requestContext": {
     "resourceId": "xxxxx",
     "resourcePath": "/{proxy+}",
-    "httpMethod": "POST",
+    "httpMethod": "GET",
     "extendedRequestId": "Z2SQlEORIAMFjpA=",
     "requestTime": "17/May/2019:22:08:16 +0000",
-    "path": "/prod/users",
+    "path": "/",
     "accountId": "xxxxxxxx",
     "protocol": "HTTP/1.1",
     "stage": "prod",
@@ -130,6 +134,6 @@
     "domainName": "xxxxxx.execute-api.us-east-1.amazonaws.com",
     "apiId": "xxxxxx"
   },
-  "body": "{\"name\": \"Sandy Samantha Salamander\"}",
+  "body": "{\"userId\": \"64c673c724782ec4c7fb2d8f\", \"amount\": 24}",
   "isBase64Encoded": false
 }

@@ -6,10 +6,18 @@ Gateway.
 This file specifies how the backend should be bundled. 
 */
 
-const path = require("path");
-// const CopyPlugin = require('copy-webpack-plugin')
+import path from 'path'
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
-module.exports = {
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+// const path = require("path");
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+
+export default {
   entry: "./src/lambda.js",
   target: "node",
   mode: "production",
@@ -18,19 +26,14 @@ module.exports = {
     path: path.join(__dirname, "dist"),
     filename: "[name].js",
     // library: 'serverlessExpressEdge',
-    // libraryTarget: 'commonjs2'
+    libraryTarget: 'commonjs2'
   },
   module: {
     rules: [
         { test: /\.node$/, use: "node-loader"}
     ]
-  }
-  //   plugins: [
-  //     new CopyPlugin({
-  //       patterns: [
-  //         { from: './src/views', to: 'views' },
-  //         { from: './src/vendia-logo.png' }
-  //       ]
-  //     })
-  //   ]
+  },
+  plugins: [
+    // new BundleAnalyzerPlugin()
+  ]
 };

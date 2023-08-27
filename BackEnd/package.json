@@ -2,7 +2,8 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/lambda.js",
+  "type": "module",
   "config": {
     "s3BucketName": "digicfa-frontend",
     "region": "us-west-1",
@@ -12,7 +13,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/server.mjs ",
+    "dev": "nodemon src/server.js",
     "//explanation//": "below ones are for managing AWS serverless assets/API Gateway/Lambda",
     "start": "node app.local.js",
     "local": "node scripts/local",
@@ -55,12 +56,15 @@
     "multer": "^1.4.5-lts.1",
     "serverless-http": "^3.2.0",
     "snappy": "^7.2.2",
+    "source-map-support": "^0.5.21",
     "webpack": "^5.88.2"
   },
   "devDependencies": {
+    "@webpack-cli/generators": "^3.0.7",
     "morgan": "^1.10.0",
     "node-loader": "^2.0.0",
     "nodemon": "^3.0.1",
+    "webpack-bundle-analyzer": "^4.9.0",
     "webpack-cli": "^5.1.4"
   }
 }
