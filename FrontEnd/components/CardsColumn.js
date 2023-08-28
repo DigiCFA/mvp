@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
-import PaymentMethodCard from "./PaymentMethodCard";
+import PaymentMethodCard from "./cards/PaymentMethodCard";
 import { selectBalance, selectCards } from "../features/selfSlice";
 import { useSelector } from "react-redux";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
@@ -12,7 +12,6 @@ const CardsColumn = (props) => {
 
   return (
     <View>
-
       {cards?.map((card, index) => (
         <PaymentMethodCard
           key={card._id}
@@ -21,7 +20,7 @@ const CardsColumn = (props) => {
           cardNumber={card.cardNumber}
           cardType={card.cardType}
           balance={card.balance} // only for DigiCFA balance
-          isActive={activeIndex === (index)}
+          isActive={activeIndex === index}
           onPress={() => {
             setActiveIndex(index);
             props.sendSelectedCard({
@@ -29,12 +28,11 @@ const CardsColumn = (props) => {
               cardName: card.name,
               cardType: card.cardType,
               cardNumber: card.cardNumber,
-              balance: card.balance
+              balance: card.balance,
             });
           }}
         />
       ))}
-
     </View>
   );
 };

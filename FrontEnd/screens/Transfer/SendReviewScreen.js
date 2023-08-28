@@ -17,12 +17,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import CardsColumn from "../../components/CardsColumn";
 import Currency from "react-currency-formatter";
-import UserCard from "../../components/UserCard";
-import PaymentMethodCard from "../../components/PaymentMethodCard";
+import UserCard from "../../components/cards/UserCard";
+import PaymentMethodCard from "../../components/cards/PaymentMethodCard";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTransactionsById, selectId } from "../../features/selfSlice";
-import { createDirectTransaction } from "../../api/api"
-
+import { createDirectTransaction } from "../../api/api";
 
 const SendReviewScreen = () => {
   const { height } = useWindowDimensions();
@@ -33,10 +32,26 @@ const SendReviewScreen = () => {
   const senderId = useSelector(selectId);
 
   const {
-    params: { receiverId, name, amount, message, cardID, cardName, cardType, cardNumber, balance },
+    params: {
+      receiverId,
+      name,
+      amount,
+      message,
+      cardID,
+      cardName,
+      cardType,
+      cardNumber,
+      balance,
+    },
   } = useRoute();
 
-  const paymentMethod = (cardType.toLowerCase() === 'balance') ? "balance" : (cardType.charAt(0).toUpperCase() + cardType.slice(1) + " " + cardNumber.slice(-4));
+  const paymentMethod =
+    cardType.toLowerCase() === "balance"
+      ? "balance"
+      : cardType.charAt(0).toUpperCase() +
+        cardType.slice(1) +
+        " " +
+        cardNumber.slice(-4);
 
   return (
     <View className="flex-1 items-center justify-center">
@@ -81,7 +96,6 @@ const SendReviewScreen = () => {
               </TouchableOpacity>
             </View>
 
-
             <PaymentMethodCard
               cardID={cardID}
               cardName={cardName}
@@ -116,14 +130,24 @@ const SendReviewScreen = () => {
 
             {/* Bottom Portion */}
             <TouchableOpacity
-              onPress={async () => 
-                {
-                  navigation.navigate("SendConfirmation", {name, amount,message});
-                  await createDirectTransaction(amount, senderId, receiverId, paymentMethod, true, true, message);
-                  dispatch(fetchUserById(ID));
-                  dispatch(fetchTransactionsById(senderId));
-                }
-              }
+              onPress={async () => {
+                navigation.navigate("SendConfirmation", {
+                  name,
+                  amount,
+                  message,
+                });
+                await createDirectTransaction(
+                  amount,
+                  senderId,
+                  receiverId,
+                  paymentMethod,
+                  true,
+                  true,
+                  message
+                );
+                dispatch(fetchUserById(ID));
+                dispatch(fetchTransactionsById(senderId));
+              }}
               className="bg-blue-900 rounded-full py-3 px-14 items-center"
             >
               <Text className="text-white text-xl font-extrabold">Send</Text>

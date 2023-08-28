@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import SearchScreen from "../Transfer/SearchScreen";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import TransactionsColumn from "../../components/TransactionsColumn";
-import TransactionCard from "../../components/TransactionCard";
+import TransactionCard from "../../components/cards/TransactionCard";
 import { useSelector } from "react-redux";
 import { selectId, selectTransactions } from "../../features/selfSlice";
 

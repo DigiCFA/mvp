@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 
 import React from "react";
-import TransactionCard from "./TransactionCard";
+import TransactionCard from "./cards/TransactionCard";
 
 const TransactionsColumn = () => {
   // Fetching the transactions from the backend

@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { selectCards } from "../../features/selfSlice";
-import CardCard from "../../components/BankCardCard";
+import CardCard from "../../components/cards/BankCardCard";
 
 const CardDetailsScreen = () => {
   const navigation = useNavigation();

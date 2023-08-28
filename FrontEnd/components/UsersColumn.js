@@ -1,11 +1,10 @@
 import { View, Text } from "react-native";
 import React from "react";
-import UserCard from "./UserCard";
+import UserCard from "./cards/UserCard";
 import { useSelector } from "react-redux";
 import { selectContacts } from "../features/selfSlice";
 
 const UsersColumn = () => {
-
   const contacts = useSelector(selectContacts);
 
   // Fetching the top contacts
@@ -16,7 +15,12 @@ const UsersColumn = () => {
   return (
     <View>
       {contacts?.map((contact) => (
-        <UserCard key={contact._id} id={contact._id} name={contact.fullName} phoneNumber={contact.phoneNumber} />
+        <UserCard
+          key={contact._id}
+          id={contact._id}
+          name={contact.fullName}
+          phoneNumber={contact.phoneNumber}
+        />
       ))}
     </View>
   );
