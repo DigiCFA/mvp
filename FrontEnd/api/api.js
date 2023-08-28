@@ -5,11 +5,15 @@ import axios from "axios";
 
 import * as FileSystem from "expo-file-system";
 
+const baseURL = "https://o4gnaf7sce.execute-api.af-south-1.amazonaws.com/prod/api"
+export const profilePicBaseURL =
+  "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
+
 // import RNFetchBlob from "rn-fetch-blob";
 // import {fileFromPath} from "formdata-node/file-from-path"
 
 // axios.defaults.baseURL = "http://192.168.3.106:5050/api";
-axios.defaults.baseURL = "http://localhost:5050/api";
+axios.defaults.baseURL = baseURL; 
 
 export const fetchUser = (userId) => {
   return axios.get("/profile/retrieve_user", {
@@ -77,7 +81,7 @@ export const uploadProfilePicture = async (userId, imageURI) => {
 
   try {
     const result = await FileSystem.uploadAsync(
-      "http://localhost:5050/api/profile/set_profile_pic",
+      baseURL + "/profile/set_profile_pic",
       imageURI,
       {
         headers: {

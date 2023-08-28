@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import pkg from 'bcryptjs'
 
+import { profilePicBaseURL } from "../config/awsConfig";
+
 //import search from "mongoose-fuzzy-searching"
 
 
@@ -165,7 +167,10 @@ const userSchema = new mongoose.Schema(
     - SHOULD just have a parent pointer from the 'many' side. Can add it as a virtual.
     */
 
-    profilePicture: String,
+    profilePicture: {
+      type: String,
+      default: profilePicBaseURL + "default.png"
+    },
     addresses: [addressSchema],
     primaryAddress: Number,
     creationDate: Date,
