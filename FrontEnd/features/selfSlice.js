@@ -2,15 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { fetchProfilePic, fetchTransactions, fetchUser, profilePicBaseURL } from "../api/api.js";
 
-// const storeImageData = (image) => {
-//   return {
-//     type: 'STORE_IMAGE_DATA',
-//     payload: image,
-//   }
-// }
-
-
-
 // Maybe write a thunk to fetch user info. In which case user info is passed during login, in which case initialState should be null
 const initialState = {
   self: {
@@ -121,6 +112,15 @@ export const fetchUserById = (userId) => {
         contacts: response.data.contacts,
         profilePicture: response.data.profilePicture,
       };
+
+      // Add a default 'card' which represents balance
+      user.cards.unshift({
+        _id: "001",
+        name: "DigiCFA Balance",
+        cardType: "balance",
+        balance: response.data.balance
+      })
+
       dispatch(setSelf(user));
     } catch(error) {
       if (error.response) {

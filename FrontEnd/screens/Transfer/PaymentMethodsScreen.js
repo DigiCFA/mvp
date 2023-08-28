@@ -16,24 +16,23 @@ import { Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import CardsColumn from "../../components/CardsColumn";
 import { useSelector } from "react-redux";
-import { selectCards } from "../../features/selfSlice";
+import { selectBalance, selectCards } from "../../features/selfSlice";
 
 const PaymentMethodsScreen = () => {
 
-  // Need to update this Screen on which card we ended up choosing!!
-
-
+  // Probably better of using info about 
   const [selectedCard, setSelectedCard] = useState({
-    cardID: '0',
     cardName: 'DigiCFA Balance',
-    cardType: 'Balance',
-    cardNumber: 'N/A'
+    cardType: 'balance',
+    cardNumber: 'N/A',
+    balance: useSelector(selectBalance)
   })
 
   const cardID = selectedCard.cardID;
   const cardName = selectedCard.cardName;
   const cardType = selectedCard.cardType;
   const cardNumber = selectedCard.cardNumber;
+  const balance = selectedCard.balance;
 
   const sendSelectedCard = (card) => {
     setSelectedCard(card)
@@ -99,7 +98,7 @@ const PaymentMethodsScreen = () => {
               onPress={() => {
                 navigation.goBack();
                 navigation.navigate("SendReview", {
-                receiverId, name, amount, message, cardID, cardName, cardType,cardNumber
+                receiverId, name, amount, message, cardID, cardName, cardType, cardNumber, balance
               })}}
               className="bg-blue-900 rounded-full py-3 px-14 items-center"
             >

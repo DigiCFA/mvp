@@ -33,12 +33,10 @@ const SendReviewScreen = () => {
   const senderId = useSelector(selectId);
 
   const {
-    params: { receiverId, name, amount, message, cardID, cardName, cardType, cardNumber },
+    params: { receiverId, name, amount, message, cardID, cardName, cardType, cardNumber, balance },
   } = useRoute();
 
   const paymentMethod = (cardType.toLowerCase() === 'balance') ? "balance" : (cardType.charAt(0).toUpperCase() + cardType.slice(1) + " " + cardNumber.slice(-4));
-
-  // const preferredCard
 
   return (
     <View className="flex-1 items-center justify-center">
@@ -83,11 +81,13 @@ const SendReviewScreen = () => {
               </TouchableOpacity>
             </View>
 
+
             <PaymentMethodCard
               cardID={cardID}
               cardName={cardName}
               cardType={cardType}
               cardNumber={cardNumber}
+              balance={balance}
             />
 
             <Text className="text-lg mt-4">

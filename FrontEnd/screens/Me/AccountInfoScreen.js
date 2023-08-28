@@ -38,6 +38,7 @@ const AccountInfoScreen = () => {
   const dispatch = useDispatch();
 
   const self = useSelector(selectSelf);
+  const profilePic = useSelector(selectProfilePic);
 
   useEffect(() => {
     // Only fetch if default user
@@ -61,9 +62,11 @@ const AccountInfoScreen = () => {
     console.log("Selected Photo: ", result);
 
     if (!result.canceled) {
-      // setPhoto(imageURI);
       await uploadProfilePicture(self._id, result.assets[0].uri);
+
+      // Not sure if these are redundant? -> if too slow, can do a setPhoto immediately
       dispatch(fetchProfilePicById(ID));
+      profilePic = useSelector(selectProfilePic);
     }
   };
 
@@ -83,7 +86,7 @@ const AccountInfoScreen = () => {
       <View className="flex-col items-center">
         <View className="p-6">
           <Image
-            source={{ uri: self.profilePicture }}
+            source={{ uri: profilePic }}
             className="h-24 w-24 rounded-full"
             // style={{width: 100, height: 100}}
           />
