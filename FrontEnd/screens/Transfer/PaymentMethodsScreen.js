@@ -90,7 +90,7 @@ const PaymentMethodsScreen = () => {
             {/* Cards */}
             <ScrollView>
               <CardsColumn sendSelectedCard={sendSelectedCard}/>
-              <Text>{receiverId}, {name}, {amount}, {message}</Text>
+              {/* <Text>{receiverId}, {name}, {amount}, {message}</Text> */}
               <Text>{selectedCard.cardID}, {selectedCard.cardName}, {selectedCard.cardNumber}</Text>
             </ScrollView>
 

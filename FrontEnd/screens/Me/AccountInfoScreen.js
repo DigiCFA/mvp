@@ -31,18 +31,22 @@ import {
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 
-const ID = "64c673c724782ec4c7fb2d8f";
+const ID = "64eb0d88eaf1bbe6d5741736";
 
 const AccountInfoScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
+  const self = useSelector(selectSelf);
+
   useEffect(() => {
-    dispatch(fetchUserById(ID));
-    dispatch(fetchTransactionsById(ID));
+    // Only fetch if default user
+    if (self._id === '001' ){
+      dispatch(fetchUserById(ID));
+      dispatch(fetchTransactionsById(ID));
+    }
   }, []);
 
-  const self = useSelector(selectSelf);
   // const [photo, setPhoto] = useState(null);
 
   const pickPhoto = async () => {

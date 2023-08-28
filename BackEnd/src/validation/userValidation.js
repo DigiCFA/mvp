@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-const passwordErrorMessage = 'Must be between 6 - 20 characters, have at least one capital letter, one lowercase letter, one digit, and one special character'
+const passwordErrorMessage = 'Must be between 6 - 20 characters, have at least one capital letter, one lowercase letter, one digit, and one special character !@#$%^&*'
 
 const phoneNumber = Joi.string()
     .regex(/^[0-9 ]{8,16}$/)

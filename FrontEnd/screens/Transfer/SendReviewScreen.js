@@ -120,6 +120,7 @@ const SendReviewScreen = () => {
                 {
                   navigation.navigate("SendConfirmation", {name, amount,message});
                   await createDirectTransaction(amount, senderId, receiverId, paymentMethod, true, true, message);
+                  dispatch(fetchUserById(ID));
                   dispatch(fetchTransactionsById(senderId));
                 }
               }

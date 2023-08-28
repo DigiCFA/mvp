@@ -10,21 +10,21 @@ import { useSelector } from "react-redux";
 import { selectBalance, selectCards } from "../../features/selfSlice";
 import Currency from "react-currency-formatter";
 import { FontAwesome, Feather } from "@expo/vector-icons";
-import CardCard from "../../components/CardCard";
+import CardCard from "../../components/BankCardCard";
 
 const WalletScreen = () => {
   const cards = useSelector(selectCards);
   const balance = useSelector(selectBalance);
 
   return (
-    <SafeAreaView className='flex-1'>
+    <SafeAreaView className="flex-1">
       <View className="flex-row p-4 items-center">
         <TouchableOpacity className="bg-white py-2 px-4 rounded-full">
           <Text className="text-lg font-extrabold text-[#192C88]">Wallet</Text>
         </TouchableOpacity>
-        <View className='flex-1'></View>
+        <View className="flex-1"></View>
         <TouchableOpacity>
-          <Feather name='plus-circle' size={40} color="#3370E2"/>
+          <Feather name="plus-circle" size={40} color="#3370E2" />
         </TouchableOpacity>
       </View>
 

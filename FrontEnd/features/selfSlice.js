@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { fetchProfilePic, fetchTransactions, fetchUser } from "../api/api.js";
+import { fetchProfilePic, fetchTransactions, fetchUser, profilePicBaseURL } from "../api/api.js";
 
 // const storeImageData = (image) => {
 //   return {
@@ -9,8 +9,7 @@ import { fetchProfilePic, fetchTransactions, fetchUser } from "../api/api.js";
 //   }
 // }
 
-const profilePicBaseURI =
-  "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
+
 
 // Maybe write a thunk to fetch user info. In which case user info is passed during login, in which case initialState should be null
 const initialState = {
@@ -37,7 +36,7 @@ const initialState = {
     ],
     // privacyPreferences: [],
     contacts: [],
-    profilePicture: profilePicBaseURI + "default.png",
+    profilePicture: profilePicBaseURL + "default.png",
     currentAddress: {
       lineOne: "Not set",
       lineTwo: "",
@@ -84,7 +83,7 @@ export const selfSlice = createSlice({
       state.self.cards = newSelf.cards;
       state.self.privacyPreferences = newSelf.privacyPreferences;
       state.self.contacts = newSelf.contacts;
-      state.self.profilePicture = profilePicBaseURI + newSelf.profilePicture;
+      state.self.profilePicture = profilePicBaseURL + newSelf.profilePicture;
     },
     setTransactions: (state, action) => {
       state.self.transactions = action.payload;
@@ -181,7 +180,7 @@ export const fetchProfilePicById = userId => {
       if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED USER TO UPDATE PROFILE PIC")
       else console.log("ERROR")
 
-      dispatch(setProfilePic(profilePicBaseURI+response.data.profilePicture));
+      dispatch(setProfilePic(profilePicBaseURL+response.data.profilePicture));
 
     } catch(error) {
       console.error(error)
