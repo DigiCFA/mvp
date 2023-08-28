@@ -9,9 +9,42 @@ import * as FileSystem from 'expo-file-system';
 // import {fileFromPath} from "formdata-node/file-from-path"
 
 
-// axios.defaults.baseURL = "http://192.168.3.106:5050/api";
-axios.defaults.baseURL = "http://localhost:5050/api";
+axios.defaults.baseURL = "http://192.168.1.6:5050/api";
+// axios.defaults.baseURL = "http://localhost:5050/api";
 
+export const signup = (user) => {
+  return axios.post("/auth/signup", JSON.stringify(user), {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+    credentials: 'include'
+  } )
+}
+
+export const login = (user) => {
+  return axios.post("/auth/login", user, {
+    headers: {
+      "Content-Type": "application/json"
+    },
+    withCredentials: true,
+    credentials: 'include'
+  })
+}
+
+export const logout = () => {
+  return axios.delete("auth/logout", {
+    withCredentials: true,
+    credentials: 'include'
+  })
+}
+
+export const getSession = () => {
+  return axios.get("/auth/obtainSession", {
+    withCredentials: true,
+    credentials: 'include'
+  })
+}
 
 export const fetchUser = (userId) => {
   return axios.get("/profile/retrieve_user", {

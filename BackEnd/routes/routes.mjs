@@ -1,5 +1,5 @@
 import express from "express";
-import { dbRef } from "../database/connect.mjs";
+// import { dbRef } from "../server.mjs";
 import { ObjectId } from "mongodb";
 import mongoose from 'mongoose';
 
@@ -17,7 +17,7 @@ import { parseError, sessionizeUser } from "../utils/helper.mjs";
 import { SESSION_NAME } from "../config.mjs";
 
 const router = express.Router();
-let db = dbRef();
+let db = mongoose.connection
 
 
 // Trying out middleware
@@ -233,8 +233,6 @@ router.patch("/profile/set_profile_pic", upload.single('profilePicture'), async(
 })
 
 
-
-
 router.post("/auth/signup", async (req, res) => {
 
   try {
@@ -258,14 +256,10 @@ router.post("/auth/signup", async (req, res) => {
       creationDate: Date.now()
       // create a QR Code on creation
     })
-    console.log(req.session)
     const sessionUser = sessionizeUser(newUser)
     await newUser.save()
 
-    console.log(sessionUser)
-    console.log(req.session)
     req.session.user = sessionUser
-    console.log(req.session)
     
     res.status(200).send(newUser);
 
@@ -286,7 +280,7 @@ router.post("/auth/login", async (req, res) => {
       const sessionUser = sessionizeUser(user)
 
       req.session.user = sessionUser 
-      res.send(sessionUser)
+      res.status(200).send(sessionUser)
     } else {
       throw new Error('Invalid Login Credentials')
     }
@@ -306,7 +300,7 @@ router.delete("/auth/logout", ({session}, res) => {
           throw err
         }
         res.clearCookie(SESSION_NAME)
-        res.send(user)
+        res.status(200).send(user)
       })
     } else {
       throw new Error('Something went wrong')
@@ -316,8 +310,8 @@ router.delete("/auth/logout", ({session}, res) => {
   }
 })
 
-router.get("/auth/obtainSession", ({session: {user}}, res) => {
-  res.send({user})
+router.get("/auth/obtainSession", ({session: {user: {userId}}}, res) => {
+  res.status(200).send({userId})
 })
 
 // router.post("/auth/create_user", async (req, res) => {

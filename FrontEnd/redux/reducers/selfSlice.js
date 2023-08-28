@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { fetchProfilePic, fetchTransactions, fetchUser } from "../api/api.js";
+import { fetchProfilePic, fetchTransactions, fetchUser } from "../../utils/api";
 
 // const storeImageData = (image) => {
 //   return {
@@ -68,7 +68,7 @@ const initialState = {
 
 export const selfSlice = createSlice({
   name: "self",
-  initialState,
+  initialState: initialState,
   reducers: {
     setSelf: (state, action) => {
       // state.self = action.payload;
@@ -124,20 +124,8 @@ export const fetchUserById = (userId) => {
       };
       dispatch(setSelf(user));
     } catch(error) {
-      if (error.response) {
-        console.log("The request was made and the server responded with a status code that falls out of the range of 2xx")
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        console.log("The request was made but no response was received `error.request` is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js")
-        console.log(error.request);
-      } else {
-        console.log("Something happened in setting up the request that triggered an Error")
-        console.log('Error', error.message);
-      }
-      console.log(error.config);
-    };
+      console.log(error)
+    }
   }
 }
 
@@ -155,24 +143,6 @@ export const fetchTransactionsById = (userId) => {
     }
   };
 };
-
-// OBSOLETE APPROACH
-
-// export const fetchProfilePicById = userId => {
-//   return async (dispatch, getState) => {
-//     try {
-//       const response = await fetchProfilePic(userId);
-//       if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED PROFILE PIC")
-//       else console.log("ERROR")
-
-//       const image = response.data.toString('base64');
-//       dispatch(setProfilePic(storeImageData(image)));
-
-//     } catch(error) {
-//       console.error(error)
-//     }
-//   }
-// }
 
 export const fetchProfilePicById = userId => {
   return async (dispatch, getState) => {
@@ -200,3 +170,21 @@ export const selectTransactions = (state) => state.self.self.transactions;
 export const selectProfilePic = (state) => state.self.self.profilePicture;
 
 export default selfSlice.reducer;
+
+// OBSOLETE APPROACH
+
+// export const fetchProfilePicById = userId => {
+//   return async (dispatch, getState) => {
+//     try {
+//       const response = await fetchProfilePic(userId);
+//       if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED PROFILE PIC")
+//       else console.log("ERROR")
+
+//       const image = response.data.toString('base64');
+//       dispatch(setProfilePic(storeImageData(image)));
+
+//     } catch(error) {
+//       console.error(error)
+//     }
+//   }
+// }

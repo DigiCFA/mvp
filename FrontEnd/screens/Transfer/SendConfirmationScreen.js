@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
-import { fetchTransactionsById, selectId } from "../../features/selfSlice";
+import { fetchTransactionsById, selectId } from "../../redux/reducers/selfSlice";
 
 const SendConfirmationScreen = () => {
   const {
