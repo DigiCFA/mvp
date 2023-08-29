@@ -16,10 +16,13 @@ import {
   selectProfilePic,
   selectSelf,
   setProfilePic,
-} from "../../features/selfSlice";
+} from "../../redux/reducers/selfSlice";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { launchImageLibrary } from "react-native-image-picker";
+<<<<<<< HEAD
+import { handleUploadPhoto, handleUploadProfilePicture, handleUploadProfilePicture2, handleUploadProfilePicture3, uploadProfilePicture } from "../../utils/api";
+=======
 import {
   handleUploadPhoto,
   handleUploadProfilePicture,
@@ -27,21 +30,20 @@ import {
   handleUploadProfilePicture3,
   uploadProfilePicture,
 } from "../../api/api.js";
+>>>>>>> 926ded11506f8350cffd5f0b8b1d133dea570017
 
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 
+<<<<<<< HEAD
+const ID = "64ead70a33e171a4f6ded8e2";
+=======
 const ID = "64c673c724782ec4c7fb2d8f";
+>>>>>>> 926ded11506f8350cffd5f0b8b1d133dea570017
 
 const AccountInfoScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchUserById(ID));
-    dispatch(fetchTransactionsById(ID));
-  }, []);
-
   const self = useSelector(selectSelf);
   // const [photo, setPhoto] = useState(null);
 

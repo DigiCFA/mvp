@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import UserCard from "./UserCard";
 import { useSelector } from "react-redux";
-import { selectContacts } from "../features/selfSlice";
+import { selectContacts } from "../redux/reducers/selfSlice";
 
 const UsersColumn = () => {
 

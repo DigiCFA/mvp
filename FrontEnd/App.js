@@ -10,12 +10,16 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import * as Linking from "expo-linking";
+import { Provider, useSelector, useDispatch } from "react-redux";
+import { createStoreWithPreloadedState } from "./store";
 
 import HomeStackScreen from "./screens/Home/HomeStackScreen";
 import WalletStackScreen from "./screens/Wallet/WalletStackScreen";
 import TransferStackScreen from "./screens/Transfer/TransferStackScreen";
 import MeStackScreen from "./screens/Me/MeStackScreen";
 import LoginSignupStackScreen from "./screens/LoginSigup/LoginSignupStackScreen";
+import { store } from "./store"
+import { Provider } from "react-redux";
 
 const NavBar = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -38,8 +42,21 @@ const tabHiddenRoutes = [
 
 const prefix = Linking.createURL("/");
 
-export default function App() {
-  [userToken, setUserToken] = useState(0);
+const App = () => {
+  const userId = useSelector((state) => (state.session.userId))
+  const isLoggedIn = Boolean(userId)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getSession())
+  }, [])
+
+  useEffect(() => {
+    if(isLoggedIn){
+        dispatch(fetchUserById(userId))
+        dispatch(fetchTransactionsById(userId))
+    }
+  }, [isLoggedIn])
 
   const config = {
     screens: {
@@ -81,16 +98,7 @@ export default function App() {
   `;
 
   const navigationScreens =
-    userToken == null ? (
-      <NavBar.Screen
-        component={LoginSignupStackScreen}
-        name="LoginSignup"
-        options={{
-          headerShown: false,
-          tabBarStyle: { display: "none" },
-        }}
-      />
-    ) : (
+    isLoggedIn ? (
       <NavBar.Group screenOptions={{ headerShown: false }}>
         <NavBar.Screen name="Home" component={HomeStackScreen} />
 
@@ -100,6 +108,15 @@ export default function App() {
 
         <NavBar.Screen name="Me" component={MeStackScreen} />
       </NavBar.Group>
+    ) : (
+      <NavBar.Screen
+        component={LoginSignupStackScreen}
+        name="LoginSignup"
+        options={{
+          headerShown: false,
+          tabBarStyle: { display: "none" },
+        }}
+      />
     );
 
   return (
@@ -152,4 +169,15 @@ export default function App() {
       </Provider>
     </NavigationContainer>
   );
+}
+
+export default AppWrapper =  () => {
+
+  const store = createStoreWithPreloadedState({})
+  return (
+    <Provider store={store}>
+        <App />
+    </Provider>
+  )
+  
 }

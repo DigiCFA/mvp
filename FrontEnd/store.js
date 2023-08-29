@@ -1,8 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import selfReducer from "./features/selfSlice";
+import selfReducer from "./redux/reducers/selfSlice"
+import sessionReducer from './redux/reducers/sessionSlice'
 
-export const store =  configureStore({
-  reducer: {
-    self: selfReducer,
-  },
-});
+export const createStoreWithPreloadedState = (preloadedState) => (
+    configureStore({
+      reducer: {
+          self: selfReducer,
+          session: sessionReducer
+      },
+      preloadedState: preloadedState
+    })
+)

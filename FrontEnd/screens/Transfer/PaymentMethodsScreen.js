@@ -16,7 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import CardsColumn from "../../components/CardsColumn";
 import { useSelector } from "react-redux";
-import { selectCards } from "../../features/selfSlice";
+import { selectCards } from "../../redux/reducers/selfSlice";
 
 const PaymentMethodsScreen = () => {
 
