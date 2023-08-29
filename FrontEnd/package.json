@@ -19,6 +19,7 @@
     "expo-file-system": "~15.2.2",
     "expo-image-picker": "~14.1.1",
     "expo-linking": "~4.0.1",
+    "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
     "fetch-blob": "^4.0.0",
     "formdata-node": "^5.0.1",
@@ -40,8 +41,7 @@
     "redux": "^4.2.1",
     "rn-fetch-blob": "^0.12.0",
     "uri-scheme": "^1.1.0",
-    "vision-camera-code-scanner": "^0.2.0",
-    "expo-splash-screen": "~0.18.2"
+    "vision-camera-code-scanner": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
