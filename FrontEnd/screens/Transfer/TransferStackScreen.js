@@ -13,21 +13,17 @@ import SendConfirmationScreen from "./SendConfirmationScreen";
 import RequestConfirmationScreen from "./RequestConfirmationScreen";
 import HomeScreen from "../Home/HomeScreen";
 import HomeStackScreen from "../Home/HomeStackScreen";
+import QRErrorScreen from "./QRErrorScreen";
 
 const TransferStack = createStackNavigator();
 
 const TransferStackScreen = () => {
   return (
     <TransferStack.Navigator screenOptions={{ headerShown: false }}>
-      <TransferStack.Screen
-        name="Search"
-        component={SearchScreen}
-      />
+      <TransferStack.Screen name="Search" component={SearchScreen} />
       <TransferStack.Screen name="Scan" component={ScanScreen} />
 
-      <TransferStack.Group
-        screenOptions={{ tabBayStyle: { display: "None" } }}
-      >
+      <TransferStack.Group screenOptions={{ tabBayStyle: { display: "None" } }}>
         <TransferStack.Screen name="User" component={UserScreen} />
 
         <TransferStack.Group
@@ -39,14 +35,36 @@ const TransferStackScreen = () => {
             // cardOverlayEnabled: true,
           }}
         >
-          <TransferStack.Screen name="PaymentMethods" component={PaymentMethodsScreen}/>
-          <TransferStack.Screen name="SendReview" component={SendReviewScreen}/>
-          <TransferStack.Screen name="RequestReview" component={RequestReviewScreen} />
+          <TransferStack.Screen
+            name="PaymentMethods"
+            component={PaymentMethodsScreen}
+          />
+          <TransferStack.Screen
+            name="SendReview"
+            component={SendReviewScreen}
+          />
+          <TransferStack.Screen
+            name="RequestReview"
+            component={RequestReviewScreen}
+          />
           <TransferStack.Screen name="Test" component={TESTScreen} />
         </TransferStack.Group>
 
-        <TransferStack.Screen name="SendConfirmation" component={SendConfirmationScreen} />
-        <TransferStack.Screen name="RequestConfirmation" component={RequestConfirmationScreen} />
+        <TransferStack.Screen
+          name="SendConfirmation"
+          component={SendConfirmationScreen}
+        />
+        <TransferStack.Screen
+          name="RequestConfirmation"
+          component={RequestConfirmationScreen}
+        />
+        <TransferStack.Screen
+          name="QRError"
+          component={QRErrorScreen}
+          options={{
+            gestureDirection: "vertical",
+          }}
+        />
       </TransferStack.Group>
     </TransferStack.Navigator>
   );

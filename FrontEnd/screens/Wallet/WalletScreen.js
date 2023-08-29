@@ -30,7 +30,7 @@ const WalletScreen = () => {
 
       <ScrollView>
         <View className="p-4 shadow-sm flex-1">
-          <TouchableOpacity className="bg-white h-60 rounded-2xl">
+          <View className="bg-white h-60 rounded-2xl">
             <View className="flex-col flex-1">
               <View className="flex-row p-4 space-x-4 flex-1">
                 <FontAwesome name="paypal" size={30} color="#192C88" />
@@ -46,7 +46,7 @@ const WalletScreen = () => {
               </Text>
               <View className="flex-1"></View>
             </View>
-          </TouchableOpacity>
+          </View>
 
           {cards?.map((card, index) => (
             <CardCard

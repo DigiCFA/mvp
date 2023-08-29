@@ -1,3 +1,6 @@
+import { Text } from "react-native";
+import { store } from "./store";
+import { Provider } from "react-redux";
 import {
   NavigationContainer,
   getFocusedRouteNameFromRoute,
@@ -6,6 +9,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
+import * as Linking from "expo-linking";
 import { Provider, useSelector, useDispatch } from "react-redux";
 import { createStoreWithPreloadedState } from "./store";
 
@@ -14,105 +18,157 @@ import WalletStackScreen from "./screens/Wallet/WalletStackScreen";
 import TransferStackScreen from "./screens/Transfer/TransferStackScreen";
 import MeStackScreen from "./screens/Me/MeStackScreen";
 import LoginSignupStackScreen from "./screens/LoginSigup/LoginSignupStackScreen";
-import { fetchTransactionsById, fetchUserById } from "./redux/reducers/selfSlice";
-import { checkIsLoggedIn } from "./utils/api";
-import { getSession } from "./redux/reducers/sessionSlice";
+import { store } from "./store"
+import { Provider } from "react-redux";
+
+const NavBar = createBottomTabNavigator();
+const HomeStack = createNativeStackNavigator();
+
+const tabHiddenRoutes = [
+  "User",
+  "PaymentMethods",
+  "SendReview",
+  "SendConfirmation",
+  "RequestReview",
+  "RequestConfirmation",
+  "Transaction",
+  "CardDetails",
+  "QRError",
+  "Scan",
+  "AccountInfo",
+  "MessageCenter",
+  "Security"
+];
+
+const prefix = Linking.createURL("/");
 
 const App = () => {
+  const userId = useSelector((state) => (state.session.userId))
+  const isLoggedIn = Boolean(userId)
+  const dispatch = useDispatch()
 
-    const NavBar = createBottomTabNavigator();
-    const userId = useSelector((state) => (state.session.userId))
-    const isLoggedIn = Boolean(userId)
-    const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getSession())
+  }, [])
 
-    useEffect(() => {
-      dispatch(getSession())
-    }, [])
+  useEffect(() => {
+    if(isLoggedIn){
+        dispatch(fetchUserById(userId))
+        dispatch(fetchTransactionsById(userId))
+    }
+  }, [isLoggedIn])
 
-    useEffect(() => {
-        if(isLoggedIn){
-            dispatch(fetchUserById(userId))
-            dispatch(fetchTransactionsById(userId))
-        }
-    }, [isLoggedIn])
+  const config = {
+    screens: {
+      Transfer: {
+        path: "pay",
+        // initialRouteName: 'Search',
+        screens: {
+          User: {
+            path: "user/:id/:name",
+            parse: {
+              name: (name) => {
+                let firstName = name.split("_")[0];
+                let lastName = name.split("_")[1];
+                let fullName =
+                  firstName.charAt(0).toUpperCase() +
+                  firstName.slice(1) +
+                  " " +
+                  lastName.charAt(0).toUpperCase() +
+                  lastName.slice(1);
 
-    const navigationScreens = isLoggedIn ? (
-        <NavBar.Group screenOptions={{ headerShown: false }}>
-            <NavBar.Screen name="Home" component={HomeStackScreen} />
+                return fullName;
+              },
+            },
+          },
+          // Catch all
+          QRError: "*",
+        },
+      },
+    },
+  };
 
-            <NavBar.Screen name="Transfer" component={TransferStackScreen} />
+  const linking = {
+    prefixes: [prefix],
+    config,
+  };
 
-            <NavBar.Screen name="Wallet" component={WalletStackScreen} />
+  const fallback = `
+    <Text>Loading...</Text>
+  `;
 
-            <NavBar.Screen name="Me" component={MeStackScreen} />
-        </NavBar.Group>
+  const navigationScreens =
+    isLoggedIn ? (
+      <NavBar.Group screenOptions={{ headerShown: false }}>
+        <NavBar.Screen name="Home" component={HomeStackScreen} />
+
+        <NavBar.Screen name="Transfer" component={TransferStackScreen} />
+
+        <NavBar.Screen name="Wallet" component={WalletStackScreen} />
+
+        <NavBar.Screen name="Me" component={MeStackScreen} />
+      </NavBar.Group>
     ) : (
-        <NavBar.Screen
-          component={LoginSignupStackScreen}
-          name="LoginSignup"
-          options={{
-            headerShown: false,
-            tabBarStyle: { display: "none" },
-          }}
-        />
-    )
-
-    return (
-        <NavigationContainer>
-            <NavBar.Navigator
-              screenOptions={({ route }) => ({
-                // can also put into each screen component, but put here as a function for convenience
-                tabBarIcon: ({ focused, color, size }) => {
-                  let iconName;
-
-                  if (route.name == "Home") {
-                    // iconName = focused ? 'ios-home' : 'ios-home-outline';
-                    iconName = "home";
-                  } else if (route.name == "Transfer") {
-                    iconName = "cart";
-                  } else if (route.name == "Wallet") {
-                    iconName = "card";
-                  } else if (route.name == "Me") {
-                    iconName = "body";
-                  }
-
-                  return <Ionicons name={iconName} size={size} color={color} />;
-                },
-                tabBarLabelStyle: { fontWeight: "bold", fontSize: 12 },
-                tabBarActiveTintColor: "#3370E2",
-                tabBarInactiveTintColor: "#192C88",
-                headerStyle: { backgroundColor: "#e9e7e2" },
-                headerTintColor: "#000000",
-                headerTintStyle: { fontWeight: "bold" },
-
-                // Hide the tab bar for certain screens
-                tabBarStyle: ((route) => {
-                  const routeName = getFocusedRouteNameFromRoute(route);
-                  if (
-                    routeName === "User" ||
-                    routeName === "PaymentMethods" ||
-                    routeName === "SendReview" ||
-                    routeName === "SendConfirmation" ||
-                    routeName === "RequestReview" ||
-                    routeName === "RequestConfirmation" ||
-                    routeName === "Transaction"
-                  ) {
-                    return {
-                      display: "none",
-                    };
-                  }
-                  return {
-                    // For routes which are not User
-                    height: 100,
-                    paddingTop: 10,
-                  };
-                })(route),
-              })}
-            >
-                {navigationScreens}
-            </NavBar.Navigator>
-        </NavigationContainer>
+      <NavBar.Screen
+        component={LoginSignupStackScreen}
+        name="LoginSignup"
+        options={{
+          headerShown: false,
+          tabBarStyle: { display: "none" },
+        }}
+      />
     );
+
+  return (
+    <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
+      <Provider store={store}>
+        <NavBar.Navigator
+          screenOptions={({ route }) => ({
+            // can also put into each screen component, but put here as a function for convenience
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+
+              if (route.name === "Home") {
+                // iconName = focused ? 'ios-home' : 'ios-home-outline';
+                iconName = "home";
+              } else if (route.name === "Transfer") {
+                iconName = "cart";
+              } else if (route.name === "Wallet") {
+                iconName = "card";
+              } else if (route.name === "Me") {
+                iconName = "body";
+              }
+
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarLabelStyle: { fontWeight: "bold", fontSize: 12 },
+            tabBarActiveTintColor: "#3370E2",
+            tabBarInactiveTintColor: "#192C88",
+            headerStyle: { backgroundColor: "#e9e7e2" },
+            headerTintColor: "#000000",
+            headerTintStyle: { fontWeight: "bold" },
+
+            // Hide the tab bar for certain screens
+            tabBarStyle: ((route) => {
+              const currentRoute = getFocusedRouteNameFromRoute(route);
+              if (tabHiddenRoutes.includes(currentRoute)) {
+                return {
+                  display: "none",
+                };
+              }
+              return {
+                // For routes which are not User
+                height: 100,
+                paddingTop: 10,
+              };
+            })(route),
+          })}
+        >
+          {navigationScreens}
+        </NavBar.Navigator>
+      </Provider>
+    </NavigationContainer>
+  );
 }
 
 export default AppWrapper =  () => {
