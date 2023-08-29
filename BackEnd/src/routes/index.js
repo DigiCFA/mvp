@@ -19,7 +19,7 @@ router.use("/testing", testing);
 router.get(
   "/",
   (req, res, next) => {
-    console.log("On /api, displaying all transactions and users");
+    console.log("On /api, displaying all of the transactions and users");
     next();
   },
   async (req, res) => {

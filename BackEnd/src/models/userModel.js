@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import pkg from 'bcryptjs'
 
-import { profilePicBaseURL } from "../config/awsConfig";
+import { profilePicBaseURL } from "../config/awsConfig.js";
 
 //import search from "mongoose-fuzzy-searching"
 

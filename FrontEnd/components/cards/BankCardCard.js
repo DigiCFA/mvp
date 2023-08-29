@@ -47,7 +47,7 @@ const CardCard = ({
             <Text className="text-xl flex-1 self-end">
               {accountHolder.toUpperCase()}
             </Text>
-            <Image source={mastercard} className="w-[80] h-[50]" />
+            {/* <Image source={mastercard} className="w-[80] h-[50]" /> */}
           </View>
         </View>
       </TouchableOpacity>
