@@ -1,4 +1,4 @@
-package com.mvp;
+package com.digicfa.app;
 
 import android.os.Build;
 import android.os.Bundle;

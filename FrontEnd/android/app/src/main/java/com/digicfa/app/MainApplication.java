@@ -1,4 +1,4 @@
-package com.mvp;
+package com.digicfa.app;
 
 import android.app.Application;
 import android.content.res.Configuration;
