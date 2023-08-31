@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { selectBalance, selectCards } from "../../features/selfSlice";
 import Currency from "react-currency-formatter";
 import { FontAwesome, Feather } from "@expo/vector-icons";
-import CardCard from "../../components/cards/BankCardCard";
+import BankCardCard from "../../components/cards/BankCardCard";
 
 const WalletScreen = () => {
   const cards = useSelector(selectCards);
@@ -49,7 +49,7 @@ const WalletScreen = () => {
           </View>
 
           {cards?.map((card, index) => (
-            <CardCard
+            <BankCardCard
               key={card._id}
               index={index}
               name={card.name}

@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { selectCards } from "../../features/selfSlice";
-import CardCard from "../../components/cards/BankCardCard";
+import BankCardCard from "../../components/cards/BankCardCard";
 
 const CardDetailsScreen = () => {
   const navigation = useNavigation();
@@ -31,7 +31,7 @@ const CardDetailsScreen = () => {
       </View>
 
       <View className="p-4 shadow">
-        <CardCard
+        <BankCardCard
           name={card.name}
           accountHolder={card.accountHolder}
           cardNumber={card.cardNumber}
