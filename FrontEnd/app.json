@@ -3,7 +3,7 @@
     "name": "mvp",
     "slug": "mvp",
     "version": "1.0.0",
-    "scheme": "DigiCFA",
+    "scheme": "digicfa",
     "orientation": "portrait",
     "icon": "./assets/DigiCFA.png",
     "userInterfaceStyle": "light",
@@ -12,17 +12,26 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "bundleIdentifier": "com.digicfa.app",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "DigiCFA needs access to your Camera."
+      }
     },
     "android": {
       "package": "com.digicfa.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -41,6 +50,11 @@
           "cameraPermissionText": "DigiCFA needs access to your Camera."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "cfdaf80f-adf9-4838-b3a3-210ca019b729"
+      }
+    }
   }
 }
