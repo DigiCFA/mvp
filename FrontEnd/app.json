@@ -5,10 +5,10 @@
     "version": "1.0.0",
     "scheme": "DigiCFA",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/DigiCFA.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/DigiCFA.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
