@@ -52,25 +52,23 @@ router.post("/create_direct_transaction", async (req, res) => {
           .send(
             `Balance ${userBalance} insufficient to send ${amountTransferred}`
           );
-        // console.log("SHOULD TERMINATE");
         return;
       }
 
-      console.log("TRANSACTION STUFF");
+      // console.log("TRANSACTION STUFF");
       await sendUser.$inc("balance", -1.0 * amountTransferred);
       await receiveUser.$inc("balance", amountTransferred);
-      console.log("Amount should be: ", newTransaction.amountTransferred);
-      console.log("Actual amount: ", transactionData.amountTransferred);
+      // console.log("Amount should be: ", newTransaction.amountTransferred);
+      // console.log("Actual amount: ", transactionData.amountTransferred);
       console.log(transactionData);
 
       await transactionData.save();
-      //   await Transaction.insertOne(transactionData);
-      console.log("Inserted transaction");
+      // console.log("Inserted transaction");
 
-      console.log("Supposed to add: ", receiveID);
+      // console.log("Supposed to add: ", receiveID);
       let addedUser = sendUser.contacts.addToSet(receiveID);
       receiveUser.contacts.addToSet(sendID);
-      console.log("Added contact: ", addedUser);
+      // console.log("Added contact: ", addedUser);
 
       await sendUser.save();
       await receiveUser.save();

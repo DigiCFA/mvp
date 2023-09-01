@@ -5,7 +5,6 @@ import SearchScreen from "./SearchScreen";
 import UserScreen from "./UserScreen";
 import ScanScreen from "./ScanScreen";
 import PaymentMethodsScreen from "./PaymentMethodsScreen";
-import TESTScreen from "../TESTScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import SendReviewScreen from "./SendReviewScreen";
 import RequestReviewScreen from "./RequestReviewScreen";
@@ -47,7 +46,6 @@ const TransferStackScreen = () => {
             name="RequestReview"
             component={RequestReviewScreen}
           />
-          <TransferStack.Screen name="Test" component={TESTScreen} />
         </TransferStack.Group>
 
         <TransferStack.Screen

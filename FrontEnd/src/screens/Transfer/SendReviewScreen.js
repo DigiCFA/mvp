@@ -20,7 +20,7 @@ import Currency from "react-currency-formatter";
 import UserCard from "../../components/cards/UserCard";
 import PaymentMethodCard from "../../components/cards/PaymentMethodCard";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTransactionsById, selectId } from "../../features/selfSlice";
+import { fetchUserById, fetchTransactionsById, selectId } from "../../features/selfSlice";
 import { createDirectTransaction } from "../../api/api";
 
 const SendReviewScreen = () => {
@@ -145,7 +145,7 @@ const SendReviewScreen = () => {
                   true,
                   message
                 );
-                // dispatch(fetchUserById(ID));
+                dispatch(fetchUserById(senderId));
                 dispatch(fetchTransactionsById(senderId));
               }}
               className="bg-blue-900 rounded-full py-3 px-14 items-center"
