@@ -16,7 +16,6 @@ import { useSelector } from "react-redux";
 import { selectId, selectTransactions } from "../../features/selfSlice";
 
 const HomeScreen = () => {
-
   const navigation = useNavigation();
 
   const axios = require("axios");
@@ -25,7 +24,6 @@ const HomeScreen = () => {
 
   const transactions = useSelector(selectTransactions);
   const id = useSelector(selectId);
-  
 
   // Fetching Past Transactions
 
@@ -100,19 +98,21 @@ const HomeScreen = () => {
             </TouchableOpacity>
           </TouchableOpacity>
         </View>
-        
 
         {/* Transactions */}
         <View className="bg-white mt-2 py-6 px-4 flex-1">
           <Text className="text-xl text-gray-800">Recent activity</Text>
-
 
           {transactions?.map((transaction) => (
             <TransactionCard
               key={transaction._id}
               id={transaction._id}
               userPays={transaction.sender._id === id}
-              title={(transaction.sender._id === id) ? transaction.receiver.fullName : transaction.sender.fullName}
+              title={
+                transaction.sender._id === id
+                  ? transaction.receiver.fullName
+                  : transaction.sender.fullName
+              }
               date={transaction.transactionDate}
               message={transaction.message}
               paymentMethod={transaction.paymentMethod}

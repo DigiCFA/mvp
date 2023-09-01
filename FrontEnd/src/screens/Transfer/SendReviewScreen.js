@@ -145,7 +145,7 @@ const SendReviewScreen = () => {
                   true,
                   message
                 );
-                dispatch(fetchUserById(ID));
+                // dispatch(fetchUserById(ID));
                 dispatch(fetchTransactionsById(senderId));
               }}
               className="bg-blue-900 rounded-full py-3 px-14 items-center"

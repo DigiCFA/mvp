@@ -33,7 +33,7 @@ const tabHiddenRoutes = [
   "Scan",
   "AccountInfo",
   "MessageCenter",
-  "Security"
+  "Security",
 ];
 
 const prefix = Linking.createURL("/");

@@ -19,14 +19,13 @@ import { useSelector } from "react-redux";
 import { selectBalance, selectCards } from "../../features/selfSlice";
 
 const PaymentMethodsScreen = () => {
-
-  // Probably better of using info about 
+  // Probably better of using info about
   const [selectedCard, setSelectedCard] = useState({
-    cardName: 'DigiCFA Balance',
-    cardType: 'balance',
-    cardNumber: 'N/A',
-    balance: useSelector(selectBalance)
-  })
+    cardName: "DigiCFA Balance",
+    cardType: "balance",
+    cardNumber: "N/A",
+    balance: useSelector(selectBalance),
+  });
 
   const cardID = selectedCard.cardID;
   const cardName = selectedCard.cardName;
@@ -35,8 +34,8 @@ const PaymentMethodsScreen = () => {
   const balance = selectedCard.balance;
 
   const sendSelectedCard = (card) => {
-    setSelectedCard(card)
-  }
+    setSelectedCard(card);
+  };
 
   const { height } = useWindowDimensions();
   const { current } = useCardAnimation();
@@ -88,9 +87,12 @@ const PaymentMethodsScreen = () => {
 
             {/* Cards */}
             <ScrollView>
-              <CardsColumn sendSelectedCard={sendSelectedCard}/>
+              <CardsColumn sendSelectedCard={sendSelectedCard} />
               {/* <Text>{receiverId}, {name}, {amount}, {message}</Text> */}
-              <Text>{selectedCard.cardID}, {selectedCard.cardName}, {selectedCard.cardNumber}</Text>
+              <Text>
+                {selectedCard.cardID}, {selectedCard.cardName},{" "}
+                {selectedCard.cardNumber}
+              </Text>
             </ScrollView>
 
             {/* Bottom Portion */}
@@ -98,8 +100,17 @@ const PaymentMethodsScreen = () => {
               onPress={() => {
                 navigation.goBack();
                 navigation.navigate("SendReview", {
-                receiverId, name, amount, message, cardID, cardName, cardType, cardNumber, balance
-              })}}
+                  receiverId,
+                  name,
+                  amount,
+                  message,
+                  cardID,
+                  cardName,
+                  cardType,
+                  cardNumber,
+                  balance,
+                });
+              }}
               className="bg-blue-900 rounded-full py-3 px-14 items-center"
             >
               <Text className="text-white text-xl font-extrabold">Send</Text>

@@ -62,14 +62,13 @@ const MeScreen = () => {
           {/* Replace this with the actual profile picture!! */}
           {/* <Ionicons name="person-circle" size={125} color="#192C88" /> */}
 
-          <View className='px-4 pt-4'>
-            <Image 
-              source={{uri: self.profilePicture}}
-              className='h-24 w-24 rounded-full'
+          <View className="px-4 pt-4">
+            <Image
+              source={{ uri: self.profilePicture }}
+              className="h-24 w-24 rounded-full"
               // style={{width: 100, height: 100}}
             />
           </View>
-
 
           <Text className="px-4 font-medium text-3xl">{self.fullName}</Text>
           {/* <Text className="px-4 font-medium">{self._id}</Text>
@@ -113,13 +112,10 @@ const MeScreen = () => {
               <Text>amountTransferred: {transaction.amountTransferred}</Text>
             </View>
           ))} */}
-{/* 
+          {/* 
           <TouchableOpacity onPress={() => setLoggedIn(!loggedIn)}>
             <Text>Press to Log In</Text>
           </TouchableOpacity> */}
-
-
-
         </View>
 
         <SettingsColumn />
