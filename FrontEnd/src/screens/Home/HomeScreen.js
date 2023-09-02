@@ -13,7 +13,7 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import TransactionsColumn from "../../components/TransactionsColumn";
 import TransactionCard from "../../components/cards/TransactionCard";
 import { useSelector } from "react-redux";
-import { selectId, selectTransactions } from "../../features/selfSlice";
+import { selectId, selectTransactions } from "../../redux/reducers/selfSlice";
 
 const HomeScreen = () => {
   const navigation = useNavigation();

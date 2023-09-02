@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
       const sessionUser = sessionizeUser(user);
 
       req.session.user = sessionUser;
-      res.send(sessionUser);
+      res.status(200).send(sessionUser);
     } else {
       throw new Error("Invalid Login Credentials");
     }
@@ -77,7 +77,7 @@ router.delete("/logout", ({ session }, res) => {
           throw err;
         }
         res.clearCookie(process.env.SESSION_NAME);
-        res.send(user);
+        res.status(200).send(user);
       });
     } else {
       throw new Error("Something went wrong");
@@ -88,7 +88,7 @@ router.delete("/logout", ({ session }, res) => {
 });
 
 router.get("/obtainSession", ({ session: { user } }, res) => {
-  res.send({ user });
+    res.status(200).send({userId})
 });
 
 // router.post("/auth/create_user", async (req, res) => {

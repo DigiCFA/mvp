@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectBalance, selectCards } from "../../features/selfSlice";
+import { selectBalance, selectCards } from "../../redux/reducers/selfSlice";
 import Currency from "react-currency-formatter";
 import { FontAwesome, Feather } from "@expo/vector-icons";
 import BankCardCard from "../../components/cards/BankCardCard";
