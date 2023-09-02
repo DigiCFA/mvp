@@ -1,6 +1,4 @@
 import { Text } from "react-native";
-import { store } from "./store";
-import { Provider } from "react-redux";
 import {
   NavigationContainer,
   getFocusedRouteNameFromRoute,
@@ -18,8 +16,8 @@ import WalletStackScreen from "./screens/Wallet/WalletStackScreen";
 import TransferStackScreen from "./screens/Transfer/TransferStackScreen";
 import MeStackScreen from "./screens/Me/MeStackScreen";
 import LoginSignupStackScreen from "./screens/LoginSigup/LoginSignupStackScreen";
-import { store } from "./store"
-import { Provider } from "react-redux";
+import { getSession } from "./redux/reducers/sessionSlice";
+import { fetchUserById, fetchTransactionsById } from "./redux/reducers/selfSlice";
 
 const NavBar = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -43,20 +41,22 @@ const tabHiddenRoutes = [
 const prefix = Linking.createURL("/");
 
 const App = () => {
-  const userId = useSelector((state) => (state.session.userId))
-  const isLoggedIn = Boolean(userId)
-  const dispatch = useDispatch()
+  let userId = useSelector((state) => state.session.userId);
+  userId = "64eb0d88eaf1bbe6d5741736"
+  let isLoggedIn = Boolean(userId);
+  // isLoggedIn = true;
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getSession())
-  }, [])
+    dispatch(getSession());
+  }, []);
 
   useEffect(() => {
-    if(isLoggedIn){
-        dispatch(fetchUserById(userId))
-        dispatch(fetchTransactionsById(userId))
+    if (isLoggedIn) {
+      dispatch(fetchUserById(userId));
+      dispatch(fetchTransactionsById(userId));
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn]);
 
   const config = {
     screens: {
@@ -97,87 +97,82 @@ const App = () => {
     <Text>Loading...</Text>
   `;
 
-  const navigationScreens =
-    isLoggedIn ? (
-      <NavBar.Group screenOptions={{ headerShown: false }}>
-        <NavBar.Screen name="Home" component={HomeStackScreen} />
+  const navigationScreens = isLoggedIn ? (
+    <NavBar.Group screenOptions={{ headerShown: false }}>
+      <NavBar.Screen name="Home" component={HomeStackScreen} />
 
-        <NavBar.Screen name="Transfer" component={TransferStackScreen} />
+      <NavBar.Screen name="Transfer" component={TransferStackScreen} />
 
-        <NavBar.Screen name="Wallet" component={WalletStackScreen} />
+      <NavBar.Screen name="Wallet" component={WalletStackScreen} />
 
-        <NavBar.Screen name="Me" component={MeStackScreen} />
-      </NavBar.Group>
-    ) : (
-      <NavBar.Screen
-        component={LoginSignupStackScreen}
-        name="LoginSignup"
-        options={{
-          headerShown: false,
-          tabBarStyle: { display: "none" },
-        }}
-      />
-    );
+      <NavBar.Screen name="Me" component={MeStackScreen} />
+    </NavBar.Group>
+  ) : (
+    <NavBar.Screen
+      component={LoginSignupStackScreen}
+      name="LoginSignup"
+      options={{
+        headerShown: false,
+        tabBarStyle: { display: "none" },
+      }}
+    />
+  );
 
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
-      <Provider store={store}>
-        <NavBar.Navigator
-          screenOptions={({ route }) => ({
-            // can also put into each screen component, but put here as a function for convenience
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
+      <NavBar.Navigator
+        screenOptions={({ route }) => ({
+          // can also put into each screen component, but put here as a function for convenience
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
 
-              if (route.name === "Home") {
-                // iconName = focused ? 'ios-home' : 'ios-home-outline';
-                iconName = "home";
-              } else if (route.name === "Transfer") {
-                iconName = "cart";
-              } else if (route.name === "Wallet") {
-                iconName = "card";
-              } else if (route.name === "Me") {
-                iconName = "body";
-              }
+            if (route.name === "Home") {
+              // iconName = focused ? 'ios-home' : 'ios-home-outline';
+              iconName = "home";
+            } else if (route.name === "Transfer") {
+              iconName = "cart";
+            } else if (route.name === "Wallet") {
+              iconName = "card";
+            } else if (route.name === "Me") {
+              iconName = "body";
+            }
 
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-            tabBarLabelStyle: { fontWeight: "bold", fontSize: 12 },
-            tabBarActiveTintColor: "#3370E2",
-            tabBarInactiveTintColor: "#192C88",
-            headerStyle: { backgroundColor: "#e9e7e2" },
-            headerTintColor: "#000000",
-            headerTintStyle: { fontWeight: "bold" },
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarLabelStyle: { fontWeight: "bold", fontSize: 12 },
+          tabBarActiveTintColor: "#3370E2",
+          tabBarInactiveTintColor: "#192C88",
+          headerStyle: { backgroundColor: "#e9e7e2" },
+          headerTintColor: "#000000",
+          headerTintStyle: { fontWeight: "bold" },
 
-            // Hide the tab bar for certain screens
-            tabBarStyle: ((route) => {
-              const currentRoute = getFocusedRouteNameFromRoute(route);
-              if (tabHiddenRoutes.includes(currentRoute)) {
-                return {
-                  display: "none",
-                };
-              }
+          // Hide the tab bar for certain screens
+          tabBarStyle: ((route) => {
+            const currentRoute = getFocusedRouteNameFromRoute(route);
+            if (tabHiddenRoutes.includes(currentRoute)) {
               return {
-                // For routes which are not User
-                height: 100,
-                paddingTop: 10,
+                display: "none",
               };
-            })(route),
-          })}
-        >
-          {navigationScreens}
-        </NavBar.Navigator>
-      </Provider>
+            }
+            return {
+              // For routes which are not User
+              height: 100,
+              paddingTop: 10,
+            };
+          })(route),
+        })}
+      >
+        {navigationScreens}
+      </NavBar.Navigator>
     </NavigationContainer>
   );
-}
+};
 
-export default AppWrapper =  () => {
-
-  const store = createStoreWithPreloadedState({})
+export default AppWrapper = () => {
+  const store = createStoreWithPreloadedState({});
   return (
     <Provider store={store}>
-        <App />
+      <App />
     </Provider>
-  )
-  
-}
+  );
+};

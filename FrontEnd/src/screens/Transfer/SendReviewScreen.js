@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
-import axios from "axios";
 
 import { useCardAnimation } from "@react-navigation/stack";
 import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
@@ -20,8 +19,8 @@ import Currency from "react-currency-formatter";
 import UserCard from "../../components/cards/UserCard";
 import PaymentMethodCard from "../../components/cards/PaymentMethodCard";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserById, fetchTransactionsById, selectId } from "../../features/selfSlice";
-import { createDirectTransaction } from "../../api/api";
+import { fetchUserById, fetchTransactionsById, selectId } from "../../redux/reducers/selfSlice";
+import { createDirectTransaction } from "../../utils/api";
 
 const SendReviewScreen = () => {
   const { height } = useWindowDimensions();

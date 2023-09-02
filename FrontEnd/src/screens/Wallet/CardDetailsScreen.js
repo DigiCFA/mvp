@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
-import { selectCards } from "../../features/selfSlice";
+import { selectCards } from "../../redux/reducers/selfSlice";
 import BankCardCard from "../../components/cards/BankCardCard";
 
 const CardDetailsScreen = () => {

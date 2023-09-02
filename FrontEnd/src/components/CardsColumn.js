@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import PaymentMethodCard from "./cards/PaymentMethodCard";
-import { selectBalance, selectCards } from "../features/selfSlice";
+import { selectBalance, selectCards } from "../redux/reducers/selfSlice";
 import { useSelector } from "react-redux";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";

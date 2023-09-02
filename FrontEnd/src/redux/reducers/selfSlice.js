@@ -1,16 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { fetchProfilePic, fetchTransactions, fetchUser } from "../../utils/api";
-
-// const storeImageData = (image) => {
-//   return {
-//     type: 'STORE_IMAGE_DATA',
-//     payload: image,
-//   }
-// }
-
-const profilePicBaseURI =
-  "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
+import { fetchProfilePic, fetchTransactions, fetchUser, profilePicBaseURL } from "../../utils/api";
 
 // Maybe write a thunk to fetch user info. In which case user info is passed during login, in which case initialState should be null
 const initialState = {
@@ -37,7 +27,7 @@ const initialState = {
     ],
     // privacyPreferences: [],
     contacts: [],
-    profilePicture: profilePicBaseURI + "default.png",
+    profilePicture: profilePicBaseURL + "default.png",
     currentAddress: {
       lineOne: "Not set",
       lineTwo: "",
@@ -68,7 +58,7 @@ const initialState = {
 
 export const selfSlice = createSlice({
   name: "self",
-  initialState: initialState,
+  initialState,
   reducers: {
     setSelf: (state, action) => {
       // state.self = action.payload;
@@ -84,7 +74,7 @@ export const selfSlice = createSlice({
       state.self.cards = newSelf.cards;
       state.self.privacyPreferences = newSelf.privacyPreferences;
       state.self.contacts = newSelf.contacts;
-      state.self.profilePicture = profilePicBaseURI + newSelf.profilePicture;
+      state.self.profilePicture = profilePicBaseURL + newSelf.profilePicture;
     },
     setTransactions: (state, action) => {
       state.self.transactions = action.payload;
@@ -122,10 +112,31 @@ export const fetchUserById = (userId) => {
         contacts: response.data.contacts,
         profilePicture: response.data.profilePicture,
       };
+
+      // Add a default 'card' which represents balance
+      user.cards.unshift({
+        _id: "001",
+        name: "DigiCFA Balance",
+        cardType: "balance",
+        balance: response.data.balance
+      })
+
       dispatch(setSelf(user));
     } catch(error) {
-      console.log(error)
-    }
+      if (error.response) {
+        console.log("The request was made and the server responded with a status code that falls out of the range of 2xx")
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log("The request was made but no response was received `error.request` is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js")
+        console.log(error.request);
+      } else {
+        console.log("Something happened in setting up the request that triggered an Error")
+        console.log('Error', error.message);
+      }
+      console.log(error.config);
+    };
   }
 }
 
@@ -151,7 +162,7 @@ export const fetchProfilePicById = userId => {
       if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED USER TO UPDATE PROFILE PIC")
       else console.log("ERROR")
 
-      dispatch(setProfilePic(profilePicBaseURI+response.data.profilePicture));
+      dispatch(setProfilePic(profilePicBaseURL+response.data.profilePicture));
 
     } catch(error) {
       console.error(error)
@@ -170,6 +181,7 @@ export const selectTransactions = (state) => state.self.self.transactions;
 export const selectProfilePic = (state) => state.self.self.profilePicture;
 
 export default selfSlice.reducer;
+
 
 // OBSOLETE APPROACH
 

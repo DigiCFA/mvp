@@ -13,13 +13,25 @@ import PasswordTextInput from "../../components/PasswordTextInput";
 import HideKeyboardView from "../../components/HideKeyboardView";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/reducers/sessionSlice";
 
 const LoginSignupLandingScreen = () => {
   const [password, setPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneNumberInputFocused, setIsPhoneNumberInputFocused] =
     useState(false);
 
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  const onPressLogin = () => {
+    const user = {
+      phoneNumber: phoneNumber,
+      password: password,
+    };
+    dispatch(login(user));
+  };
 
   return (
     <SafeAreaView className="items-center bg-white flex-1">
@@ -43,13 +55,12 @@ const LoginSignupLandingScreen = () => {
           onBlur={() => {
             setIsPhoneNumberInputFocused(false);
           }}
+          onChangeText={setPhoneNumber}
         />
 
         <PasswordTextInput
           placeHolder={"Password"}
-          onChangeText={(text) => {
-            setPassword(text);
-          }}
+          onChangeText={setPassword}
         />
 
         <TouchableOpacity className="mt-1.5">
@@ -61,7 +72,10 @@ const LoginSignupLandingScreen = () => {
 
       <HideKeyboardView>
         <View className="w-full space-y-3 mt-10 px-10 flex-1">
-          <TouchableOpacity className="rounded-full bg-blue-800 py-3">
+          <TouchableOpacity
+            className="rounded-full bg-blue-800 py-3"
+            onPress={onPressLogin}
+          >
             <Text
               style={{ fontSize: 18 }}
               className="text-center text-white font-bold"

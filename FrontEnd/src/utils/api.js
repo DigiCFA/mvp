@@ -3,15 +3,17 @@ import axios from "axios";
 
 // import {FormData, Blob} from "formdata-node"
 
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from "expo-file-system";
+
+const baseURL = "https://o4gnaf7sce.execute-api.af-south-1.amazonaws.com/prod/api"
+export const profilePicBaseURL =
+  "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
 
 // import RNFetchBlob from "rn-fetch-blob";
 // import {fileFromPath} from "formdata-node/file-from-path"
 
-
 // axios.defaults.baseURL = "http://192.168.3.106:5050/api";
-axios.defaults.baseURL = "http://localhost:5050/api";
-
+axios.defaults.baseURL = baseURL; 
 
 export const fetchUser = (userId) => {
   return axios.get("/profile/retrieve_user", {
@@ -33,8 +35,8 @@ export const fetchTransactions = (userId) => {
 
 // export const fetchProfilePic = (userId) => {
 //   return axios.get("/profile/retrieve_user", {
-//     params: { 
-//       userId: userId 
+//     params: {
+//       userId: userId
 //     },
 //     // responseType: 'arraybuffer'
 //   });
@@ -69,36 +71,30 @@ export const createDirectTransaction = async (
   }
 };
 
-
-
 export const uploadProfilePicture = async (userId, imageURI) => {
-
   console.log("URI: ", imageURI);
   console.log("UserID: ", userId);
 
-
   let uriArray = imageURI.split(".");
   let fileType = "image/" + uriArray[uriArray.length - 1];
-  console.log(fileType)
+  console.log(fileType);
 
   try {
-
     const result = await FileSystem.uploadAsync(
-      "http://localhost:5050/api/profile/set_profile_pic",
+      baseURL + "/profile/set_profile_pic",
       imageURI,
       {
         headers: {
-          'Content-Type': fileType,
+          "Content-Type": fileType,
         },
-        httpMethod: 'PATCH',
+        httpMethod: "PATCH",
         uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-        fieldName: 'profilePicture',
+        fieldName: "profilePicture",
         parameters: {
           userId: userId,
-        }
-      },
-    )
-
+        },
+      }
+    );
 
     // const result = await FileSystem.uploadAsync(
     //   "http://localhost:5050/api/profile/set_profile_pic",
@@ -119,13 +115,12 @@ export const uploadProfilePicture = async (userId, imageURI) => {
     //   },
     // )
 
-    if (result.status === 200) console.log("Successfully uploaded profile picture");
+    if (result.status === 200)
+      console.log("Successfully uploaded profile picture");
     else console.log("Error uploading photo");
 
     // console.log(result);
   } catch (error) {
     console.error(error);
   }
-}
-
-
+};
