@@ -14,10 +14,13 @@ import { createStoreWithPreloadedState } from "./store";
 import HomeStackScreen from "./screens/Home/HomeStackScreen";
 import WalletStackScreen from "./screens/Wallet/WalletStackScreen";
 import TransferStackScreen from "./screens/Transfer/TransferStackScreen";
-import MeStackScreen from "./screens/Me/MeStackScreen";
-import LoginSignupStackScreen from "./screens/LoginSigup/LoginSignupStackScreen";
+import MeStackScreen from "./screens/Profile/MeStackScreen";
+import LoginSignupStackScreen from "./screens/Auth/LoginSignupStackScreen";
 import { getSession } from "./redux/reducers/sessionSlice";
-import { fetchUserById, fetchTransactionsById } from "./redux/reducers/selfSlice";
+import {
+  fetchUserById,
+  fetchTransactionsById,
+} from "./redux/reducers/selfSlice";
 
 const NavBar = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -42,7 +45,7 @@ const prefix = Linking.createURL("/");
 
 const App = () => {
   let userId = useSelector((state) => state.session.userId);
-  userId = "64eb0d88eaf1bbe6d5741736"
+  userId = "64eb0d88eaf1bbe6d5741736";
   let isLoggedIn = Boolean(userId);
   // isLoggedIn = true;
   const dispatch = useDispatch();

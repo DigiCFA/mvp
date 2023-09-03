@@ -13,7 +13,7 @@ import { selectSelf, setSelf } from "../../redux/reducers/selfSlice";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsColumn from "../../components/SettingsColumn";
 
-const MeScreen = () => {
+const ProfileScreen = () => {
   // [loggedIn, setLoggedIn] = useState(false);
 
   const navigation = useNavigation();
@@ -118,4 +118,4 @@ const MeScreen = () => {
   );
 };
 
-export default MeScreen;
+export default ProfileScreen;
