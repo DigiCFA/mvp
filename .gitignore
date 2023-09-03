@@ -3,3 +3,4 @@
 */node_modules/
 */serverless-express/
 BackEnd/config.mjs
+.expo/

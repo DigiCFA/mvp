@@ -13,7 +13,7 @@ import { selectSelf, setSelf } from "../../redux/reducers/selfSlice";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsColumn from "../../components/SettingsColumn";
 
-const MeScreen = () => {
+const ProfileScreen = () => {
   // [loggedIn, setLoggedIn] = useState(false);
 
   const navigation = useNavigation();
@@ -43,9 +43,6 @@ const MeScreen = () => {
     <View className="grow">
       {/* Top Bar */}
       <View className="flex-row self-center items-center space-x-2 pt-12 pb-6 px-4 bg-[#3370E2]">
-        {/* <TouchableOpacity onPress={() => navigation.navigate("Home")} className="">
-          <Ionicons name="arrow-back" size={30} color="grey" />
-        </TouchableOpacity> */}
         <View className="flex-1"></View>
         <Text className="font-extrabold text-lg text-white">Profile</Text>
         <TouchableOpacity
@@ -59,9 +56,6 @@ const MeScreen = () => {
       <ScrollView>
         {/* Profile Area */}
         <View className="bg-white flex-col items-start space-y-1 pb-4">
-          {/* Replace this with the actual profile picture!! */}
-          {/* <Ionicons name="person-circle" size={125} color="#192C88" /> */}
-
           <View className="px-4 pt-4">
             <Image
               source={{ uri: self.profilePicture }}
@@ -124,4 +118,4 @@ const MeScreen = () => {
   );
 };
 
-export default MeScreen;
+export default ProfileScreen;

@@ -3,7 +3,7 @@ import React from 'react'
 
 const LoadingView = () => {
   return (
-    <View>
+    <View className='items-center justify-center'>
       <Text className='text-blue-400 text-lg font-extrabold'>THIS IS THE LOADING VIEW</Text>
     </View>
   )
