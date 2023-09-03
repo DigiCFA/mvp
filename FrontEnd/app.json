@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "mvp",
+    "name": "DigiCFA",
     "slug": "mvp",
     "version": "1.0.0",
     "scheme": "digicfa",
@@ -48,6 +48,12 @@
         "react-native-vision-camera",
         {
           "cameraPermissionText": "DigiCFA needs access to your Camera."
+        }
+      ],
+      [
+        "expo-barcode-scanner",
+        {
+          "camerPermission": "Allow DigiCFA to access camera for QR code scanning."
         }
       ]
     ],

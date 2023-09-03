@@ -3,7 +3,7 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SearchScreen from "./SearchScreen";
 import UserScreen from "./UserScreen";
-import ScanScreen from "./ScanScreen";
+import QRScreen from "./QRScreen";
 import PaymentMethodsScreen from "./PaymentMethodsScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import SendReviewScreen from "./SendReviewScreen";
@@ -20,7 +20,7 @@ const TransferStackScreen = () => {
   return (
     <TransferStack.Navigator screenOptions={{ headerShown: false }}>
       <TransferStack.Screen name="Search" component={SearchScreen} />
-      <TransferStack.Screen name="Scan" component={ScanScreen} />
+      <TransferStack.Screen name="Scan" component={QRScreen} />
 
       <TransferStack.Group screenOptions={{ tabBayStyle: { display: "None" } }}>
         <TransferStack.Screen name="User" component={UserScreen} />
