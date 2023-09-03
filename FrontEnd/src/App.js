@@ -8,19 +8,22 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import * as Linking from "expo-linking";
+
 import { Provider, useSelector, useDispatch } from "react-redux";
 import { createStoreWithPreloadedState } from "./store";
-
-import HomeStackScreen from "./screens/Home/HomeStackScreen";
-import WalletStackScreen from "./screens/Wallet/WalletStackScreen";
-import TransferStackScreen from "./screens/Transfer/TransferStackScreen";
-import MeStackScreen from "./screens/Profile/MeStackScreen";
-import LoginSignupStackScreen from "./screens/Auth/LoginSignupStackScreen";
-import { getSession } from "./redux/reducers/sessionSlice";
 import {
   fetchUserById,
   fetchTransactionsById,
 } from "./redux/reducers/selfSlice";
+
+import HomeNavigator from "./navigation/HomeNavigator";
+import AuthNavigator from "./navigation/AuthNavigator";
+import TransferNavigator from "./navigation/TransferNavigator";
+import WalletNavigator from "./navigation/WalletNavigator";
+import ProfileNavigator from "./navigation/ProfileNavigator";
+
+import { getSession } from "./redux/reducers/sessionSlice";
+
 
 const NavBar = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -96,24 +99,21 @@ const App = () => {
     config,
   };
 
-  const fallback = `
-    <Text>Loading...</Text>
-  `;
 
   const navigationScreens = isLoggedIn ? (
     <NavBar.Group screenOptions={{ headerShown: false }}>
-      <NavBar.Screen name="Home" component={HomeStackScreen} />
+      <NavBar.Screen name="Home" component={HomeNavigator} />
 
-      <NavBar.Screen name="Transfer" component={TransferStackScreen} />
+      <NavBar.Screen name="Transfer" component={TransferNavigator} />
 
-      <NavBar.Screen name="Wallet" component={WalletStackScreen} />
+      <NavBar.Screen name="Wallet" component={WalletNavigator} />
 
-      <NavBar.Screen name="Me" component={MeStackScreen} />
+      <NavBar.Screen name="Me" component={ProfileNavigator} />
     </NavBar.Group>
   ) : (
     <NavBar.Screen
-      component={LoginSignupStackScreen}
-      name="LoginSignup"
+      component={AuthNavigator}
+      name="Auth"
       options={{
         headerShown: false,
         tabBarStyle: { display: "none" },

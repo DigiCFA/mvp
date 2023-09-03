@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/Home/HomeScreen";
 import SearchScreen from "../screens/Transfer/SearchScreen";
 import QRScreen from "../screens/Transfer/QRScreen";
-import TransactionScreen from "./screens/TransactionScreen";
+import TransactionScreen from "../screens/Home/TransactionScreen";
 import QRErrorScreen from "../screens/Transfer/QRErrorScreen";
 
 const Stack = createNativeStackNavigator();
