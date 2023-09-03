@@ -9,7 +9,6 @@ import RequestReviewScreen from "../screens/Transfer/RequestReviewScreen";
 import SendConfirmationScreen from "../screens/Transfer/SendConfirmationScreen";
 import RequestConfirmationScreen from "../screens/Transfer/RequestConfirmationScreen";
 import HomeScreen from "../screens/Home/HomeScreen";
-import HomeStackScreen from "../screens/Home/HomeStackScreen";
 import QRErrorScreen from "../screens/Transfer/QRErrorScreen";
 
 const Stack = createStackNavigator();
