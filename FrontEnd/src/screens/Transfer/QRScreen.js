@@ -71,7 +71,7 @@ const ScanScreen = () => {
   return (
     <SafeAreaView>
       {/* Return Arrow*/}
-      <View className="my-2 mx-6 flex-row">
+      <View className="mt-2 mx-6 flex-row">
         <TouchableOpacity
           onPress={navigation.goBack}
           className="bg-black rounded-full"
@@ -81,20 +81,20 @@ const ScanScreen = () => {
       </View>
 
       {/* Buttons in a row */}
-      <View className="flex-row justify-center border">
-        <View className="border flex-row my-4 rounded-full">
+      <View className="flex-row justify-center my-4">
+        <View className="border flex-row my-4 py-1 rounded-full bg-gray-100">
           <TouchableOpacity
             onPress={() => setMode(0)}
-            className="border rounded-full py-2 px-6"
+            className={`rounded-full py-2 px-6 ${mode === 0 ? 'bg-white' : ''}`}
           >
-            <Text className="font-extrabold text-lg">Scan code</Text>
+            <Text className={`font-extrabold text-lg ${mode === 0 ? 'text-black' : 'text-gray-500'}`}>Scan code</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => setMode(1)}
-            className="border rounded-full py-2 px-8"
+            className={`rounded-full py-2 px-8 ${mode === 1 ? 'bg-white' : ''}`}
           >
-            <Text className="font-extrabold text-lg">Get paid</Text>
+            <Text className={`font-extrabold text-lg ${mode === 1 ? 'text-black' : 'text-gray-500'}`}>Get paid</Text>
           </TouchableOpacity>
         </View>
       </View>
