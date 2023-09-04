@@ -33,7 +33,9 @@ const config = {
   },
 };
 
-export default linking = {
+ const linking = {
   prefixes: [prefix],
   config,
 };
+
+export default linking;

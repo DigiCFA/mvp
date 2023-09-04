@@ -60,8 +60,22 @@ const ScanScreen = () => {
   };
 
   const handleBarCodeScanned = ({ type, data }) => {
+
+    let usefulData = data.split("/user/")[1].split('/');
+    let id = usefulData[0];
+
+    let firstName = usefulData[1].split("_")[0];
+    let lastName = usefulData[1].split("_")[1];
+    let fullName =
+      firstName.charAt(0).toUpperCase() +
+      firstName.slice(1) +
+      " " +
+      lastName.charAt(0).toUpperCase() +
+      lastName.slice(1);
+    // alert(`ID: ${id}, name: ${fullName}`);
+
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    navigation.navigate("User", {id, name: fullName})
   };
 
   useEffect(() => {
@@ -85,16 +99,28 @@ const ScanScreen = () => {
         <View className="border flex-row my-4 py-1 rounded-full bg-gray-100">
           <TouchableOpacity
             onPress={() => setMode(0)}
-            className={`rounded-full py-2 px-6 ${mode === 0 ? 'bg-white' : ''}`}
+            className={`rounded-full py-2 px-6 ${mode === 0 ? "bg-white" : ""}`}
           >
-            <Text className={`font-extrabold text-lg ${mode === 0 ? 'text-black' : 'text-gray-500'}`}>Scan code</Text>
+            <Text
+              className={`font-extrabold text-lg ${
+                mode === 0 ? "text-black" : "text-gray-500"
+              }`}
+            >
+              Scan code
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => setMode(1)}
-            className={`rounded-full py-2 px-8 ${mode === 1 ? 'bg-white' : ''}`}
+            className={`rounded-full py-2 px-8 ${mode === 1 ? "bg-white" : ""}`}
           >
-            <Text className={`font-extrabold text-lg ${mode === 1 ? 'text-black' : 'text-gray-500'}`}>Get paid</Text>
+            <Text
+              className={`font-extrabold text-lg ${
+                mode === 1 ? "text-black" : "text-gray-500"
+              }`}
+            >
+              Get paid
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -107,10 +133,11 @@ const ScanScreen = () => {
           {hasPermission === false && <Text>No access to camera.</Text>}
 
           {hasPermission && (
-            <View className="h-80 mx-10 rounded-xl border-4 border-blue-400">
+            <View className="w-4/5 aspect-square mx-10 rounded-xl border-4 border-black overflow-hidden">
               <BarCodeScanner
                 onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                style={StyleSheet.absoluteFillObject}
+                // style={StyleSheet.absoluteFillObject}
+                className="flex-1"
               />
             </View>
           )}
@@ -125,25 +152,24 @@ const ScanScreen = () => {
           <Text className="text-lg font-semibold">{self.phoneNumber}</Text>
 
           <View className="p-6">
-
             {/* Should be the QR code */}
             <Image
               source={{ uri: self.profilePicture }}
-              style={{width: 240, height: 240}}
+              style={{ width: 240, height: 240 }}
             />
           </View>
 
-          <View className='flex-row mx-20'>
-            <TouchableOpacity className='border p-3 rounded-full'>
-              <Ionicons name="print" size={24} color="black"/>
+          <View className="flex-row mx-20">
+            <TouchableOpacity className="border p-3 rounded-full">
+              <Ionicons name="print" size={24} color="black" />
             </TouchableOpacity>
-            <View className='flex-1'></View>
-            <TouchableOpacity className='border p-3 rounded-full'>
-              <Ionicons name="mail" size={24} color="black"/>
+            <View className="flex-1"></View>
+            <TouchableOpacity className="border p-3 rounded-full">
+              <Ionicons name="mail" size={24} color="black" />
             </TouchableOpacity>
-            <View className='flex-1'></View>
-            <TouchableOpacity className='border p-3 rounded-full'>
-              <Ionicons name="cloud-upload" size={24} color="black"/>
+            <View className="flex-1"></View>
+            <TouchableOpacity className="border p-3 rounded-full">
+              <Ionicons name="cloud-upload" size={24} color="black" />
             </TouchableOpacity>
           </View>
         </View>
