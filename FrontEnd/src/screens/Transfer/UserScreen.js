@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
 
 const UserScreen = () => {
@@ -16,15 +16,17 @@ const UserScreen = () => {
   const [amount, onChangeAmount] = useState("0.00");
   const [message, onChangeMessage] = useState("");
 
+  const [amountValid, setAmountValid] = useState(true);
+  const [messageValid, setMessageValid] = useState(true);
+
   const {
     params: { id, name },
   } = useRoute();
 
   return (
     <SafeAreaView className="flex-col flex-1">
+      {/* Upper Portion */}
       <View className="flex-1">
-        {/* Upper Portion */}
-
         {/* User Info */}
         <View className="flex-row justify-items-start items-center space-x-2 pt-1 mx-4">
           <TouchableOpacity onPress={navigation.goBack} className="flex-1">
@@ -34,40 +36,51 @@ const UserScreen = () => {
           <Text className="text-lg font-semibold">{name}</Text>
 
           <View className="flex-1"></View>
-
-          {/* <TouchableOpacity
-            onPress={() => navigation.navigate("HomeScreen")}
-            className=""
-          >
-            <Ionicons name="close" size={30} color="grey" />
-          </TouchableOpacity> */}
         </View>
 
         {/* Payment Amount */}
         <View className="flex-row h-24 mt-6 justify-center">
           <View className="self-start">
-            <Text className="text-5xl">$</Text>
+            <Text
+              className={`text-5xl ${
+                amountValid ? "text-black" : "text-red-600"
+              }`}
+            >
+              $
+            </Text>
           </View>
 
-          {/* <View className='border'>
-            <Text className='text-7xl font-medium '>0.00</Text>
-          </View> */}
-
-          <View className=''>
+          <View className="">
             <TextInput
               // inputMode="numeric"
               keyboardType="numeric"
               maxLength={8}
               placeholder="0.00"
               contextMenuHidden={true}
-              onChangeText={(newAmount) => onChangeAmount(newAmount)}
+              onChangeText={(newAmount) => {
+                if (Number(newAmount) != 0) setAmountValid(true);
+                onChangeAmount(newAmount);
+              }}
               value={amount}
-              className="text-7xl font-medium flex-1"
+              className={`text-7xl font-medium flex-1 ${
+                amountValid ? "text-black" : "text-red-600"
+              }`}
             />
           </View>
         </View>
 
-        <View className="m-3 self-center bg-[#e9e7e2] rounded-lg">
+        <View className="h-8">
+          {!amountValid && (
+            <View className="self-center flex-row space-x-2">
+              <FontAwesome5 name="exclamation" size={20} color="red" />
+              <Text className="font-medium text-base text-red-600">
+                Enter an amount more than $0
+              </Text>
+            </View>
+          )}
+        </View>
+
+        <View className="self-center bg-[#e9e7e2] rounded-lg">
           <Text className="text-lg px-1">USD</Text>
         </View>
       </View>
@@ -80,26 +93,49 @@ const UserScreen = () => {
           {/* Comments associated with the transaction */}
           <TextInput
             placeholder="What's this for?"
-            placeholderTextColor="gray"
             keyboardType="default"
+            placeholderTextColor={messageValid ? "gray" : "#dc2626"}
             multiline={true}
-            onChangeText={(newMessage) => onChangeMessage(newMessage)}
+            onChangeText={(newMessage) => {
+              if (newMessage.trim() != "") setMessageValid(true);
+              onChangeMessage(newMessage);
+            }}
             value={message}
-            className="text-base font-medium mx-4 p-3 bg-[#e9e7e2] rounded-3xl"
+            className={`text-base font-medium mx-4 p-3 bg-[#e9e7e2] rounded-xl  ${
+              messageValid ? "" : "border border-red-600"
+            }`}
           />
 
-          <View className="m-4 flex-row space-x-4 justify-center">
+          <View className="mt-1 h-8">
+            {!messageValid && (
+              <View className="self-center flex-row space-x-2">
+                <Text className="font-medium text-base text-red-600">
+                  Please write a message. Ex: dinner, fruits.
+                </Text>
+              </View>
+            )}
+          </View>
+
+          <View className="flex-row space-x-4 justify-center">
             {/* Request */}
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("RequestReview", {
-                  id,
-                  name,
-                  amount,
-                  message,
-                });
+                if (Number(amount) == 0) {
+                  setAmountValid(false);
+                }
+                if (message.trim() == "") {
+                  setMessageValid(false);
+                }
+                if (Number(amount) != 0 && message.trim() != "") {
+                  navigation.navigate("RequestReview", {
+                    id,
+                    name,
+                    amount,
+                    message,
+                  });
+                }
               }}
-              className='bg-blue-900 rounded-full py-3 px-8'
+              className="bg-blue-900 rounded-full py-3 px-8"
             >
               <Text className="text-white text-xl font-extrabold">Request</Text>
             </TouchableOpacity>
@@ -107,12 +143,20 @@ const UserScreen = () => {
             {/* Pay */}
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("PaymentMethods", {
-                  receiverId: id,
-                  name,
-                  amount,
-                  message,
-                });
+                if (Number(amount) == 0) {
+                  setAmountValid(false);
+                }
+                if (message.trim() == "") {
+                  setMessageValid(false);
+                }
+                if (Number(amount) != 0 && message.trim() != "") {
+                  navigation.navigate("PaymentMethods", {
+                    receiverId: id,
+                    name,
+                    amount,
+                    message,
+                  });
+                }
               }}
               className="bg-blue-900 rounded-full py-3 px-14"
             >
@@ -121,22 +165,6 @@ const UserScreen = () => {
           </View>
         </View>
       </KeyboardAvoidingView>
-
-      {/* Search */}
-      {/* <View className="px-4 py-2 rounded-full border-2 border-blue-600 flex-1">
-        <TextInput
-          placeholder="Phone number, name"
-          keyboardType="default"
-          className="text-lg font-medium"
-        />
-      </View> */}
-
-      {/* <TouchableOpacity
-        onPress={navigation.goBack}
-        className="absolute top-14 left-5 p-2"
-      >
-        <Ionicons name='chevron-back' size={24} color='black'/>
-      </TouchableOpacity> */}
     </SafeAreaView>
   );
 };
