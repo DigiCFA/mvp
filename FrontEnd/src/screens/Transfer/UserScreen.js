@@ -10,6 +10,22 @@ import React, { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
+import { onChange } from "react-native-reanimated";
+
+const numericRE = new RegExp("^[0-9.]*$");
+const startsWithTwoDigits = new RegExp("^[0-9]{2}.");
+
+const countDecimals = (value) => {
+  if (Math.floor(value) === value) return 0;
+  return value.toString().split(".")[1].length || 0;
+};
+
+const amountInvalid = (amount) =>
+  !amount.match(numericRE) ||
+  amount.match(/^\./) ||
+  (amount[0] == "0" && amount.match(startsWithTwoDigits)) ||
+  (amount.match(/\./g) || []).length > 1 ||
+  countDecimals(Number(amount)) > 2;
 
 const UserScreen = () => {
   const navigation = useNavigation();
@@ -59,7 +75,11 @@ const UserScreen = () => {
               contextMenuHidden={true}
               onChangeText={(newAmount) => {
                 if (Number(newAmount) != 0) setAmountValid(true);
-                onChangeAmount(newAmount);
+
+                if (!amountInvalid(newAmount)) onChangeAmount(newAmount);
+              }}
+              onEndEditing={() => {
+                onChangeAmount(Number(amount).toFixed(2).toString());
               }}
               value={amount}
               className={`text-7xl font-medium flex-1 ${
@@ -102,7 +122,7 @@ const UserScreen = () => {
             }}
             value={message}
             className={`text-base font-medium mx-4 p-3 bg-[#e9e7e2] rounded-xl  ${
-              messageValid ? "" : "border border-red-600"
+              messageValid ? "border border-[#e9e7e2]" : "border border-red-600"
             }`}
           />
 
