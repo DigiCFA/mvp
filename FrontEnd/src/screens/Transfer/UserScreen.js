@@ -44,7 +44,7 @@ const UserScreen = () => {
         </View>
 
         {/* Payment Amount */}
-        <View className="flex-row h-20 mt-6 justify-center">
+        <View className="flex-row h-24 mt-6 justify-center">
           <View className="self-start">
             <Text className="text-5xl">$</Text>
           </View>
@@ -53,7 +53,7 @@ const UserScreen = () => {
             <Text className='text-7xl font-medium '>0.00</Text>
           </View> */}
 
-          <View>
+          <View className=''>
             <TextInput
               // inputMode="numeric"
               keyboardType="numeric"
@@ -62,7 +62,7 @@ const UserScreen = () => {
               contextMenuHidden={true}
               onChangeText={(newAmount) => onChangeAmount(newAmount)}
               value={amount}
-              className="text-7xl font-medium pt-8"
+              className="text-7xl font-medium flex-1"
             />
           </View>
         </View>
