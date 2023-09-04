@@ -10,38 +10,11 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-import { Camera, useCameraDevices } from "react-native-vision-camera";
 import LoadingView from "../../components/LoadingView";
-import { useScanBarcodes } from "vision-camera-code-scanner";
 
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useSelector } from "react-redux";
 import { selectSelf } from "../../redux/reducers/selfSlice";
-
-// const checkCameraPermission = async () => {
-//   let status = await Camera.getCameraPermissionStatus();
-//   if (status !== "authorized") {
-//     await Camera.requestCameraPermission();
-//     status = await Camera.getCameraPermissionStatus();
-//     console.log("Camera Authorised");
-//     setHasPermission(status === "authorized");
-//     if (status === "denied") {
-//       Alert.alert(
-//         "No Camera Access",
-//         "You need to give permission to use the QR Code scanner",
-//         [
-//           {
-//             text: "Cancel",
-//             style: "cancel",
-//           },
-//           {
-//             text: "OK",
-//           },
-//         ]
-//       );
-//     }
-//   }
-// };
 
 const ScanScreen = () => {
   const navigation = useNavigation();

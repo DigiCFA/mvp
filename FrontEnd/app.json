@@ -45,12 +45,6 @@
         }
       ],
       [
-        "react-native-vision-camera",
-        {
-          "cameraPermissionText": "DigiCFA needs access to your Camera."
-        }
-      ],
-      [
         "expo-barcode-scanner",
         {
           "camerPermission": "Allow DigiCFA to access camera for QR code scanning."
