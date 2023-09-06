@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Touchable,
   ScrollView,
+  StyleSheet,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -15,9 +16,10 @@ import TransactionCard from "../../components/cards/TransactionCard";
 import { useSelector } from "react-redux";
 import { selectId, selectTransactions } from "../../redux/reducers/selfSlice";
 
+import Spinner from 'react-native-loading-spinner-overlay';
+
 const HomeScreen = () => {
   const navigation = useNavigation();
-
   const axios = require("axios");
 
   const [transactionHistory, setTransactionHistory] = useState([]);
@@ -25,38 +27,33 @@ const HomeScreen = () => {
   const transactions = useSelector(selectTransactions);
   const id = useSelector(selectId);
 
-  // Fetching Past Transactions
+  const [spinner, setSpinner] = useState(false);
 
+
+  // useEffect runs after the render
   // useEffect(() => {
-  //   axios
-  //     .get("localhost:5050/routes/transaction/transaction_data", {
-  //       params: {
-  //         ID: "64b851f72736819c427e0708",
-  //       },
-  //     })
-  //     .then((data) => {
-  //       setTransactionHistory(data);
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // }, []);
+  //   const interval = setInterval(() => {
+  //     setSpinner((prevSpinner) => !prevSpinner);
+  //   }, 5000);
+
+  //   return () => {
+  //     clearInterval(interval);
+  //   }
+  // }, [])
+
 
   return (
     <SafeAreaView className="bg-[#e9e7e2] flex-1">
+{/* 
+      <Spinner 
+        visible={spinner}
+        textContent={'Loading...'}
+        textStyle={styles.spinnerTextStyle}
+      /> */}
+
       <ScrollView>
         {/* Header */}
-        <View className="flex-row px-4 pb-6 space-x-3">
-          <View className="flex-1">
-            {/* <TouchableOpacity className="p-1 rounded-full bg-white w-8">
-              <Ionicons name="menu" size={24} color="#192C88" />
-            </TouchableOpacity> */}
-          </View>
-
-          {/* <TouchableOpacity className="p-1.5 rounded-full bg-white">
-            <Ionicons name="trophy" size={20} color="#192C88" />
-          </TouchableOpacity> */}
-
+        <View className="flex-row px-4 pb-6 space-x-3 self-end">
           <TouchableOpacity
             onPress={() => navigation.navigate("Scan")}
             className="p-1.5 rounded-full bg-white"
@@ -132,5 +129,15 @@ const HomeScreen = () => {
     </SafeAreaView>
   );
 };
+
+
+const styles = StyleSheet.create({
+  spinnerTextStyle: {
+    color: 'blue',
+    fontSize: 20
+  }
+})
+
+
 
 export default HomeScreen;
