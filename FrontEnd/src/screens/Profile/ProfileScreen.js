@@ -4,9 +4,9 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
+import { Image } from "expo-image"
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSelf, setSelf } from "../../redux/reducers/selfSlice";
@@ -22,6 +22,15 @@ const ProfileScreen = () => {
 
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+
+    // Sets loading to false after 1 second. Then we cancel the timer. 
+    timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [])
+
   return (
     <View className="grow">
       {/* Top Bar */}
@@ -29,7 +38,6 @@ const ProfileScreen = () => {
         <View className="flex-1"></View>
         <Text className="font-extrabold text-lg text-white">Profile</Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Scan")}
           className="flex-1 items-end"
         >
           <Ionicons name="notifications" size={24} color="white" />
