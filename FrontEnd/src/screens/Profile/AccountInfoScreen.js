@@ -34,16 +34,6 @@ const AccountInfoScreen = () => {
   const self = useSelector(selectSelf);
   const profilePic = useSelector(selectProfilePic);
 
-  useEffect(() => {
-    // Only fetch if default user
-    if (self._id === "001") {
-      dispatch(fetchUserById(ID));
-      dispatch(fetchTransactionsById(ID));
-    }
-  }, []);
-
-  // const [photo, setPhoto] = useState(null);
-
   const pickPhoto = async () => {
     await ImagePicker.requestCameraPermissionsAsync();
 
