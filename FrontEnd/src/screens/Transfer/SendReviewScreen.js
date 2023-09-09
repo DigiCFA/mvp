@@ -101,6 +101,7 @@ const SendReviewScreen = () => {
               cardType={cardType}
               cardNumber={cardNumber}
               balance={balance}
+              balanceSufficient={true}
             />
 
             <Text className="text-lg mt-4">

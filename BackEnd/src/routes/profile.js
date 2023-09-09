@@ -49,7 +49,7 @@ router.get("/retrieve_transactions", async (req, res) => {
 });
 
 router.get("/search_users", async (req, res) => {
-  let query = req.body.query;
+  let query = req.query.query;
   try {
     // all transactions
     const result = await User.aggregate()

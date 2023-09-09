@@ -31,6 +31,14 @@ export const fetchTransactions = (userId) => {
   });
 };
 
+export const searchUsers = (query) => {
+  return axios.get("/profile/search_users", {
+    params: {
+      query: query
+    }
+  })
+}
+
 // Not necessary to have a stand alone function
 
 // export const fetchProfilePic = (userId) => {

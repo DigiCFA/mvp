@@ -34,16 +34,6 @@ const AccountInfoScreen = () => {
   const self = useSelector(selectSelf);
   const profilePic = useSelector(selectProfilePic);
 
-  useEffect(() => {
-    // Only fetch if default user
-    if (self._id === "001") {
-      dispatch(fetchUserById(ID));
-      dispatch(fetchTransactionsById(ID));
-    }
-  }, []);
-
-  // const [photo, setPhoto] = useState(null);
-
   const pickPhoto = async () => {
     await ImagePicker.requestCameraPermissionsAsync();
 
@@ -105,7 +95,9 @@ const AccountInfoScreen = () => {
           </View>
         </View>
 
-        <TouchableOpacity className="flex-row items-center py-4 border-b border-gray-300">
+        <TouchableOpacity 
+        onPress={() => navigation.navigate("PhoneNumber")}
+        className="flex-row items-center py-4 border-b border-gray-300">
           <View className="flex-col flex-1 space-y-1">
             <Text className="text-gray-500">Phone Numbers</Text>
             <Text className="text-base font-medium">{self.phoneNumber}</Text>
@@ -114,7 +106,9 @@ const AccountInfoScreen = () => {
           <Ionicons name="chevron-forward" size={30} color="black" />
         </TouchableOpacity>
 
-        <TouchableOpacity className="flex-row items-center py-4 border-b border-gray-300">
+        <TouchableOpacity 
+        onPress={() => navigation.navigate("Address")}
+        className="flex-row items-center py-4 border-b border-gray-300">
           <View className="flex-col flex-1 space-y-1">
             <Text className="text-gray-500">Addresses</Text>
             <Text className="text-base font-medium">
