@@ -8,6 +8,7 @@ import Currency from "react-currency-formatter";
 
 const CardsColumn = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
+
   let cards = useSelector(selectCards);
 
   return (
@@ -20,6 +21,7 @@ const CardsColumn = (props) => {
           cardNumber={card.cardNumber}
           cardType={card.cardType}
           balance={card.balance} // only for DigiCFA balance
+          balanceSufficient={props.balanceSufficient}
           isActive={activeIndex === index}
           onPress={() => {
             setActiveIndex(index);

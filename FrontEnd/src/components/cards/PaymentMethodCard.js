@@ -15,6 +15,7 @@ const PaymentMethodCard = ({
   cardName,
   cardNumber,
   cardType,
+  balanceSufficient,
   isActive,
   onPress,
   balance
@@ -44,7 +45,7 @@ const PaymentMethodCard = ({
           </View>
         </View>
         {cardType === "balance" ? (
-          <Text className="font-medium text-gray-500">
+          <Text className={`${balanceSufficient ? 'font-medium text-gray-500' : 'font-semibold text-red-600'}`}>
             Balance: <Currency quantity={Number(balance)} currency="USD" />
           </Text>
         ) : (

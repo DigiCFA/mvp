@@ -35,22 +35,22 @@ const initialState = {
       zipCode: "",
     },
     transactions: [
-      {
-        _id: "64cef2e74a0615d28fc4b58a",
-        amountTransferred: 0.04,
-        sender: {
-          _id: "64c66df647cc118b6eba8b26",
-          fullName: "Henry Liu",
-        },
-        receiver: {
-          _id: "64c673c724782ec4c7fb2d8f",
-          fullName: "Edmond Wang",
-        },
-        transactionDate: "2023-08-06T01:09:59.848Z",
-        isPayment: true,
-        message: "Henry sends to Edmond",
-        isFulfilled: true,
-      },
+      // {
+      //   _id: "64cef2e74a0615d28fc4b58a",
+      //   amountTransferred: 0.04,
+      //   sender: {
+      //     _id: "64c66df647cc118b6eba8b26",
+      //     fullName: "Henry Liu",
+      //   },
+      //   receiver: {
+      //     _id: "64c673c724782ec4c7fb2d8f",
+      //     fullName: "Edmond Wang",
+      //   },
+      //   transactionDate: "2023-08-06T01:09:59.848Z",
+      //   isPayment: true,
+      //   message: "Henry sends to Edmond",
+      //   isFulfilled: true,
+      // },
     ],
     // Not necessary to fetch too much else at login (Eager Loading)
   },

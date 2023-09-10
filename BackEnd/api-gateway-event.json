@@ -1,11 +1,8 @@
 {
   "resource": "/{proxy+}",
-  "path": "/api",
+  "path": "/api/retrieve_users",
   "httpMethod": "GET",
   "queryStringParameters": {
-    "userId": "64c673c724782ec4c7fb2d8f"
-  },
-  "query": {
     "userId": "64c673c724782ec4c7fb2d8f"
   },
   "pathParameters": {
@@ -134,6 +131,5 @@
     "domainName": "xxxxxx.execute-api.us-east-1.amazonaws.com",
     "apiId": "xxxxxx"
   },
-  "body": "{\"userId\": \"64c673c724782ec4c7fb2d8f\", \"amount\": 24}",
   "isBase64Encoded": false
 }

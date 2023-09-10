@@ -33,6 +33,8 @@ const PaymentMethodsScreen = () => {
   const cardNumber = selectedCard.cardNumber;
   const balance = selectedCard.balance;
 
+  const [balanceSufficient, setBalanceSufficient] = useState(true);
+
   const sendSelectedCard = (card) => {
     setSelectedCard(card);
   };
@@ -87,34 +89,52 @@ const PaymentMethodsScreen = () => {
 
             {/* Cards */}
             <ScrollView>
-              <CardsColumn sendSelectedCard={sendSelectedCard} />
+              <CardsColumn
+                sendSelectedCard={sendSelectedCard}
+                balanceSufficient={balanceSufficient}
+              />
               {/* <Text>{receiverId}, {name}, {amount}, {message}</Text> */}
-              <Text>
+              {/* <Text>
                 {selectedCard.cardID}, {selectedCard.cardName},{" "}
                 {selectedCard.cardNumber}
-              </Text>
+              </Text> */}
             </ScrollView>
 
             {/* Bottom Portion */}
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack();
-                navigation.navigate("SendReview", {
-                  receiverId,
-                  name,
-                  amount,
-                  message,
-                  cardID,
-                  cardName,
-                  cardType,
-                  cardNumber,
-                  balance,
-                });
-              }}
-              className="bg-blue-900 rounded-full py-3 px-14 items-center"
-            >
-              <Text className="text-white text-xl font-extrabold">Send</Text>
-            </TouchableOpacity>
+            <View>
+              <View className="mb-1">
+                {!balanceSufficient && (
+                  <Text className="font-semibold text-base text-red-600 text-center">
+                    Insufficient balance! {"\n"}Please top up or choose a credit
+                    card.
+                  </Text>
+                )}
+              </View>
+
+              <TouchableOpacity
+                onPress={() => {
+                  if (balance < amount) {
+                    setBalanceSufficient(false);
+                  } else {
+                    navigation.goBack();
+                    navigation.navigate("SendReview", {
+                      receiverId,
+                      name,
+                      amount,
+                      message,
+                      cardID,
+                      cardName,
+                      cardType,
+                      cardNumber,
+                      balance,
+                    });
+                  }
+                }}
+                className="bg-blue-900 rounded-full py-3 px-14 items-center"
+              >
+                <Text className="text-white text-xl font-extrabold">Send</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Animated.View>
