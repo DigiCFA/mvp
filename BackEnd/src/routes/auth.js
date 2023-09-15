@@ -87,8 +87,13 @@ router.delete("/logout", ({ session }, res) => {
   }
 });
 
-router.get("/obtainSession", ({ session: { user } }, res) => {
-    res.status(200).send({userId})
+router.get("/obtainSession", ({ session }, res) => {
+    try {
+      const userId = session.user.userId
+      res.status(200).send({userId: userId})
+    } catch (error){
+      res.status(200).send({userId: null})
+    }
 });
 
 // router.post("/auth/create_user", async (req, res) => {
@@ -121,34 +126,34 @@ router.get("/obtainSession", ({ session: { user } }, res) => {
 //     });
 // });
 
-router.delete("/delete_user", async (req, res) => {
-  let id = req.body.userId;
-  try {
-    let result = await User.findByIdAndDelete(id);
+// router.delete("/delete_user", async (req, res) => {
+//   let id = req.body.userId;
+//   try {
+//     let result = await User.findByIdAndDelete(id);
 
-    if (!result) res.status(404).send(`User with ID ${id} Not found`);
-    else res.status(200).send(result);
-  } catch (error) {
-    console.error(error);
-    res.status(400).send(error);
-  }
-});
+//     if (!result) res.status(404).send(`User with ID ${id} Not found`);
+//     else res.status(200).send(result);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(400).send(error);
+//   }
+// });
 
-router.post("/user_login", async (req, res) => {
-  let collection = db.collection("users");
-  let user_input = req.body;
-  let findUser = await collection.findOne(
-    { user_phone_number: user_input.user_phone_number },
-    function (error, result) {
-      if (!error) {
-        res.send({}).status(200);
-      } else {
-        console.error(error);
-        res.send({}).status(400);
-      }
-    }
-  );
-});
+// router.post("/user_login", async (req, res) => {
+//   let collection = db.collection("users");
+//   let user_input = req.body;
+//   let findUser = await collection.findOne(
+//     { user_phone_number: user_input.user_phone_number },
+//     function (error, result) {
+//       if (!error) {
+//         res.send({}).status(200);
+//       } else {
+//         console.error(error);
+//         res.send({}).status(400);
+//       }
+//     }
+//   );
+// });
 
 // ------------------------
 // OBSOLETE ONES
