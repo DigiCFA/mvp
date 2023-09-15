@@ -41,3 +41,7 @@ export const loginValidation = Joi.object().keys({
     phoneNumber,
     password,
 })
+
+export const phoneNumberValidation = Joi.object().keys({
+    phoneNumber
+})

@@ -34,6 +34,8 @@ const AppNavigator = ({isLoggedIn}) => {
     "AccountInfo",
     "MessageCenter",
     "Security",
+    "PhoneNumber",
+    "Addresses",
   ];
 
   // Whether normal screens or auth screens

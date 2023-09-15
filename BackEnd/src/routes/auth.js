@@ -4,6 +4,7 @@ import express from "express";
 import {
   loginValidation,
   signUpValidation,
+  phoneNumberValidation,
 } from "../validation/userValidation.js";
 import { parseError, sessionizeUser } from "../utils/helper.js";
 
@@ -88,7 +89,7 @@ router.delete("/logout", ({ session }, res) => {
 });
 
 router.get("/obtainSession", ({ session: { user } }, res) => {
-    res.status(200).send({userId})
+  res.status(200).send({ userId });
 });
 
 // router.post("/auth/create_user", async (req, res) => {
@@ -148,6 +149,33 @@ router.post("/user_login", async (req, res) => {
       }
     }
   );
+});
+
+router.patch("/add_phone_number", async (req, res) => {
+  const { userId, phoneNumber } = req.body;
+  let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, '');
+  try {
+    let user = await User.findById(userId);
+    if (!user) {
+      res.status(404).send(`User with ID ${userId} Not found`);
+      return;
+    }
+
+    await phoneNumberValidation.validateAsync({ phoneNumberNoWhitespace });
+
+    // Need to add validation
+
+    if (user.phoneNumbers.includes(phoneNumberNoWhitespace)) {
+      res.send("This phone number is already added").status(422);
+    } else {
+      user.phoneNumbers.addToSet(phoneNumberNoWhitespace);
+      await user.save();
+      res.status(200).send(user);
+    }
+
+  } catch (error) {
+    res.status(400).send(error);
+  }
 });
 
 // ------------------------

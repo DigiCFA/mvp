@@ -17,7 +17,7 @@ router.get("/retrieve_user", async (req, res) => {
     let result = await User.findById(id).populate({
       path: "contacts",
       perDocumentLimit: 10,
-      select: ["fullName", "phoneNumber"],
+      select: ["fullName", "primaryPhoneNumber"],
     });
 
     if (!result) res.status(404).send(`User with ID ${id} not found`);
@@ -81,7 +81,7 @@ router.get("/search_users", async (req, res) => {
             {
               autocomplete: {
                 query: query,
-                path: "phoneNumber",
+                path: "primaryPhoneNumber",
                 fuzzy: {},
               },
             },
@@ -92,7 +92,7 @@ router.get("/search_users", async (req, res) => {
         firstName: 1,
         lastName: 1,
         fullName: 1,
-        phoneNumber: 1,
+        primaryPhoneNumber: 1,
         _id: 1,
       });
     res.status(200).send(result);
@@ -109,7 +109,7 @@ router.get("/retrieve_user_with_certain_fields", async (req, res) => {
       // 5 most recent contacts
       path: "contacts",
       perDocumentLimit: 5,
-      select: ["fullName", "phoneNumber"],
+      select: ["fullName", "primaryPhoneNumber"],
     });
 
     if (!user) {
@@ -266,6 +266,8 @@ router.patch("/add_balance", async (req, res) => {
     res.status(400).send(error);
   }
 });
+
+
 
 // ------------------------
 // OBSOLETE ONES

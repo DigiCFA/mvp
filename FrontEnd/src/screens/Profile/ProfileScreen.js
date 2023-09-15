@@ -34,7 +34,7 @@ const ProfileScreen = () => {
   return (
     <View className="grow">
       {/* Top Bar */}
-      <View className="flex-row self-center items-center space-x-2 pt-12 pb-6 px-4 bg-[#3370E2]">
+      <View className="flex-row self-center items-center space-x-2 pt-12 pb-6 px-4 bg-blueLight">
         <View className="flex-1"></View>
         <Text className="font-extrabold text-lg text-white">Profile</Text>
         <TouchableOpacity

@@ -1,14 +1,12 @@
 import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
-import pkg from 'bcryptjs'
+import pkg from "bcryptjs";
 
 import { profilePicBaseURL } from "../config/awsConfig.js";
 
 //import search from "mongoose-fuzzy-searching"
 
-
-
-const {hashSync, compareSync} = pkg
+const { hashSync, compareSync } = pkg;
 // import Transaction from "transactionModel.mjs"
 
 // var uniqueValidator = require('mongoose-unique-validator');
@@ -19,12 +17,12 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: true,
     index: true,
-    trim: true
+    trim: true,
   },
   accountHolder: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   cardNumber: {
     type: String,
@@ -32,21 +30,21 @@ const cardSchema = new mongoose.Schema({
     index: true,
     trim: true,
     validate: {
-      validator: function(v) {
+      validator: function (v) {
         return /^[0-9 ]+$/.test(v);
       },
-      message: props =>`${props.value} is not a valid card number!`
-    }
+      message: (props) => `${props.value} is not a valid card number!`,
+    },
   },
   cardType: {
     type: String,
     required: true,
     trim: true,
     validate: {
-      validator: function(v) {
+      validator: function (v) {
         return /^(savings|credit|debit)+$/.test(v);
-      }
-    }
+      },
+    },
   },
   expDate: {
     type: Date,
@@ -68,33 +66,27 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-  }
+  },
 });
 
-
-
-const addressSchema = new mongoose.Schema(
-  {
-    lineOne: {
-      type: String,
-      required: true
-    },
-    lineTwo: {
-      type: String,
-      required: true
-    },
-    city: {
-      type: String,
-      required: true
-    },
-    zipCode: {
-      type: String,
-      required: true
-    }
-  }
-)
-
-
+const addressSchema = new mongoose.Schema({
+  lineOne: {
+    type: String,
+    required: true,
+  },
+  lineTwo: {
+    type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+  zipCode: {
+    type: String,
+    required: true,
+  },
+});
 
 const userSchema = new mongoose.Schema(
   {
@@ -103,39 +95,52 @@ const userSchema = new mongoose.Schema(
       required: [true, "Please enter your first name"],
       trim: true,
       validate: {
-        validator: function(v) {
+        validator: function (v) {
           return /^[a-zA-Z ]*$/.test(v);
         },
-        message: "Must be all characters"
-      }
+        message: "Must be all characters",
+      },
     },
     lastName: {
       type: String,
       required: [true, "Please enter your last name"],
       trim: true,
       validate: {
-        validator: function(v) {
+        validator: function (v) {
           return /^[a-zA-Z ]*$/.test(v);
         },
-        message: "Must be all characters"
-      }
+        message: "Must be all characters",
+      },
     },
     fullName: {
       type: String,
       index: true,
     },
-    phoneNumber: {
+    primaryPhoneNumber: {
       type: String,
       index: true,
       unique: true,
-      required: [true, "Please enter a phone number"],
+      required: [true, "Must have a primary phone number"],
       trim: true,
       validate: {
-        validator: function(v) {
+        validator: function (v) {
           return /^[0-9 +]+$/.test(v);
         },
-        message: "Must be all numbers (or plus)"
-      }
+        message: "Must be all numbers (or plus)",
+      },
+    },
+    phoneNumbers: {
+      type: [String],
+      index: true,
+      unique: true,
+      required: [true, "Phone number list cannot be empty"],
+      trim: true,
+      validate: {
+        validator: function (v) {
+          return /^[0-9 +]+$/.test(v);
+        },
+        message: "Must be all numbers (or plus)",
+      },
     },
     password: {
       type: String,
@@ -169,10 +174,10 @@ const userSchema = new mongoose.Schema(
 
     profilePicture: {
       type: String,
-      default: profilePicBaseURL + "default.png"
+      default: profilePicBaseURL + "default.png",
     },
     addresses: [addressSchema],
-    primaryAddress: Number,
+    // primaryAddress: Number,
     creationDate: Date,
   }
   // Useful if want to create Redacted User view
@@ -188,19 +193,19 @@ const userSchema = new mongoose.Schema(
 userSchema.plugin(uniqueValidator);
 //userSchema.plugin(search,{fields:['firstName','lastName','fullName,phoneNumber']});
 
-userSchema.pre('save', function () {
-  if(this.isModified('password')){
-    this.password = hashSync(this.password, 10)
+userSchema.pre("save", function () {
+  if (this.isModified("password")) {
+    this.password = hashSync(this.password, 10);
   }
-})
+});
 
 userSchema.statics.fieldDoesNotExist = async function (field) {
-  return await this.where(field).countDocuments() === 0
-}
+  return (await this.where(field).countDocuments()) === 0;
+};
 
 userSchema.methods.comparePasswords = function (password) {
-  return compareSync(password, this.password)
-}
+  return compareSync(password, this.password);
+};
 
 // for the 'users' collection
 // Mongoose automatically looks for the all-case/plural named collection in the database
@@ -222,6 +227,5 @@ const RedactedUser = mongoose.model("RedactedUser", userSchema);
 //     }
 //   }]
 // })
-
 
 export default User;
