@@ -4,3 +4,4 @@
 */serverless-express/
 BackEnd/config.mjs
 .expo/
+dist/

@@ -27,8 +27,8 @@ const LoginSignupLandingScreen = () => {
 
   const onPressLogin = () => {
     const user = {
-      phoneNumber: phoneNumber,
-      password: password,
+      "phoneNumber": phoneNumber,
+      "password": password,
     };
     dispatch(login(user));
   };

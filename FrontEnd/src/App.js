@@ -16,8 +16,7 @@ import linking from "./config/linking";
 
 const App = () => {
   let userId = useSelector((state) => state.session.userId);
-  userId = "64eb0d88eaf1bbe6d5741736";
-  let isLoggedIn = Boolean(userId);
+  let isLoggedIn = Boolean(userId  );
   const dispatch = useDispatch();
 
   useEffect(() => {
