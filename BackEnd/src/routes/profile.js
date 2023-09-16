@@ -32,9 +32,7 @@ router.get("/retrieve_user_by_phone_number", async(req, res) => {
   let phoneNumber = req.query.phoneNumber
   try{
     let result = await User.findOne({phoneNumber: phoneNumber})
-
-    if (!result) res.status(404).send(`User with phone number ${phoneNumber} not found`);
-    else res.status(200).send(result);
+    res.status(200).send(result);
   } catch (error) {
     console.error(error);
     res.status(400).send(error)
