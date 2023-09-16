@@ -5,6 +5,8 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Modal,
+  Image
 } from "react-native";
 import React, { useState } from "react";
 import {useDispatch, useSelector} from 'react-redux'
@@ -14,17 +16,86 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import HideKeyboardView from "../../components/HideKeyboardView";
 import { clearAllField, selectFieldWithAttr, setField } from "../../redux/reducers/signUpSlice";
+import * as apiUtil from "../../utils/api";
 
 const SignupPhoneNumberScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch()
 
   const [isInputFocused, setIsInputFocused] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false)
+  const [registeredUser, setRegisteredUser] = useState("")
   const phoneNumber = useSelector(selectFieldWithAttr("phoneNumber"))
+
+  const onPressNext = async function(){
+    try {
+      let response = await apiUtil.fetchUserByPhoneNumber(phoneNumber)
+      let data = response.data
+
+      if(!data){
+        navigation.navigate("PhoneVerification")
+      } else {
+        setRegisteredUser(data)
+        setModalVisible(true)
+      }
+
+    } catch(error) {
+      console.error(error)
+    }
+  }
+
+  const modalScreen = (
+    registeredUser ? (
+      <Modal animationType="slide" transparent={true} visible={modalVisible}
+        onRequestClose={() =>{setModalVisible(false)}}>
+          <View className="flex-1 justify-end">
+            <View className="bg-white items-center py-10 px-9 rounded-3xl shadow-xl relative">
+
+              <View className="absolute left-3 top-3">
+                <TouchableOpacity onPress={() => {setModalVisible(false)}}>
+                  <Ionicons name="close" size={30} color="gray" />
+                </TouchableOpacity>
+              </View>
+
+              <Text className="font-bold text-black text-3xl mt-2 mb-1">Welcom Back!</Text>
+              <Image source={{uri: registeredUser.profilePicture}} className="rounded-full mt-3 mb-3" height={100} width={100} />
+              
+              <View className="mb-5 items-center">
+                <Text className="font-bold text-black text-xl">{registeredUser.firstName} {registeredUser.lastName}</Text>
+                <Text className="font-bold text-black text-xl">{registeredUser.phoneNumber}</Text>
+              </View>
+              
+              <View className="w-full space-y-5 mb-10">
+                <TouchableOpacity className="bg-blue-800 rounded-full py-3 px-10 items-center"
+                  onPress={() => {
+                    dispatch(clearAllField())
+                    navigation.navigate("Landing")
+                    }}>
+                  <Text className="font-bold text-white text-lg">Login with this number</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity className="bg-blue-800 rounded-full py-3 px-10 items-center">
+                  <Text className="font-bold text-white text-lg">Forgot password?</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity className="bg-white rounded-full py-3 px-10 items-center border-2 border-blue-800"
+                  onPress={() => {setModalVisible(false)}}>
+                  <Text className="font-bold text-blue-800 text-lg">Signup with another number</Text>
+                </TouchableOpacity>
+              </View>
+
+            </View>
+          </View>
+      </Modal>
+    ) : null
+  )
 
   return (
     <HideKeyboardView>
-      <SafeAreaView className="flex-1 bg-white">
+      <SafeAreaView className="flex-1 bg-white relative">
+
+        {modalScreen}
+
         <View className="mx-3 my-4 w-6">
           <TouchableOpacity
             onPress={() => {
@@ -81,9 +152,7 @@ const SignupPhoneNumberScreen = () => {
         >
           <TouchableOpacity
             className="bg-blue-800 rounded-full py-4 mx-3"
-            onPress={() => {
-              navigation.navigate("PhoneVerification");
-            }}
+            onPress={onPressNext}
           >
             <Text
               className="text-center font-bold text-white"
@@ -93,6 +162,9 @@ const SignupPhoneNumberScreen = () => {
             </Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>
+      
+        {modalVisible && (<View className="absolute top-0 left-0 bg-gray-500/40 w-full h-full"></View>)}
+
       </SafeAreaView>
     </HideKeyboardView>
   );
