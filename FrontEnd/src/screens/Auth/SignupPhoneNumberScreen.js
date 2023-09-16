@@ -7,16 +7,20 @@ import {
   Platform,
 } from "react-native";
 import React, { useState } from "react";
+import {useDispatch, useSelector} from 'react-redux'
 
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import HideKeyboardView from "../../components/HideKeyboardView";
+import { clearAllField, selectFieldWithAttr, setField } from "../../redux/reducers/signUpSlice";
 
 const SignupPhoneNumberScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch()
 
   const [isInputFocused, setIsInputFocused] = useState(true);
+  const phoneNumber = useSelector(selectFieldWithAttr("phoneNumber"))
 
   return (
     <HideKeyboardView>
@@ -24,6 +28,7 @@ const SignupPhoneNumberScreen = () => {
         <View className="mx-3 my-4 w-6">
           <TouchableOpacity
             onPress={() => {
+              dispatch(clearAllField())
               navigation.goBack();
             }}
           >
@@ -47,6 +52,7 @@ const SignupPhoneNumberScreen = () => {
               <TextInput
                 style={{ fontSize: 20 }}
                 placeholder="000-000-0000"
+                value={phoneNumber}
                 autoFocus={true}
                 keyboardType="numeric"
                 className="pr-2 w-full"
@@ -55,6 +61,9 @@ const SignupPhoneNumberScreen = () => {
                 }}
                 onBlur={() => {
                   setIsInputFocused(false);
+                }}
+                onChangeText={(e) => {
+                  dispatch(setField({field: "phoneNumber", content: e}))
                 }}
               />
             </View>

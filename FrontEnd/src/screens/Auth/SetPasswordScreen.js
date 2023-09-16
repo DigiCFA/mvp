@@ -9,12 +9,15 @@ import {
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import {useDispatch} from 'react-redux'
 
 import PasswordTextInput from "../../components/PasswordTextInput";
 import HideKeyboardView from "../../components/HideKeyboardView";
+import { setField } from "../../redux/reducers/signUpSlice";
 
 const SetPasswordScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const [password, setPassword] = useState("");
   const [retypedPassword, setRetypedPassword] = useState("");
@@ -66,6 +69,7 @@ const SetPasswordScreen = () => {
         <TouchableOpacity
           className="bg-blue-800 rounded-full py-4 mx-3"
           onPress={() => {
+            dispatch(setField({field: "password", content: password}))
             navigation.navigate("Profile");
           }}
         >
