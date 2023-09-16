@@ -27,22 +27,18 @@ router.post("/signup", async (req, res) => {
       lastName: lastName,
       fullName: firstName + " " + lastName,
       phoneNumber: phoneNumber,
+      phoneNumbers: [phoneNumber],
       password: password,
       creationDate: Date.now(),
       // create a QR Code on creation
     });
-    console.log(req.session);
     const sessionUser = sessionizeUser(newUser);
     await newUser.save();
 
-    console.log(sessionUser);
-    console.log(req.session);
     req.session.user = sessionUser;
-    console.log(req.session);
 
-    res.status(200).send(newUser);
+    res.status(200).send(sessionUser);
   } catch (error) {
-    console.log(parseError(error));
     res.status(400).send(parseError(error));
   }
 });
@@ -56,8 +52,8 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ phoneNumber });
     if (user && user.comparePasswords(password)) {
       const sessionUser = sessionizeUser(user);
-
       req.session.user = sessionUser;
+
       res.status(200).send(sessionUser);
     } else {
       throw new Error("Invalid Login Credentials");

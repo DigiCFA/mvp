@@ -31,7 +31,7 @@ export const signup = (user) => {
   return instance.post("/auth/signup", {
       "phoneNumber": user.phoneNumber,
       "password": user.password,
-      "fistName": user.firstName,
+      "firstName": user.firstName,
       'lastName': user.lastName
   })
 }

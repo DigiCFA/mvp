@@ -28,6 +28,19 @@ router.get("/retrieve_user", async (req, res) => {
   }
 });
 
+router.get("/retrieve_user_by_phone_number", async(req, res) => {
+  let phoneNumber = req.query.phoneNumber
+  try{
+    let result = await User.findOne({phoneNumber: phoneNumber})
+
+    if (!result) res.status(404).send(`User with phone number ${phoneNumber} not found`);
+    else res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(400).send(error)
+  }
+})
+
 router.get("/retrieve_transactions", async (req, res) => {
   let id = req.query.userId;
   try {
@@ -40,7 +53,7 @@ router.get("/retrieve_transactions", async (req, res) => {
       .populate({ path: "receiver", select: ["fullName", "_id"] });
 
     if (result.length === 0)
-      res.status(404).send(`User with ID ${id} has no transactions`);
+      res.status(200).send([]);
     else res.status(200).send(result);
   } catch (error) {
     console.error(error);
