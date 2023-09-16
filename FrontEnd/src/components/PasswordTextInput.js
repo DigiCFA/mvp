@@ -1,12 +1,15 @@
 import { View, Text, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {Entypo} from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const PasswordTextInput = ({placeHolder, onChangeText}) => {
 
-    [showPassword, setShowPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [isPasswordInputFocused, setIsPasswordInputFocused] = useState(false);
+    const onPress = ()=>{
+        setShowPassword(!showPassword)
+    }
 
     return (
         <View className={`flex-row items-center border px-3 py-5 rounded-md ${isPasswordInputFocused ? 'border-blue-500' : 'border-gray-500'} mt-10`}>
@@ -16,7 +19,7 @@ const PasswordTextInput = ({placeHolder, onChangeText}) => {
                 onBlur={() => {setIsPasswordInputFocused(false)}}
                 onFocus={() => {setIsPasswordInputFocused(true)}}
                 />
-            <TouchableOpacity onPress={()=>{setShowPassword(!showPassword)}}>
+            <TouchableOpacity onPress={onPress}>
                 <Entypo name={showPassword ? "eye" : "eye-with-line" } size={20} color="black"/>
             </TouchableOpacity>
         </View>
