@@ -94,7 +94,19 @@ const addressSchema = new mongoose.Schema(
   }
 )
 
-
+const phoneNumberConfig = {
+  type: String,
+  index: true,
+  unique: true,
+  required: [true, "Please enter a phone number"],
+  trim: true,
+  validate: {
+    validator: function(v) {
+      return /^[0-9 +]+$/.test(v);
+    },
+    message: "Must be all numbers (or plus)"
+  }
+}
 
 const userSchema = new mongoose.Schema(
   {
@@ -124,19 +136,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       index: true,
     },
-    phoneNumber: {
-      type: String,
-      index: true,
-      unique: true,
-      required: [true, "Please enter a phone number"],
-      trim: true,
-      validate: {
-        validator: function(v) {
-          return /^[0-9 +]+$/.test(v);
-        },
-        message: "Must be all numbers (or plus)"
-      }
-    },
+    phoneNumber: phoneNumberConfig,
+    phoneNumbers: [phoneNumberConfig],
     password: {
       type: String,
       required: [true, "Please enter a valid password"],
