@@ -88,7 +88,7 @@ router.delete("/logout", ({ session }, res) => {
   }
 });
 
-router.get("/obtainSession", ({ session: { user } }, res) => {
+router.get("/obtain_session", ({ session: { user } }, res) => {
   res.status(200).send({ userId });
 });
 
@@ -161,12 +161,11 @@ router.patch("/add_phone_number", async (req, res) => {
       return;
     }
 
-    await phoneNumberValidation.validateAsync({ phoneNumberNoWhitespace });
-
     // Need to add validation
+    // await phoneNumberValidation.validateAsync({ phoneNumberNoWhitespace });
 
     if (user.phoneNumbers.includes(phoneNumberNoWhitespace)) {
-      res.send("This phone number is already added").status(422);
+      res.status(422).send("This phone number is already added.");
     } else {
       user.phoneNumbers.addToSet(phoneNumberNoWhitespace);
       await user.save();
@@ -177,6 +176,28 @@ router.patch("/add_phone_number", async (req, res) => {
     res.status(400).send(error);
   }
 });
+
+router.patch("/make_primary_phone_number", async (req, res) => {
+  const { userId, phoneNumber } = req.body;
+  try {
+    let user = await User.findById(userId);
+    if (!user) {
+      res.status(404).send(`User with ID ${userId} Not found`);
+      return;
+    }
+
+    if (!user.phoneNumbers.includes(phoneNumber)) {
+      res.status(422).send("This phone number needs to be added first.");
+    } else {
+      user.phoneNumber = phoneNumber;
+      await user.save();
+      res.status(200).send(user);
+    }
+
+  } catch (error) {
+    res.status(400).send(error);
+  }
+})
 
 // ------------------------
 // OBSOLETE ONES

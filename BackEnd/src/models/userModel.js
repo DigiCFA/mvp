@@ -116,7 +116,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       index: true,
     },
-    primaryPhoneNumber: {
+    phoneNumber: {
       type: String,
       index: true,
       unique: true,
@@ -132,15 +132,8 @@ const userSchema = new mongoose.Schema(
     phoneNumbers: {
       type: [String],
       index: true,
-      unique: true,
       required: [true, "Phone number list cannot be empty"],
       trim: true,
-      validate: {
-        validator: function (v) {
-          return /^[0-9 +]+$/.test(v);
-        },
-        message: "Must be all numbers (or plus)",
-      },
     },
     password: {
       type: String,
