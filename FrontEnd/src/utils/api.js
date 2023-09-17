@@ -41,7 +41,7 @@ export const logout = () => {
 }
 
 export const getSession = () => {
-  return instance.get("/auth/obtainSession")
+  return instance.get("/auth/obtain_session")
 }
 
 export const fetchUser = (userId) => {
