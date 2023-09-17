@@ -1,7 +1,5 @@
 import { MongoClient } from "mongodb";
 import mongoose from "mongoose";
-import { ATLAS_URI } from "../../config.mjs";
-
 
 // Mongoose automatically manages connection pool underneath the hood
 

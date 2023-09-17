@@ -152,6 +152,14 @@ router.get("/obtain_session", ({ session }, res) => {
 //   );
 // });
 
+
+
+
+// ------------------------
+// PHONE NUMBERS
+// ------------------------
+
+
 router.patch("/add_phone_number", async (req, res) => {
   const { userId, phoneNumber } = req.body;
   let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, '');
@@ -187,7 +195,9 @@ router.patch("/make_primary_phone_number", async (req, res) => {
       return;
     }
 
-    if (!user.phoneNumbers.includes(phoneNumber)) {
+    console.log(user.phoneNumbers.includes(phoneNumber))
+
+    if (user.phoneNumbers.includes(phoneNumber) === false) {
       res.status(422).send("This phone number needs to be added first.");
     } else {
       user.phoneNumber = phoneNumber;
@@ -200,8 +210,5 @@ router.patch("/make_primary_phone_number", async (req, res) => {
   }
 })
 
-// ------------------------
-// OBSOLETE ONES
-// ------------------------
 
 export default router;

@@ -4,7 +4,7 @@ import morgan from "morgan";
 import connectStore from "connect-mongo";
 import session from "express-session"
 import routes from "./routes/index.js";
-import 'dotenv/config.js'
+// import 'dotenv/config.js'
 
 const app = express();
 
