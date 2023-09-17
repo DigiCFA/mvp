@@ -20,7 +20,7 @@ const WalletScreen = () => {
     <SafeAreaView className="flex-1">
       <View className="flex-row p-4 items-center">
         <TouchableOpacity className="bg-white py-2 px-4 rounded-full">
-          <Text className="text-lg font-extrabold text-[#192C88]">Wallet</Text>
+          <Text className="text-lg font-extrabold text-blueDark">Wallet</Text>
         </TouchableOpacity>
         <View className="flex-1"></View>
         <TouchableOpacity>

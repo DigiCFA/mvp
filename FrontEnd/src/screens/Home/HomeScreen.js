@@ -43,7 +43,7 @@ const HomeScreen = () => {
 
 
   return (
-    <SafeAreaView className="bg-[#e9e7e2] flex-1">
+    <SafeAreaView className="bg-beige flex-1">
 {/* 
       <Spinner 
         visible={spinner}
