@@ -6,14 +6,14 @@ import {
   TextInput,
   Touchable,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 
 import { FontAwesome } from "@expo/vector-icons";
 import PasswordTextInput from "../../components/PasswordTextInput";
 import HideKeyboardView from "../../components/HideKeyboardView";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/reducers/sessionSlice";
 
 const LoginSignupLandingScreen = () => {
@@ -27,8 +27,8 @@ const LoginSignupLandingScreen = () => {
 
   const onPressLogin = () => {
     const user = {
-      phoneNumber: phoneNumber,
-      password: password,
+      "phoneNumber": phoneNumber,
+      "password": password,
     };
     dispatch(login(user));
   };

@@ -12,10 +12,12 @@ import { useNavigation } from "@react-navigation/native";
 import VerificationCodeInput from "../../components/VerificationCodeInput";
 
 import HideKeyboardView from "../../components/HideKeyboardView";
+import { useSelector } from "react-redux";
+import { selectFieldWithAttr } from "../../redux/reducers/signUpSlice";
 
 const PhoneVerificationScreen = () => {
-  const phoneNumber = "+1 123 123 1234";
 
+  const phoneNumber = useSelector(selectFieldWithAttr("phoneNumber"));
   const navigation = useNavigation();
 
   const onVerificationCodeReady = (verificationCode) => {

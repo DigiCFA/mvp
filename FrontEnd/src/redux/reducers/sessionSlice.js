@@ -11,9 +11,11 @@ const sessionSlice = createSlice({
   reducers: {
     receiveCurrentUser: (state, action) => {
       state.userId = action.payload.userId;
+      return state
     },
     logoutCurrentUser: (state, action) => {
       state.userId = null;
+      return state
     },
   },
 });

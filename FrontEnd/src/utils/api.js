@@ -13,18 +13,55 @@ export const profilePicBaseURL =
 // import {fileFromPath} from "formdata-node/file-from-path"
 
 // axios.defaults.baseURL = "http://192.168.3.106:5050/api";
-axios.defaults.baseURL = baseURL; 
+
+const instance = axios.create({
+  baseURL: baseURL,
+  withCredentials: true,
+  credentials: "include"
+})
+
+export const login = (user) => {
+  return instance.post("/auth/login", {
+      "phoneNumber": user.phoneNumber,
+      "password": user.password
+  })
+}
+
+export const signup = (user) => {
+  return instance.post("/auth/signup", {
+      "phoneNumber": user.phoneNumber,
+      "password": user.password,
+      "firstName": user.firstName,
+      'lastName': user.lastName
+  })
+}
+
+export const logout = () => {
+  return instance.delete("/auth/logout")
+}
+
+export const getSession = () => {
+  return instance.get("/auth/obtainSession")
+}
 
 export const fetchUser = (userId) => {
-  return axios.get("/profile/retrieve_user", {
+  return instance.get("/profile/retrieve_user", {
     params: {
       userId: userId,
     },
   });
 };
 
+export const fetchUserByPhoneNumber = (phoneNumber) => {
+  return instance.get("/profile/retrieve_user_by_phone_number", {
+    params: {
+      phoneNumber: phoneNumber
+    }
+  })
+}
+
 export const fetchTransactions = (userId) => {
-  return axios.get("/profile/retrieve_transactions", {
+  return instance.get("/profile/retrieve_transactions", {
     params: {
       userId: userId,
     },
@@ -32,7 +69,7 @@ export const fetchTransactions = (userId) => {
 };
 
 export const searchUsers = (query) => {
-  return axios.get("/profile/search_users", {
+  return instance.get("/profile/search_users", {
     params: {
       query: query
     }
@@ -42,7 +79,7 @@ export const searchUsers = (query) => {
 // Not necessary to have a stand alone function
 
 // export const fetchProfilePic = (userId) => {
-//   return axios.get("/profile/retrieve_user", {
+//   return instance.get("/profile/retrieve_user", {
 //     params: {
 //       userId: userId
 //     },
@@ -60,7 +97,7 @@ export const createDirectTransaction = async (
   message
 ) => {
   try {
-    const response = await axios.post(
+    const response = await instance.post(
       "/transaction/create_direct_transaction",
       {
         amountTransferred: amountTransferred,

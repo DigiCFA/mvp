@@ -28,22 +28,18 @@ router.post("/signup", async (req, res) => {
       lastName: lastName,
       fullName: firstName + " " + lastName,
       phoneNumber: phoneNumber,
+      phoneNumbers: [phoneNumber],
       password: password,
       creationDate: Date.now(),
       // create a QR Code on creation
     });
-    console.log(req.session);
     const sessionUser = sessionizeUser(newUser);
     await newUser.save();
 
-    console.log(sessionUser);
-    console.log(req.session);
     req.session.user = sessionUser;
-    console.log(req.session);
 
-    res.status(200).send(newUser);
+    res.status(200).send(sessionUser);
   } catch (error) {
-    console.log(parseError(error));
     res.status(400).send(parseError(error));
   }
 });
@@ -57,8 +53,8 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ phoneNumber });
     if (user && user.comparePasswords(password)) {
       const sessionUser = sessionizeUser(user);
-
       req.session.user = sessionUser;
+
       res.status(200).send(sessionUser);
     } else {
       throw new Error("Invalid Login Credentials");
@@ -88,8 +84,13 @@ router.delete("/logout", ({ session }, res) => {
   }
 });
 
-router.get("/obtain_session", ({ session: { user } }, res) => {
-  res.status(200).send({ userId });
+router.get("/obtain_session", ({ session }, res) => {
+    try {
+      const userId = session.user.userId
+      res.status(200).send({userId: userId})
+    } catch (error){
+      res.status(200).send({userId: null})
+    }
 });
 
 // router.post("/auth/create_user", async (req, res) => {
@@ -122,34 +123,34 @@ router.get("/obtain_session", ({ session: { user } }, res) => {
 //     });
 // });
 
-router.delete("/delete_user", async (req, res) => {
-  let id = req.body.userId;
-  try {
-    let result = await User.findByIdAndDelete(id);
+// router.delete("/delete_user", async (req, res) => {
+//   let id = req.body.userId;
+//   try {
+//     let result = await User.findByIdAndDelete(id);
 
-    if (!result) res.status(404).send(`User with ID ${id} Not found`);
-    else res.status(200).send(result);
-  } catch (error) {
-    console.error(error);
-    res.status(400).send(error);
-  }
-});
+//     if (!result) res.status(404).send(`User with ID ${id} Not found`);
+//     else res.status(200).send(result);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(400).send(error);
+//   }
+// });
 
-router.post("/user_login", async (req, res) => {
-  let collection = db.collection("users");
-  let user_input = req.body;
-  let findUser = await collection.findOne(
-    { user_phone_number: user_input.user_phone_number },
-    function (error, result) {
-      if (!error) {
-        res.send({}).status(200);
-      } else {
-        console.error(error);
-        res.send({}).status(400);
-      }
-    }
-  );
-});
+// router.post("/user_login", async (req, res) => {
+//   let collection = db.collection("users");
+//   let user_input = req.body;
+//   let findUser = await collection.findOne(
+//     { user_phone_number: user_input.user_phone_number },
+//     function (error, result) {
+//       if (!error) {
+//         res.send({}).status(200);
+//       } else {
+//         console.error(error);
+//         res.send({}).status(400);
+//       }
+//     }
+//   );
+// });
 
 router.patch("/add_phone_number", async (req, res) => {
   const { userId, phoneNumber } = req.body;

@@ -9,14 +9,24 @@ import {
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from 'react-redux'
 
 import HideKeyboardView from "../../components/HideKeyboardView";
+import { selectFieldWithAttr, setField } from "../../redux/reducers/signUpSlice";
+import { signup } from "../../redux/reducers/sessionSlice";
 
 const SetProfileScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const state = useSelector(state => state.signUp)
 
   const [firstNameInputFocused, setFirstNameInputFocused] = useState(false);
   const [lastNameInputFocused, setLastNameInputFocused] = useState(false);
+
+  const firstName = useSelector(selectFieldWithAttr("firstName"))
+  const lastName = useSelector(selectFieldWithAttr("lastName"))
+  const user = useSelector(state => state.signUp)
 
   return (
     <SafeAreaView className="bg-white flex-1">
@@ -46,6 +56,7 @@ const SetProfileScreen = () => {
       <View className="mx-3 mt-10 space-y-6">
         <TextInput
           placeholder="First name"
+          value={firstName}
           style={{ fontSize: 18 }}
           className={`border px-3 py-5 rounded-md ${
             firstNameInputFocused ? "border-blue-500" : "border-gray-500"
@@ -56,10 +67,12 @@ const SetProfileScreen = () => {
           onFocus={() => {
             setFirstNameInputFocused(true);
           }}
+          onChangeText={(e) => {dispatch(setField({field: "firstName", content: e}))}}
         />
 
         <TextInput
           placeholder="Last name"
+          value={lastName}
           style={{ fontSize: 18 }}
           className={`border px-3 py-5 rounded-md ${
             lastNameInputFocused ? "border-blue-500" : "border-gray-500"
@@ -70,6 +83,7 @@ const SetProfileScreen = () => {
           onFocus={() => {
             setLastNameInputFocused(true);
           }}
+          onChangeText={(e) => {dispatch(setField({field: "lastName", content: e}))}}
         />
       </View>
 
@@ -81,7 +95,9 @@ const SetProfileScreen = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={10}
       >
-        <TouchableOpacity className="bg-blue-800 rounded-full py-4 mx-3">
+        <TouchableOpacity className="bg-blue-800 rounded-full py-4 mx-3"
+          onPress={() => {
+            dispatch(signup(user))}}>
           <Text
             className="text-center font-bold text-white"
             style={{ fontSize: 20 }}
