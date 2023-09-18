@@ -39,7 +39,7 @@ router.post("/signup", async (req, res) => {
 
     req.session.user = sessionUser;
 
-    res.status(200).send(sessionUser);
+    res.status(200).json(sessionUser);
   } catch (error) {
     return handleRouteError(res, error);
   }
@@ -56,7 +56,7 @@ router.post("/login", async (req, res) => {
       const sessionUser = sessionizeUser(user);
       req.session.user = sessionUser;
 
-      res.status(200).send(sessionUser);
+      res.status(200).json(sessionUser);
     } else {
       throw new Error("Invalid Login Credentials");
     }
@@ -74,7 +74,7 @@ router.delete("/logout", ({ session }, res) => {
           throw err;
         }
         res.clearCookie(process.env.SESSION_NAME);
-        res.status(200).send(user);
+        res.status(200).json(user);
       });
     } else {
       throw new Error("Something went wrong");
@@ -85,12 +85,12 @@ router.delete("/logout", ({ session }, res) => {
 });
 
 router.get("/obtain_session", ({ session }, res) => {
-    try {
-      const userId = session.user.userId
-      res.status(200).send({userId: userId})
-    } catch (error){
-      res.status(200).send({userId: null})
-    }
+  try {
+    const userId = session.user.userId;
+    res.status(200).json({ userId: userId });
+  } catch (error) {
+    res.status(200).json({ userId: null });
+  }
 });
 
 // router.post("/auth/create_user", async (req, res) => {
@@ -152,35 +152,34 @@ router.get("/obtain_session", ({ session }, res) => {
 //   );
 // });
 
-
-
-
 // ------------------------
 // PHONE NUMBERS
 // ------------------------
 
-
 router.patch("/add_phone_number", async (req, res) => {
   const { userId, phoneNumber } = req.body;
-  let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, '');
+  let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
   try {
     let user = await User.findById(userId);
     if (!user) {
-      res.status(404).send(`User with ID ${userId} Not found`);
-      return;
+      return res.status(404).json({
+        error_code: "USER_NOT_FOUND",
+        message: `User with ID ${userId} not found`,
+      });
     }
-
     // Need to add validation
     // await phoneNumberValidation.validateAsync({ phoneNumberNoWhitespace });
 
     if (user.phoneNumbers.includes(phoneNumberNoWhitespace)) {
-      res.status(422).send("This phone number is already added.");
+      return res.status(422).json({
+        error_code: "PHONE_ALREADY_ADDED",
+        message: "This phone number has already been added.",
+      });
     } else {
       user.phoneNumbers.addToSet(phoneNumberNoWhitespace);
       await user.save();
-      res.status(200).send(user);
+      res.status(200).json(user);
     }
-
   } catch (error) {
     return handleRouteError(res, error);
   }
@@ -188,30 +187,36 @@ router.patch("/add_phone_number", async (req, res) => {
 
 router.patch("/delete_phone_number", async (req, res) => {
   const { userId, phoneNumber } = req.body;
-  let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, '');
+  let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
   try {
     let user = await User.findById(userId);
     if (!user) {
-      res.status(404).send(`User with ID ${userId} Not found`);
-      return;
+      return res.status(404).json({
+        error_code: "USER_NOT_FOUND",
+        message: `User with ID ${userId} not found`,
+      });
     }
 
     // Need to add validation
     // await phoneNumberValidation.validateAsync({ phoneNumberNoWhitespace });
-    console.log(user.phoneNumbers)
-    console.log(phoneNumberNoWhitespace)
+    console.log(user.phoneNumbers);
+    console.log(phoneNumberNoWhitespace);
 
-    if (user.phoneNumbers.includes(phoneNumberNoWhitespace) === false) {
-      res.status(422).send("This phone number has not been added.");
+    if (!user.phoneNumbers.includes(phoneNumberNoWhitespace)) {
+      return res.status(422).json({
+        error_code: "PHONE_NOT_FOUND",
+        message: "This phone number has not been added.",
+      });
     } else if (user.phoneNumber === phoneNumberNoWhitespace) {
-      res.status(422).send("Cannot remove primary phone number")
-    }
-    else {
+      return res.status(422).json({
+        error_code: "CANNOT_REMOVE_PRIMARY_PHONE",
+        message: "Cannot remove the primary phone number. Please make another phone number the primary phone number first.",
+      });
+    } else {
       user.phoneNumbers.pull(phoneNumberNoWhitespace);
       await user.save();
-      res.status(200).send(user);
+      res.status(200).json(user);
     }
-
   } catch (error) {
     return handleRouteError(res, error);
   }
@@ -219,26 +224,29 @@ router.patch("/delete_phone_number", async (req, res) => {
 
 router.patch("/make_primary_phone_number", async (req, res) => {
   const { userId, phoneNumber } = req.body;
-  let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, '');
+  let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
   try {
     let user = await User.findById(userId);
     if (!user) {
-      res.status(404).send(`User with ID ${userId} Not found`);
-      return;
+      return res.status(404).json({
+        error_code: "USER_NOT_FOUND",
+        message: `User with ID ${userId} not found`,
+      });
     }
 
-    if (user.phoneNumbers.includes(phoneNumberNoWhitespace) === false) {
-      res.status(422).send("This phone number needs to be added first.");
+    if (!user.phoneNumbers.includes(phoneNumberNoWhitespace)) {
+      return res.status(422).json({
+        error_code: "PHONE_NOT_FOUND",
+        message: "This phone number has not been added.",
+      });
     } else {
       user.phoneNumber = phoneNumberNoWhitespace;
       await user.save();
-      res.status(200).send(user);
+      res.status(200).json(user);
     }
-
   } catch (error) {
     return handleRouteError(res, error);
   }
-})
-
+});
 
 export default router;

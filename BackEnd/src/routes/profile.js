@@ -12,46 +12,63 @@ import { handleRouteError } from "../utils/errorHandling.js";
 const router = express.Router();
 
 router.get("/retrieve_user", async (req, res) => {
-  let id = req.query.userId;
+  let userId = req.query.userId;
   try {
     // Top 5 contacts
-    let result = await User.findById(id).populate({
+    let user = await User.findById(userId).populate({
       path: "contacts",
       perDocumentLimit: 10,
       select: ["fullName", "phoneNumber"],
     });
 
-    if (!result) res.status(404).send(`User with ID ${id} not found`);
-    else res.status(200).send(result);
+    if (!user) {
+      return res.status(404).json({
+        error_code: "USER_NOT_FOUND",
+        message: `User with ID ${userId} not found`,
+      });
+    } else {
+      res.status(200).json(user);
+    }
   } catch (error) {
     return handleRouteError(res, error);
   }
 });
 
-router.get("/retrieve_user_by_phone_number", async(req, res) => {
-  let phoneNumber = req.query.phoneNumber
-  try{
-    let result = await User.findOne({phoneNumber: phoneNumber})
-    res.status(200).send(result);
+router.get("/retrieve_user_by_phone_number", async (req, res) => {
+  let phoneNumber = req.query.phoneNumber;
+  try {
+    let user = await User.findOne({ phoneNumber: phoneNumber }).populate({
+      path: "contacts",
+      perDocumentLimit: 10,
+      select: ["fullName", "phoneNumber"],
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        error_code: "USER_NOT_FOUND",
+        message: `User with ID ${userId} not found`,
+      });
+    } else {
+      res.status(200).json(user);
+    }
   } catch (error) {
     return handleRouteError(res, error);
   }
-})
+});
 
 router.get("/retrieve_transactions", async (req, res) => {
-  let id = req.query.userId;
+  let userId = req.query.userId;
   try {
     // all transactions
-    let result = await Transaction.find({
-      $or: [{ sender: id }, { receiver: id }],
+    let transactions = await Transaction.find({
+      $or: [{ sender: userId }, { receiver: userId }],
       isFulfilled: true,
     })
       .populate({ path: "sender", select: ["fullName", "_id"] })
       .populate({ path: "receiver", select: ["fullName", "_id"] });
 
-    if (result.length === 0)
-      res.status(200).send([]);
-    else res.status(200).send(result);
+    if (transactions.length === 0) res.status(200).send([]);
+    else res.status(200).send(transactions);
   } catch (error) {
     return handleRouteError(res, error);
   }
@@ -110,10 +127,11 @@ router.get("/search_users", async (req, res) => {
   }
 });
 
+// NOT DONE
 router.get("/retrieve_user_with_certain_fields", async (req, res) => {
-  let id = req.query.userId;
+  let userId = req.query.userId;
   try {
-    let user = await User.findById(id).populate({
+    let user = await User.findById(userId).populate({
       // 5 most recent contacts
       path: "contacts",
       perDocumentLimit: 5,
@@ -121,12 +139,14 @@ router.get("/retrieve_user_with_certain_fields", async (req, res) => {
     });
 
     if (!user) {
-      res.status(404).send(`User with ID ${id} Not found`);
-      return;
+      return res.status(404).json({
+        error_code: "USER_NOT_FOUND",
+        message: `User with ID ${userId} not found`,
+      });
     }
     // Find all transactions within 2 months
     let transactions = await Transaction.find({
-      $or: [{ sender: id }, { receiver: id }],
+      $or: [{ sender: userId }, { receiver: userId }],
       isFulfilled: true,
     });
 
@@ -147,7 +167,7 @@ router.get("/retrieve_user_with_certain_fields", async (req, res) => {
     //   }
     // ])
 
-    res.status(200).send(user);
+    res.status(200).json(user);
     // res.status(200).send(transactions);
   } catch (error) {
     return handleRouteError(res, error);
@@ -155,13 +175,17 @@ router.get("/retrieve_user_with_certain_fields", async (req, res) => {
 });
 
 router.patch("/add_card", async (req, res) => {
-  let id = req.body.userId;
+  let userId = req.body.userId;
   try {
-    let user = await User.findById(id);
+    let user = await User.findById(userId);
+
     if (!user) {
-      res.status(404).send(`User with ID ${id} Not found`);
-      return;
+      return res.status(404).json({
+        error_code: "USER_NOT_FOUND",
+        message: `User with ID ${userId} not found`,
+      });
     }
+
     const newCard = await user.cards.create({
       name: req.body.name,
       accountHolder: req.body.accountHolder,
@@ -175,7 +199,7 @@ router.patch("/add_card", async (req, res) => {
     // Check if card number already exists
     const card = await User.findOne(
       {
-        _id: id,
+        _id: userId,
       },
       {
         cards: {
@@ -187,12 +211,14 @@ router.patch("/add_card", async (req, res) => {
     );
 
     if (card.cards.length != 0) {
-      console.log(card);
-      res.send("This card number or name has already been added.").status(422);
+      return res.status(422).json({
+        error_code: "CARD_ALREADY_ADDED",
+        message: "This card number or name has already been added.",
+      });
     } else {
       await user.cards.addToSet(newCard);
       await user.save();
-      res.status(200).send(newCard);
+      res.status(200).json(newCard);
     }
   } catch (error) {
     return handleRouteError(res, error);
@@ -200,22 +226,24 @@ router.patch("/add_card", async (req, res) => {
 });
 
 router.patch("/remove_card", async (req, res) => {
-  let id = req.body.userId;
+  let userId = req.body.userId;
   let cardId = req.body.cardId;
   // let cardNumber = req.body.cardNumber;
   //card.expDate = Date(card.expDate);
   // console.log(cardNumber);
   try {
-    let user = await User.findById(id);
+    let user = await User.findById(userId);
     if (!user) {
-      res.status(404).send(`User with ID ${id} Not found`);
-      return;
+      return res.status(404).json({
+        error_code: "USER_NOT_FOUND",
+        message: `User with ID ${userId} not found`,
+      });
     }
 
     await user.cards.pull(cardId);
     await user.save();
 
-    res.status(200).send(user);
+    res.status(200).json(user);
   } catch (error) {
     return handleRouteError(res, error);
   }
@@ -225,7 +253,7 @@ router.patch(
   "/set_profile_pic",
   upload.single("profilePicture"),
   async (req, res) => {
-    let id = req.body.userId;
+    let userId = req.body.userId;
     const { originalname, buffer } = req.file;
 
     const params = {
@@ -235,10 +263,12 @@ router.patch(
     };
 
     try {
-      let user = await User.findById(id);
+      let user = await User.findById(userId);
       if (!user) {
-        res.status(404).send(`User with ID ${id} Not found`);
-        return;
+        return res.status(404).json({
+          error_code: "USER_NOT_FOUND",
+          message: `User with ID ${userId} not found`,
+        });
       }
 
       await uploadToS3(params);
@@ -247,7 +277,7 @@ router.patch(
       user.profilePicture = originalname;
       await user.save();
 
-      res.status(200).send(user);
+      res.status(200).json(user);
     } catch (error) {
       return handleRouteError(res, error);
     }
@@ -255,24 +285,24 @@ router.patch(
 );
 
 router.patch("/add_balance", async (req, res) => {
-  let id = req.body.userId;
+  let userId = req.body.userId;
   try {
-    let user = await User.findById(id);
+    let user = await User.findById(userId);
     if (!user) {
-      res.status(404).send(`User with ID ${id} Not found`);
-      return;
+      return res.status(404).json({
+        error_code: "USER_NOT_FOUND",
+        message: `User with ID ${userId} not found`,
+      });
     }
 
     user.balance += req.body.amount;
 
     await user.save();
-    res.status(200).send(user);
+    res.status(200).json(user);
   } catch (error) {
     return handleRouteError(res, error);
   }
 });
-
-
 
 // ------------------------
 // OBSOLETE ONES
