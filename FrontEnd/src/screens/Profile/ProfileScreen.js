@@ -52,7 +52,6 @@ const ProfileScreen = () => {
               <Image
                 source={{ uri: self.profilePicture }}
                 className="h-24 w-24 rounded-full"
-                // style={{width: 100, height: 100}}
               />
             </View>
 

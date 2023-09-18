@@ -2,6 +2,7 @@
 *.DS_Store
 */node_modules/
 */serverless-express/
-BackEnd/config.mjs
+*/dist/
+BackEnd/config.js
+BackEnd/sam-template.packaged.yaml
 .expo/
-dist/
