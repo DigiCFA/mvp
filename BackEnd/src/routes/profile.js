@@ -5,6 +5,7 @@ import { retrieveFromS3, uploadToS3 } from "../controllers/awsController.js";
 
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
+import { handleRouteError } from "../utils/errorHandling.js";
 
 //import {mongoose_fuzzy_searching} from "mongoose-fuzzy-searching"
 
@@ -23,8 +24,7 @@ router.get("/retrieve_user", async (req, res) => {
     if (!result) res.status(404).send(`User with ID ${id} not found`);
     else res.status(200).send(result);
   } catch (error) {
-    console.error(error);
-    res.status(400).send(error);
+    return handleRouteError(res, error);
   }
 });
 
@@ -34,8 +34,7 @@ router.get("/retrieve_user_by_phone_number", async(req, res) => {
     let result = await User.findOne({phoneNumber: phoneNumber})
     res.status(200).send(result);
   } catch (error) {
-    console.error(error);
-    res.status(400).send(error)
+    return handleRouteError(res, error);
   }
 })
 
@@ -54,8 +53,7 @@ router.get("/retrieve_transactions", async (req, res) => {
       res.status(200).send([]);
     else res.status(200).send(result);
   } catch (error) {
-    console.error(error);
-    res.status(400).send(error);
+    return handleRouteError(res, error);
   }
 });
 
@@ -108,8 +106,7 @@ router.get("/search_users", async (req, res) => {
       });
     res.status(200).send(result);
   } catch (error) {
-    console.error(error);
-    res.status(400).send(error);
+    return handleRouteError(res, error);
   }
 });
 
@@ -153,8 +150,7 @@ router.get("/retrieve_user_with_certain_fields", async (req, res) => {
     res.status(200).send(user);
     // res.status(200).send(transactions);
   } catch (error) {
-    console.error(error);
-    res.status(400).send(error);
+    return handleRouteError(res, error);
   }
 });
 
@@ -199,7 +195,7 @@ router.patch("/add_card", async (req, res) => {
       res.status(200).send(newCard);
     }
   } catch (error) {
-    res.status(400).send(error);
+    return handleRouteError(res, error);
   }
 });
 
@@ -221,8 +217,7 @@ router.patch("/remove_card", async (req, res) => {
 
     res.status(200).send(user);
   } catch (error) {
-    console.error(error);
-    res.status(400).send(error);
+    return handleRouteError(res, error);
   }
 });
 
@@ -254,8 +249,7 @@ router.patch(
 
       res.status(200).send(user);
     } catch (error) {
-      console.error(error);
-      res.status(500).send("Error uploading pic");
+      return handleRouteError(res, error);
     }
   }
 );
@@ -274,7 +268,7 @@ router.patch("/add_balance", async (req, res) => {
     await user.save();
     res.status(200).send(user);
   } catch (error) {
-    res.status(400).send(error);
+    return handleRouteError(res, error);
   }
 });
 

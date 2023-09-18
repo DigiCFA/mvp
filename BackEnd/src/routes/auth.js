@@ -7,6 +7,7 @@ import {
   phoneNumberValidation,
 } from "../validation/userValidation.js";
 import { parseError, sessionizeUser } from "../utils/helper.js";
+import { handleRouteError } from "../utils/errorHandling.js";
 
 import User from "../models/userModel.js";
 
@@ -40,7 +41,7 @@ router.post("/signup", async (req, res) => {
 
     res.status(200).send(sessionUser);
   } catch (error) {
-    res.status(400).send(parseError(error));
+    return handleRouteError(res, error);
   }
 });
 
@@ -60,8 +61,7 @@ router.post("/login", async (req, res) => {
       throw new Error("Invalid Login Credentials");
     }
   } catch (error) {
-    console.log(error);
-    res.status(401).send(parseError(error));
+    return handleRouteError(res, error);
   }
 });
 
@@ -80,7 +80,7 @@ router.delete("/logout", ({ session }, res) => {
       throw new Error("Something went wrong");
     }
   } catch (error) {
-    res.status(422).send(parseError(err));
+    return handleRouteError(res, error);
   }
 });
 
@@ -182,7 +182,7 @@ router.patch("/add_phone_number", async (req, res) => {
     }
 
   } catch (error) {
-    res.status(400).send(error);
+    return handleRouteError(res, error);
   }
 });
 
@@ -213,7 +213,7 @@ router.patch("/delete_phone_number", async (req, res) => {
     }
 
   } catch (error) {
-    res.status(400).send(error);
+    return handleRouteError(res, error);
   }
 });
 
@@ -236,7 +236,7 @@ router.patch("/make_primary_phone_number", async (req, res) => {
     }
 
   } catch (error) {
-    res.status(400).send(error);
+    return handleRouteError(res, error);
   }
 })
 
