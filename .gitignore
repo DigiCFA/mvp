@@ -2,6 +2,6 @@
 *.DS_Store
 */node_modules/
 */serverless-express/
+*/dist/
 BackEnd/config.js
 .expo/
-dist/
