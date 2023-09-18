@@ -186,8 +186,9 @@ router.patch("/add_phone_number", async (req, res) => {
   }
 });
 
-router.patch("/make_primary_phone_number", async (req, res) => {
+router.patch("/delete_phone_number", async (req, res) => {
   const { userId, phoneNumber } = req.body;
+  let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, '');
   try {
     let user = await User.findById(userId);
     if (!user) {
@@ -195,12 +196,41 @@ router.patch("/make_primary_phone_number", async (req, res) => {
       return;
     }
 
-    console.log(user.phoneNumbers.includes(phoneNumber))
+    // Need to add validation
+    // await phoneNumberValidation.validateAsync({ phoneNumberNoWhitespace });
+    console.log(user.phoneNumbers)
+    console.log(phoneNumberNoWhitespace)
 
-    if (user.phoneNumbers.includes(phoneNumber) === false) {
+    if (user.phoneNumbers.includes(phoneNumberNoWhitespace) === false) {
+      res.status(422).send("This phone number has not been added.");
+    } else if (user.phoneNumber === phoneNumberNoWhitespace) {
+      res.status(422).send("Cannot remove primary phone number")
+    }
+    else {
+      user.phoneNumbers.pull(phoneNumberNoWhitespace);
+      await user.save();
+      res.status(200).send(user);
+    }
+
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+router.patch("/make_primary_phone_number", async (req, res) => {
+  const { userId, phoneNumber } = req.body;
+  let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, '');
+  try {
+    let user = await User.findById(userId);
+    if (!user) {
+      res.status(404).send(`User with ID ${userId} Not found`);
+      return;
+    }
+
+    if (user.phoneNumbers.includes(phoneNumberNoWhitespace) === false) {
       res.status(422).send("This phone number needs to be added first.");
     } else {
-      user.phoneNumber = phoneNumber;
+      user.phoneNumber = phoneNumberNoWhitespace;
       await user.save();
       res.status(200).send(user);
     }

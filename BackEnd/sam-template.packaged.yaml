@@ -22,7 +22,7 @@ Resources:
   ExpressLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://digicfa-frontend/9191a6ca873f6f4190868a76cb7813b9
+      CodeUri: s3://digicfa-frontend/7bc7bb8c921a09409d904b319cb05358
       Handler: main.handler
       MemorySize: 1024
       Runtime: nodejs18.x
