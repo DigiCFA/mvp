@@ -4,14 +4,19 @@ MVP for the FinTech startup DigiCFA, a digital payment solution for Central Afri
 
 ---
 
-# How to run 
+## How to test the lambda BackEnd locally
 
-## BackEnd
-```
-cd mvp/BackEnd
-npm run dev
-```
-Will open at: localhost:5050/routes
+Prerequisite: make sure to add the .env file to the root of the project
+
+1. Comment out the express-session line in ```index.js```. Somehow it doesn't work with local testing
+
+2. Modify the ```api-gateway-event.json``` file. Only modify the 'path', 'httpMethod', and 'body' variables which appear to be sufficient. The rest don't seem to make a difference. Could not get the GET requests to work (someone please look into this - queryStringParameters does not seem to register), but as long as the request uses the 'body' variable it works.
+
+3. ```npm run local```
+
+
+
+# How to run
 
 ## FrontEnd
 
