@@ -6,8 +6,8 @@ import {
   signUpValidation,
   phoneNumberValidation,
 } from "../validation/userValidation.js";
-import { parseError, sessionizeUser } from "../utils/helper.js";
-import { handleRouteError } from "../utils/errorHandling.js";
+import { sessionizeUser } from "../utils/helper.js";
+import { parseError, handleRouteError } from "../utils/errorHandling.js";
 
 import User from "../models/userModel.js";
 
