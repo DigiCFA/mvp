@@ -9,10 +9,6 @@ const baseURL = "https://o4gnaf7sce.execute-api.af-south-1.amazonaws.com/prod/ap
 export const profilePicBaseURL =
   "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
 
-// import RNFetchBlob from "rn-fetch-blob";
-// import {fileFromPath} from "formdata-node/file-from-path"
-
-// axios.defaults.baseURL = "http://192.168.3.106:5050/api";
 
 const instance = axios.create({
   baseURL: baseURL,

@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { fetchProfilePic, fetchTransactions, fetchUser, profilePicBaseURL } from "../../utils/api";
+import {
+  fetchProfilePic,
+  fetchTransactions,
+  fetchUser,
+  profilePicBaseURL,
+} from "../../utils/api";
 
 // Maybe write a thunk to fetch user info. In which case user info is passed during login, in which case initialState should be null
 const initialState = {
@@ -10,7 +15,6 @@ const initialState = {
     lastName: "User",
     fullName: "Default User",
     phoneNumber: "+1 123 456 7890",
-    // password: "johnsmith",
     QRCode: null,
     balance: 888.88,
     cards: [
@@ -34,26 +38,14 @@ const initialState = {
       city: "",
       zipCode: "",
     },
-    transactions: [
-      // {
-      //   _id: "64cef2e74a0615d28fc4b58a",
-      //   amountTransferred: 0.04,
-      //   sender: {
-      //     _id: "64c66df647cc118b6eba8b26",
-      //     fullName: "Henry Liu",
-      //   },
-      //   receiver: {
-      //     _id: "64c673c724782ec4c7fb2d8f",
-      //     fullName: "Edmond Wang",
-      //   },
-      //   transactionDate: "2023-08-06T01:09:59.848Z",
-      //   isPayment: true,
-      //   message: "Henry sends to Edmond",
-      //   isFulfilled: true,
-      // },
-    ],
+    transactions: [],
     // Not necessary to fetch too much else at login (Eager Loading)
   },
+
+  // Handling Loading
+  userLoaded: false,
+  transactionsLoaded: false,
+  newProfilePicLoaded: false,
 };
 
 export const selfSlice = createSlice({
@@ -75,13 +67,17 @@ export const selfSlice = createSlice({
       state.self.privacyPreferences = newSelf.privacyPreferences;
       state.self.contacts = newSelf.contacts;
       state.self.profilePicture = profilePicBaseURL + newSelf.profilePicture;
+
+      state.userLoaded = true;
     },
     setTransactions: (state, action) => {
       state.self.transactions = action.payload;
+      state.transactionsLoaded = true;
     },
     setProfilePic: (state, action) => {
-      console.log("New profile pic: ", action.payload);
+      // console.log("New profile pic: ", action.payload);
       state.self.profilePicture = action.payload;
+      state.newProfilePicLoaded = true;
     },
   },
 });
@@ -118,27 +114,33 @@ export const fetchUserById = (userId) => {
         _id: "001",
         name: "DigiCFA Balance",
         cardType: "balance",
-        balance: response.data.balance
-      })
+        balance: response.data.balance,
+      });
 
       dispatch(setSelf(user));
-    } catch(error) {
+    } catch (error) {
       if (error.response) {
-        console.log("The request was made and the server responded with a status code that falls out of the range of 2xx")
+        console.log(
+          "The request was made and the server responded with a status code that falls out of the range of 2xx"
+        );
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
       } else if (error.request) {
-        console.log("The request was made but no response was received `error.request` is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js")
+        console.log(
+          "The request was made but no response was received `error.request` is an instance of XMLHttpRequest in the browser and an instance of http.ClientRequest in node.js"
+        );
         console.log(error.request);
       } else {
-        console.log("Something happened in setting up the request that triggered an Error")
-        console.log('Error', error.message);
+        console.log(
+          "Something happened in setting up the request that triggered an Error"
+        );
+        console.log("Error", error.message);
       }
       console.log(error.config);
-    };
-  }
-}
+    }
+  };
+};
 
 export const fetchTransactionsById = (userId) => {
   return async (dispatch, getState) => {
@@ -155,20 +157,20 @@ export const fetchTransactionsById = (userId) => {
   };
 };
 
-export const fetchProfilePicById = userId => {
+export const fetchProfilePicById = (userId) => {
   return async (dispatch, getState) => {
     try {
       const response = await fetchUser(userId);
-      if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED USER TO UPDATE PROFILE PIC")
-      else console.log("ERROR")
+      if (response.status == 200)
+        console.log("SUCCESSFULLY RETRIEVED USER TO UPDATE PROFILE PIC");
+      else console.log("ERROR");
 
-      dispatch(setProfilePic(profilePicBaseURL+response.data.profilePicture));
-
-    } catch(error) {
-      console.error(error)
+      dispatch(setProfilePic(profilePicBaseURL + response.data.profilePicture));
+    } catch (error) {
+      console.error(error);
     }
-  }
-}
+  };
+};
 
 export const { setSelf, setTransactions, setProfilePic } = selfSlice.actions;
 
@@ -179,24 +181,10 @@ export const selectCards = (state) => state.self.self.cards;
 export const selectContacts = (state) => state.self.self.contacts;
 export const selectTransactions = (state) => state.self.self.transactions;
 export const selectProfilePic = (state) => state.self.self.profilePicture;
+export const whetherUserLoaded = (state) => state.self.userLoaded;
+export const whetherTransactionsLoaded = (state) =>
+  state.self.transactionsLoaded;
+export const whetherNewProfilePicLoaded = (state) =>
+  state.self.newProfilePicLoaded;
 
 export default selfSlice.reducer;
-
-
-// OBSOLETE APPROACH
-
-// export const fetchProfilePicById = userId => {
-//   return async (dispatch, getState) => {
-//     try {
-//       const response = await fetchProfilePic(userId);
-//       if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED PROFILE PIC")
-//       else console.log("ERROR")
-
-//       const image = response.data.toString('base64');
-//       dispatch(setProfilePic(storeImageData(image)));
-
-//     } catch(error) {
-//       console.error(error)
-//     }
-//   }
-// }

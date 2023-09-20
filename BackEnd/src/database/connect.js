@@ -1,10 +1,8 @@
 import { MongoClient } from "mongodb";
 import mongoose from "mongoose";
-import { ATLAS_URI } from "../../config.js";
 
 
 // Mongoose automatically manages connection pool underneath the hood
-
 let conn = null;
 
 export async function createMongooseConnection() {
