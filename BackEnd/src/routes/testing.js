@@ -2,6 +2,7 @@ import express from "express";
 
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
+import { handleRouteError } from "../utils/errorHandling.js";
 
 const router = express.Router();
 
@@ -34,8 +35,7 @@ router.patch("/add_contact", async (req, res) => {
 
     res.status(200).send(result);
   } catch (error) {
-    console.error(error);
-    res.status(400).send(error);
+    return handleRouteError(res, error);
   }
 });
 
@@ -63,12 +63,10 @@ router.patch("/delete_contact", async (req, res) => {
 
     res.status(200).send(result);
   } catch (error) {
-    console.error(error);
-    res.status(400).send(error);
+    return handleRouteError(res, error);
   }
 });
 
-// MONGOOSE
 router.delete("/delete_transaction", async (req, res) => {
   let id = req.body.transactionId;
   try {
@@ -77,8 +75,7 @@ router.delete("/delete_transaction", async (req, res) => {
     if (!result) res.status(404).send(`Transaction with ID ${id} Not found`);
     else res.status(200).send(result);
   } catch (error) {
-    console.error(error);
-    res.status(400).send(error);
+    return handleRouteError(res, error);
   }
 });
 

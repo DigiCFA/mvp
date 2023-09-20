@@ -14,9 +14,10 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import TransactionsColumn from "../../components/TransactionsColumn";
 import TransactionCard from "../../components/cards/TransactionCard";
 import { useSelector } from "react-redux";
-import { selectId, selectTransactions } from "../../redux/reducers/selfSlice";
+import { selectId, selectTransactions, whetherTransactionsLoaded } from "../../redux/reducers/selfSlice";
 
-import Spinner from 'react-native-loading-spinner-overlay';
+import Spinner from "react-native-loading-spinner-overlay";
+import ContentLoader, { Bullets } from "react-native-easy-content-loader";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -29,6 +30,7 @@ const HomeScreen = () => {
 
   const [spinner, setSpinner] = useState(false);
 
+  const loaded = useSelector(whetherTransactionsLoaded)
 
   // useEffect runs after the render
   // useEffect(() => {
@@ -41,10 +43,9 @@ const HomeScreen = () => {
   //   }
   // }, [])
 
-
   return (
     <SafeAreaView className="bg-beige flex-1">
-{/* 
+      {/* 
       <Spinner 
         visible={spinner}
         textContent={'Loading...'}
@@ -97,47 +98,50 @@ const HomeScreen = () => {
         </View>
 
         {/* Transactions */}
+
         <View className="bg-white mt-2 py-6 px-4 flex-1">
-          <Text className="text-xl text-gray-800">Recent activity</Text>
 
-          {transactions?.map((transaction) => (
-            <TransactionCard
-              key={transaction._id}
-              id={transaction._id}
-              userPays={transaction.sender._id === id}
-              title={
-                transaction.sender._id === id
-                  ? transaction.receiver.fullName
-                  : transaction.sender.fullName
-              }
-              date={transaction.transactionDate}
-              message={transaction.message}
-              paymentMethod={transaction.paymentMethod}
-              amount={transaction.amountTransferred}
-            />
-          ))}
+          <Text className="text-xl text-gray-800 pb-2">Recent activity</Text>
 
-          {/* <TransactionsColumn /> */}
+          <ContentLoader active title={false} pHeight={48} pWidth={'100%'} listSize={10} loading={!loaded}>
 
-          <TouchableOpacity className="pt-4">
-            <Text className="text-center text-lg font-bold text-blue-600">
-              Show all
-            </Text>
-          </TouchableOpacity>
+            {transactions?.map((transaction) => (
+              <TransactionCard
+                key={transaction._id}
+                id={transaction._id}
+                userPays={transaction.sender._id === id}
+                title={
+                  transaction.sender._id === id
+                    ? transaction.receiver.fullName
+                    : transaction.sender.fullName
+                }
+                date={transaction.transactionDate}
+                message={transaction.message}
+                paymentMethod={transaction.paymentMethod}
+                amount={transaction.amountTransferred}
+              />
+            ))}
+
+            </ContentLoader>
+
+            {/* <TransactionsColumn /> */}
+
+            <TouchableOpacity className="pt-4">
+              <Text className="text-center text-lg font-bold text-blue-600">
+                Show all
+              </Text>
+            </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-
 const styles = StyleSheet.create({
   spinnerTextStyle: {
-    color: 'blue',
-    fontSize: 20
-  }
-})
-
-
+    color: "blue",
+    fontSize: 20,
+  },
+});
 
 export default HomeScreen;

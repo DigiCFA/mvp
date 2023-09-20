@@ -204,6 +204,8 @@ userSchema.methods.comparePasswords = function (password) {
 // Mongoose automatically looks for the all-case/plural named collection in the database
 const User = mongoose.model("User", userSchema);
 
+
+
 // OBSOLETE
 
 // < --------- Redacted User -------->
