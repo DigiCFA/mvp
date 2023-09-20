@@ -20,16 +20,16 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
   const self = useSelector(selectSelf);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    // Sets loading to false after 1 second. Then we cancel the timer. 
-    timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [])
+  //   // Sets loading to false after 1 second. Then we cancel the timer. 
+  //   timer = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 1000);
+  //   return () => clearTimeout(timer);
+  // }, [])
 
   return (
     <View className="grow">
