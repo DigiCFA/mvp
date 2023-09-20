@@ -3,10 +3,10 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-  Image,
   Touchable,
 } from "react-native";
 import React, { useEffect, useState } from "react";
+import { Image } from "expo-image";
 
 import { useDispatch, useSelector } from "react-redux";
 import {

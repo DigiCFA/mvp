@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
+import { handleRouteError, handleTransactionError } from "../utils/errorHandling.js";
 
 
 const router = express.Router();
@@ -76,9 +77,8 @@ router.post("/create_direct_transaction", async (req, res) => {
 
       res.status(200).send(transactionData);
     });
-  } catch (transactError) {
-    // console.error(transactError);
-    res.status(400).send(transactError);
+  } catch (error) {
+    handleTransactionError(res, error);
     await session.abortTransaction();
   } finally {
     await session.endSession();

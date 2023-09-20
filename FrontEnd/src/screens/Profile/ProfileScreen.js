@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { Image } from "expo-image"
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSelf, setSelf } from "../../redux/reducers/selfSlice";
+import { selectSelf, setSelf, whetherUserLoaded } from "../../redux/reducers/selfSlice";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsColumn from "../../components/SettingsColumn";
 
@@ -19,8 +19,9 @@ import { InstagramLoader } from "react-native-easy-content-loader";
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const self = useSelector(selectSelf);
+  const loaded = useSelector(whetherUserLoaded);
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(true);
 
   // useEffect(() => {
 
@@ -44,7 +45,7 @@ const ProfileScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <InstagramLoader active loading={loading}>
+      <InstagramLoader active loading={!loaded}>
         <ScrollView>
           {/* Profile Area */}
           <View className="bg-white flex-col items-start space-y-1 pb-4">
@@ -52,7 +53,10 @@ const ProfileScreen = () => {
               <Image
                 source={{ uri: self.profilePicture }}
                 className="h-24 w-24 rounded-full"
-                // style={{width: 100, height: 100}}
+                // onLoadStart={()=>console.log("Started to load image")}
+                // onProgress={()=>console.log("LOADING...")}
+                // onLoadEnd={()=>console.log("Finished loading")}
+                // onLoad={()=>setLoading(false)}
               />
             </View>
 
