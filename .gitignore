@@ -6,3 +6,4 @@
 BackEnd/config.js
 BackEnd/sam-template.packaged.yaml
 .expo/
+config.mjs
