@@ -9,7 +9,7 @@ import { handleRouteError, handleTransactionError } from "../utils/errorHandling
 
 const router = express.Router();
 
-router.post("/create_direct_transaction", async (req, res) => {
+router.post("/create_direct_transaction", async (req, res, next) => {
   const session = await mongoose.startSession();
 
   const newTransaction = req.body;
@@ -78,21 +78,19 @@ router.post("/create_direct_transaction", async (req, res) => {
       res.status(200).send(transactionData);
     });
   } catch (error) {
-    handleTransactionError(res, error);
     await session.abortTransaction();
+    next(error)
   } finally {
     await session.endSession();
   }
 });
-
-
 
 // ------------------------
 // OBSOLETE ONES
 // ------------------------
 
 // OBSOLETE
-router.post("/create_transaction_request", async (req, res) => {
+router.post("/create_transaction_request", async (req, res, next) => {
   const session = client.startSession();
   let transaction_data = req.body;
   let transactionID;
@@ -159,7 +157,7 @@ router.post("/create_transaction_request", async (req, res) => {
 });
 
 // OBSOLETE
-router.patch("/approve_transaction", async (req, res) => {
+router.patch("/approve_transaction", async (req, res, next) => {
   const session = client.startSession();
   let transactionData = req.body;
   let transactionID = new ObjectId(transactionData._id);
@@ -260,7 +258,7 @@ router.patch("/approve_transaction", async (req, res) => {
 
 router.delete(
   "/transaction/mongoose_delete_all_transactions",
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       let result = await Transaction.deleteMany({});
       res.status(200).send(result);
