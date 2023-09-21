@@ -1,10 +1,11 @@
 import express from "express";
 import cors from "cors";
-import morgan from "morgan";
+import morgan, { format } from "morgan";
 import connectStore from "connect-mongo";
 import session from "express-session"
 import routes from "./routes/index.js";
 import 'dotenv/config.js'
+import { ERROR_CODES, ERROR_MESSAGES, format_error, mapErrorCodeToHttpCode } from "./utils/errorHandling.js";
 
 const app = express();
 
@@ -34,23 +35,25 @@ app.use(session({
   }
 }))
 
-
 app.use("/api", routes);
 
-/*
-{
-    status: "error",
-    "errorCode": "",
-    "message": "",
-    "details": {
+app.use((err, req, res, next) => {
+
+    console.log("invoked")
+    console.log(err)
+    res.send(err)
+
+    error_response = {
+        status: "error",
+        errorCode: null,
+        message: null,
+        details: {}
+    }
+
+    if(err.code && err.code in Object.keys(ERROR_CODES)){
+        error_response.errorCode = err.code
 
     }
-}
-*/
-
-app.use((err, req, res, next) => {
-    console.log(err)
-    res.status(500).send(err)
 })
 
 export default app;

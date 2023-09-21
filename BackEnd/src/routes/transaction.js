@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
-import { handleRouteError, handleTransactionError } from "../utils/errorHandling.js";
+import { ERROR_CODES, format_error } from "../utils/errorHandling.js";
 
 
 const router = express.Router();
@@ -31,29 +31,21 @@ router.post("/create_direct_transaction", async (req, res, next) => {
 
       const sendUser = await User.findById(sendID);
       if (!sendUser) {
-        res.status(404).send(`User with ID ${sendID} Not found`);
-        return;
+        throw format_error(ERROR_CODES.ID_NOT_FOUND)
       }
       const receiveUser = await User.findById(receiveID);
       if (!receiveUser) {
-        res.status(404).send(`User with ID ${receiveID} Not found`);
-        return;
+        throw format_error(ERROR_CODES.ID_NOT_FOUND)
       }
 
       if (sendID === receiveID) {
-        res.status(400).send("Cannot send transaction to self");
-        return;
+        throw format_error(ERROR_CODES.CANNOT_TRANSACT_TO_SELF)
       }
 
       let userBalance = sendUser.balance;
       let amountTransferred = newTransaction.amountTransferred;
       if (userBalance < amountTransferred) {
-        res
-          .status(400)
-          .send(
-            `Balance ${userBalance} insufficient to send ${amountTransferred}`
-          );
-        return;
+        throw format_error(ERROR_CODES.INSUFFICIENT_BALANCE)
       }
 
       // console.log("TRANSACTION STUFF");
