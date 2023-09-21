@@ -1,11 +1,5 @@
 import express from "express";
 
-// import { SESSION_NAME } from "../../config.mjs";
-import {
-  loginValidation,
-  signUpValidation,
-  phoneNumberValidation,
-} from "../validation/userValidation.js";
 import { sessionizeUser } from "../utils/helper.js";
 import { parseError, handleRouteError } from "../utils/errorHandling.js";
 
@@ -13,16 +7,10 @@ import User from "../models/userModel.js";
 
 const router = express.Router();
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", async (req, res, next) => {
   const { firstName, lastName, phoneNumber, password } = req.body;
 
   try {
-    await signUpValidation.validateAsync({
-      phoneNumber,
-      password,
-      firstName,
-      lastName,
-    });
 
     const newUser = new User({
       firstName: firstName,
@@ -41,15 +29,13 @@ router.post("/signup", async (req, res) => {
 
     res.status(200).json(sessionUser);
   } catch (error) {
-    return handleRouteError(res, error);
+    next(error)
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
   try {
     const { phoneNumber, password } = req.body;
-
-    await loginValidation.validateAsync({ phoneNumber, password });
 
     const user = await User.findOne({ phoneNumber });
     if (user && user.comparePasswords(password)) {
@@ -61,7 +47,7 @@ router.post("/login", async (req, res) => {
       throw new Error("Invalid Login Credentials");
     }
   } catch (error) {
-    return handleRouteError(res, error);
+    next(error.message)
   }
 });
 
@@ -80,7 +66,7 @@ router.delete("/logout", ({ session }, res) => {
       throw new Error("Something went wrong");
     }
   } catch (error) {
-    return handleRouteError(res, error);
+    next(error)
   }
 });
 
@@ -93,70 +79,11 @@ router.get("/obtain_session", ({ session }, res) => {
   }
 });
 
-// router.post("/auth/create_user", async (req, res) => {
-//   let collection = db.collection("users");
-//   let user_data = req.body;
-//   await collection
-//     .insertOne({
-//       user_name: user_data.user_name,
-//       user_phone_number: user_data.user_phone_number,
-//       user_password: user_data.user_password,
-//       user_QRCode: user_data.user_QRCode,
-//       user_balance: 0,
-//       user_card_info: [],
-//       privacy_preference: user_data.user_balance,
-//       user_contacts: [],
-//       transactions: [],
-//       received_transactions: [],
-//       sent_transactions: [],
-//       received_requests: [],
-//       sent_requests: [],
-//       user_creation_date: Date.now(),
-//     })
-//     .then(function (add_result, add_error) {
-//       if (!add_error) {
-//         res.send(add_result).status(200);
-//       } else {
-//         console.error(add_error);
-//         res.send(add_error).status(400);
-//       }
-//     });
-// });
-
-// router.delete("/delete_user", async (req, res) => {
-//   let id = req.body.userId;
-//   try {
-//     let result = await User.findByIdAndDelete(id);
-
-//     if (!result) res.status(404).send(`User with ID ${id} Not found`);
-//     else res.status(200).send(result);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(400).send(error);
-//   }
-// });
-
-// router.post("/user_login", async (req, res) => {
-//   let collection = db.collection("users");
-//   let user_input = req.body;
-//   let findUser = await collection.findOne(
-//     { user_phone_number: user_input.user_phone_number },
-//     function (error, result) {
-//       if (!error) {
-//         res.send({}).status(200);
-//       } else {
-//         console.error(error);
-//         res.send({}).status(400);
-//       }
-//     }
-//   );
-// });
-
 // ------------------------
 // PHONE NUMBERS
 // ------------------------
 
-router.patch("/add_phone_number", async (req, res) => {
+router.patch("/add_phone_number", async (req, res, next) => {
   const { userId, phoneNumber } = req.body;
   let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
   try {
@@ -181,11 +108,11 @@ router.patch("/add_phone_number", async (req, res) => {
       res.status(200).json(user);
     }
   } catch (error) {
-    return handleRouteError(res, error);
+    return next(error)
   }
 });
 
-router.patch("/delete_phone_number", async (req, res) => {
+router.patch("/delete_phone_number", async (req, res, next) => {
   const { userId, phoneNumber } = req.body;
   let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
   try {
@@ -218,7 +145,7 @@ router.patch("/delete_phone_number", async (req, res) => {
       res.status(200).json(user);
     }
   } catch (error) {
-    return handleRouteError(res, error);
+    return next(error)
   }
 });
 

@@ -1,5 +1,66 @@
 import Joi from "joi";
 
+/*
+1000 - 1999: Authentication error
+2000 - 2999: Profile error
+3000 - 3999: Transaction error
+*/
+export const ERROR_CODES = {
+  DUPLICATE_KEY: 1000,
+  PHONE_NUMBER_NOT_FOUND: 1001,
+  PASSWORD_INCORRECT: 1002,
+  CANNOT_REMOVE_PRIMARY_PHONE: 1003,
+  INVALID_ID: 2000,
+  USER_NOT_FOUND: 2001,
+  CANNOT_TRANSACT_TO_SELF: 3000,
+  INSUFFICIENT_BALANCE: 3001,
+  DEFAULT_ERROR: 5000
+}
+
+export const ERROR_MESSAGES = {
+  [ERROR_CODES.DUPLICATE_KEY]: (field) => {return `${field} already exists`},
+  [ERROR_CODES.PHONE_NUMBER_NOT_FOUND]: "Invalid phone number",
+  [ERROR_CODES.PASSWORD_INCORRECT]: "Password is incorrect",
+  [ERROR_CODES.CANNOT_REMOVE_PRIMARY_PHONE]: "Cannot remove the primary phone number. Please make another phone number the primary phone number first",
+  [ERROR_CODES.INVALID_ID]: "Invalid userId format",
+  [ERROR_CODES.USER_NOT_FOUND]: "User can not be found with the provided id",
+  [ERROR_CODES.CANNOT_TRANSACT_TO_SELF]: "Cannot send transaction to yourself",
+  [ERROR_CODES.INSUFFICIENT_BALANCE]: (balance, amountTransferred) => 
+    {return `Your balance ${balance} is insufficient to send ${amountTransferred}`},
+  [ERROR_CODES.DEFAULT_ERROR]: "An internal server error occured, please try again later"
+}
+
+export const format_error = (error_code, error_payload) => {
+  return error_payload ? {
+    code: error_code,
+    payload: error_payload
+  } : {
+    code: error_code
+  }
+}
+
+export const mapErrorCodeToHttpCode = (errorCode) => {
+  switch(errorCode){
+    case ERROR_CODES.DUPLICATE_KEY:
+      return 422
+
+    case ERROR_CODES.PHONE_NUMBER_NOT_FOUND:
+    case ERROR_CODES.USER_NOT_FOUND:
+      return 404
+
+    case ERROR_CODES.INVALID_ID:
+    case ERROR_CODES.PASSWORD_INCORRECT: 
+    case ERROR_CODES.CANNOT_TRANSACT_TO_SELF:
+    case ERROR_CODES.INSUFFICIENT_BALANCE:
+    case ERROR_CODES.CANNOT_REMOVE_PRIMARY_PHONE:
+      return 400
+
+    case ERROR_CODES.DEFAULT_ERROR:
+    default:
+      return 500
+  }
+}
+
 export const parseError = (err) => {
   if (err.isJoi) return err.details[0];
   return JSON.stringify(err, Object.getOwnPropertyNames(err));
