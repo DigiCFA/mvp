@@ -2,11 +2,10 @@ import express from "express";
 
 import { upload } from "../middleware/multer.js";
 import { retrieveFromS3, uploadToS3 } from "../controllers/awsController.js";
+import { format_error, ERROR_CODES } from "../utils/errorHandling.js";
 
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
-import { handleRouteError } from "../utils/errorHandling.js";
-import { waitForBucketNotExists } from "@aws-sdk/client-s3";
 
 //import {mongoose_fuzzy_searching} from "mongoose-fuzzy-searching"
 
@@ -23,10 +22,7 @@ router.get("/retrieve_user", async (req, res, next) => {
     });
 
     if (!user) {
-      return res.status(404).json({
-        error_code: "USER_NOT_FOUND",
-        message: `User with ID ${userId} not found`,
-      });
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
     } else {
       res.status(200).json(user);
     }
@@ -45,10 +41,7 @@ router.get("/retrieve_user_by_phone_number", async (req, res, next) => {
     });
 
     if (!user) {
-      return res.status(404).json({
-        error_code: "USER_NOT_FOUND",
-        message: `User with ID ${userId} not found`,
-      });
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
     } else {
       res.status(200).json(user);
     }
@@ -181,10 +174,7 @@ router.patch("/add_card", async (req, res, next) => {
     let user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({
-        error_code: "USER_NOT_FOUND",
-        message: `User with ID ${userId} not found`,
-      });
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
     }
 
     const newCard = await user.cards.create({
@@ -212,10 +202,7 @@ router.patch("/add_card", async (req, res, next) => {
     );
 
     if (card.cards.length != 0) {
-      return res.status(422).json({
-        error_code: "CARD_ALREADY_ADDED",
-        message: "This card number or name has already been added.",
-      });
+      throw format_error(ERROR_CODES.DUPLICATE_KEY, "Card")
     } else {
       await user.cards.addToSet(newCard);
       await user.save();
@@ -235,10 +222,7 @@ router.patch("/remove_card", async (req, res, next) => {
   try {
     let user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({
-        error_code: "USER_NOT_FOUND",
-        message: `User with ID ${userId} not found`,
-      });
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
     }
 
     await user.cards.pull(cardId);
@@ -266,10 +250,7 @@ router.patch(
     try {
       let user = await User.findById(userId);
       if (!user) {
-        return res.status(404).json({
-          error_code: "USER_NOT_FOUND",
-          message: `User with ID ${userId} not found`,
-        });
+        throw format_error(ERROR_CODES.ID_NOT_FOUND)
       }
 
       await uploadToS3(params);
@@ -280,7 +261,7 @@ router.patch(
 
       res.status(200).json(user);
     } catch (error) {
-      return handleRouteError(res, error);
+      next(error)
     }
   }
 );
@@ -290,10 +271,7 @@ router.patch("/add_balance", async (req, res, next) => {
   try {
     let user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({
-        error_code: "USER_NOT_FOUND",
-        message: `User with ID ${userId} not found`,
-      });
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
     }
 
     user.balance += req.body.amount;
