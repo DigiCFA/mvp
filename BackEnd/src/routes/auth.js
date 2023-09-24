@@ -93,64 +93,6 @@ router.get("/obtain_session", ({ session }, res) => {
   }
 });
 
-// router.post("/auth/create_user", async (req, res) => {
-//   let collection = db.collection("users");
-//   let user_data = req.body;
-//   await collection
-//     .insertOne({
-//       user_name: user_data.user_name,
-//       user_phone_number: user_data.user_phone_number,
-//       user_password: user_data.user_password,
-//       user_QRCode: user_data.user_QRCode,
-//       user_balance: 0,
-//       user_card_info: [],
-//       privacy_preference: user_data.user_balance,
-//       user_contacts: [],
-//       transactions: [],
-//       received_transactions: [],
-//       sent_transactions: [],
-//       received_requests: [],
-//       sent_requests: [],
-//       user_creation_date: Date.now(),
-//     })
-//     .then(function (add_result, add_error) {
-//       if (!add_error) {
-//         res.send(add_result).status(200);
-//       } else {
-//         console.error(add_error);
-//         res.send(add_error).status(400);
-//       }
-//     });
-// });
-
-// router.delete("/delete_user", async (req, res) => {
-//   let id = req.body.userId;
-//   try {
-//     let result = await User.findByIdAndDelete(id);
-
-//     if (!result) res.status(404).send(`User with ID ${id} Not found`);
-//     else res.status(200).send(result);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(400).send(error);
-//   }
-// });
-
-// router.post("/user_login", async (req, res) => {
-//   let collection = db.collection("users");
-//   let user_input = req.body;
-//   let findUser = await collection.findOne(
-//     { user_phone_number: user_input.user_phone_number },
-//     function (error, result) {
-//       if (!error) {
-//         res.send({}).status(200);
-//       } else {
-//         console.error(error);
-//         res.send({}).status(400);
-//       }
-//     }
-//   );
-// });
 
 // ------------------------
 // PHONE NUMBERS
@@ -241,6 +183,13 @@ router.patch("/make_primary_phone_number", async (req, res) => {
       });
     } else {
       user.phoneNumber = phoneNumberNoWhitespace;
+      // Moving the primary phone number to the first position
+      let phoneNumbers = user.phoneNumbers.filter(pn => pn != phoneNumberNoWhitespace);
+      phoneNumbers.unshift(phoneNumberNoWhitespace);
+      user.phoneNumbers = phoneNumbers
+      // user.phoneNumbers.splice(user.phoneNumbers.findIndex(pn => pn == phoneNumberNoWhitespace));
+      // user.phoneNumbers =
+      // user.phoneNumbers.unshift(phoneNumberNoWhitespace);
       await user.save();
       res.status(200).json(user);
     }

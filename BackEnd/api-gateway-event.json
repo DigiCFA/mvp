@@ -1,6 +1,6 @@
 {
   "resource": "/{proxy+}",
-  "path": "/api/auth/add_phone_number",
+  "path": "/api/auth/make_primary_phone_number",
   "httpMethod": "PATCH",
   "queryStringParameters": {
     "userId": "64c673c724782ec4c7fb2d8f"
@@ -131,6 +131,6 @@
     "domainName": "xxxxxx.execute-api.us-east-1.amazonaws.com",
     "apiId": "xxxxxx"
   },
-  "body": "{\"userId\": \"64eb0d88eaf1bbe6d5741736\", \"phoneNumber\": \"2132140824\"}",
+  "body": "{\"userId\": \"64eb0d88eaf1bbe6d5741736\", \"phoneNumber\": \"2132140825\"}",
   "isBase64Encoded": false
 }
