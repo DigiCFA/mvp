@@ -154,6 +154,13 @@ router.patch("/make_primary_phone_number", async (req, res) => {
       throw format_error(ERROR_CODES.PHONE_NOT_FOUND)
     } else {
       user.phoneNumber = phoneNumberNoWhitespace;
+      // Moving the primary phone number to the first position
+      let phoneNumbers = user.phoneNumbers.filter(pn => pn != phoneNumberNoWhitespace);
+      phoneNumbers.unshift(phoneNumberNoWhitespace);
+      user.phoneNumbers = phoneNumbers
+      // user.phoneNumbers.splice(user.phoneNumbers.findIndex(pn => pn == phoneNumberNoWhitespace));
+      // user.phoneNumbers =
+      // user.phoneNumbers.unshift(phoneNumberNoWhitespace);
       await user.save();
       res.status(200).json(user);
     }

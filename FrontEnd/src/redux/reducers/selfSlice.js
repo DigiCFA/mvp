@@ -31,6 +31,7 @@ const initialState = {
     ],
     // privacyPreferences: [],
     contacts: [],
+    phoneNumbers: [],
     profilePicture: profilePicBaseURL + "default.png",
     currentAddress: {
       lineOne: "Not set",
@@ -53,9 +54,8 @@ export const selfSlice = createSlice({
   initialState,
   reducers: {
     setSelf: (state, action) => {
-      // state.self = action.payload;
+      // Can't get rid of these since some fields (like transaction) are not updated just from setSelf
       let newSelf = action.payload;
-      // console.log("Newself: ", newSelf);
       state.self._id = newSelf._id;
       state.self.firstName = newSelf.firstName;
       state.self.lastName = newSelf.lastName;
@@ -66,6 +66,7 @@ export const selfSlice = createSlice({
       state.self.cards = newSelf.cards;
       state.self.privacyPreferences = newSelf.privacyPreferences;
       state.self.contacts = newSelf.contacts;
+      state.self.phoneNumbers = newSelf.phoneNumbers;
       state.self.profilePicture = profilePicBaseURL + newSelf.profilePicture;
 
       state.userLoaded = true;
@@ -86,38 +87,20 @@ export const selfSlice = createSlice({
 export const fetchUserById = (userId) => {
   return async (dispatch, getState) => {
     try {
-      const response = await fetchUser(userId);
-      // const response = await axios.get("/profile/retrieve_user", {
-      //   params: {
-      //     userId: userId,
-      //   },
-      // });
-      if (response.status == 200) console.log("SUCCESSFULLY RETRIEVED USER");
+      const user = await fetchUser(userId);
+
+      if (user.status == 200) console.log("SUCCESSFULLY RETRIEVED USER");
       else console.log("ERROR RETRIEVING USER");
 
-      let user = {
-        _id: response.data._id,
-        firstName: response.data.firstName,
-        lastName: response.data.lastName,
-        fullName: response.data.fullName,
-        phoneNumber: response.data.phoneNumber,
-        QRCode: response.data.QRCode,
-        balance: response.data.balance,
-        cards: response.data.cards,
-        privacyPreferences: response.data.privacyPreferences,
-        contacts: response.data.contacts,
-        profilePicture: response.data.profilePicture,
-      };
-
       // Add a default 'card' which represents balance
-      user.cards.unshift({
+      user.data.cards.unshift({
         _id: "001",
         name: "DigiCFA Balance",
         cardType: "balance",
-        balance: response.data.balance,
+        balance: user.data.balance,
       });
 
-      dispatch(setSelf(user));
+      dispatch(setSelf(user.data));
     } catch (error) {
       if (error.response) {
         console.log(
@@ -181,6 +164,7 @@ export const selectCards = (state) => state.self.self.cards;
 export const selectContacts = (state) => state.self.self.contacts;
 export const selectTransactions = (state) => state.self.self.transactions;
 export const selectProfilePic = (state) => state.self.self.profilePicture;
+export const selectPhoneNumbers = (state) => state.self.self.phoneNumbers;
 export const whetherUserLoaded = (state) => state.self.userLoaded;
 export const whetherTransactionsLoaded = (state) =>
   state.self.transactionsLoaded;
