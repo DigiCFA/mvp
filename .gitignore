@@ -4,5 +4,6 @@
 */serverless-express/
 */dist/
 BackEnd/config.js
+BackEnd/config.mjs
 BackEnd/sam-template.packaged.yaml
 .expo/

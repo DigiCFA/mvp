@@ -1,28 +1,16 @@
 import express from "express";
 
-// import { SESSION_NAME } from "../../config.mjs";
-import {
-  loginValidation,
-  signUpValidation,
-  phoneNumberValidation,
-} from "../validation/userValidation.js";
 import { sessionizeUser } from "../utils/helper.js";
-import { parseError, handleRouteError } from "../utils/errorHandling.js";
+import { format_error, ERROR_CODES } from "../utils/errorHandling.js";
 
 import User from "../models/userModel.js";
 
 const router = express.Router();
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", async (req, res, next) => {
   const { firstName, lastName, phoneNumber, password } = req.body;
 
   try {
-    await signUpValidation.validateAsync({
-      phoneNumber,
-      password,
-      firstName,
-      lastName,
-    });
 
     const newUser = new User({
       firstName: firstName,
@@ -40,28 +28,33 @@ router.post("/signup", async (req, res) => {
     req.session.user = sessionUser;
 
     res.status(200).json(sessionUser);
-  } catch (error) {
-    return handleRouteError(res, error);
+  } catch (err) {
+    if(err.message && err.message.includes("phoneNumber") && err.message.includes("unique")){
+      err = format_error(ERROR_CODES.DUPLICATE_KEY, "Phone number")
+    }
+    next(err)
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
   try {
     const { phoneNumber, password } = req.body;
 
-    await loginValidation.validateAsync({ phoneNumber, password });
-
     const user = await User.findOne({ phoneNumber });
-    if (user && user.comparePasswords(password)) {
-      const sessionUser = sessionizeUser(user);
-      req.session.user = sessionUser;
-
-      res.status(200).json(sessionUser);
-    } else {
-      throw new Error("Invalid Login Credentials");
+    if(!user){
+      throw format_error(ERROR_CODES.PHONE_NOT_FOUND)
     }
+
+    if(!user.comparePasswords(password)){
+      throw format_error(ERROR_CODES.PASSWORD_INCORRECT)
+    }
+
+    const sessionUser = sessionizeUser(user);
+    req.session.user = sessionUser;
+    res.status(200).json(sessionUser);
+
   } catch (error) {
-    return handleRouteError(res, error);
+    next(error)
   }
 });
 
@@ -77,10 +70,10 @@ router.delete("/logout", ({ session }, res) => {
         res.status(200).json(user);
       });
     } else {
-      throw new Error("Something went wrong");
+      throw format_error(ERROR_CODES.UNKNOWN_ERROR)
     }
   } catch (error) {
-    return handleRouteError(res, error);
+    next(error)
   }
 });
 
@@ -93,50 +86,40 @@ router.get("/obtain_session", ({ session }, res) => {
   }
 });
 
-
 // ------------------------
 // PHONE NUMBERS
 // ------------------------
 
-router.patch("/add_phone_number", async (req, res) => {
+router.patch("/add_phone_number", async (req, res, next) => {
   const { userId, phoneNumber } = req.body;
   let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
   try {
     let user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({
-        error_code: "USER_NOT_FOUND",
-        message: `User with ID ${userId} not found`,
-      });
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
     }
     // Need to add validation
     // await phoneNumberValidation.validateAsync({ phoneNumberNoWhitespace });
 
     if (user.phoneNumbers.includes(phoneNumberNoWhitespace)) {
-      return res.status(422).json({
-        error_code: "PHONE_ALREADY_ADDED",
-        message: "This phone number has already been added.",
-      });
+      throw format_error(ERROR_CODES.DUPLICATE_KEY, "Phone number")
     } else {
       user.phoneNumbers.addToSet(phoneNumberNoWhitespace);
       await user.save();
       res.status(200).json(user);
     }
   } catch (error) {
-    return handleRouteError(res, error);
+    return next(error)
   }
 });
 
-router.patch("/delete_phone_number", async (req, res) => {
+router.patch("/delete_phone_number", async (req, res, next) => {
   const { userId, phoneNumber } = req.body;
   let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
   try {
     let user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({
-        error_code: "USER_NOT_FOUND",
-        message: `User with ID ${userId} not found`,
-      });
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
     }
 
     // Need to add validation
@@ -145,22 +128,16 @@ router.patch("/delete_phone_number", async (req, res) => {
     console.log(phoneNumberNoWhitespace);
 
     if (!user.phoneNumbers.includes(phoneNumberNoWhitespace)) {
-      return res.status(422).json({
-        error_code: "PHONE_NOT_FOUND",
-        message: "This phone number has not been added.",
-      });
+      throw format_error(ERROR_CODES.PHONE_NOT_FOUND)
     } else if (user.phoneNumber === phoneNumberNoWhitespace) {
-      return res.status(422).json({
-        error_code: "CANNOT_REMOVE_PRIMARY_PHONE",
-        message: "Cannot remove the primary phone number. Please make another phone number the primary phone number first.",
-      });
+      throw format_error(ERROR_CODES.CANNOT_REMOVE_PRIMARY_PHONE)
     } else {
       user.phoneNumbers.pull(phoneNumberNoWhitespace);
       await user.save();
       res.status(200).json(user);
     }
   } catch (error) {
-    return handleRouteError(res, error);
+    return next(error)
   }
 });
 
@@ -170,17 +147,11 @@ router.patch("/make_primary_phone_number", async (req, res) => {
   try {
     let user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({
-        error_code: "USER_NOT_FOUND",
-        message: `User with ID ${userId} not found`,
-      });
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
     }
 
     if (!user.phoneNumbers.includes(phoneNumberNoWhitespace)) {
-      return res.status(422).json({
-        error_code: "PHONE_NOT_FOUND",
-        message: "This phone number has not been added.",
-      });
+      throw format_error(ERROR_CODES.PHONE_NOT_FOUND)
     } else {
       user.phoneNumber = phoneNumberNoWhitespace;
       // Moving the primary phone number to the first position
@@ -194,7 +165,7 @@ router.patch("/make_primary_phone_number", async (req, res) => {
       res.status(200).json(user);
     }
   } catch (error) {
-    return handleRouteError(res, error);
+    next(error)
   }
 });
 

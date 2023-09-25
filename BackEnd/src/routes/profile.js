@@ -2,16 +2,16 @@ import express from "express";
 
 import { upload } from "../middleware/multer.js";
 import { retrieveFromS3, uploadToS3 } from "../controllers/awsController.js";
+import { format_error, ERROR_CODES } from "../utils/errorHandling.js";
 
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
-import { handleRouteError } from "../utils/errorHandling.js";
 
 //import {mongoose_fuzzy_searching} from "mongoose-fuzzy-searching"
 
 const router = express.Router();
 
-router.get("/retrieve_user", async (req, res) => {
+router.get("/retrieve_user", async (req, res, next) => {
   let userId = req.query.userId;
   try {
     // Top 5 contacts
@@ -22,19 +22,16 @@ router.get("/retrieve_user", async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({
-        error_code: "USER_NOT_FOUND",
-        message: `User with ID ${userId} not found`,
-      });
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
     } else {
       res.status(200).json(user);
     }
   } catch (error) {
-    return handleRouteError(res, error);
+    next(error)
   }
 });
 
-router.get("/retrieve_user_by_phone_number", async (req, res) => {
+router.get("/retrieve_user_by_phone_number", async (req, res, next) => {
   let phoneNumber = req.query.phoneNumber;
   try {
     let user = await User.findOne({ phoneNumber: phoneNumber }).populate({
@@ -44,19 +41,16 @@ router.get("/retrieve_user_by_phone_number", async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({
-        error_code: "USER_NOT_FOUND",
-        message: `User with ID ${userId} not found`,
-      });
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
     } else {
       res.status(200).json(user);
     }
   } catch (error) {
-    return handleRouteError(res, error);
+    return next(error)
   }
 });
 
-router.get("/retrieve_transactions", async (req, res) => {
+router.get("/retrieve_transactions", async (req, res, next) => {
   let userId = req.query.userId;
   try {
     // all transactions
@@ -70,11 +64,11 @@ router.get("/retrieve_transactions", async (req, res) => {
     if (transactions.length === 0) res.status(200).send([]);
     else res.status(200).send(transactions);
   } catch (error) {
-    return handleRouteError(res, error);
+    next(error)
   }
 });
 
-router.get("/search_users", async (req, res) => {
+router.get("/search_users", async (req, res, next) => {
   let query = req.query.query;
   try {
     // all transactions
@@ -123,12 +117,12 @@ router.get("/search_users", async (req, res) => {
       });
     res.status(200).send(result);
   } catch (error) {
-    return handleRouteError(res, error);
+    next(error)
   }
 });
 
 // NOT DONE
-router.get("/retrieve_user_with_certain_fields", async (req, res) => {
+router.get("/retrieve_user_with_certain_fields", async (req, res, next) => {
   let userId = req.query.userId;
   try {
     let user = await User.findById(userId).populate({
@@ -170,20 +164,17 @@ router.get("/retrieve_user_with_certain_fields", async (req, res) => {
     res.status(200).json(user);
     // res.status(200).send(transactions);
   } catch (error) {
-    return handleRouteError(res, error);
+    next(error)
   }
 });
 
-router.patch("/add_card", async (req, res) => {
+router.patch("/add_card", async (req, res, next) => {
   let userId = req.body.userId;
   try {
     let user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({
-        error_code: "USER_NOT_FOUND",
-        message: `User with ID ${userId} not found`,
-      });
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
     }
 
     const newCard = await user.cards.create({
@@ -211,21 +202,18 @@ router.patch("/add_card", async (req, res) => {
     );
 
     if (card.cards.length != 0) {
-      return res.status(422).json({
-        error_code: "CARD_ALREADY_ADDED",
-        message: "This card number or name has already been added.",
-      });
+      throw format_error(ERROR_CODES.DUPLICATE_KEY, "Card")
     } else {
       await user.cards.addToSet(newCard);
       await user.save();
       res.status(200).json(newCard);
     }
   } catch (error) {
-    return handleRouteError(res, error);
+    next(error)
   }
 });
 
-router.patch("/remove_card", async (req, res) => {
+router.patch("/remove_card", async (req, res, next) => {
   let userId = req.body.userId;
   let cardId = req.body.cardId;
   // let cardNumber = req.body.cardNumber;
@@ -234,10 +222,7 @@ router.patch("/remove_card", async (req, res) => {
   try {
     let user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({
-        error_code: "USER_NOT_FOUND",
-        message: `User with ID ${userId} not found`,
-      });
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
     }
 
     await user.cards.pull(cardId);
@@ -245,14 +230,14 @@ router.patch("/remove_card", async (req, res) => {
 
     res.status(200).json(user);
   } catch (error) {
-    return handleRouteError(res, error);
+    next(error)
   }
 });
 
 router.patch(
   "/set_profile_pic",
   upload.single("profilePicture"),
-  async (req, res) => {
+  async (req, res, next) => {
     let userId = req.body.userId;
     const { originalname, buffer } = req.file;
 
@@ -265,10 +250,7 @@ router.patch(
     try {
       let user = await User.findById(userId);
       if (!user) {
-        return res.status(404).json({
-          error_code: "USER_NOT_FOUND",
-          message: `User with ID ${userId} not found`,
-        });
+        throw format_error(ERROR_CODES.ID_NOT_FOUND)
       }
 
       await uploadToS3(params);
@@ -279,20 +261,17 @@ router.patch(
 
       res.status(200).json(user);
     } catch (error) {
-      return handleRouteError(res, error);
+      next(error)
     }
   }
 );
 
-router.patch("/add_balance", async (req, res) => {
+router.patch("/add_balance", async (req, res, next) => {
   let userId = req.body.userId;
   try {
     let user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({
-        error_code: "USER_NOT_FOUND",
-        message: `User with ID ${userId} not found`,
-      });
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
     }
 
     user.balance += req.body.amount;
@@ -300,7 +279,7 @@ router.patch("/add_balance", async (req, res) => {
     await user.save();
     res.status(200).json(user);
   } catch (error) {
-    return handleRouteError(res, error);
+    next(error)
   }
 });
 

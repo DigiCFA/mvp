@@ -4,12 +4,12 @@ import mongoose from "mongoose";
 
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
-import { handleRouteError, handleTransactionError } from "../utils/errorHandling.js";
+import { ERROR_CODES, format_error } from "../utils/errorHandling.js";
 
 
 const router = express.Router();
 
-router.post("/create_direct_transaction", async (req, res) => {
+router.post("/create_direct_transaction", async (req, res, next) => {
   const session = await mongoose.startSession();
 
   const newTransaction = req.body;
@@ -31,29 +31,21 @@ router.post("/create_direct_transaction", async (req, res) => {
 
       const sendUser = await User.findById(sendID);
       if (!sendUser) {
-        res.status(404).send(`User with ID ${sendID} Not found`);
-        return;
+        throw format_error(ERROR_CODES.ID_NOT_FOUND)
       }
       const receiveUser = await User.findById(receiveID);
       if (!receiveUser) {
-        res.status(404).send(`User with ID ${receiveID} Not found`);
-        return;
+        throw format_error(ERROR_CODES.ID_NOT_FOUND)
       }
 
       if (sendID === receiveID) {
-        res.status(400).send("Cannot send transaction to self");
-        return;
+        throw format_error(ERROR_CODES.CANNOT_TRANSACT_TO_SELF)
       }
 
       let userBalance = sendUser.balance;
       let amountTransferred = newTransaction.amountTransferred;
       if (userBalance < amountTransferred) {
-        res
-          .status(400)
-          .send(
-            `Balance ${userBalance} insufficient to send ${amountTransferred}`
-          );
-        return;
+        throw format_error(ERROR_CODES.INSUFFICIENT_BALANCE)
       }
 
       // console.log("TRANSACTION STUFF");
@@ -78,21 +70,19 @@ router.post("/create_direct_transaction", async (req, res) => {
       res.status(200).send(transactionData);
     });
   } catch (error) {
-    handleTransactionError(res, error);
     await session.abortTransaction();
+    next(error)
   } finally {
     await session.endSession();
   }
 });
-
-
 
 // ------------------------
 // OBSOLETE ONES
 // ------------------------
 
 // OBSOLETE
-router.post("/create_transaction_request", async (req, res) => {
+router.post("/create_transaction_request", async (req, res, next) => {
   const session = client.startSession();
   let transaction_data = req.body;
   let transactionID;
@@ -159,7 +149,7 @@ router.post("/create_transaction_request", async (req, res) => {
 });
 
 // OBSOLETE
-router.patch("/approve_transaction", async (req, res) => {
+router.patch("/approve_transaction", async (req, res, next) => {
   const session = client.startSession();
   let transactionData = req.body;
   let transactionID = new ObjectId(transactionData._id);
@@ -260,7 +250,7 @@ router.patch("/approve_transaction", async (req, res) => {
 
 router.delete(
   "/transaction/mongoose_delete_all_transactions",
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       let result = await Transaction.deleteMany({});
       res.status(200).send(result);
