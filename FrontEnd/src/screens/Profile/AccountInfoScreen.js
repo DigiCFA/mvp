@@ -55,7 +55,7 @@ const AccountInfoScreen = () => {
   };
 
   return (
-    <View className="h-screen bg-white border">
+    <View className="h-screen bg-white">
       <View className='bg-beige pb-8'>
         {/* Top Bar */}
         <View className="flex-row justify-items-start items-center space-x-2 pt-12 px-4">

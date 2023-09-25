@@ -26,7 +26,7 @@ export const handleRouteError = (res, error) => {
     console.error("Server error: ", error);
     return res.status(500).json({
       error_code: "SERVER_ERROR",
-      message: "Internal server error occurred.",
+      message: "Internal server error occurred: " + error
     });
   }
 };

@@ -35,6 +35,7 @@ const AppNavigator = ({isLoggedIn}) => {
     "MessageCenter",
     "Security",
     "PhoneNumber",
+    "PhoneNumberDetails",
     "Addresses",
   ];
 

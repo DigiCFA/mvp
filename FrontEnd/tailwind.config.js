@@ -13,7 +13,8 @@ module.exports = {
         current: 'currentColor',
         'blueLight': '#3370E2',
         'blueDark': '#192C88',
-        'beige': '#e9e7e2'
+        'beige': '#e9e7e2',
+        'default': '#ececec'
       }
     }
   },
