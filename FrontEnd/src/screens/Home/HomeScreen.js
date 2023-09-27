@@ -14,7 +14,11 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import TransactionsColumn from "../../components/TransactionsColumn";
 import TransactionCard from "../../components/cards/TransactionCard";
 import { useSelector } from "react-redux";
-import { selectId, selectTransactions, whetherTransactionsLoaded } from "../../redux/reducers/selfSlice";
+import {
+  selectId,
+  selectTransactions,
+  whetherTransactionsLoaded,
+} from "../../redux/reducers/selfSlice";
 
 import Spinner from "react-native-loading-spinner-overlay";
 import ContentLoader, { Bullets } from "react-native-easy-content-loader";
@@ -30,7 +34,7 @@ const HomeScreen = () => {
 
   const [spinner, setSpinner] = useState(false);
 
-  const loaded = useSelector(whetherTransactionsLoaded)
+  const loaded = useSelector(whetherTransactionsLoaded);
 
   // useEffect runs after the render
   // useEffect(() => {
@@ -100,11 +104,16 @@ const HomeScreen = () => {
         {/* Transactions */}
 
         <View className="bg-white mt-2 py-6 px-4 flex-1">
-
           <Text className="text-xl text-gray-800 pb-2">Recent activity</Text>
 
-          <ContentLoader active title={false} pHeight={48} pWidth={'100%'} listSize={10} loading={!loaded}>
-
+          <ContentLoader
+            active
+            title={false}
+            pHeight={48}
+            pWidth={"100%"}
+            listSize={10}
+            loading={!loaded}
+          >
             {transactions?.map((transaction) => (
               <TransactionCard
                 key={transaction._id}
@@ -121,16 +130,15 @@ const HomeScreen = () => {
                 amount={transaction.amountTransferred}
               />
             ))}
+          </ContentLoader>
 
-            </ContentLoader>
+          {/* <TransactionsColumn /> */}
 
-            {/* <TransactionsColumn /> */}
-
-            <TouchableOpacity className="pt-4">
-              <Text className="text-center text-lg font-bold text-blue-600">
-                Show all
-              </Text>
-            </TouchableOpacity>
+          <TouchableOpacity className="pt-4">
+            <Text className="text-center text-lg font-bold text-blue-600">
+              Show all
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
