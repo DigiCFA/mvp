@@ -66,27 +66,25 @@ const UserScreen = () => {
             </Text>
           </View>
 
-          <View className="">
-            <TextInput
-              // inputMode="numeric"
-              keyboardType="numeric"
-              maxLength={8}
-              placeholder="0.00"
-              contextMenuHidden={true}
-              onChangeText={(newAmount) => {
-                if (Number(newAmount) != 0) setAmountValid(true);
+          <TextInput
+            // inputMode="numeric"
+            keyboardType="numeric"
+            maxLength={8}
+            placeholder="0.00"
+            contextMenuHidden={true}
+            onChangeText={(newAmount) => {
+              if (Number(newAmount) != 0) setAmountValid(true);
 
-                if (!amountInvalid(newAmount)) onChangeAmount(newAmount);
-              }}
-              onEndEditing={() => {
-                onChangeAmount(Number(amount).toFixed(2).toString());
-              }}
-              value={amount}
-              className={`text-7xl font-medium flex-1 ${
-                amountValid ? "text-black" : "text-red-600"
-              }`}
-            />
-          </View>
+              if (!amountInvalid(newAmount)) onChangeAmount(newAmount);
+            }}
+            onEndEditing={() => {
+              onChangeAmount(Number(amount).toFixed(2).toString());
+            }}
+            value={amount}
+            className={`text-7xl font-medium flex-1 ${
+              amountValid ? "text-black" : "text-red-600"
+            }`}
+          />
         </View>
 
         <View className="h-8">
@@ -155,7 +153,7 @@ const UserScreen = () => {
                   });
                 }
               }}
-              className="bg-blue-900 rounded-full py-3 px-8"
+              className="bg-blueDark rounded-full py-3 px-8"
             >
               <Text className="text-white text-xl font-extrabold">Request</Text>
             </TouchableOpacity>

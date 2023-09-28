@@ -41,7 +41,7 @@ router.get("/retrieve_user_by_phone_number", async (req, res, next) => {
     });
 
     if (!user) {
-      throw format_error(ERROR_CODES.ID_NOT_FOUND)
+      throw format_error(ERROR_CODES.PHONE_NUMBER_NOT_FOUND)
     } else {
       res.status(200).json(user);
     }

@@ -8,7 +8,7 @@ import Joi from "joi";
 */
 export const ERROR_CODES = {
   DUPLICATE_KEY: 1000,
-  PHONE_NOT_FOUND: 1001,
+  PHONE_NUMBER_NOT_FOUND: 1001,
   PASSWORD_INCORRECT: 1002,
   CANNOT_REMOVE_PRIMARY_PHONE: 1003,
   INVALID_ID_FORMAT: 2000,
@@ -22,7 +22,7 @@ export const ERROR_CODES = {
 
 export const ERROR_MESSAGES = {
   [ERROR_CODES.DUPLICATE_KEY]: (field) => {return `${field} already exists`},
-  [ERROR_CODES.PHONE_NOT_FOUND]: "Phone number is invalid",
+  [ERROR_CODES.PHONE_NUMBER_NOT_FOUND]: "Phone number is invalid",
   [ERROR_CODES.PASSWORD_INCORRECT]: "Password is incorrect",
   [ERROR_CODES.CANNOT_REMOVE_PRIMARY_PHONE]: "Cannot remove the primary phone number. Please make another phone number the primary phone number first",
   [ERROR_CODES.INVALID_ID_FORMAT]: "Invalid userId format",
@@ -48,7 +48,6 @@ export const mapErrorCodeToHttpCode = (errorCode) => {
   switch(errorCode){
     case ERROR_CODES.DUPLICATE_KEY:
       return 422
-
     case ERROR_CODES.PHONE_NUMBER_NOT_FOUND:
     case ERROR_CODES.USER_NOT_FOUND:
       return 404
