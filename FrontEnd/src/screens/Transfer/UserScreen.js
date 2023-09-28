@@ -136,7 +136,7 @@ const UserScreen = () => {
             )}
           </View>
 
-          <View className="flex-row space-x-4 justify-center">
+          <View className="flex-row mb-4 space-x-4 justify-center">
             {/* Request */}
             <TouchableOpacity
               onPress={() => {

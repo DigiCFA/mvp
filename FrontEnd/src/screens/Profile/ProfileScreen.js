@@ -25,17 +25,6 @@ const ProfileScreen = () => {
 
   const duringLogout = useSelector(whetherDuringLogout);
 
-  // const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-
-  //   // Sets loading to false after 1 second. Then we cancel the timer. 
-  //   timer = setTimeout(() => {
-  //     setLoading(false);
-  //   }, 1000);
-  //   return () => clearTimeout(timer);
-  // }, [])
-
   return (
     <View className="grow">
 
@@ -68,10 +57,6 @@ const ProfileScreen = () => {
             </View>
 
             <Text className="px-4 font-medium text-3xl">{self.fullName}</Text>
-            {/* <Text className="px-4 font-medium">{self._id}</Text>
-            <Text className="px-4 font-medium">{self.phoneNumber}</Text>
-
-            <Text className="px-4 font-medium">QRCode: {self.QRCode}</Text> */}
             <Text className="px-4 font-medium">Balance: {self.balance}</Text>
 
             {/* Just for checks */}
