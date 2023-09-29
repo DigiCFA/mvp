@@ -37,7 +37,7 @@ const SetProfileScreen = () => {
               navigation.goBack();
             }}
           >
-            <Ionicons name="arrow-back-outline" size={24} color="gray" />
+            <Ionicons name="arrow-back-outline" size={30} color="gray" />
           </TouchableOpacity>
         </View>
       </HideKeyboardView>

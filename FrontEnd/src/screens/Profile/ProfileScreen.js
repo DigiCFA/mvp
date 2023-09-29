@@ -15,25 +15,21 @@ import SettingsColumn from "../../components/SettingsColumn";
 
 import ContentLoader from "react-native-easy-content-loader";
 import { InstagramLoader } from "react-native-easy-content-loader";
+import { whetherDuringLogout } from "../../redux/reducers/sessionSlice";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const self = useSelector(selectSelf);
   const loaded = useSelector(whetherUserLoaded);
 
-  // const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-
-  //   // Sets loading to false after 1 second. Then we cancel the timer. 
-  //   timer = setTimeout(() => {
-  //     setLoading(false);
-  //   }, 1000);
-  //   return () => clearTimeout(timer);
-  // }, [])
+  const duringLogout = useSelector(whetherDuringLogout);
 
   return (
     <View className="grow">
+
+      <Spinner visible={duringLogout} />
+
       {/* Top Bar */}
       <View className="flex-row self-center items-center space-x-2 pt-12 pb-6 px-4 bg-blueLight">
         <View className="flex-1"></View>
@@ -61,10 +57,6 @@ const ProfileScreen = () => {
             </View>
 
             <Text className="px-4 font-medium text-3xl">{self.fullName}</Text>
-            {/* <Text className="px-4 font-medium">{self._id}</Text>
-            <Text className="px-4 font-medium">{self.phoneNumber}</Text>
-
-            <Text className="px-4 font-medium">QRCode: {self.QRCode}</Text> */}
             <Text className="px-4 font-medium">Balance: {self.balance}</Text>
 
             {/* Just for checks */}

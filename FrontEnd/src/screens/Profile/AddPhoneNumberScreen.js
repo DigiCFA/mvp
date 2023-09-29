@@ -1,0 +1,130 @@
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+} from "react-native";
+import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { TextInput } from "react-native-gesture-handler";
+import HideKeyboardView from "../../components/HideKeyboardView";
+
+// import { Input } from "react-native-elements";
+// import { Input } from "@rneui/themed";
+
+const AddPhoneNumberScreen = () => {
+  const navigation = useNavigation();
+
+  const [focus, setFocus] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
+  const [phoneNumber, setPhoneNumber] = useState();
+
+  return (
+    <HideKeyboardView>
+      <SafeAreaView className="flex-col flex-1">
+        <View className="flex-row justify-items-start items-center space-x-2 pt-1 mx-4">
+          <TouchableOpacity onPress={navigation.goBack} className="flex-1">
+            <Ionicons name="close" size={30} color="grey" />
+          </TouchableOpacity>
+
+          <Text className="text-lg font-semibold">Add a phone number</Text>
+
+          <View className="flex-1"></View>
+        </View>
+
+        <View className="h-1/3"></View>
+
+        <View className="flex-1 flex-col mx-4">
+          {/* <Text
+          className={`text-base font-semibold ${
+            focus ? "text-blueLight" : "text-black"
+          }`}
+        >
+          Phone Number
+        </Text>
+        <TextInput
+          keyboardType="numeric"
+          style={{ fontSize: 20 }}
+          autoFocus={true}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+          className={`pt-1 pb-2 font-medium border-b ${
+            focus ? "border-blueLight" : "border-black"
+          }`}
+        /> */}
+
+          <View
+            className={`border-2 p-2 rounded-md ${
+              isInputFocused ? "border-blue-500" : "border-gray-500"
+            }`}
+          >
+            <Text className="text-base font-semibold text-gray-500">
+              Mobile number
+            </Text>
+            <View className="flex-row items-center space-x-0.5">
+              <Text style={{ fontSize: 20 }}>+1</Text>
+              <TextInput
+                style={{ fontSize: 20 }}
+                placeholder="000-000-0000"
+                value={phoneNumber}
+                autoFocus={true}
+                keyboardType="numeric"
+                className="pr-2 w-full"
+                onFocus={() => {
+                  setIsInputFocused(true);
+                }}
+                onBlur={() => {
+                  setIsInputFocused(false);
+                }}
+                onChangeText={(e) => {
+                  setPhoneNumber(e);
+                }}
+              />
+            </View>
+          </View>
+        </View>
+
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={10}
+        >
+          <View className="w-2/3 self-center items-center">
+            <TouchableOpacity
+              onPress={() => navigation.navigate("PhoneVerification")}
+              className="bg-blueDark rounded-full py-3 w-full"
+            >
+              <Text className="text-white text-xl font-extrabold self-center">
+                Done
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </HideKeyboardView>
+  );
+};
+
+// const styles = StyleSheet.create({
+//     inputOnBlur: {
+//         fontSize: 20,
+//         paddingTop: 8,
+//         paddingBottom: 8,
+//         borderBottomWidth: 1,
+//         // borderBottomColor: '#3370E2'
+//         // borderBottomWidth:'medium',
+//         // borderBottomColor: "#3370E2"
+//     },
+//     inputOnFocus: {
+//         fontSize: 20,
+//         paddingTop: 8,
+//         paddingBottom: 8,
+//         borderBottomWidth: 1,
+//         borderBottomColor: '#3370E2'
+//     }
+// })
+
+export default AddPhoneNumberScreen;

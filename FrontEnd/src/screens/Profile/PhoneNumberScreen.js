@@ -19,8 +19,7 @@ const PhoneNumberScreen = () => {
 
   return (
     <View className="h-screen bg-white">
-      <View className='bg-default pb-8'>
-        
+      <View className="bg-default pb-8">
         {/* Top Bar */}
         <View className="flex-row justify-items-start items-center space-x-2 pt-12 mx-4">
           <TouchableOpacity onPress={navigation.goBack} className="flex-1">
@@ -34,7 +33,10 @@ const PhoneNumberScreen = () => {
             Manage your communication preferences.
           </Text>
 
-          <TouchableOpacity className="flex-row pt-10 items-center space-x-2">
+          <TouchableOpacity
+            onPress={() => navigation.navigate("AddPhoneNumber")}
+            className="flex-row pt-10 items-center space-x-2"
+          >
             <Ionicons name="add" size={30} color="#3370E2" />
             <Text className="text-base font-semibold text-blueLight">
               Add a phone number
@@ -42,18 +44,24 @@ const PhoneNumberScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-      
 
       <ScrollView className="bg-white grow p-4">
         {phoneNumbers?.map((phoneNumber, index) => (
           <TouchableOpacity
             key={index}
-            onPress={() => navigation.navigate("PhoneNumberDetails", { isPrimary: index === 0, phoneNumber})}
+            onPress={() =>
+              navigation.navigate("PhoneNumberDetails", {
+                isPrimary: index === 0,
+                phoneNumber,
+              })
+            }
             className="flex-row items-center py-4 border-b border-gray-300"
           >
             <View className="flex-col flex-1 space-y-1">
               <Text className="text-gray-500">
-                {index == 0 ? "Primary Phone Number" : `Phone Number ${index + 1}`}
+                {index == 0
+                  ? "Primary Phone Number"
+                  : `Phone Number ${index + 1}`}
               </Text>
               <Text className="text-base font-medium">{phoneNumber}</Text>
             </View>

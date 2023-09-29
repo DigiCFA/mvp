@@ -32,12 +32,16 @@ const SignupPhoneNumberScreen = () => {
       let response = await apiUtil.fetchUserByPhoneNumber(phoneNumber)
       let data = response.data
 
-      if(!data){
-        navigation.navigate("PhoneVerification")
-      } else {
-        setRegisteredUser(data)
-        setModalVisible(true)
-      }
+      navigation.navigate("PhoneVerification")
+
+      
+      // UNCOMMENT THIS AFTER BACKEND CHANGE HAS BEEN MADE
+      // if(!data){
+      //   navigation.navigate("PhoneVerification")
+      // } else {
+      //   setRegisteredUser(data)
+      //   setModalVisible(true)
+      // }
 
     } catch(error) {
       console.error(error)
@@ -66,7 +70,7 @@ const SignupPhoneNumberScreen = () => {
               </View>
               
               <View className="w-full space-y-5 mb-10">
-                <TouchableOpacity className="bg-blue-800 rounded-full py-3 px-10 items-center"
+                <TouchableOpacity className="bg-blueDark rounded-full py-3 px-10 items-center"
                   onPress={() => {
                     dispatch(clearAllField())
                     navigation.navigate("Landing")
@@ -74,13 +78,13 @@ const SignupPhoneNumberScreen = () => {
                   <Text className="font-bold text-white text-lg">Login with this number</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity className="bg-blue-800 rounded-full py-3 px-10 items-center">
+                <TouchableOpacity className="bg-blueDark rounded-full py-3 px-10 items-center">
                   <Text className="font-bold text-white text-lg">Forgot password?</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity className="bg-white rounded-full py-3 px-10 items-center border-2 border-blue-800"
                   onPress={() => {setModalVisible(false)}}>
-                  <Text className="font-bold text-blue-800 text-lg">Signup with another number</Text>
+                  <Text className="font-bold text-blueDark text-lg">Signup with another number</Text>
                 </TouchableOpacity>
               </View>
 
@@ -151,7 +155,7 @@ const SignupPhoneNumberScreen = () => {
           keyboardVerticalOffset={10}
         >
           <TouchableOpacity
-            className="bg-blue-800 rounded-full py-4 mx-3"
+            className="bg-blueDark rounded-full py-4 mx-3"
             onPress={onPressNext}
           >
             <Text

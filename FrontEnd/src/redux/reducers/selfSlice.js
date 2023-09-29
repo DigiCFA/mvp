@@ -7,7 +7,6 @@ import {
   profilePicBaseURL,
 } from "../../utils/api";
 
-// Maybe write a thunk to fetch user info. In which case user info is passed during login, in which case initialState should be null
 const initialState = {
   self: {
     _id: "001",
@@ -49,6 +48,7 @@ const initialState = {
   newProfilePicLoaded: false,
 };
 
+// reducers: pure function to change state (only way to change state)
 export const selfSlice = createSlice({
   name: "self",
   initialState,

@@ -7,6 +7,8 @@ import SecurityScreen from "../screens/Profile/SecurityScreen";
 import PhoneNumberScreen from "../screens/Profile/PhoneNumberScreen";
 import AddressScreen from "../screens/Profile/AddressScreen";
 import PhoneNumberDetailsScreen from "../screens/Profile/PhoneNumberDetailsScreen";
+import AddPhoneNumberScreen from "../screens/Profile/AddPhoneNumberScreen";
+import PhoneVerificationScreen from "../screens/Auth/PhoneVerificationScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,7 +19,12 @@ const ProfileNavigator = () => (
       <Stack.Screen name="AccountInfo" component={AccountInfoScreen} />
       <Stack.Screen name="PhoneNumber" component={PhoneNumberScreen}/>
       <Stack.Screen name="PhoneNumberDetails" component={PhoneNumberDetailsScreen}/>
+      <Stack.Screen name="AddPhoneNumber" component={AddPhoneNumberScreen}/>
       <Stack.Screen name="Address" component={AddressScreen} />
+      <Stack.Screen
+        name="PhoneVerification"
+        component={PhoneVerificationScreen}
+      />
     </Stack.Group>
     <Stack.Screen name="MessageCenter" component={MessageCenterScreen} />
     <Stack.Screen name="Security" component={SecurityScreen} />
