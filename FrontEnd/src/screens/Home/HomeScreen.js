@@ -96,7 +96,7 @@ const HomeScreen = () => {
               <Text className="">Terms apply.</Text>
             </View>
             <TouchableOpacity>
-              <Ionicons name="close" size={24} color="black" />
+              <Ionicons name="close" size={30} color="black" />
             </TouchableOpacity>
           </TouchableOpacity>
         </View>
