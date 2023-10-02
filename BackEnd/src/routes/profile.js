@@ -81,28 +81,28 @@ router.get("/search_users", async (req, res, next) => {
               autocomplete: {
                 query: query,
                 path: "firstName",
-                fuzzy: {},
+                fuzzy: {"maxEdits": 1},
               },
             },
             {
               autocomplete: {
                 query: query,
                 path: "lastName",
-                fuzzy: {},
+                fuzzy: {"maxEdits": 1},
               },
             },
             {
               autocomplete: {
                 query: query,
                 path: "fullName",
-                fuzzy: {},
+                fuzzy: {"maxEdits": 1},
               },
             },
             {
               autocomplete: {
                 query: query,
                 path: "phoneNumber",
-                fuzzy: {},
+                fuzzy: {"maxEdits": 1},
               },
             },
           ],
