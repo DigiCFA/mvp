@@ -60,7 +60,8 @@ router.post("/login", async (req, res, next) => {
 
 router.delete("/logout", ({ session }, res) => {
   try {
-    const user = session.user;
+    const user = {...session.user};
+
     if (user) {
       session.destroy((err) => {
         if (err) {
