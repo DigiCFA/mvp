@@ -7,28 +7,18 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Image } from "expo-image"
-import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import { selectSelf, setSelf, whetherUserLoaded } from "../../redux/reducers/selfSlice";
+import {  useSelector } from "react-redux";
+import { selectSelf, whetherUserLoaded } from "../../redux/reducers/selfSlice";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsColumn from "../../components/SettingsColumn";
-
-import ContentLoader from "react-native-easy-content-loader";
 import { InstagramLoader } from "react-native-easy-content-loader";
-import { whetherDuringLogout } from "../../redux/reducers/sessionSlice";
-import Spinner from "react-native-loading-spinner-overlay";
 
 const ProfileScreen = () => {
-  const navigation = useNavigation();
   const self = useSelector(selectSelf);
   const loaded = useSelector(whetherUserLoaded);
 
-  const duringLogout = useSelector(whetherDuringLogout);
-
   return (
     <View className="grow">
-
-      <Spinner visible={duringLogout} />
 
       {/* Top Bar */}
       <View className="flex-row self-center items-center space-x-2 pt-12 pb-6 px-4 bg-blueLight">

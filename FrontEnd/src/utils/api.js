@@ -16,30 +16,6 @@ const instance = axios.create({
   credentials: "include"
 })
 
-export const login = (user) => {
-  return instance.post("/auth/login", {
-      "phoneNumber": user.phoneNumber,
-      "password": user.password
-  })
-}
-
-export const signup = (user) => {
-  return instance.post("/auth/signup", {
-      "phoneNumber": user.phoneNumber,
-      "password": user.password,
-      "firstName": user.firstName,
-      'lastName': user.lastName
-  })
-}
-
-export const logout = () => {
-  return instance.delete("/auth/logout")
-}
-
-export const getSession = () => {
-  return instance.get("/auth/obtain_session")
-}
-
 export const fetchUser = (userId) => {
   return instance.get("/profile/retrieve_user", {
     params: {
@@ -113,9 +89,7 @@ export const createDirectTransaction = async (
 };
 
 export const uploadProfilePicture = async (userId, imageURI) => {
-  console.log("URI: ", imageURI);
-  console.log("UserID: ", userId);
-
+ 
   let uriArray = imageURI.split(".");
   let fileType = "image/" + uriArray[uriArray.length - 1];
   console.log(fileType);

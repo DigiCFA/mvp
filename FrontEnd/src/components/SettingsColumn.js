@@ -2,12 +2,21 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { logout } from "../redux/reducers/sessionSlice";
 import { useDispatch } from "react-redux";
+import { useLogoutMutation } from "../redux/reducers/apiAuthSlice";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const SettingsColumn = () => {
   const navigation = useNavigation()
-  const dispatch = useDispatch()
+  const [logout, {data, isSuccess, isError, isLoading}] = useLogoutMutation()
+  const onPressLogout = async () => {
+    try{
+      console.log("invoking logout")
+      await logout().unwrap()
+    } catch(error){
+      console.log(error)
+    }
+  }
 
   const preferenceRow = (iconName, iconSize, iconColor, preferenceName, onPress) => {
     return (
@@ -22,10 +31,11 @@ const SettingsColumn = () => {
 
   return (
     <View className="mt-2">
+      <Spinner visible={isLoading} />
       {preferenceRow("person", 24, "#192C88", "Account Info", ()=>{navigation.navigate("AccountInfo")})}
       {preferenceRow("mail-unread", 24, "#192C88", "Message Center", ()=>{navigation.navigate("MessageCenter")})}
       {preferenceRow("shield", 24, "#192C88", "Security", ()=>{navigation.navigate("Security")})}
-      {preferenceRow("log-out", 24, "#192C88", "Log Out", ()=>{dispatch(logout())})}
+      {preferenceRow("log-out", 24, "#192C88", "Log Out", onPressLogout)}
     </View>
   );
 };
