@@ -12,14 +12,13 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from 'react-redux'
 
 import HideKeyboardView from "../../components/HideKeyboardView";
-import { selectFieldWithAttr, setField } from "../../redux/reducers/signUpSlice";
-import { signup } from "../../redux/reducers/sessionSlice";
+import { selectFieldWithAttr, setField, clearAllField } from "../../redux/reducers/signUpSlice";
+import { useSignupMutation } from "../../redux/reducers/apiAuthSlice";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const SetProfileScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
-  const state = useSelector(state => state.signUp)
 
   const [firstNameInputFocused, setFirstNameInputFocused] = useState(false);
   const [lastNameInputFocused, setLastNameInputFocused] = useState(false);
@@ -27,9 +26,21 @@ const SetProfileScreen = () => {
   const firstName = useSelector(selectFieldWithAttr("firstName"))
   const lastName = useSelector(selectFieldWithAttr("lastName"))
   const user = useSelector(state => state.signUp)
+  const [signup,{data, isLoading, isSuccess, isError, error}] = useSignupMutation()
+
+  const onPressButton = async () => {
+    try {
+      console.log(user)
+      await signup(user).unwrap()
+      dispatch(clearAllField())
+    } catch (error) {
+      console.error("error",error)
+    }
+  }
 
   return (
     <SafeAreaView className="bg-white flex-1">
+      <Spinner visible={isLoading} />
       <HideKeyboardView>
         <View className="mx-3 my-4 w-6">
           <TouchableOpacity
@@ -96,8 +107,7 @@ const SetProfileScreen = () => {
         keyboardVerticalOffset={10}
       >
         <TouchableOpacity className="bg-blue-800 rounded-full py-4 mx-3"
-          onPress={() => {
-            dispatch(signup(user))}}>
+          onPress={onPressButton}>
           <Text
             className="text-center font-bold text-white"
             style={{ fontSize: 20 }}

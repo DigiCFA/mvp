@@ -10,7 +10,7 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
                 method: 'GET'
             })
         }),
-        fetchUserByPhoneNumber: builder.query({
+        fetchUserByPhoneNumber: builder.mutation({
             query: (phoneNumber) => ({
                 url: '/profile/retrieve_user_by_phone_number?' + new URLSearchParams({
                     phoneNumber: phoneNumber
@@ -29,4 +29,4 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const {useFetchUserQuery} = extendedProfileSlice
+export const {useFetchUserQuery, useFetchTransactionsQuery, useFetchUserByPhoneNumberMutation} = extendedProfileSlice

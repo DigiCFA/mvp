@@ -11,7 +11,6 @@ const SettingsColumn = () => {
   const [logout, {data, isSuccess, isError, isLoading}] = useLogoutMutation()
   const onPressLogout = async () => {
     try{
-      console.log("invoking logout")
       await logout().unwrap()
     } catch(error){
       console.log(error)

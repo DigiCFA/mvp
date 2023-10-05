@@ -5,17 +5,21 @@ import {
   ScrollView,
   SafeAreaView,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Image } from "expo-image"
 import {  useSelector } from "react-redux";
 import { selectSelf, whetherUserLoaded } from "../../redux/reducers/selfSlice";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsColumn from "../../components/SettingsColumn";
 import { InstagramLoader } from "react-native-easy-content-loader";
+import { useFetchUserQuery } from '../../redux/reducers/apiProfileSlice'
+import { useGetSessionQuery } from "../../redux/reducers/apiAuthSlice";
 
 const ProfileScreen = () => {
-  const self = useSelector(selectSelf);
-  const loaded = useSelector(whetherUserLoaded);
+
+  const {data: session, isLoading: getSessionIsLoading} = useGetSessionQuery()
+  const {data: user, isLoading: fetchUserIsLoading, 
+    isSuccess: fetchUserIsSuccess, isError: fetchUserIsError} = useFetchUserQuery(session.userId, {skip: getSessionIsLoading})
 
   return (
     <View className="grow">
@@ -31,13 +35,13 @@ const ProfileScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <InstagramLoader active loading={!loaded}>
+      <InstagramLoader active loading={getSessionIsLoading || fetchUserIsLoading}>
         <ScrollView>
           {/* Profile Area */}
           <View className="bg-white flex-col items-start space-y-1 pb-4">
             <View className="px-4 pt-4">
               <Image
-                source={{ uri: self.profilePicture }}
+                source={{ uri: user.profilePicture }}
                 className="h-24 w-24 rounded-full"
                 // onLoadStart={()=>console.log("Started to load image")}
                 // onProgress={()=>console.log("LOADING...")}
@@ -46,11 +50,11 @@ const ProfileScreen = () => {
               />
             </View>
 
-            <Text className="px-4 font-medium text-3xl">{self.fullName}</Text>
-            <Text className="px-4 font-medium">Balance: {self.balance}</Text>
+            <Text className="px-4 font-medium text-3xl">{user.fullName}</Text>
+            <Text className="px-4 font-medium">Balance: {user.balance}</Text>
 
             {/* Just for checks */}
-            {/* {self.cards?.map((card) => (
+            {/* {user.cards?.map((card) => (
               <View key={card._id}>
                 <Text>Card: </Text>
                 <Text>accountHolder: {card.accountHolder}</Text>
@@ -60,7 +64,7 @@ const ProfileScreen = () => {
               </View>
             ))}
 
-            {self.contacts?.map((contact) => (
+            {user.contacts?.map((contact) => (
               <View key={contact._id}>
                 <Text>Contact: </Text>
                 <Text>fullName: {contact.fullName}</Text>
@@ -68,7 +72,7 @@ const ProfileScreen = () => {
               </View>
             ))} */}
             {/* 
-            {self.contacts?.map((contact) => (
+            {user.contacts?.map((contact) => (
               <View key={contact._id}>
                 <Text>Contact: </Text>
                 <Text>fullName: {contact.fullName}</Text>
@@ -76,7 +80,7 @@ const ProfileScreen = () => {
               </View>
             ))} 
 
-            {self.transactions?.map((transaction) => (
+            {user.transactions?.map((transaction) => (
               <View key={transaction._id}>
                 <Text className='font-bold'>Transaction: </Text>
                 <Text>Sender: {transaction.sender.fullName}</Text>

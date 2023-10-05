@@ -14,22 +14,18 @@ import AppNavigator from "./navigation/AppNavigator";
 import linking from "./config/linking";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useGetSessionQuery } from "./redux/reducers/apiAuthSlice";
-import { useFetchUserQuery } from "./redux/reducers/apiProfileSlice";
+import { useFetchUserQuery, useFetchTransactionsQuery } from "./redux/reducers/apiProfileSlice";
 
 const App = () => {
   const {isLoading: sessionIsLoading, data: session} = useGetSessionQuery()
   const isLoggedIn = Boolean(session?.userId);
-  const {isLoading: fetchUserIsLoading, data: user, isSuccess} = useFetchUserQuery(session?.userId, {
-    skip: !isLoggedIn
-  })
+  const {isLoading: fetchUserIsLoading, data: user, 
+    isSuccess: fetchUserIsSuccess, isError: fetchUserIsError,
+    error: fetchUserError} = useFetchUserQuery(session?.userId, { skip: !isLoggedIn})
+  const {isLoading: fetchTransactionsIsLoading, data: transactions,
+    isSuccess: fetchTransactionsIsSuccess, isError: fetchTransactionsIsError,
+    error: fetchTransactionsError} = useFetchTransactionsQuery(session?.userId, {skip: !isLoggedIn})
   const dispatch = useDispatch();
-  
-  useEffect(() => {
-    if(isLoggedIn){
-      dispatch(fetchUserById(session.userId))
-      dispatch(fetchTransactionsById(session.userId))
-    }
-  }, [isLoggedIn]);
 
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
