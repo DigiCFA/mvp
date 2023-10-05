@@ -20,6 +20,8 @@ export const ERROR_CODES = {
   UNKNOWN_ERROR: 5000
 }
 
+export const KNOWN_ERROR_CODES = Object.keys(ERROR_CODES).map((key) => ERROR_CODES[key])
+
 export const ERROR_MESSAGES = {
   [ERROR_CODES.DUPLICATE_KEY]: (field) => {return `${field} already exists`},
   [ERROR_CODES.PHONE_NUMBER_NOT_FOUND]: "Phone number is invalid",
