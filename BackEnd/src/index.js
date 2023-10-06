@@ -5,7 +5,8 @@ import connectStore from "connect-mongo";
 import session from "express-session"
 import routes from "./routes/index.js";
 import 'dotenv/config.js'
-import { ERROR_CODES, ERROR_MESSAGES, format_error, mapErrorCodeToHttpCode } from "./utils/errorHandling.js";
+import { ERROR_CODES, ERROR_MESSAGES, format_error, mapErrorCodeToHttpCode,
+        KNOWN_ERROR_CODES } from "./utils/errorHandling.js";
 
 const app = express();
 
@@ -39,21 +40,28 @@ app.use("/api", routes);
 
 app.use((err, req, res, next) => {
 
+    console.log("error", err.code, KNOWN_ERROR_CODES.includes(err.code))
+    if(err.code && !KNOWN_ERROR_CODES.includes(err.code)){
+      err.code = ERROR_CODES.UNKNOWN_ERROR
+    }
+    let message
+    if(err?.payload){
+      message = ERROR_MESSAGES[err.code](err.payload)
+    } else {
+      message = ERROR_MESSAGES[err.code]
+    }
+    const httpStatus = mapErrorCodeToHttpCode(err.code)
+
     console.log("invoked")
     console.log(err)
-    res.send(err)
+    res.status(httpStatus).send(err)
 
-    error_response = {
-        status: "error",
-        errorCode: null,
-        message: null,
-        details: {}
-    }
-
-    if(err.code && err.code in Object.keys(ERROR_CODES)){
-        error_response.errorCode = err.code
-
-    }
+    // error_response = {
+    //     status: "error",
+    //     errorCode: null,
+    //     message: null,
+    //     details: {}
+    // }
 })
 
 export default app;

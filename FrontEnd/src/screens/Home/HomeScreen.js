@@ -3,58 +3,26 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
-  Touchable,
   ScrollView,
-  StyleSheet,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import SearchScreen from "../Transfer/SearchScreen";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import TransactionsColumn from "../../components/TransactionsColumn";
 import TransactionCard from "../../components/cards/TransactionCard";
-import { useSelector } from "react-redux";
-import {
-  selectId,
-  selectTransactions,
-  whetherTransactionsLoaded,
-} from "../../redux/reducers/selfSlice";
-
-import Spinner from "react-native-loading-spinner-overlay";
+import { useFetchTransactionsQuery } from "../../redux/reducers/apiProfileSlice";
+import { useGetSessionQuery } from "../../redux/reducers/apiAuthSlice";
 import ContentLoader, { Bullets } from "react-native-easy-content-loader";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const axios = require("axios");
-
-  const [transactionHistory, setTransactionHistory] = useState([]);
-
-  const transactions = useSelector(selectTransactions);
-  const id = useSelector(selectId);
-
-  const [spinner, setSpinner] = useState(false);
-
-  const loaded = useSelector(whetherTransactionsLoaded);
-
-  // useEffect runs after the render
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setSpinner((prevSpinner) => !prevSpinner);
-  //   }, 5000);
-
-  //   return () => {
-  //     clearInterval(interval);
-  //   }
-  // }, [])
+  const {data: session, isSuccess: getSessionIsSuccess, isLoading: getSessionIsLoading} = useGetSessionQuery()
+  const {data: transactions, isSuccess: fetchTransactionIsSuccess, 
+    isLoading: fetchTransactionIsLoading} = useFetchTransactionsQuery(session.userId, {skip: !getSessionIsSuccess})
 
   return (
     <SafeAreaView className="bg-beige flex-1">
-      {/* 
-      <Spinner 
-        visible={spinner}
-        textContent={'Loading...'}
-        textStyle={styles.spinnerTextStyle}
-      /> */}
 
       <ScrollView>
         {/* Header */}
@@ -112,15 +80,15 @@ const HomeScreen = () => {
             pHeight={48}
             pWidth={"100%"}
             listSize={10}
-            loading={!loaded}
+            loading={fetchTransactionIsLoading}
           >
             {transactions?.map((transaction) => (
               <TransactionCard
                 key={transaction._id}
                 id={transaction._id}
-                userPays={transaction.sender._id === id}
+                userPays={transaction.sender._id === session.userId}
                 title={
-                  transaction.sender._id === id
+                  transaction.sender._id === session.userId
                     ? transaction.receiver.fullName
                     : transaction.sender.fullName
                 }
@@ -144,12 +112,5 @@ const HomeScreen = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  spinnerTextStyle: {
-    color: "blue",
-    fontSize: 20,
-  },
-});
 
 export default HomeScreen;
