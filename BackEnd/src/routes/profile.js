@@ -50,6 +50,26 @@ router.get("/retrieve_user_by_phone_number", async (req, res, next) => {
   }
 });
 
+router.get("/retrieve_contacts", async (req, res, next) => {
+  let userId = req.query.userId;
+  try{
+    let user = await User.findById(userId).populate({
+      path: "contacts",
+      perDocumentLimit: 10,
+      select: ["_id", "fullName", "phoneNumber"]
+    });
+
+    if(!user){
+      throw format_error(ERROR_CODES.ID_NOT_FOUND);
+    } else {
+      res.status(200).json(user.contacts)
+    }
+
+  } catch (error){
+    return next(error)
+  }
+})
+
 router.get("/retrieve_transactions", async (req, res, next) => {
   let userId = req.query.userId;
   try {

@@ -3,7 +3,7 @@ import React from "react";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-const UserCard = ({ id, name, phoneNumber }) => {
+export const UserCard = ({ id, name, phoneNumber }) => {
   const navigation = useNavigation();
 
   return (
@@ -34,5 +34,3 @@ const UserCard = ({ id, name, phoneNumber }) => {
     </TouchableOpacity>
   );
 };
-
-export default UserCard;

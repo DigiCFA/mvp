@@ -1,17 +1,19 @@
-import { View, Text } from "react-native";
-import React from "react";
-import UserCard from "./cards/UserCard";
+import { View } from "react-native";
+import React, { useEffect } from "react";
+import { UserCard } from '../components/cards/UserCard'
 import { useSelector } from "react-redux";
-import { selectContacts } from "../redux/reducers/selfSlice";
+import { useFetchContactsByIdQuery, contactSelector } from "../redux/reducers/apiProfileSlice";
+import { useGetSessionQuery } from "../redux/reducers/apiAuthSlice";
 
 const UsersColumn = () => {
-  const contacts = useSelector(selectContacts);
 
-  // Fetching the top contacts
-  // useEffect(() => {
-
-  // })
-
+  const {data: session, isLoading: sessionIsLoading, isSuccess: sessionIsSuccess,
+        isError: sessionIsError, error: sessionError} = useGetSessionQuery();
+  const {data: rawContact, isLoading: contactIsLoading, isSuccess: contactIsSuccess,
+        isError: contactIsError, error: contactError} = useFetchContactsByIdQuery(session.userId, {
+          skip: sessionIsLoading
+        })
+  const contacts = useSelector(contactSelector(session.userId).selectAll)
   return (
     <View>
       {contacts?.map((contact) => (
