@@ -15,17 +15,22 @@ import { onChange } from "react-native-reanimated";
 const numericRE = new RegExp("^[0-9.]*$");
 const startsWithTwoDigits = new RegExp("^[0-9]{2}.");
 
-const countDecimals = (value) => {
+const countFractional = (value) => {
   if (Math.floor(value) === value) return 0;
   return value.toString().split(".")[1].length || 0;
 };
+
+const countWhole = (value) => {
+  return value.toString().split(".")[0].length || 0;
+}
 
 const amountInvalid = (amount) =>
   !amount.match(numericRE) ||
   amount.match(/^\./) ||
   (amount[0] == "0" && amount.match(startsWithTwoDigits)) ||
   (amount.match(/\./g) || []).length > 1 ||
-  countDecimals(Number(amount)) > 2;
+  countFractional(Number(amount)) > 2 ||
+  countWhole(Number(amount)) > 5;
 
 const UserScreen = () => {
   const navigation = useNavigation();
@@ -66,25 +71,27 @@ const UserScreen = () => {
             </Text>
           </View>
 
-          <TextInput
-            // inputMode="numeric"
-            keyboardType="numeric"
-            maxLength={8}
-            placeholder="0.00"
-            contextMenuHidden={true}
-            onChangeText={(newAmount) => {
-              if (Number(newAmount) != 0) setAmountValid(true);
+          <View className="">
+            <TextInput
+              // inputMode="numeric"
+              keyboardType="numeric"
+              maxLength={8}
+              placeholder="0.00"
+              contextMenuHidden={true}
+              onChangeText={(newAmount) => {
+                if (Number(newAmount) != 0) setAmountValid(true);
 
-              if (!amountInvalid(newAmount)) onChangeAmount(newAmount);
-            }}
-            onEndEditing={() => {
-              onChangeAmount(Number(amount).toFixed(2).toString());
-            }}
-            value={amount}
-            className={`text-7xl font-medium flex-1 ${
-              amountValid ? "text-black" : "text-red-600"
-            }`}
-          />
+                if (!amountInvalid(newAmount)) onChangeAmount(newAmount);
+              }}
+              onEndEditing={() => {
+                onChangeAmount(Number(amount).toFixed(2).toString());
+              }}
+              value={amount}
+              className={`text-7xl font-medium flex-1 ${
+                amountValid ? "text-black" : "text-red-600"
+              }`}
+            />
+          </View>
         </View>
 
         <View className="h-8">

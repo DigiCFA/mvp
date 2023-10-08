@@ -25,8 +25,16 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
                 }),
                 method: 'GET'
             })
+        }),
+        fetchSearchResults: builder.query({
+            query: (query) => ({
+                url: '/profile/search_users?' + new URLSearchParams({
+                    query: query
+                }),
+                method: 'GET'
+            })
         })
     })
 })
 
-export const {useFetchUserQuery, useFetchTransactionsQuery, useFetchUserByPhoneNumberMutation} = extendedProfileSlice
+export const {useFetchUserQuery, useFetchTransactionsQuery, useFetchUserByPhoneNumberMutation, fetchSearchResults} = extendedProfileSlice
