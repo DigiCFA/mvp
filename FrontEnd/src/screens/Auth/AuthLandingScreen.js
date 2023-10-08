@@ -15,7 +15,7 @@ const LoginSignupLandingScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneNumberInputFocused, setIsPhoneNumberInputFocused] = useState(false);
   
-  const [login, {data, error, isLoading, isSuccess, isError}] = useLoginMutation()
+  const [login, {data, error, isLoading, isSuccess, isError}] = useLoginMutation();
 
   const navigation = useNavigation();
 

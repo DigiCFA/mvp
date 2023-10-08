@@ -1,4 +1,11 @@
 import { apiSlice } from "./apiIndexSlice";
+import { createEntityAdapter, createSelector } from "@reduxjs/toolkit";
+
+const contactsAdapter = createEntityAdapter({
+    selectId: (contact) => contact._id,
+    sortComparer: (a, b) => a.fullName.localeCompare(b.fullName)
+})
+const contactsInitialState = contactsAdapter.getInitialState()
 
 export const extendedProfileSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -17,6 +24,17 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
                 }),
                 method: 'GET'
             })
+        }),
+        fetchContactsById: builder.query({
+            query: (userId) => ({
+                url: '/profile/retrieve_contacts?' + new URLSearchParams({
+                    userId: userId
+                }),
+                method: 'GET'
+            }),
+            transformResponse: responseData => {
+                return contactsAdapter.setAll(contactsInitialState, responseData)
+            }
         }),
         fetchTransactions: builder.query({
             query: (userId) => ({
@@ -37,4 +55,15 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const {useFetchUserQuery, useFetchTransactionsQuery, useFetchUserByPhoneNumberMutation, useFetchSearchResultsQuery} = extendedProfileSlice
+export const {useFetchUserQuery, useFetchTransactionsQuery, 
+    useFetchUserByPhoneNumberMutation, useFetchSearchResultsQuery,
+    useFetchContactsByIdQuery} = extendedProfileSlice
+
+export const selectContactsResult = (userId) => extendedProfileSlice.endpoints.fetchContactsById.select(userId)
+
+export const selectContactsData = (userId) => createSelector(
+    selectContactsResult(userId),
+    contactsResult => contactsResult.data
+)
+
+export const contactSelector = (userId) => contactsAdapter.getSelectors(state => (selectContactsData(userId))(state) ?? contactsInitialState)

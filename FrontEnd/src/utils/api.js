@@ -24,22 +24,6 @@ export const fetchUser = (userId) => {
   });
 };
 
-export const fetchUserByPhoneNumber = (phoneNumber) => {
-  return instance.get("/profile/retrieve_user_by_phone_number", {
-    params: {
-      phoneNumber: phoneNumber
-    }
-  })
-}
-
-export const fetchTransactions = (userId) => {
-  return instance.get("/profile/retrieve_transactions", {
-    params: {
-      userId: userId,
-    },
-  });
-};
-
 export const searchUsers = (query) => {
   return instance.get("/profile/search_users", {
     params: {
