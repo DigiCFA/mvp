@@ -44,6 +44,11 @@ const PhoneNumberDetailsScreen = () => {
           </TouchableOpacity>
         )}
 
+        <TouchableOpacity className='flex-row py-8 px-4 items-center space-x-8 border-b border-gray-300'>
+            <Ionicons name="trash" size={24} color="#3370E2"/>
+            <Text className="text-base font-semibold text-gray-600">Delete it</Text>
+        </TouchableOpacity>
+
         <Text className="text-xs font-medium  text-gray-600 py-8">
           If this is your mobile number, you give us permission to contact you about your DigiCFA branded accounts using automated calls or texts to service your accounts, investigate fraud, or collect a debt, but not for telemarketing. Let us know if you want us to do the following:
         </Text>

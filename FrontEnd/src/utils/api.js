@@ -27,7 +27,7 @@ export const fetchUser = (userId) => {
 export const searchUsers = (query) => {
   return instance.get("/profile/search_users", {
     params: {
-      query: query
+      query: query,
     }
   })
 }

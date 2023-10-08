@@ -6,20 +6,71 @@ import {
   TextInput,
   ScrollViewComponent,
   ScrollView,
+  FlatList,
 } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import UsersColumn from "../../components/UsersColumn";
+import { searchUsers } from "../../utils/api";
+import ResultsColumn from "../../components/ResultsColumn";
+import Spinner from "react-native-loading-spinner-overlay";
+import { useFetchSearchResultsQuery } from "../../redux/reducers/apiProfileSlice";
 
 const SearchScreen = () => {
   const navigation = useNavigation();
 
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     tabBarVisible: false,
-  //   })
-  // }, []);
+  const [query, setQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [queryEmpty, setQueryEmpty] = useState(true);
+
+  const { data, error, isSuccess, isLoading } = useFetchSearchResultsQuery(
+    query,
+    {
+      skip: queryEmpty,
+    }
+  );
+
+  // const onChangeQuery = async (newQuery) => {
+  //   // console.log("New query: ", newQuery)
+  //   setQuery(newQuery);
+
+  //   if (newQuery != "") {
+  //     setQueryEmpty(false)
+  //     // const {data: result, isSuccess: fetchSearchResultsSuccessful, isLoading: fetchSearchResultsIsLoading} = useFetchSearchResultsQuery(newQuery)
+  //     setSearchResults(result)
+  //   } else {
+  //     setQueryEmpty(true)
+  //   }
+
+  //   // if (newQuery != "") {
+  //   //   try {
+  //   //     let result = await searchUsers(newQuery);
+  //   //     // console.log("Results: ", result.data)
+  //   //     setSearchResults(result.data);
+  //   //   } catch (error) {
+  //   //     console.error(error);
+  //   //   }
+  //   // }
+  // };
+
+  const onChangeQuery = async (newQuery) => {
+    setQuery(newQuery);
+    console.log(newQuery);
+
+    if (newQuery === "") {
+      setQueryEmpty(true);
+      console.log("EMPTY");
+      console.log(isSuccess);
+    } else {
+      setQueryEmpty(false);
+      if (isSuccess) {
+        console.log(isSuccess);
+        setSearchResults(data);
+      }
+      // console.log("Setting the query as not empty -> should send new request")
+    }
+  };
 
   return (
     <SafeAreaView className="bg-white flex-1">
@@ -39,6 +90,11 @@ const SearchScreen = () => {
             keyboardType="default"
             className="font-medium"
             style={{ fontSize: 18 }}
+            value={query}
+            autoCorrect={false}
+            onChangeText={(newQuery) => {
+              onChangeQuery(newQuery);
+            }}
           />
         </View>
 
@@ -50,21 +106,52 @@ const SearchScreen = () => {
         </TouchableOpacity>
       </View>
 
+      {/* <FlatList
+        data={searchResults}
+        keyExtractor={(item) => item._id.toString()}
+        renderItem={({ item }) => (
+          <View className="flex-col">
+            <Text>{item.firstName}</Text>
+            <Text>{item.lastName}</Text>
+            <Text>{item.phoneNumber}</Text>
+          </View>
+        )}
+        className='grow'
+      /> */}
+
       <ScrollView className="px-4">
         {/* Random Notice */}
-        <TouchableOpacity className="py-3 px-4 my-4 bg-white rounded-lg flex-row space-x-4 shadow">
+        {/* <TouchableOpacity className="py-3 px-4 my-4 bg-white rounded-lg flex-row space-x-4 shadow">
           <Ionicons name="paper-plane" size={40} color="#192C88" />
           <View>
             <Text className="text-lg font-medium mr-10 leading-6">
               Send abroad to banks, cash pick-up locations, and more
             </Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <Text className="text-xl text-gray-800 mb-2">Suggested</Text>
+        <Spinner visible={isLoading} />
 
-        {/* List of top Users */}
-        <UsersColumn />
+        {/* {error && (
+          <View>
+            <Text>ERROR: {error}</Text>
+          </View>
+        )} */}
+
+        {queryEmpty ? (
+          <View>
+            <Text className="text-xl text-gray-800 mb-2">
+              Suggested Contacts
+            </Text>
+            <UsersColumn />
+          </View>
+        ) : (
+          <View>
+            <Text className="text-xl text-gray-800 mb-2">Users on DigiCFA</Text>
+            <ResultsColumn users={searchResults} />
+          </View>
+        )}
+
       </ScrollView>
     </SafeAreaView>
   );
