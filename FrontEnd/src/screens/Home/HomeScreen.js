@@ -11,7 +11,7 @@ import SearchScreen from "../Transfer/SearchScreen";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import TransactionsColumn from "../../components/TransactionsColumn";
 import TransactionCard from "../../components/cards/TransactionCard";
-import { useFetchTransactionsQuery } from "../../redux/reducers/apiProfileSlice";
+import { useFetchContactsByIdQuery, useFetchTransactionsQuery } from "../../redux/reducers/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/reducers/apiAuthSlice";
 import ContentLoader, { Bullets } from "react-native-easy-content-loader";
 
@@ -20,6 +20,7 @@ const HomeScreen = () => {
   const {data: session, isSuccess: getSessionIsSuccess, isLoading: getSessionIsLoading} = useGetSessionQuery()
   const {data: transactions, isSuccess: fetchTransactionIsSuccess, 
     isLoading: fetchTransactionIsLoading} = useFetchTransactionsQuery(session.userId, {skip: !getSessionIsSuccess})
+    
 
   return (
     <SafeAreaView className="bg-beige flex-1">
