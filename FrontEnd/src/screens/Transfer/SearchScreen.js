@@ -14,24 +14,61 @@ import { Ionicons } from "@expo/vector-icons";
 import UsersColumn from "../../components/UsersColumn";
 import { searchUsers } from "../../utils/api";
 import ResultsColumn from "../../components/ResultsColumn";
+import Spinner from "react-native-loading-spinner-overlay";
+import { useFetchSearchResultsQuery } from "../../redux/reducers/apiProfileSlice";
 
 const SearchScreen = () => {
   const navigation = useNavigation();
 
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [queryEmpty, setQueryEmpty] = useState(true);
+
+  const { data, error, isSuccess, isLoading } = useFetchSearchResultsQuery(
+    query,
+    {
+      skip: queryEmpty,
+    }
+  );
+
+  // const onChangeQuery = async (newQuery) => {
+  //   // console.log("New query: ", newQuery)
+  //   setQuery(newQuery);
+
+  //   if (newQuery != "") {
+  //     setQueryEmpty(false)
+  //     // const {data: result, isSuccess: fetchSearchResultsSuccessful, isLoading: fetchSearchResultsIsLoading} = useFetchSearchResultsQuery(newQuery)
+  //     setSearchResults(result)
+  //   } else {
+  //     setQueryEmpty(true)
+  //   }
+
+  //   // if (newQuery != "") {
+  //   //   try {
+  //   //     let result = await searchUsers(newQuery);
+  //   //     // console.log("Results: ", result.data)
+  //   //     setSearchResults(result.data);
+  //   //   } catch (error) {
+  //   //     console.error(error);
+  //   //   }
+  //   // }
+  // };
 
   const onChangeQuery = async (newQuery) => {
     setQuery(newQuery);
-    // console.log("New query: ", newQuery)
-    if (newQuery != "") {
-      try {
-        let result = await searchUsers(newQuery);
-        // console.log("Results: ", result.data)
-        setSearchResults(result.data);
-      } catch (error) {
-        console.error(error);
+    console.log(newQuery);
+
+    if (newQuery === "") {
+      setQueryEmpty(true);
+      console.log("EMPTY");
+      console.log(isSuccess);
+    } else {
+      setQueryEmpty(false);
+      if (isSuccess) {
+        console.log(isSuccess);
+        setSearchResults(data);
       }
+      // console.log("Setting the query as not empty -> should send new request")
     }
   };
 
@@ -54,6 +91,7 @@ const SearchScreen = () => {
             className="font-medium"
             style={{ fontSize: 18 }}
             value={query}
+            autoCorrect={false}
             onChangeText={(newQuery) => {
               onChangeQuery(newQuery);
             }}
@@ -92,20 +130,27 @@ const SearchScreen = () => {
           </View>
         </TouchableOpacity> */}
 
-        {query === "" && (
+        <Spinner visible={isLoading} />
+
+        {/* {error && (
           <View>
-            <Text className="text-xl text-gray-800 mb-2">Suggested Contacts</Text>
+            <Text>ERROR: {error}</Text>
+          </View>
+        )} */}
+
+        {queryEmpty ? (
+          <View>
+            <Text className="text-xl text-gray-800 mb-2">
+              Suggested Contacts
+            </Text>
             <UsersColumn />
           </View>
-        )}
-
-        {query !== "" && (
+        ) : (
           <View>
             <Text className="text-xl text-gray-800 mb-2">Users on DigiCFA</Text>
-            <ResultsColumn users={searchResults}/>
+            <ResultsColumn users={searchResults} />
           </View>
         )}
-
 
       </ScrollView>
     </SafeAreaView>

@@ -37,4 +37,4 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
     })
 })
 
-export const {useFetchUserQuery, useFetchTransactionsQuery, useFetchUserByPhoneNumberMutation, fetchSearchResults} = extendedProfileSlice
+export const {useFetchUserQuery, useFetchTransactionsQuery, useFetchUserByPhoneNumberMutation, useFetchSearchResultsQuery} = extendedProfileSlice

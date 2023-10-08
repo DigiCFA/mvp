@@ -4,11 +4,13 @@ import UserCard from "./cards/UserCard";
 import { useSelector } from "react-redux";
 import { selectContacts } from "../redux/reducers/selfSlice";
 
-const ResultsColumn = ({users}) => {
+const ResultsColumn = ({ users }) => {
   // Fetching the top contacts
   // useEffect(() => {
 
   // })
+
+  console.log("From column: ", users)
 
   return (
     <View>
@@ -20,6 +22,13 @@ const ResultsColumn = ({users}) => {
           phoneNumber={user.phoneNumber}
         />
       ))}
+
+      {/* Will be an error, if you straight away go for it. Need to load first!! */}
+      {users.length === 0 && (
+        <View>
+          <Text>No User</Text>
+        </View>
+      )}
     </View>
   );
 };

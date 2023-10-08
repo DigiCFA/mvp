@@ -32,6 +32,8 @@ const amountInvalid = (amount) =>
   countFractional(Number(amount)) > 2 ||
   countWhole(Number(amount)) > 5;
 
+
+
 const UserScreen = () => {
   const navigation = useNavigation();
   const [amount, onChangeAmount] = useState("0.00");
@@ -43,6 +45,7 @@ const UserScreen = () => {
   const {
     params: { id, name },
   } = useRoute();
+
 
   return (
     <SafeAreaView className="flex-col flex-1">
