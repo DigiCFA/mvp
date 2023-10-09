@@ -35,7 +35,7 @@ const SignupPhoneNumberScreen = () => {
       await fetchuserByPhoneNumber(phoneNumber).unwrap()
       setModalVisible(true)
     } catch(error){
-      navigation.navigate('Password')
+      navigation.navigate('PhoneVerification')
     }
   }
 

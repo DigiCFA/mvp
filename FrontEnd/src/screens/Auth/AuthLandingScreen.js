@@ -1,7 +1,6 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useLoginMutation } from "../../redux/reducers/apiAuthSlice";
+import { useLoginMutation, useGetSessionQuery } from "../../redux/reducers/apiAuthSlice";
 import { useNavigation } from "@react-navigation/native";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import PasswordTextInput from "../../components/PasswordTextInput";
 import HideKeyboardView from "../../components/HideKeyboardView";
@@ -15,7 +14,11 @@ const LoginSignupLandingScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneNumberInputFocused, setIsPhoneNumberInputFocused] = useState(false);
   
-  const [login, {data, error, isLoading, isSuccess, isError}] = useLoginMutation();
+  const [login, {error: loginError, isFetching: loginIsLoading, isLoading: loginIsFetching, 
+    isSuccess: loginIsSuccess, isError: loginIsError}] = useLoginMutation();
+  
+  const {data: session, isFetching: sessionIsFetching, isLoading: sessionIsLoading, 
+    isSuccess: sessionIsSuccess, isError: sessionIsError} = useGetSessionQuery()
 
   const navigation = useNavigation();
 
@@ -34,7 +37,7 @@ const LoginSignupLandingScreen = () => {
   return (
     <SafeAreaView className="items-center bg-white flex-1">
 
-      <Spinner visible={isLoading}/>
+      <Spinner visible={loginIsFetching || loginIsSuccess ||sessionIsFetching}/>
 
       <HideKeyboardView>
         <View className="mt-5 w-full items-center">

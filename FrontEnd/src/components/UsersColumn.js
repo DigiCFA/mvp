@@ -4,6 +4,7 @@ import { UserCard } from '../components/cards/UserCard'
 import { useSelector } from "react-redux";
 import { useFetchContactsByIdQuery, contactSelector } from "../redux/reducers/apiProfileSlice";
 import { useGetSessionQuery } from "../redux/reducers/apiAuthSlice";
+import ContentLoader from "react-native-easy-content-loader";
 
 const UsersColumn = () => {
 
@@ -15,7 +16,7 @@ const UsersColumn = () => {
         })
   const contacts = useSelector(contactSelector(session.userId).selectAll)
   return (
-    <View>
+    <ContentLoader active pRows={10} title={false} pHeight={48} pWidth={"100%"} loading={sessionIsLoading || contactIsLoading}>
       {contacts?.map((contact) => (
         <UserCard
           key={contact._id}
@@ -24,7 +25,7 @@ const UsersColumn = () => {
           phoneNumber={contact.phoneNumber}
         />
       ))}
-    </View>
+    </ContentLoader>
   );
 };
 
