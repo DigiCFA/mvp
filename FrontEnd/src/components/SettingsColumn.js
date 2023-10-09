@@ -3,12 +3,18 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
-import { useLogoutMutation } from "../redux/reducers/apiAuthSlice";
+import { useLogoutMutation, useGetSessionQuery } from "../redux/reducers/apiAuthSlice";
 import Spinner from "react-native-loading-spinner-overlay";
 
 const SettingsColumn = () => {
   const navigation = useNavigation()
-  const [logout, {data, isSuccess, isError, isLoading}] = useLogoutMutation()
+  const [logout, {isSuccess: logoutIsSuccess, isError: logoutIsError, 
+    isLoading: logoutIsLoading, isFetching: logoutIsFetching}] = useLogoutMutation()
+  const {isSuccess: sessionIsSuccess, isError: sessionIsError, isLoading: sessionIsLoading,
+    isFetching: sessionIsFetching} = useGetSessionQuery(undefined, {
+      skip: !logoutIsSuccess
+    })
+  
   const onPressLogout = async () => {
     try{
       await logout().unwrap()
@@ -30,7 +36,7 @@ const SettingsColumn = () => {
 
   return (
     <View className="mt-2">
-      <Spinner visible={isLoading} />
+      <Spinner visible={logoutIsLoading || logoutIsFetching || logoutIsSuccess || sessionIsFetching} />
       {preferenceRow("person", 24, "#192C88", "Account Info", ()=>{navigation.navigate("AccountInfo")})}
       {preferenceRow("mail-unread", 24, "#192C88", "Message Center", ()=>{navigation.navigate("MessageCenter")})}
       {preferenceRow("shield", 24, "#192C88", "Security", ()=>{navigation.navigate("Security")})}

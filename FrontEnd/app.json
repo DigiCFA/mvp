@@ -7,6 +7,7 @@
     "orientation": "portrait",
     "icon": "./assets/DigiCFA.png",
     "userInterfaceStyle": "light",
+    "jsEngine": "hermes",
     "splash": {
       "image": "./assets/DigiCFA.png",
       "resizeMode": "contain",
