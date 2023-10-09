@@ -38,7 +38,10 @@ const LoginSignupLandingScreen = () => {
 
       <HideKeyboardView>
         <View className="mt-5 w-full items-center">
-          <FontAwesome name="paypal" size={50} color="blue" />
+          <Image 
+          source={require('../../../assets/DigiCFA.png')}
+          className='h-24 w-20 ml-4' />
+          {/* <FontAwesome name="paypal" size={50} color="blue" /> */}
         </View>
       </HideKeyboardView>
 

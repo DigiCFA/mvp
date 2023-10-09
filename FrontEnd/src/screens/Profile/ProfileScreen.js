@@ -6,36 +6,40 @@ import {
   SafeAreaView,
 } from "react-native";
 import React from "react";
-import { Image } from "expo-image"
-import {  useSelector } from "react-redux";
+import { Image } from "expo-image";
+import { useSelector } from "react-redux";
 import { selectSelf, whetherUserLoaded } from "../../redux/reducers/selfSlice";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsColumn from "../../components/SettingsColumn";
 import { InstagramLoader } from "react-native-easy-content-loader";
-import { useFetchUserQuery } from '../../redux/reducers/apiProfileSlice'
+import { useFetchUserQuery } from "../../redux/reducers/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/reducers/apiAuthSlice";
 
 const ProfileScreen = () => {
-
-  const {data: session, isLoading: getSessionIsLoading} = useGetSessionQuery()
-  const {data: user, isLoading: fetchUserIsLoading, 
-    isSuccess: fetchUserIsSuccess, isError: fetchUserIsError} = useFetchUserQuery(session.userId, {skip: getSessionIsLoading})
+  const { data: session, isLoading: getSessionIsLoading } =
+    useGetSessionQuery();
+  const {
+    data: user,
+    isLoading: fetchUserIsLoading,
+    isSuccess: fetchUserIsSuccess,
+    isError: fetchUserIsError,
+  } = useFetchUserQuery(session.userId, { skip: getSessionIsLoading });
 
   return (
     <View className="grow">
-
       {/* Top Bar */}
       <View className="flex-row self-center items-center space-x-2 pt-12 pb-6 px-4 bg-blueLight">
         <View className="flex-1"></View>
         <Text className="font-extrabold text-lg text-white">Profile</Text>
-        <TouchableOpacity
-          className="flex-1 items-end"
-        >
+        <TouchableOpacity className="flex-1 items-end">
           <Ionicons name="notifications" size={24} color="white" />
         </TouchableOpacity>
       </View>
 
-      <InstagramLoader active loading={getSessionIsLoading || fetchUserIsLoading}>
+      <InstagramLoader
+        active
+        loading={getSessionIsLoading || fetchUserIsLoading}
+      >
         <ScrollView>
           {/* Profile Area */}
           <View className="bg-white flex-col items-start space-y-1 pb-4">
