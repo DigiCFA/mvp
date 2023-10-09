@@ -24,12 +24,10 @@ const SearchScreen = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [queryEmpty, setQueryEmpty] = useState(true);
 
-  const { data, error, isSuccess, isLoading } = useFetchSearchResultsQuery(
-    query,
-    {
+  const { data, error, isError, isSuccess, isLoading } =
+    useFetchSearchResultsQuery(query, {
       skip: queryEmpty,
-    }
-  );
+    });
 
   // const onChangeQuery = async (newQuery) => {
   //   // console.log("New query: ", newQuery)
@@ -57,20 +55,45 @@ const SearchScreen = () => {
   const onChangeQuery = async (newQuery) => {
     setQuery(newQuery);
     console.log(newQuery);
-
     if (newQuery === "") {
       setQueryEmpty(true);
-      console.log("EMPTY");
-      console.log(isSuccess);
+      console.log("EMPTY")
     } else {
       setQueryEmpty(false);
-      if (isSuccess) {
-        console.log(isSuccess);
-        setSearchResults(data);
-      }
-      // console.log("Setting the query as not empty -> should send new request")
+      console.log("Is successful? ", isSuccess)
+      if (isSuccess) setSearchResults(data);
     }
+
+    // if (newQuery === "") {
+    //   setQueryEmpty(true);
+    //   console.log("EMPTY");
+    //   console.log(isSuccess);
+    // } else {
+    //   setQueryEmpty(false);
+    //   if (isSuccess) {
+    //     console.log(isSuccess);
+    //     setSearchResults(data);
+    //   }
+      // console.log("Setting the query as not empty -> should send new request")
+  //   }
   };
+
+  let content;
+
+  if (isLoading) {
+    content = <Spinner text="Loading..." />;
+  } else if (isSuccess) {
+    console.log(searchResults)
+    content = (
+      <View>
+        <Text className="text-xl text-gray-800 mb-2">Users on DigiCFA</Text>
+        <ResultsColumn users={searchResults} />
+      </View>
+    );
+  } else if (isError) {
+    console.log("ERROR")
+    content = <div>{error.toString()}</div>;
+  }
 
   return (
     <SafeAreaView className="bg-white flex-1">
@@ -146,12 +169,8 @@ const SearchScreen = () => {
             <UsersColumn />
           </View>
         ) : (
-          <View>
-            <Text className="text-xl text-gray-800 mb-2">Users on DigiCFA</Text>
-            <ResultsColumn users={searchResults} />
-          </View>
+          content
         )}
-
       </ScrollView>
     </SafeAreaView>
   );

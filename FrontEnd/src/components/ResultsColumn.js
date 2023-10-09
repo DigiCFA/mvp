@@ -1,16 +1,11 @@
-import { View, Text } from "react-native";
-import React from "react";
-import UserCard from "./cards/UserCard";
+import { View } from "react-native";
+import React, { useEffect } from "react";
+import { UserCard } from './cards/UserCard'
 import { useSelector } from "react-redux";
-import { selectContacts } from "../redux/reducers/selfSlice";
+import { useFetchContactsByIdQuery, contactSelector } from "../redux/reducers/apiProfileSlice";
+import { useGetSessionQuery } from "../redux/reducers/apiAuthSlice";
 
-const ResultsColumn = ({ users }) => {
-  // Fetching the top contacts
-  // useEffect(() => {
-
-  // })
-
-  console.log("From column: ", users)
+const ResultsColumn = ({users}) => {
 
   return (
     <View>
@@ -22,13 +17,6 @@ const ResultsColumn = ({ users }) => {
           phoneNumber={user.phoneNumber}
         />
       ))}
-
-      {/* Will be an error, if you straight away go for it. Need to load first!! */}
-      {users.length === 0 && (
-        <View>
-          <Text>No User</Text>
-        </View>
-      )}
     </View>
   );
 };
