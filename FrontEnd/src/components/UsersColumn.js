@@ -15,8 +15,9 @@ const UsersColumn = () => {
           skip: sessionIsLoading
         })
   const contacts = useSelector(contactSelector(session.userId).selectAll)
+  console.log("length", contacts.length)
   return (
-    <ContentLoader active pRows={10} title={false} pHeight={48} pWidth={"100%"} loading={sessionIsLoading || contactIsLoading}>
+    <ContentLoader active pRows={5} title={false} pHeight={48} pWidth={"100%"} loading={sessionIsLoading || contactIsLoading}>
       {contacts?.map((contact) => (
         <UserCard
           key={contact._id}

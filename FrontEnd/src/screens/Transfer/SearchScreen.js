@@ -29,29 +29,6 @@ const SearchScreen = () => {
       skip: queryEmpty,
     });
 
-  // const onChangeQuery = async (newQuery) => {
-  //   // console.log("New query: ", newQuery)
-  //   setQuery(newQuery);
-
-  //   if (newQuery != "") {
-  //     setQueryEmpty(false)
-  //     // const {data: result, isSuccess: fetchSearchResultsSuccessful, isLoading: fetchSearchResultsIsLoading} = useFetchSearchResultsQuery(newQuery)
-  //     setSearchResults(result)
-  //   } else {
-  //     setQueryEmpty(true)
-  //   }
-
-  //   // if (newQuery != "") {
-  //   //   try {
-  //   //     let result = await searchUsers(newQuery);
-  //   //     // console.log("Results: ", result.data)
-  //   //     setSearchResults(result.data);
-  //   //   } catch (error) {
-  //   //     console.error(error);
-  //   //   }
-  //   // }
-  // };
-
   const onChangeQuery = async (newQuery) => {
     setQuery(newQuery);
     console.log(newQuery);
@@ -61,21 +38,13 @@ const SearchScreen = () => {
     } else {
       setQueryEmpty(false);
       console.log("Is successful? ", isSuccess)
-      if (isSuccess) setSearchResults(data);
+      if (isSuccess) {
+        setSearchResults(data);
+      }
+      if (isError) {
+        console.error(error)
+      }
     }
-
-    // if (newQuery === "") {
-    //   setQueryEmpty(true);
-    //   console.log("EMPTY");
-    //   console.log(isSuccess);
-    // } else {
-    //   setQueryEmpty(false);
-    //   if (isSuccess) {
-    //     console.log(isSuccess);
-    //     setSearchResults(data);
-    //   }
-      // console.log("Setting the query as not empty -> should send new request")
-  //   }
   };
 
   let content;
@@ -153,7 +122,7 @@ const SearchScreen = () => {
           </View>
         </TouchableOpacity> */}
 
-        <Spinner visible={isLoading} />
+        {/* <Spinner visible={isLoading} /> */}
 
         {/* {error && (
           <View>
