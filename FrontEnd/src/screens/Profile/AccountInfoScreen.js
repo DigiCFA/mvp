@@ -16,7 +16,7 @@ import {
   selectProfilePic,
   selectSelf,
   setProfilePic,
-} from "../../redux/reducers/selfSlice";
+} from "../../redux/api/selfSlice";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { launchImageLibrary } from "react-native-image-picker";
@@ -56,7 +56,7 @@ const AccountInfoScreen = () => {
 
   return (
     <View className="h-screen bg-white">
-      <View className='bg-beige pb-8'>
+      <View className="bg-beige pb-8">
         {/* Top Bar */}
         <View className="flex-row justify-items-start items-center space-x-2 pt-12 px-4">
           <TouchableOpacity onPress={navigation.goBack} className="flex-1">

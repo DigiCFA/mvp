@@ -1,4 +1,4 @@
-import { useLoginMutation, useGetSessionQuery } from "../../redux/reducers/apiAuthSlice";
+import { useLoginMutation, useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 

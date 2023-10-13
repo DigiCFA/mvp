@@ -57,7 +57,7 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
 
 export const {useFetchUserQuery, useFetchTransactionsQuery, 
     useFetchUserByPhoneNumberMutation, useFetchSearchResultsQuery,
-    useFetchContactsByIdQuery} = extendedProfileSlice
+    useFetchContactsByIdQuery, useLazyFetchSearchResultsQuery} = extendedProfileSlice
 
 export const selectContactsResult = (userId) => extendedProfileSlice.endpoints.fetchContactsById.select(userId)
 

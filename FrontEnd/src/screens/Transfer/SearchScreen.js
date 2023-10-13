@@ -15,53 +15,81 @@ import UsersColumn from "../../components/UsersColumn";
 import { searchUsers } from "../../utils/api";
 import ResultsColumn from "../../components/ResultsColumn";
 import Spinner from "react-native-loading-spinner-overlay";
-import { useFetchSearchResultsQuery } from "../../redux/reducers/apiProfileSlice";
+import {
+  useFetchSearchResultsQuery,
+  useLazyFetchSearchResultsQuery,
+} from "../../redux/api/apiProfileSlice";
 
 const SearchScreen = () => {
   const navigation = useNavigation();
 
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [queryEmpty, setQueryEmpty] = useState(true);
 
-  const { data, error, isError, isSuccess, isLoading } =
-    useFetchSearchResultsQuery(query, {
-      skip: queryEmpty,
-    });
+  // const {
+  //   data = [],
+  //   error,
+  //   isError,
+  //   isSuccess,
+  //   isLoading,
+  //   isFetching,
+  // } = useFetchSearchResultsQuery(query, {
+  //   skip: query == "",
+  // });
+
+  const [fetchSearchResults, {data, error, isLoading, isFetching, isSuccess, isError}] = useLazyFetchSearchResultsQuery();
 
   const onChangeQuery = async (newQuery) => {
     setQuery(newQuery);
     console.log(newQuery);
-    if (newQuery === "") {
-      setQueryEmpty(true);
-      console.log("EMPTY")
-    } else {
-      setQueryEmpty(false);
-      console.log("Is successful? ", isSuccess)
-      if (isSuccess) {
-        setSearchResults(data);
-      }
-      if (isError) {
+
+    if (newQuery != "") {
+      try {
+        await fetchSearchResults(newQuery).unwrap()
+        // console.log("FETCH COMPLETE")
+        // console.log(data)
+        if (isSuccess) {
+          setSearchResults(data)
+        }
+      } catch (error) {
         console.error(error)
       }
     }
+
+    // if (newQuery === "") {
+    // } else {
+
+    //   // await fetchSearchResults().unwrap();
+    //   // console.log(data);
+    //   setSearchResults(data);
+    //   //   console.log("Is successful? ", isSuccess);
+    //   //   if (isSuccess) {
+    //   //     setSearchResults(data);
+    //   //   }
+    //   //   if (isError) {
+    //   //     console.error(error);
+    //   //   }
+    // }
   };
 
-  let content;
+  let content = <ResultsColumn users={searchResults} />;
 
   if (isLoading) {
-    content = <Spinner text="Loading..." />;
+    // content = <Spinner text="First time..." />;
+    content = <Text>Is Loading</Text>;
+  } else if (isFetching) {
+    console.log("Fetching");
+    // content = <Spinner text="Fetching..." />;
+    content = <Text>Is Fetching</Text>;
   } else if (isSuccess) {
-    console.log(searchResults)
-    content = (
-      <View>
-        <Text className="text-xl text-gray-800 mb-2">Users on DigiCFA</Text>
-        <ResultsColumn users={searchResults} />
-      </View>
-    );
+    console.log("Finished fetching");
+    console.log(searchResults);
+    content = <ResultsColumn users={searchResults} />;
   } else if (isError) {
-    console.log("ERROR")
+    console.log("ERROR");
     content = <div>{error.toString()}</div>;
+  } else {
+    console.log("NOT FETCHING");
   }
 
   return (
@@ -130,7 +158,7 @@ const SearchScreen = () => {
           </View>
         )} */}
 
-        {queryEmpty ? (
+        {query==="" ? (
           <View>
             <Text className="text-xl text-gray-800 mb-2">
               Suggested Contacts
@@ -138,7 +166,10 @@ const SearchScreen = () => {
             <UsersColumn />
           </View>
         ) : (
-          content
+          <View>
+            <Text className="text-xl text-gray-800 mb-2">Users on DigiCFA</Text>
+            {content}
+          </View>
         )}
       </ScrollView>
     </SafeAreaView>
