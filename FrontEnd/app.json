@@ -18,13 +18,21 @@
     ],
     "ios": {
       "bundleIdentifier": "com.digicfa.app",
+      "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
       "infoPlist": {
-        "NSCameraUsageDescription": "DigiCFA needs access to your Camera."
+        "NSCameraUsageDescription": "DigiCFA needs access to your Camera.",
+        "UIBackgroundModes": [
+          "fetch",
+          "remote-notification"
+        ]
       }
+      
     },
     "android": {
       "package": "com.digicfa.app",
+      "googleServicesFile": "./google-services.json",
+
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -50,7 +58,8 @@
         {
           "camerPermission": "Allow DigiCFA to access camera for QR code scanning."
         }
-      ]
+      ],
+      "@react-native-firebase/app"
     ],
     "extra": {
       "eas": {
