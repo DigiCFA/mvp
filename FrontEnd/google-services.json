@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "597354266353",
+    "project_id": "digicfa-2fd7f",
+    "storage_bucket": "digicfa-2fd7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597354266353:android:f8f54644eb33421a34b350",
+        "android_client_info": {
+          "package_name": "com.digicfa.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBW3aWgNAwhY2mcVKOwWOHanjTKiSMIerg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
