@@ -14,7 +14,7 @@ import LoadingView from "../../components/LoadingView";
 
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useSelector } from "react-redux";
-import { selectSelf } from "../../redux/reducers/selfSlice";
+import { selectSelf } from "../../redux/api/selfSlice";
 
 const ScanScreen = () => {
   const navigation = useNavigation();

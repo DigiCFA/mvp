@@ -13,7 +13,7 @@ import {useDispatch} from 'react-redux'
 
 import PasswordTextInput from "../../components/PasswordTextInput";
 import HideKeyboardView from "../../components/HideKeyboardView";
-import { setField } from "../../redux/reducers/signUpSlice";
+import { setField } from "../../redux/api/signUpSlice";
 
 const SetPasswordScreen = () => {
   const navigation = useNavigation();

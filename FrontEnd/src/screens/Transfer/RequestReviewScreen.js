@@ -13,7 +13,6 @@ import React from "react";
 import { useCardAnimation } from "@react-navigation/stack";
 import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { ScrollView } from "react-native-gesture-handler";
 import Currency from "react-currency-formatter";
 
 const SendReviewScreen = () => {

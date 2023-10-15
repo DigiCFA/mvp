@@ -7,8 +7,8 @@ import { createStoreWithPreloadedState } from "./store";
 import AppNavigator from "./navigation/AppNavigator";
 import linking from "./config/linking";
 import Spinner from "react-native-loading-spinner-overlay";
-import { useGetSessionQuery } from "./redux/reducers/apiAuthSlice";
-import { useFetchUserQuery, useFetchTransactionsQuery } from "./redux/reducers/apiProfileSlice";
+import { useGetSessionQuery } from "./redux/api/apiAuthSlice";
+import { useFetchUserQuery, useFetchTransactionsQuery } from "./redux/api/apiProfileSlice";
 import { useEffect } from "react";
 
 const App = () => {

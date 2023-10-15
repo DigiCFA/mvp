@@ -3,7 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
-import { useLogoutMutation, useGetSessionQuery } from "../redux/reducers/apiAuthSlice";
+import { useLogoutMutation, useGetSessionQuery } from "../redux/api/apiAuthSlice";
 import Spinner from "react-native-loading-spinner-overlay";
 
 const SettingsColumn = () => {

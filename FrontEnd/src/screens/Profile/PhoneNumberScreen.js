@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { Ionicons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
-import { selectPhoneNumbers } from "../../redux/reducers/selfSlice";
+import { selectPhoneNumbers } from "../../redux/api/selfSlice";
 
 const PhoneNumberScreen = () => {
   const navigation = useNavigation();

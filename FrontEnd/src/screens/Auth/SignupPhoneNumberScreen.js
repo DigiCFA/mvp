@@ -6,18 +6,18 @@ import {
   KeyboardAvoidingView,
   Platform,
   Modal,
-  Image
+  Image,
+  TouchableOpacity
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import {useDispatch, useSelector} from 'react-redux'
 
 import { Ionicons } from "@expo/vector-icons";
 import Spinner from "react-native-loading-spinner-overlay";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import { useFetchUserByPhoneNumberMutation } from "../../redux/reducers/apiProfileSlice";
+import { useFetchUserByPhoneNumberMutation } from "../../redux/api/apiProfileSlice";
 import HideKeyboardView from "../../components/HideKeyboardView";
-import { clearAllField, selectFieldWithAttr, setField } from "../../redux/reducers/signUpSlice";
+import { clearAllField, selectFieldWithAttr, setField } from "../../redux/api/signUpSlice";
 import * as apiUtil from "../../utils/api";
 
 const SignupPhoneNumberScreen = () => {
