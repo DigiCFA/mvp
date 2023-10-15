@@ -41,16 +41,11 @@ const SearchScreen = () => {
 
   const onChangeQuery = async (newQuery) => {
     setQuery(newQuery);
-    console.log(newQuery);
 
     if (newQuery != "") {
       try {
-        await fetchSearchResults(newQuery).unwrap()
-        // console.log("FETCH COMPLETE")
-        // console.log(data)
-        if (isSuccess) {
-          setSearchResults(data)
-        }
+        const response = await fetchSearchResults(newQuery).unwrap()
+        setSearchResults(response)
       } catch (error) {
         console.error(error)
       }
@@ -82,11 +77,10 @@ const SearchScreen = () => {
     // content = <Spinner text="Fetching..." />;
     content = <Text>Is Fetching</Text>;
   } else if (isSuccess) {
-    console.log("Finished fetching");
-    console.log(searchResults);
+    // console.log("Finished fetching");
+    // console.log(searchResults);
     content = <ResultsColumn users={searchResults} />;
   } else if (isError) {
-    console.log("ERROR");
     content = <div>{error.toString()}</div>;
   } else {
     console.log("NOT FETCHING");

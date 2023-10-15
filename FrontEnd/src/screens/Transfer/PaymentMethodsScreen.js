@@ -7,13 +7,13 @@ import {
   Animated,
   Button,
   TouchableOpacity,
+  ScrollView
 } from "react-native";
 import React, { useState } from "react";
 
 import { useCardAnimation } from "@react-navigation/stack";
 import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { ScrollView } from "react-native-gesture-handler";
 import CardsColumn from "../../components/CardsColumn";
 import { useSelector } from "react-redux";
 import { selectBalance, selectCards } from "../../redux/api/selfSlice";

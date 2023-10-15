@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons"
 import Currency from 'react-currency-formatter'
-import { ScrollView } from 'react-native-gesture-handler'
 
 const PhoneNumberDetailsScreen = () => {
 

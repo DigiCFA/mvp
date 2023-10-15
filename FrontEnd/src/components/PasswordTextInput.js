@@ -1,7 +1,6 @@
-import { View, Text, TextInput } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {Entypo} from '@expo/vector-icons'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const PasswordTextInput = ({placeHolder, onChangeText}) => {
 
