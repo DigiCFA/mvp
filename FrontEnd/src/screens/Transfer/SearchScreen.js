@@ -73,13 +73,15 @@ const SearchScreen = () => {
     // content = <Spinner text="First time..." />;
     content = <Text>Is Loading</Text>;
   } else if (isFetching) {
-    console.log("Fetching");
+    // console.log("Fetching");
     // content = <Spinner text="Fetching..." />;
     content = <Text>Is Fetching</Text>;
   } else if (isSuccess) {
-    // console.log("Finished fetching");
-    // console.log(searchResults);
-    content = <ResultsColumn users={searchResults} />;
+    if (searchResults.length == 0) {
+      
+    } else {
+      content = <ResultsColumn users={searchResults} />;
+    }
   } else if (isError) {
     content = <div>{error.toString()}</div>;
   } else {

@@ -27,7 +27,6 @@ const UsersColumn = () => {
     skip: sessionIsLoading,
   });
   const contacts = useSelector(contactSelector(session.userId).selectAll);
-  console.log("length", contacts.length);
   return (
     <ContentLoader
       active
