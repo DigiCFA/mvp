@@ -6,10 +6,8 @@ import { createStoreWithPreloadedState } from "./store";
 
 import AppNavigator from "./navigation/AppNavigator";
 import linking from "./config/linking";
-import Spinner from "react-native-loading-spinner-overlay";
 import { useGetSessionQuery } from "./redux/api/apiAuthSlice";
 import { useFetchUserQuery, useFetchTransactionsQuery } from "./redux/api/apiProfileSlice";
-import { useEffect } from "react";
 
 const App = () => {
   const {isLoading: sessionIsLoading, data: session, isFetching: sessionisFetching} = useGetSessionQuery()
@@ -28,7 +26,7 @@ const App = () => {
   );
 };
 
-export default AppWrapper = () => {
+const AppWrapper = () => {
   const store = createStoreWithPreloadedState({});
   return (
     <Provider store={store}>
@@ -36,3 +34,5 @@ export default AppWrapper = () => {
     </Provider>
   );
 };
+
+export default AppWrapper;

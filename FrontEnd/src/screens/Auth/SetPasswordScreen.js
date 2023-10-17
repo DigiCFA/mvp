@@ -3,7 +3,6 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-  TextInput,
   KeyboardAvoidingView,
 } from "react-native";
 import React, { useState } from "react";

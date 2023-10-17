@@ -5,8 +5,7 @@ import React, { useState } from "react";
 import PasswordTextInput from "../../components/PasswordTextInput";
 import HideKeyboardView from "../../components/HideKeyboardView";
 import Spinner from "react-native-loading-spinner-overlay";
-import { FontAwesome } from "@expo/vector-icons";
-import {View, Text, SafeAreaView, Image, TextInput, Touchable, TouchableOpacity } from "react-native";
+import {View, Text, SafeAreaView, Image, TextInput, TouchableOpacity } from "react-native";
 
 const LoginSignupLandingScreen = () => {
   const [password, setPassword] = useState("");

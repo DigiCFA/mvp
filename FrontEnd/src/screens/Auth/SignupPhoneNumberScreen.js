@@ -15,10 +15,9 @@ import {useDispatch, useSelector} from 'react-redux'
 import { Ionicons } from "@expo/vector-icons";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useNavigation } from "@react-navigation/native";
-import { useFetchUserByPhoneNumberMutation } from "../../redux/api/apiProfileSlice";
+import { useFetchUserByPhoneNumberQuery } from "../../redux/api/apiProfileSlice";
 import HideKeyboardView from "../../components/HideKeyboardView";
 import { clearAllField, selectFieldWithAttr, setField } from "../../redux/api/signUpSlice";
-import * as apiUtil from "../../utils/api";
 
 const SignupPhoneNumberScreen = () => {
   const navigation = useNavigation();
@@ -26,27 +25,40 @@ const SignupPhoneNumberScreen = () => {
 
   const [isInputFocused, setIsInputFocused] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [skip, setSkip] = useState(true)
 
   const phoneNumber = useSelector(selectFieldWithAttr("phoneNumber"));
-  const [fetchuserByPhoneNumber, {isLoading, isSuccess, isError, data: registeredUser, error}] = useFetchUserByPhoneNumberMutation()
 
-  const onPressNext = async function(){
-    try{
-      await fetchuserByPhoneNumber(phoneNumber).unwrap()
+  const {isLoading, isSuccess, isError, data: registeredUser, error, isFetching} = useFetchUserByPhoneNumberQuery(phoneNumber, {
+    skip: skip
+  })
+
+  const onPressNext = () =>{
+    setSkip(false)
+  }
+
+  const onModalClosed = () => {
+    setModalVisible(false)
+    setSkip(true)
+  }
+
+  useEffect(() => {
+    if(isSuccess && !isFetching){
       setModalVisible(true)
-    } catch(error){
+    } else if (isError){
       navigation.navigate('PhoneVerification')
     }
-  }
+  }, [isSuccess, isError, isFetching])
+
 
   const modalScreen = (user) => (
     <Modal animationType="slide" transparent={true} visible={modalVisible}
-      onRequestClose={() =>{setModalVisible(false)}}>
+      onRequestClose={onModalClosed}>
         <View className="flex-1 justify-end">
           <View className="bg-white items-center py-10 px-9 rounded-3xl shadow-xl relative">
 
             <View className="absolute left-3 top-3">
-              <TouchableOpacity onPress={() => {setModalVisible(false)}}>
+              <TouchableOpacity onPress={onModalClosed}>
                 <Ionicons name="close" size={30} color="gray" />
               </TouchableOpacity>
             </View>
@@ -73,7 +85,7 @@ const SignupPhoneNumberScreen = () => {
               </TouchableOpacity>
 
               <TouchableOpacity className="bg-white rounded-full py-3 px-10 items-center border-2 border-blue-800"
-                onPress={() => {setModalVisible(false)}}>
+                onPress={onModalClosed}>
                 <Text className="font-bold text-blueDark text-lg">Signup with another number</Text>
               </TouchableOpacity>
             </View>
@@ -87,7 +99,7 @@ const SignupPhoneNumberScreen = () => {
     <HideKeyboardView>
       <SafeAreaView className="flex-1 bg-white relative">
 
-        <Spinner visible={isLoading} />
+        <Spinner visible={isLoading || isFetching} />
 
         {isSuccess ? modalScreen(registeredUser) : null}
 

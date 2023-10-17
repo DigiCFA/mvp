@@ -8,26 +8,30 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useCardAnimation } from "@react-navigation/stack";
-import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import CardsColumn from "../../components/CardsColumn";
 import Currency from "react-currency-formatter";
-import UserCard from "../../components/cards/UserCard";
 import PaymentMethodCard from "../../components/cards/PaymentMethodCard";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUserById, fetchTransactionsById, selectId } from "../../redux/api/selfSlice";
 import { createDirectTransaction } from "../../utils/api";
+
+import { useCreateDirectTransactionMutation } from "../../redux/api/apiProfileSlice";
+import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 
 const SendReviewScreen = () => {
   const { height } = useWindowDimensions();
   const { current } = useCardAnimation();
   const navigation = useNavigation();
-  const dispatch = useDispatch();
 
-  const senderId = useSelector(selectId);
+  const {data: session, isLoading: sessionIsLoading, 
+    isSuccess: sessionIsSuccess, isError: sessionIsError} = useGetSessionQuery()
+
+  // const [createDirectTransaction, {data: transaciton, isLoading: transactionIsLoading,
+  //   isSuccess: transactionIsSuccess, isError: transactionIsError}] = useCreateDirectTransactionMutation()
+
+  const senderId = session.userId
 
   const {
     params: {
@@ -50,6 +54,19 @@ const SendReviewScreen = () => {
         cardType.slice(1) +
         " " +
         cardNumber.slice(-4);
+
+  onPressCreateTransaction = async () => {
+    navigation.navigate("SendConfirmation", {
+      name,
+      amount,
+      message,
+    });
+    try {
+      await createDirectTransaction(amount, senderId, receiverId, paymentMethod, true, true, message)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <View className="flex-1 items-center justify-center">
@@ -129,24 +146,7 @@ const SendReviewScreen = () => {
 
             {/* Bottom Portion */}
             <TouchableOpacity
-              onPress={async () => {
-                navigation.navigate("SendConfirmation", {
-                  name,
-                  amount,
-                  message,
-                });
-                await createDirectTransaction(
-                  amount,
-                  senderId,
-                  receiverId,
-                  paymentMethod,
-                  true,
-                  true,
-                  message
-                );
-                dispatch(fetchUserById(senderId));
-                dispatch(fetchTransactionsById(senderId));
-              }}
+              onPress={onPressCreateTransaction}
               className="bg-blue-900 rounded-full py-3 px-14 items-center"
             >
               <Text className="text-white text-xl font-extrabold">Send</Text>
