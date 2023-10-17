@@ -5,11 +5,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   KeyboardAvoidingView,
+  TextInput
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { TextInput } from "react-native-gesture-handler";
 import HideKeyboardView from "../../components/HideKeyboardView";
 
 // import { Input } from "react-native-elements";

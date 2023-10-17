@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import selfReducer from "./redux/reducers/selfSlice";
-import signUpReducer from './redux/reducers/signUpSlice';
-import phoneVerificationReducer from './redux/reducers/phoneVerificationSlice'
-import { apiSlice } from "./redux/reducers/apiIndexSlice";
+import selfReducer from "./redux/api/selfSlice";
+import signUpReducer from "./redux/api/signUpSlice";
+import phoneVerificationReducer from "./redux/api/phoneVerificationSlice";
+import { apiSlice } from "./redux/api/apiIndexSlice";
 
 export const createStoreWithPreloadedState = (preloadedState) =>
   configureStore({
@@ -13,5 +13,6 @@ export const createStoreWithPreloadedState = (preloadedState) =>
       [apiSlice.reducerPath]: apiSlice.reducer,
     },
     preloadedState: preloadedState,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware)
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(apiSlice.middleware),
   });

@@ -1,13 +1,12 @@
-import { useLoginMutation, useGetSessionQuery } from "../../redux/reducers/apiAuthSlice";
+import { useLoginMutation, useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 
 import PasswordTextInput from "../../components/PasswordTextInput";
 import HideKeyboardView from "../../components/HideKeyboardView";
 import Spinner from "react-native-loading-spinner-overlay";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
-import {View, Text, SafeAreaView, Image, TextInput, Touchable } from "react-native";
+import {View, Text, SafeAreaView, Image, TextInput, Touchable, TouchableOpacity } from "react-native";
 
 const LoginSignupLandingScreen = () => {
   const [password, setPassword] = useState("");
@@ -41,7 +40,10 @@ const LoginSignupLandingScreen = () => {
 
       <HideKeyboardView>
         <View className="mt-5 w-full items-center">
-          <FontAwesome name="paypal" size={50} color="blue" />
+          <Image 
+          source={require('../../../assets/DigiCFA.png')}
+          className='h-24 w-20 ml-4' />
+          {/* <FontAwesome name="paypal" size={50} color="blue" /> */}
         </View>
       </HideKeyboardView>
 

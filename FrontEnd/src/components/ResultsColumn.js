@@ -1,12 +1,14 @@
 import { View } from "react-native";
 import React, { useEffect } from "react";
-import { UserCard } from './cards/UserCard'
+import { UserCard } from "./cards/UserCard";
 import { useSelector } from "react-redux";
-import { useFetchContactsByIdQuery, contactSelector } from "../redux/reducers/apiProfileSlice";
-import { useGetSessionQuery } from "../redux/reducers/apiAuthSlice";
+import {
+  useFetchContactsByIdQuery,
+  contactSelector,
+} from "../redux/api/apiProfileSlice";
+import { useGetSessionQuery } from "../redux/api/apiAuthSlice";
 
-const ResultsColumn = ({users}) => {
-
+const ResultsColumn = ({ users }) => {
   return (
     <View>
       {users?.map((user) => (

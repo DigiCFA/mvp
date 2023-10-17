@@ -13,7 +13,7 @@ import VerificationCodeInput from "../../components/VerificationCodeInput";
 
 import HideKeyboardView from "../../components/HideKeyboardView";
 import { useSelector } from "react-redux";
-import { selectFieldWithAttr } from "../../redux/reducers/signUpSlice";
+import { selectFieldWithAttr } from "../../redux/api/signUpSlice";
 
 const PhoneVerificationScreen = () => {
 

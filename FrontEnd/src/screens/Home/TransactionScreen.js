@@ -1,9 +1,8 @@
-import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons"
 import Currency from 'react-currency-formatter'
-import { ScrollView } from 'react-native-gesture-handler'
 
 const TransactionScreen = () => {
 

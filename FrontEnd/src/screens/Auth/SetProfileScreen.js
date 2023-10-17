@@ -12,8 +12,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from 'react-redux'
 
 import HideKeyboardView from "../../components/HideKeyboardView";
-import { selectFieldWithAttr, setField, clearAllField } from "../../redux/reducers/signUpSlice";
-import { useSignupMutation } from "../../redux/reducers/apiAuthSlice";
+import { selectFieldWithAttr, setField, clearAllField } from "../../redux/api/signUpSlice";
+import { useSignupMutation } from "../../redux/api/apiAuthSlice";
 import Spinner from "react-native-loading-spinner-overlay";
 
 const SetProfileScreen = () => {
