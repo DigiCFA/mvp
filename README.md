@@ -36,6 +36,14 @@ npx expo start
 
 ---
 
+#Configure Redux Debugger
+
+1. Install Redux-devtool cli, follow instructions [here](https://github.com/reduxjs/redux-devtools/tree/main/packages/redux-devtools-cli#usage)
+2. If installation for cli failed and prompted to update Node, install Node.js from [here](https://nodejs.org/en)
+3. Install Redux-remote-dev-tools, follow instructions [here](https://github.com/reduxjs/redux-devtools/tree/main/packages/redux-devtools-remote)
+4. Before launching frontend using expo, start the redux devtool using ```redux-devtools --hostname=localhost --port=8000```
+5. Launch frontend with the command ```npx expo start --localhost```. If successfully connected to the devtool, the console should output ```connected to remotedev-server```.
+
 - Have not tried on Andriod - requires downloading Andriod Studio.
   
 - If running multiple simulators, go to the Expo Go App home menu and copy in the >exp:// URL manually.
