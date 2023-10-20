@@ -18,7 +18,11 @@ import Currency from "react-currency-formatter";
 import UserCard from "../../components/cards/UserCard";
 import PaymentMethodCard from "../../components/cards/PaymentMethodCard";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserById, fetchTransactionsById, selectId } from "../../redux/api/selfSlice";
+import {
+  fetchUserById,
+  fetchTransactionsById,
+  selectId,
+} from "../../redux/api/selfSlice";
 import { createDirectTransaction } from "../../utils/api";
 
 const SendReviewScreen = () => {

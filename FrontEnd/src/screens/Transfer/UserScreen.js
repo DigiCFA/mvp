@@ -22,7 +22,7 @@ const countFractional = (value) => {
 
 const countWhole = (value) => {
   return value.toString().split(".")[0].length || 0;
-}
+};
 
 const amountInvalid = (amount) =>
   !amount.match(numericRE) ||
@@ -31,8 +31,6 @@ const amountInvalid = (amount) =>
   (amount.match(/\./g) || []).length > 1 ||
   countFractional(Number(amount)) > 2 ||
   countWhole(Number(amount)) > 5;
-
-
 
 const UserScreen = () => {
   const navigation = useNavigation();
@@ -45,7 +43,6 @@ const UserScreen = () => {
   const {
     params: { id, name },
   } = useRoute();
-
 
   return (
     <SafeAreaView className="flex-col flex-1">

@@ -20,10 +20,12 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { launchImageLibrary } from "react-native-image-picker";
-import { uploadProfilePicture } from "../../utils/api.js";
+import { profilePicBaseURL, uploadProfilePicture } from "../../utils/api.js";
 
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
+import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
+import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 
 const ID = "64eb0d88eaf1bbe6d5741736";
 
@@ -31,8 +33,17 @@ const AccountInfoScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const self = useSelector(selectSelf);
-  const profilePic = useSelector(selectProfilePic);
+  // const self = useSelector(selectSelf);
+  // const profilePic = useSelector(selectProfilePic);
+
+  const { data: session, isLoading: getSessionIsLoading } =
+    useGetSessionQuery();
+  const {
+    data: self,
+    isLoading: fetchUserIsLoading,
+    isSuccess: fetchUserIsSuccess,
+    isError: fetchUserIsError,
+  } = useFetchUserQuery(session.userId, { skip: getSessionIsLoading });
 
   const pickPhoto = async () => {
     await ImagePicker.requestCameraPermissionsAsync();
@@ -46,7 +57,7 @@ const AccountInfoScreen = () => {
     console.log("Selected Photo: ", result);
 
     if (!result.canceled) {
-      await uploadProfilePicture(self._id, result.assets[0].uri);
+      await uploadProfilePicture(user._id, result.assets[0].uri);
 
       // Not sure if these are redundant? -> if too slow, can do a setPhoto immediately
       dispatch(fetchProfilePicById(ID));
@@ -71,7 +82,7 @@ const AccountInfoScreen = () => {
         <View className="flex-col items-center">
           <View className="p-6">
             <Image
-              source={{ uri: profilePic }}
+              source={{ uri: profilePicBaseURL + self.profilePic }}
               className="h-24 w-24 rounded-full"
               // style={{width: 100, height: 100}}
             />
