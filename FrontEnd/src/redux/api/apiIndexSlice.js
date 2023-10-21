@@ -8,6 +8,6 @@ export const apiSlice = createApi({
         baseUrl: baseURL,
         credentials: 'include',
     }),
-    tagTypes: ['Session'],
+    tagTypes: ['Session', 'Profile'],
     endpoints: builder => ({})
 })

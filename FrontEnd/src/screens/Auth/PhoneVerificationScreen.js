@@ -3,9 +3,8 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-  Keyboard,
 } from "react-native";
-import React, { useEffect } from "react";
+import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 

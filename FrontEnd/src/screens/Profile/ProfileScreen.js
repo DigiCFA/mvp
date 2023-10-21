@@ -7,8 +7,6 @@ import {
 } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
-import { useSelector } from "react-redux";
-import { selectSelf, whetherUserLoaded } from "../../redux/api/selfSlice";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsColumn from "../../components/SettingsColumn";
 import { InstagramLoader } from "react-native-easy-content-loader";

@@ -7,12 +7,9 @@ import {
 } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import SearchScreen from "../Transfer/SearchScreen";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import TransactionsColumn from "../../components/TransactionsColumn";
 import TransactionCard from "../../components/cards/TransactionCard";
 import {
-  useFetchContactsByIdQuery,
   useFetchTransactionsQuery,
 } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";

@@ -16,21 +16,21 @@ const instance = axios.create({
   credentials: "include"
 })
 
-export const fetchUser = (userId) => {
-  return instance.get("/profile/retrieve_user", {
-    params: {
-      userId: userId,
-    },
-  });
-};
+// export const fetchUser = (userId) => {
+//   return instance.get("/profile/retrieve_user", {
+//     params: {
+//       userId: userId,
+//     },
+//   });
+// };
 
-export const searchUsers = (query) => {
-  return instance.get("/profile/search_users", {
-    params: {
-      query: query,
-    }
-  })
-}
+// export const searchUsers = (query) => {
+//   return instance.get("/profile/search_users", {
+//     params: {
+//       query: query,
+//     }
+//   })
+// }
 
 // Not necessary to have a stand alone function
 
