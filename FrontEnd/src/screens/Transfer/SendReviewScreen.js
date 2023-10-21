@@ -15,7 +15,6 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
 import PaymentMethodCard from "../../components/cards/PaymentMethodCard";
-import { createDirectTransaction } from "../../utils/api";
 
 import { useCreateDirectTransactionMutation } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
@@ -28,10 +27,10 @@ const SendReviewScreen = () => {
   const {data: session, isLoading: sessionIsLoading, 
     isSuccess: sessionIsSuccess, isError: sessionIsError} = useGetSessionQuery()
 
-  // const [createDirectTransaction, {data: transaciton, isLoading: transactionIsLoading,
-  //   isSuccess: transactionIsSuccess, isError: transactionIsError}] = useCreateDirectTransactionMutation()
+  const [createDirectTransaction, {data: transaciton, isLoading: transactionIsLoading,
+    isSuccess: transactionIsSuccess, isError: transactionIsError}] = useCreateDirectTransactionMutation()
 
-  const senderId = session.userId
+  const sender = session.userId
 
   const {
     params: {
@@ -62,7 +61,8 @@ const SendReviewScreen = () => {
       message,
     });
     try {
-      await createDirectTransaction(amount, senderId, receiverId, paymentMethod, true, true, message)
+      const isPayment = true, isApproved = true
+      await createDirectTransaction({amountTransferred: amount, sender, receiver: receiverId, paymentMethod, isPayment, isApproved, message}).unwrap()
     } catch (error) {
       console.log(error)
     }

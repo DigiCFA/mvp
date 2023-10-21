@@ -1,6 +1,6 @@
 import { useLoginMutation, useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import PasswordTextInput from "../../components/PasswordTextInput";
 import HideKeyboardView from "../../components/HideKeyboardView";
@@ -28,7 +28,7 @@ const LoginSignupLandingScreen = () => {
     try {
       await login(user).unwrap()
     } catch (err) {
-      console.log(err)
+      console.error("error", err)
     }
   };
 

@@ -16,9 +16,7 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
                 }),
                 method: 'GET'
             }),
-            providesTags: (result, error, arg) => {
-                return ([{type: "Profile", userId: arg.userId}])
-            }
+            providesTags: (result, error, arg) => [{type: "Profile", userId: arg}]
         }),
         fetchUserByPhoneNumber: builder.query({
             query: (phoneNumber) => ({
@@ -27,9 +25,7 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
                 }),
                 method: 'GET'
             }),
-            providesTags: (result, error, arg) => {
-                return ([{type: "Profile", userId: result.userId}])
-            }
+            providesTags: (result, error, arg) => [{type: "Profile", userId: result._id}]
         }),
         fetchContactsById: builder.query({
             query: (userId) => ({
@@ -52,7 +48,9 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
                 }),
                 method: 'GET'
             }),
-            providesTags: (result, error, arg) => [{type: "Profile", userId: arg.userId}]
+            providesTags: (result, error, arg) => {
+                return [{type: "Profile", userId: arg}]
+            }
         }),
         fetchSearchResults: builder.query({
             query: (query) => ({
@@ -63,22 +61,27 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
             })
         }),
         createDirectTransaction: builder.mutation({
-            query: (amountTransferred, sender, receiver, paymentMethod, 
-                     isPayment, isApproved, message) => ({
-                url: '/trnsaction/create_direct_transaction',
-                method: 'POST',
-                body: {
-                    amountTransferred: amountTransferred,
-                    sender: sender,
-                    receiver: receiver,
-                    paymentMethod: paymentMethod,
-                    isPayment: isPayment,
-                    isApproved: isApproved,
-                    message: message,
-                }
-            }),
+            query: (arg) => { 
+
+                ({amountTransferred, sender, receiver, paymentMethod, 
+                    isPayment, isApproved, message} = arg)
+
+                return ({
+                    url: '/transaction/create_direct_transaction',
+                    method: 'POST',
+                    body: {
+                        amountTransferred: amountTransferred,
+                        sender: sender,
+                        receiver: receiver,
+                        paymentMethod: paymentMethod,
+                        isPayment: isPayment,
+                        isApproved: isApproved,
+                        message: message,
+                    }
+                })
+            },
             invalidatesTags: (result, error, arg) => {
-                console.log("arg", arg)
+                console.log("send", arg)
                 return [{type: "Profile", userId: arg.sender}, {type: "Profile", userId: arg.receiver}]
             }
         })
