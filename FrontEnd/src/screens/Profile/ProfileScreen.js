@@ -43,7 +43,7 @@ const ProfileScreen = () => {
           <View className="bg-white flex-col items-start space-y-1 pb-4">
             <View className="px-4 pt-4">
               <Image
-                source={{ uri: user.profilePicture }}
+                source={{ uri: user?.profilePicture }}
                 className="h-24 w-24 rounded-full"
                 // onLoadStart={()=>console.log("Started to load image")}
                 // onProgress={()=>console.log("LOADING...")}
@@ -52,8 +52,8 @@ const ProfileScreen = () => {
               />
             </View>
 
-            <Text className="px-4 font-medium text-3xl">{user.fullName}</Text>
-            <Text className="px-4 font-medium">Balance: {user.balance}</Text>
+            <Text className="px-4 font-medium text-3xl">{user?.fullName}</Text>
+            <Text className="px-4 font-medium">Balance: {user?.balance}</Text>
 
             {/* Just for checks */}
             {/* {user.cards?.map((card) => (

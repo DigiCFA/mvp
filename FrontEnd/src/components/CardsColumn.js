@@ -1,15 +1,15 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View } from "react-native";
 import React, { useState } from "react";
 import PaymentMethodCard from "./cards/PaymentMethodCard";
-import { selectBalance, selectCards } from "../redux/api/selfSlice";
+import { useGetSessionQuery } from "../redux/api/apiAuthSlice";
+import { selectCardsFromUser } from "../redux/api/apiProfileSlice";
 import { useSelector } from "react-redux";
-import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
-import Currency from "react-currency-formatter";
 
 const CardsColumn = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
-
-  let cards = useSelector(selectCards);
+  const {data: session, isLoading} = useGetSessionQuery()
+  const cards = useSelector(selectCardsFromUser(session.userId))
+  console.log(cards)
 
   return (
     <View>

@@ -33,6 +33,10 @@ const SignupPhoneNumberScreen = () => {
     skip: skip
   })
 
+  useEffect(() => {
+    console.log("skip", skip)
+  }, [skip])
+
   const onPressNext = () =>{
     setSkip(false)
   }
@@ -46,6 +50,7 @@ const SignupPhoneNumberScreen = () => {
     if(isSuccess && !isFetching){
       setModalVisible(true)
     } else if (isError){
+      setSkip(true)
       navigation.navigate('PhoneVerification')
     }
   }, [isSuccess, isError, isFetching])

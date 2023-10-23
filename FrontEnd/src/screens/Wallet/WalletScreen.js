@@ -7,14 +7,20 @@ import {
 } from "react-native";
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectBalance, selectCards } from "../../redux/api/selfSlice";
 import Currency from "react-currency-formatter";
 import { FontAwesome, Feather } from "@expo/vector-icons";
 import BankCardCard from "../../components/cards/BankCardCard";
+import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
+import { selectCardsFromUser, selectBalanceFromUser } from "../../redux/api/apiProfileSlice";
+import ContentLoader from "react-native-easy-content-loader";
 
 const WalletScreen = () => {
-  const cards = useSelector(selectCards);
-  const balance = useSelector(selectBalance);
+
+  const {data: session, isLoading, isSuccess, isError, error} = useGetSessionQuery()
+  const cards = useSelector(selectCardsFromUser(session.userId))
+  const balance = useSelector(selectBalanceFromUser(session.userId))
+
+  console.log(balance)
 
   return (
     <SafeAreaView className="flex-1">
@@ -48,18 +54,21 @@ const WalletScreen = () => {
             </View>
           </View>
 
-          {cards?.map((card, index) => (
-            <BankCardCard
-              key={card._id}
-              index={index}
-              name={card.name}
-              accountHolder={card.accountHolder}
-              cardNumber={card.cardNumber}
-              cardType={card.cardType}
-              expDate={card.expDate}
-              cvv={card.cvv}
-            />
-          ))}
+          <ContentLoader active pRows={5} title={false} pHeight={250} 
+            pWidth={"100%"} loading={!Boolean(cards)}>
+            {cards?.map((card, index) => (
+              <BankCardCard
+                key={card._id}
+                index={index}
+                name={card.name}
+                accountHolder={card.accountHolder}
+                cardNumber={card.cardNumber}
+                cardType={card.cardType}
+                expDate={card.expDate}
+                cvv={card.cvv}
+              />
+            ))}
+          </ContentLoader>
         </View>
       </ScrollView>
     </SafeAreaView>
