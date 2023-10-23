@@ -1,11 +1,14 @@
 import { apiSlice } from "./apiIndexSlice";
 import { createEntityAdapter, createSelector } from "@reduxjs/toolkit";
+import * as FileSystem from "expo-file-system";
 
 const contactsAdapter = createEntityAdapter({
     selectId: (contact) => contact._id,
     sortComparer: (a, b) => a.fullName.localeCompare(b.fullName)
 })
 const contactsInitialState = contactsAdapter.getInitialState()
+
+const baseURL = "https://o4gnaf7sce.execute-api.af-south-1.amazonaws.com/prod/api"
 
 export const extendedProfileSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -25,7 +28,7 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
                 }),
                 method: 'GET'
             }),
-            providesTags: (result, error, arg) => [{type: "Profile", userId: result._id}]
+            providesTags: (result, error, arg) => error ? [] : ([{type: "Profile", userId: result._id}])
         }),
         fetchContactsById: builder.query({
             query: (userId) => ({
@@ -81,9 +84,40 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
                 })
             },
             invalidatesTags: (result, error, arg) => {
-                console.log("send", arg)
                 return [{type: "Profile", userId: arg.sender}, {type: "Profile", userId: arg.receiver}]
             }
+        }),
+        uploadProfilePicture: builder.mutation({
+            queryFn: async (args) => {
+                const {userId, imageURI} = args
+                let uriArray = imageURI.split(".");
+                let fileType = "image/" + uriArray[uriArray.length - 1];
+
+                try {
+                    const result = await FileSystem.uploadAsync(
+                    baseURL + "/profile/set_profile_pic",
+                    imageURI,
+                    {
+                        headers: {
+                        "Content-Type": fileType,
+                        },
+                        httpMethod: "PATCH",
+                        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+                        fieldName: "profilePicture",
+                        parameters: {
+                        userId: userId,
+                        },
+                    }
+                    );
+
+                    if (result.status === 200){
+                        return {data: result}
+                    }
+                } catch (error) {
+                    return {error: error}
+                }
+            },
+            invalidatesTags: (result, error, arg) => [{type: "Profile", userId: arg.userId}]
         })
     })
 })
@@ -91,13 +125,32 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
 export const {useFetchUserQuery, useFetchTransactionsQuery, 
     useFetchUserByPhoneNumberQuery, useFetchSearchResultsQuery,
     useFetchContactsByIdQuery, useLazyFetchSearchResultsQuery,
-    useCreateDirectTransactionMutation} = extendedProfileSlice
+    useCreateDirectTransactionMutation, useUploadProfilePictureMutation} = extendedProfileSlice
 
-export const selectContactsResult = (userId) => extendedProfileSlice.endpoints.fetchContactsById.select(userId)
+// CONTACT SELECTORS
+const selectContactsResult = (userId) => extendedProfileSlice.endpoints.fetchContactsById.select(userId)
 
-export const selectContactsData = (userId) => createSelector(
+const selectContactsData = (userId) => createSelector(
     selectContactsResult(userId),
     contactsResult => contactsResult.data
 )
 
 export const contactSelector = (userId) => contactsAdapter.getSelectors(state => (selectContactsData(userId))(state) ?? contactsInitialState)
+
+// USER SELECTORS
+const selectUserResult = (userId) => extendedProfileSlice.endpoints.fetchUser.select(userId)
+
+export const selectCardsFromUser = (userId) => createSelector(
+    selectUserResult(userId),
+    userResult => userResult?.data?.cards
+)
+
+export const selectBalanceFromUser = (userId) => createSelector(
+    selectUserResult(userId),
+    userResult => userResult?.data?.balance
+)
+
+export const selectProfilePicFromUser = (userId) => createSelector(
+    selectUserResult(userId),
+    userResult => userResult?.data?.profilePicture
+)

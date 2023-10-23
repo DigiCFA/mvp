@@ -5,7 +5,6 @@ import {
   Pressable,
   StyleSheet,
   Animated,
-  Button,
   TouchableOpacity,
   ScrollView
 } from "react-native";
@@ -16,16 +15,23 @@ import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import CardsColumn from "../../components/CardsColumn";
 import { useSelector } from "react-redux";
-import { selectBalance, selectCards } from "../../redux/api/selfSlice";
+import { selectCardsFromUser, selectBalanceFromUser} from "../../redux/api/apiProfileSlice";
+import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 
 const PaymentMethodsScreen = () => {
-  // Probably better of using info about
-  const [selectedCard, setSelectedCard] = useState({
+  
+  const {data: session} = useGetSessionQuery()
+
+  const defaultBalance = useSelector(selectBalanceFromUser(session.userId))
+  const defaultPayment = {
     cardName: "DigiCFA Balance",
     cardType: "balance",
     cardNumber: "N/A",
-    balance: useSelector(selectBalance),
-  });
+    balance: defaultBalance,
+  }
+
+
+  const [selectedCard, setSelectedCard] = useState(defaultPayment);
 
   const cardID = selectedCard.cardID;
   const cardName = selectedCard.cardName;

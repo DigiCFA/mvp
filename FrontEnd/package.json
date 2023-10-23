@@ -19,6 +19,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "base-64": "^1.0.0",
+    "buffer": "^6.0.3",
     "expo": "^49.0.0",
     "expo-barcode-scanner": "~12.5.3",
     "expo-file-system": "~15.4.4",

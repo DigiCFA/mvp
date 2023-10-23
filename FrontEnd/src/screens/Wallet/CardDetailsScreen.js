@@ -3,7 +3,8 @@ import React from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
-import { selectCards } from "../../redux/api/selfSlice";
+import { selectCardsFromUser } from "../../redux/api/apiProfileSlice";
+import { useGetSessionQuery } from "../../redux/api/apiAuthSlice"
 import BankCardCard from "../../components/cards/BankCardCard";
 
 const CardDetailsScreen = () => {
@@ -13,7 +14,8 @@ const CardDetailsScreen = () => {
     params: { index },
   } = useRoute();
 
-  const card = useSelector(selectCards)[index];
+  const {data: session} = useGetSessionQuery()
+  const card = useSelector(selectCardsFromUser(session.userId))[index]
 
   return (
     <SafeAreaView className="bg-[#e9e7e2]">

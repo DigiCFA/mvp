@@ -1,16 +1,12 @@
 import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
-import { fetchTransactionsById, selectId } from "../../redux/api/selfSlice";
 
 const SendConfirmationScreen = () => {
   const {
     params: { name, amount, message },
   } = useRoute();
-
-  const id = useSelector(selectId);
 
   // useEffect(() => {
   //   fetchTransactionsById(id);

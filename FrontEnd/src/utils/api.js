@@ -43,57 +43,56 @@ const instance = axios.create({
 //   });
 // };
 
-export const createDirectTransaction = async (
-  amountTransferred,
-  sender,
-  receiver,
-  paymentMethod,
-  isPayment,
-  isApproved,
-  message
-) => {
-  try {
-    const response = await instance.post(
-      "/transaction/create_direct_transaction",
-      {
-        amountTransferred: amountTransferred,
-        sender: sender,
-        receiver: receiver,
-        paymentMethod: paymentMethod,
-        isPayment: isPayment,
-        isApproved: isApproved,
-        message: message,
-      }
-    );
-    if (response.status == 200) console.log("Successfully created transaction");
-    else console.log("Error creating transaction");
-  } catch (error) {
-    console.error(error.response.data);
-  }
-};
+// export const createDirectTransaction = async (
+//   amountTransferred,
+//   sender,
+//   receiver,
+//   paymentMethod,
+//   isPayment,
+//   isApproved,
+//   message
+// ) => {
+//   try {
+//     const response = await instance.post(
+//       "/transaction/create_direct_transaction",
+//       {
+//         amountTransferred: amountTransferred,
+//         sender: sender,
+//         receiver: receiver,
+//         paymentMethod: paymentMethod,
+//         isPayment: isPayment,
+//         isApproved: isApproved,
+//         message: message,
+//       }
+//     );
+//     if (response.status == 200) console.log("Successfully created transaction");
+//     else console.log("Error creating transaction");
+//   } catch (error) {
+//     console.error(error.response.data);
+//   }
+// };
 
-export const uploadProfilePicture = async (userId, imageURI) => {
+// export const uploadProfilePicture = async (userId, imageURI) => {
  
-  let uriArray = imageURI.split(".");
-  let fileType = "image/" + uriArray[uriArray.length - 1];
-  console.log(fileType);
+//   let uriArray = imageURI.split(".");
+//   let fileType = "image/" + uriArray[uriArray.length - 1];
 
-  try {
-    const result = await FileSystem.uploadAsync(
-      baseURL + "/profile/set_profile_pic",
-      imageURI,
-      {
-        headers: {
-          "Content-Type": fileType,
-        },
-        httpMethod: "PATCH",
-        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-        fieldName: "profilePicture",
-        parameters: {
-          userId: userId,
-        },
-      }
-    );
+//   try {
+//     const result = await FileSystem.uploadAsync(
+//       baseURL + "/profile/set_profile_pic",
+//       imageURI,
+//       {
+//         headers: {
+//           "Content-Type": fileType,
+//         },
+//         httpMethod: "PATCH",
+//         uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+//         fieldName: "profilePicture",
+//         parameters: {
+//           userId: userId,
+//         },
+//       }
+//     );
 
     // const result = await FileSystem.uploadAsync(
     //   "http://localhost:5050/api/profile/set_profile_pic",
@@ -114,12 +113,12 @@ export const uploadProfilePicture = async (userId, imageURI) => {
     //   },
     // )
 
-    if (result.status === 200)
-      console.log("Successfully uploaded profile picture");
-    else console.log("Error uploading photo");
+//     if (result.status === 200)
+//       console.log("Successfully uploaded profile picture");
+//     else console.log("Error uploading photo");
 
-    // console.log(result);
-  } catch (error) {
-    console.error(error);
-  }
-};
+//     // console.log(result);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };

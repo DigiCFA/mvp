@@ -1,38 +1,28 @@
 import {
   View,
   Text,
-  SafeAreaView,
   TouchableOpacity,
-  Touchable,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Image } from "expo-image";
 
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchProfilePicById,
-  fetchTransactionsById,
-  fetchUserById,
-  selectProfilePic,
-  selectSelf,
-  setProfilePic,
-} from "../../redux/api/selfSlice";
+import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { launchImageLibrary } from "react-native-image-picker";
-import { uploadProfilePicture } from "../../utils/api.js";
+import { selectProfilePicFromUser } from "../../redux/api/apiProfileSlice";
+import { useGetSessionQuery } from '../../redux/api/apiAuthSlice'
+import { useFetchUserQuery, useUploadProfilePictureMutation } from "../../redux/api/apiProfileSlice";
 
-import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
-
-const ID = "64eb0d88eaf1bbe6d5741736";
-
 const AccountInfoScreen = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
 
-  const self = useSelector(selectSelf);
-  const profilePic = useSelector(selectProfilePic);
+  const {data: session} = useGetSessionQuery()
+  const {data: user, isLoading: fetchUserIsLoading} = useFetchUserQuery(session.userId)
+  const [uploadProfilePic, {isLoading: profileUploadIsLoading, isError: profileUploadIsError,
+    isFetching: profileUploadIsFetching, isSuccess: profileUploadIsSuccess}] = useUploadProfilePictureMutation()
+  const profilePic = useSelector(selectProfilePicFromUser(session.userId));
+  console.log(profilePic)
 
   const pickPhoto = async () => {
     await ImagePicker.requestCameraPermissionsAsync();
@@ -43,16 +33,40 @@ const AccountInfoScreen = () => {
       aspect: [4, 3],
       quality: 1,
     });
-    console.log("Selected Photo: ", result);
 
     if (!result.canceled) {
-      await uploadProfilePicture(self._id, result.assets[0].uri);
-
-      // Not sure if these are redundant? -> if too slow, can do a setPhoto immediately
-      dispatch(fetchProfilePicById(ID));
-      profilePic = useSelector(selectProfilePic);
+      try {
+        const imageURI = result.assets[0].uri
+        await uploadProfilePic({userId: session.userId, imageURI: imageURI}).unwrap()
+      } catch (error) {
+        console.log(error)
+      }
     }
   };
+
+  const addressSection = () => {
+    if(Object.values(user?.addresses[0]).slice(0,-1).every(value => value === "Not set")){
+      return (
+        <Text className="text-base font-medium">Not Set</Text>
+      )
+    }
+    return (
+      <>
+        <Text className="text-base font-medium">
+          {user?.addresses[0].lineOne}
+        </Text>
+        <View>
+          {user?.addresses[0].lineTwo != "Not Set" && (
+          <Text className="text-base font-medium">
+            {user?.addresses[0].lineTwo}
+          </Text>)}
+          <Text className="text-base font-medium">
+            {user?.addresses[0].city}, {user?.addresses[0].zipCode}
+          </Text>
+        </View>
+      </>
+    )
+  }
 
   return (
     <View className="h-screen bg-white">
@@ -92,8 +106,8 @@ const AccountInfoScreen = () => {
       <View className="bg-white grow p-4">
         <View className="flex-row items-center pb-4 border-b border-gray-300">
           <View className="flex-col flex-1 space-y-1">
-            <Text className="text-gray-500">User ID</Text>
-            <Text className="text-base font-medium">{self._id}</Text>
+            <Text className="text-gray-500">user ID</Text>
+            <Text className="text-base font-medium">{user?._id}</Text>
           </View>
         </View>
 
@@ -103,7 +117,7 @@ const AccountInfoScreen = () => {
         >
           <View className="flex-col flex-1 space-y-1">
             <Text className="text-gray-500">Phone Numbers</Text>
-            <Text className="text-base font-medium">{self.phoneNumber}</Text>
+            <Text className="text-base font-medium">{user?.phoneNumber}</Text>
           </View>
 
           <Ionicons name="chevron-forward" size={30} color="black" />
@@ -115,20 +129,7 @@ const AccountInfoScreen = () => {
         >
           <View className="flex-col flex-1 space-y-1">
             <Text className="text-gray-500">Addresses</Text>
-            <Text className="text-base font-medium">
-              {self.currentAddress.lineOne}
-            </Text>
-
-            {self.currentAddress.lineTwo != "" && (
-              <View>
-                <Text className="text-base font-medium">
-                  {self.currentAddress.lineTwo}
-                </Text>
-                <Text className="text-base font-medium">
-                  {self.currentAddress.city}, {self.currentAddress.zipCode}
-                </Text>
-              </View>
-            )}
+            {/* {addressSection()} */}
           </View>
 
           <Ionicons name="chevron-forward" size={30} color="black" />

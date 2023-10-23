@@ -8,7 +8,7 @@ import { devToolsEnhancer } from "@redux-devtools/remote"
 export const createStoreWithPreloadedState = (preloadedState) =>
   configureStore({
     reducer: {
-      self: selfReducer,
+      // self: selfReducer,
       signUp: signUpReducer,
       phoneVerification: phoneVerificationReducer,
       [apiSlice.reducerPath]: apiSlice.reducer,
