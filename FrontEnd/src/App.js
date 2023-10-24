@@ -1,4 +1,4 @@
-import { Text } from "react-native";
+import { Text , Alert} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider, useDispatch } from "react-redux";
 
