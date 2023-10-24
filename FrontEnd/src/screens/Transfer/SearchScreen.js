@@ -16,7 +16,6 @@ import { searchUsers } from "../../utils/api";
 import ResultsColumn from "../../components/ResultsColumn";
 import Spinner from "react-native-loading-spinner-overlay";
 import {
-  useFetchSearchResultsQuery,
   useLazyFetchSearchResultsQuery,
 } from "../../redux/api/apiProfileSlice";
 import ContentLoader from "react-native-easy-content-loader";

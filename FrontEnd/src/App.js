@@ -6,14 +6,13 @@ import { createStoreWithPreloadedState } from "./store";
 
 import AppNavigator from "./navigation/AppNavigator";
 import linking from "./config/linking";
-import Spinner from "react-native-loading-spinner-overlay";
 import { useGetSessionQuery } from "./redux/api/apiAuthSlice";
 import { useFetchUserQuery, useFetchTransactionsQuery } from "./redux/api/apiProfileSlice";
 import { useEffect } from "react";
 //import messaging from '@react-native-firebase/messaging';
 import FCM from '@react-native-firebase/messaging';
 const App = () => {
-  const {isLoading: sessionIsLoading, data: session, isFetching: sessionisFetching} = useGetSessionQuery()
+  const {isLoading: sessionIsLoading, data: session, isFetching: sessionIsFetching, isError: sessionIsError} = useGetSessionQuery()
   const isLoggedIn = Boolean(session?.userId);
   const {isLoading: fetchUserIsLoading, data: user, 
     isSuccess: fetchUserIsSuccess, isError: fetchUserIsError,
@@ -31,10 +30,7 @@ const App = () => {
     useEffect(()=>{
       const received = FCM().onMessage(
         async (receivedData)=>{
-
-
         console.log(receivedData);
-
     })
   },[])
   return (
@@ -44,7 +40,7 @@ const App = () => {
   );
 };
 
-export default AppWrapper = () => {
+const AppWrapper = () => {
   const store = createStoreWithPreloadedState({});
   return (
     <Provider store={store}>
@@ -52,3 +48,5 @@ export default AppWrapper = () => {
     </Provider>
   );
 };
+
+export default AppWrapper;

@@ -73,18 +73,22 @@ const addressSchema = new mongoose.Schema({
   lineOne: {
     type: String,
     required: true,
+    default: "Not set"
   },
   lineTwo: {
     type: String,
     required: true,
+    default: "Not set"
   },
   city: {
     type: String,
     required: true,
+    default: "Not set"
   },
   zipCode: {
     type: String,
     required: true,
+    default: "Not set"
   },
 });
 

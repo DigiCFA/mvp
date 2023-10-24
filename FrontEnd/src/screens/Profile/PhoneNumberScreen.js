@@ -10,12 +10,15 @@ import { useNavigation } from "@react-navigation/native";
 
 import { Ionicons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
-import { selectPhoneNumbers } from "../../redux/api/selfSlice";
+import { useGetSessionQuery } from "../../redux/api/apiAuthSlice"
+import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
 
 const PhoneNumberScreen = () => {
   const navigation = useNavigation();
 
-  const phoneNumbers = useSelector(selectPhoneNumbers);
+  const {data: session} = useGetSessionQuery()
+  const {data: user} = useFetchUserQuery(session.userId)
+  const phoneNumbers = user.phoneNumbers
 
   return (
     <View className="h-screen bg-white">

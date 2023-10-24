@@ -20,7 +20,7 @@ router.post("/signup", async (req, res, next) => {
       phoneNumbers: [phoneNumber],
       password: password,
       creationDate: Date.now(),
-      // create a QR Code on creation
+      addresses: [{}]
     });
     const sessionUser = sessionizeUser(newUser);
     await newUser.save();

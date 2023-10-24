@@ -11,6 +11,8 @@ import Transaction from "../models/transactionModel.js";
 
 const router = express.Router();
 
+const profilePicBaseURL = "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
+
 router.get("/retrieve_user", async (req, res, next) => {
   let userId = req.query.userId;
   try {
@@ -258,6 +260,10 @@ router.patch(
   "/set_profile_pic",
   upload.single("profilePicture"),
   async (req, res, next) => {
+    console.log("head", req.headers)
+    console.log("body", req.body)
+    console.log("data", res.data)
+    console.log("file", req.file)
     let userId = req.body.userId;
     const { originalname, buffer } = req.file;
 
@@ -276,7 +282,7 @@ router.patch(
       await uploadToS3(params);
 
       // console.log("Unique key: ", originalname);
-      user.profilePicture = originalname;
+      user.profilePicture = profilePicBaseURL + originalname;
       await user.save();
 
       res.status(200).json(user);
