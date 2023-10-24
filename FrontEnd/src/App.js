@@ -10,7 +10,6 @@ import { useGetSessionQuery } from "./redux/api/apiAuthSlice";
 import { useFetchUserQuery, useFetchTransactionsQuery } from "./redux/api/apiProfileSlice";
 import { useEffect } from "react";
 //import messaging from '@react-native-firebase/messaging';
-import FCM from '@react-native-firebase/messaging';
 const App = () => {
   const {isLoading: sessionIsLoading, data: session, isFetching: sessionIsFetching, isError: sessionIsError} = useGetSessionQuery()
   const isLoggedIn = Boolean(session?.userId);
