@@ -41,7 +41,6 @@
     "react-native-easy-content-loader": "^0.3.2",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.12.0",
-    "react-native-get-random-values": "^1.9.0",
     "react-native-ionicons": "^4.x",
     "react-native-keyboard-accessory": "^0.1.16",
     "react-native-loading-spinner-overlay": "^3.0.1",

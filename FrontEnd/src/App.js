@@ -27,10 +27,10 @@ const App = () => {
       }
     }
     useEffect(()=>{
-      const received = FCM().onMessage(
-        async (receivedData)=>{
-        console.log(receivedData);
-    })
+    //   const received = FCM().onMessage(
+    //     async (receivedData)=>{
+    //     console.log(receivedData);
+    // })
   },[])
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>

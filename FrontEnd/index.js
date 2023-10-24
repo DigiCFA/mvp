@@ -1,5 +1,5 @@
 // import 'react-native-reanimated'
-import 'react-native-get-random-values';
+//import 'react-native-get-random-values';
 import { registerRootComponent } from "expo";
 import { AppRegistry } from 'react-native';
 import App from "./src/App";
