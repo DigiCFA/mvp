@@ -59,6 +59,14 @@
           "camerPermission": "Allow DigiCFA to access camera for QR code scanning."
         }
       ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
       "@react-native-firebase/app"
     ],
     "extra": {
