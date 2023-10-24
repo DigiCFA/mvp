@@ -33,8 +33,7 @@ const ScanScreen = () => {
   };
 
   const handleBarCodeScanned = ({ type, data }) => {
-
-    let usefulData = data.split("/user/")[1].split('/');
+    let usefulData = data.split("/user/")[1].split("/");
     let id = usefulData[0];
 
     let firstName = usefulData[1].split("_")[0];
@@ -48,7 +47,7 @@ const ScanScreen = () => {
     // alert(`ID: ${id}, name: ${fullName}`);
 
     setScanned(true);
-    navigation.navigate("User", {id, name: fullName})
+    navigation.navigate("User", { id, name: fullName });
   };
 
   useEffect(() => {

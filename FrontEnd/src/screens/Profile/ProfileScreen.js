@@ -7,11 +7,18 @@ import {
 } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
+import { useSelector } from "react-redux";
+import {
+  selectProfilePic,
+  selectSelf,
+  whetherUserLoaded,
+} from "../../redux/api/selfSlice";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsColumn from "../../components/SettingsColumn";
 import { InstagramLoader } from "react-native-easy-content-loader";
 import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
+import { profilePicBaseURL } from "../../utils/api";
 
 const ProfileScreen = () => {
   const { data: session, isLoading: getSessionIsLoading } =
@@ -23,6 +30,31 @@ const ProfileScreen = () => {
     isError: fetchUserIsError,
   } = useFetchUserQuery(session.userId, { skip: getSessionIsLoading });
 
+  let content = <InstagramLoader active />;
+
+  // if (getSessionIsLoading || fetchUserIsLoading) {
+  //   content = <InstagramLoader active loading={true} />;
+  // } else
+  if (fetchUserIsSuccess) {
+    content = (
+      <View className="bg-white flex-col items-start space-y-1 pb-4">
+        <View className="px-4 pt-4">
+          <Image
+            source={{ uri: profilePicBaseURL + user.profilePicture }}
+            className="h-24 w-24 rounded-full"
+            // onLoadStart={()=>console.log("Started to load image")}
+            // onProgress={()=>console.log("LOADING...")}
+            // onLoadEnd={()=>console.log("Finished loading")}
+            // onLoad={()=>setLoading(false)}
+          />
+        </View>
+
+        <Text className="px-4 font-medium text-3xl">{user.fullName}</Text>
+        <Text className="px-4 font-medium">Balance: {user.balance}</Text>
+      </View>
+    );
+  }
+
   return (
     <View className="grow">
       {/* Top Bar */}
@@ -33,30 +65,13 @@ const ProfileScreen = () => {
           <Ionicons name="notifications" size={24} color="white" />
         </TouchableOpacity>
       </View>
+      <ScrollView>
+        {/* Profile Area */}
 
-      <InstagramLoader
-        active
-        loading={getSessionIsLoading || fetchUserIsLoading}
-      >
-        <ScrollView>
-          {/* Profile Area */}
-          <View className="bg-white flex-col items-start space-y-1 pb-4">
-            <View className="px-4 pt-4">
-              <Image
-                source={{ uri: user?.profilePicture }}
-                className="h-24 w-24 rounded-full"
-                // onLoadStart={()=>console.log("Started to load image")}
-                // onProgress={()=>console.log("LOADING...")}
-                // onLoadEnd={()=>console.log("Finished loading")}
-                // onLoad={()=>setLoading(false)}
-              />
-            </View>
+        {content}
 
-            <Text className="px-4 font-medium text-3xl">{user?.fullName}</Text>
-            <Text className="px-4 font-medium">Balance: {user?.balance}</Text>
-
-            {/* Just for checks */}
-            {/* {user.cards?.map((card) => (
+        {/* Just for checks */}
+        {/* {user.cards?.map((card) => (
               <View key={card._id}>
                 <Text>Card: </Text>
                 <Text>accountHolder: {card.accountHolder}</Text>
@@ -73,7 +88,7 @@ const ProfileScreen = () => {
                 <Text>phoneNumber: {contact.phoneNumber}</Text>
               </View>
             ))} */}
-            {/* 
+        {/* 
             {user.contacts?.map((contact) => (
               <View key={contact._id}>
                 <Text>Contact: </Text>
@@ -90,15 +105,13 @@ const ProfileScreen = () => {
                 <Text>amountTransferred: {transaction.amountTransferred}</Text>
               </View>
             ))} */}
-            {/* 
+        {/* 
             <TouchableOpacity onPress={() => setLoggedIn(!loggedIn)}>
               <Text>Press to Log In</Text>
             </TouchableOpacity> */}
-          </View>
 
-          <SettingsColumn />
-        </ScrollView>
-      </InstagramLoader>
+        <SettingsColumn />
+      </ScrollView>
     </View>
   );
 };

@@ -5,9 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 const QRErrorScreen = () => {
-
   const navigation = useNavigation();
-
 
   return (
     <SafeAreaView className="flex-grow items-center">
@@ -21,7 +19,7 @@ const QRErrorScreen = () => {
         </Text>
       </View>
 
-      <View className=''>
+      <View className="">
         <TouchableOpacity
           onPress={navigation.goBack}
           className="bg-[#4664B2] rounded-full py-3 px-8"
@@ -29,7 +27,6 @@ const QRErrorScreen = () => {
           <Text className="text-white text-xl font-extrabold">OK</Text>
         </TouchableOpacity>
       </View>
-
     </SafeAreaView>
   );
 };

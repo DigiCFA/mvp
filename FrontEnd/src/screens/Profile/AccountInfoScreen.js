@@ -85,7 +85,7 @@ const AccountInfoScreen = () => {
         <View className="flex-col items-center">
           <View className="p-6">
             <Image
-              source={{ uri: profilePic }}
+              source={{ uri: profilePicBaseURL + self.profilePic }}
               className="h-24 w-24 rounded-full"
               // style={{width: 100, height: 100}}
             />
