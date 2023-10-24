@@ -26,7 +26,8 @@
           "fetch",
           "remote-notification"
         ]
-      }
+      },
+      "jsEngine": "jsc"
     },
     "android": {
       "package": "com.digicfa.app",
