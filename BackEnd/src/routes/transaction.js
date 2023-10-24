@@ -6,7 +6,7 @@ import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
 import { ERROR_CODES, format_error } from "../utils/errorHandling.js";
 
-// import admin from "firebase-admin";
+import admin from "firebase-admin";
 // import serviceAccount from ("path/to/serviceAccountKey.json");
 // import { getMessaging } from "firebase/messaging";
 
@@ -74,26 +74,26 @@ router.post("/create_direct_transaction", async (req, res, next) => {
       await receiveUser.save();
 
 
-      // const FCMtoken = req.body.FCMtoken
-      // const notification = {
-      //   data:{
-      //     title:"Payment Received",
-      //     body:"$"+amountTransferred+" received from: " + sendUser.fullName
-      //   },
-      //   token:FCMtoken
-      // }
-      // const options = {
-      //   priority: "high"
-      // }
+      const FCMtoken = req.body.FCMtoken
+      const notification = {
+        data:{
+          title:"Payment Received",
+          body:"$"+amountTransferred+" received from: " + sendUser.fullName
+        },
+        token:FCMtoken
+      }
+      const options = {
+        priority: "high"
+      }
 
-      // await getMessaging().send(notification)
-      // .then((response) => {
-      //   // Response is a message ID string.
-      //   console.log('Successfully sent message:', response);
-      // })
-      // .catch((error) => {
-      //   console.log('Error sending message:', error);
-      // });
+      await getMessaging().send(notification)
+      .then((response) => {
+        // Response is a message ID string.
+        console.log('Successfully sent message:', response);
+      })
+      .catch((error) => {
+        console.log('Error sending message:', error);
+      });
 
       await session.commitTransaction();
 

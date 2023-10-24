@@ -7,6 +7,7 @@ import routes from "./routes/index.js";
 import 'dotenv/config.js'
 import { ERROR_CODES, ERROR_MESSAGES, format_error, mapErrorCodeToHttpCode,
         KNOWN_ERROR_CODES } from "./utils/errorHandling.js";
+import admin from "firebase-admin";
 
 const app = express();
 
@@ -64,12 +65,11 @@ app.use((err, req, res, next) => {
     // }
 })
 
-// import admin from "firebase-admin";
 // import serviceAccount from ("path/to/serviceAccountKey.json");
 
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount)
-// });
+admin.initializeApp({
+  credential: admin.credential.cert("../GoogleService-Info.plist")
+});
 
 
 export default app;
