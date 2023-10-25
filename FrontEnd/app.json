@@ -56,11 +56,6 @@
           "camerPermission": "Allow DigiCFA to access camera for QR code scanning."
         }
       ]
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "cfdaf80f-adf9-4838-b3a3-210ca019b729"
-      }
-    }
+    ]
   }
 }
