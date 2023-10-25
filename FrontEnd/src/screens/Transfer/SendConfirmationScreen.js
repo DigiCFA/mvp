@@ -12,7 +12,7 @@ const SendConfirmationScreen = () => {
   //   fetchTransactionsById(id);
   // }, []);
 
-    // useEffect(() => {
+  // useEffect(() => {
   //   axios
   //     .get("localhost:5050/routes/transaction/transaction_data", {
   //       params: {
@@ -27,16 +27,13 @@ const SendConfirmationScreen = () => {
   //     });
   // }, []);
 
-
   const navigation = useNavigation();
 
   let firstName = name.substring(0, name.indexOf(" "));
 
   return (
     <SafeAreaView className="grow">
-
       <View className="flex-row mb-4">
-
         <TouchableOpacity
           onPress={() => navigation.popToTop()}
           className="flex-1 items-end p-4"

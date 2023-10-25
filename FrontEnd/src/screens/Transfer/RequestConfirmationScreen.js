@@ -24,15 +24,14 @@ const SendConfirmationScreen = () => {
         </Text>
       </View>
 
-      <View className='px-24'>
+      <View className="px-24">
         <TouchableOpacity
-          onPress={() =>navigation.popToTop()}
+          onPress={() => navigation.popToTop()}
           className="bg-blue-900 rounded-full py-3 items-center"
         >
           <Text className="text-white text-xl font-extrabold">Done</Text>
         </TouchableOpacity>
       </View>
-
     </SafeAreaView>
   );
 };

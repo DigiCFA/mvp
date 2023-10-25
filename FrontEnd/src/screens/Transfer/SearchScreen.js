@@ -18,6 +18,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import {
   useLazyFetchSearchResultsQuery,
 } from "../../redux/api/apiProfileSlice";
+import ContentLoader from "react-native-easy-content-loader";
 
 const SearchScreen = () => {
   const navigation = useNavigation();
@@ -25,28 +26,20 @@ const SearchScreen = () => {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  // const {
-  //   data = [],
-  //   error,
-  //   isError,
-  //   isSuccess,
-  //   isLoading,
-  //   isFetching,
-  // } = useFetchSearchResultsQuery(query, {
-  //   skip: query == "",
-  // });
-
-  const [fetchSearchResults, {data, error, isLoading, isFetching, isSuccess, isError}] = useLazyFetchSearchResultsQuery();
+  const [
+    fetchSearchResults,
+    { data, error, isLoading, isFetching, isSuccess, isError },
+  ] = useLazyFetchSearchResultsQuery();
 
   const onChangeQuery = async (newQuery) => {
     setQuery(newQuery);
 
     if (newQuery != "") {
       try {
-        const response = await fetchSearchResults(newQuery).unwrap()
-        setSearchResults(response)
+        const response = await fetchSearchResults(newQuery).unwrap();
+        setSearchResults(response);
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     }
 
@@ -68,17 +61,16 @@ const SearchScreen = () => {
 
   let content = <ResultsColumn users={searchResults} />;
 
-  if (isLoading) {
-    // content = <Spinner text="First time..." />;
-    content = <Text>Is Loading</Text>;
-  } else if (isFetching) {
-    console.log("Fetching");
-    // content = <Spinner text="Fetching..." />;
-    content = <Text>Is Fetching</Text>;
+  if (isLoading || isFetching) {
+    // console.log("Fetching");
+    content = (
+      <ContentLoader active title={false} pHeight={48} pWidth={"100%"} />
+    );
   } else if (isSuccess) {
-    // console.log("Finished fetching");
-    // console.log(searchResults);
-    content = <ResultsColumn users={searchResults} />;
+    if (searchResults.length == 0) {
+    } else {
+      content = <ResultsColumn users={searchResults} />;
+    }
   } else if (isError) {
     content = <div>{error.toString()}</div>;
   } else {
@@ -133,25 +125,13 @@ const SearchScreen = () => {
       /> */}
 
       <ScrollView className="px-4">
-        {/* Random Notice */}
-        {/* <TouchableOpacity className="py-3 px-4 my-4 bg-white rounded-lg flex-row space-x-4 shadow">
-          <Ionicons name="paper-plane" size={40} color="#192C88" />
-          <View>
-            <Text className="text-lg font-medium mr-10 leading-6">
-              Send abroad to banks, cash pick-up locations, and more
-            </Text>
-          </View>
-        </TouchableOpacity> */}
-
-        {/* <Spinner visible={isLoading} /> */}
-
         {/* {error && (
           <View>
             <Text>ERROR: {error}</Text>
           </View>
         )} */}
 
-        {query==="" ? (
+        {query === "" ? (
           <View>
             <Text className="text-xl text-gray-800 mb-2">
               Suggested Contacts

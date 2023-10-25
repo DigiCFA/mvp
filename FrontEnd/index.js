@@ -2,7 +2,7 @@
 import 'react-native-get-random-values';
 import { registerRootComponent } from "expo";
 import { AppRegistry } from 'react-native';
-//import FCM from '@react-native-firebase/messaging';
+// import FCM from '@react-native-firebase/messaging';
 
 import App from "./src/App";
 
