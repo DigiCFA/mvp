@@ -15,7 +15,6 @@
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
     "@react-navigation/stack": "^6.3.17",
-    "@redux-devtools/remote": "^0.8.1",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "base-64": "^1.0.0",
@@ -56,7 +55,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@redux-devtools/cli": "^3.0.2",
     "tailwindcss": "^3.3.2"
   },
   "resolutions": {
