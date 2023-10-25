@@ -10,7 +10,7 @@ import { useGetSessionQuery } from "./redux/api/apiAuthSlice";
 import { useFetchUserQuery, useFetchTransactionsQuery } from "./redux/api/apiProfileSlice";
 import { useEffect } from "react";
 //import messaging from '@react-native-firebase/messaging';
-import FCM from '@react-native-firebase/messaging';
+// import FCM from '@react-native-firebase/messaging';
 const App = () => {
   const {isLoading: sessionIsLoading, data: session, isFetching: sessionIsFetching, isError: sessionIsError} = useGetSessionQuery()
   const isLoggedIn = Boolean(session?.userId);
@@ -20,19 +20,20 @@ const App = () => {
   const {isLoading: fetchTransactionsIsLoading, data: transactions,
     isSuccess: fetchTransactionsIsSuccess, isError: fetchTransactionsIsError,
     error: fetchTransactionsError} = useFetchTransactionsQuery(session?.userId, {skip: !isLoggedIn})
-    async function requestUserPermissions(){
-      const authRequest = FCM().requestUserPermissions()
-      const FCMEnabled = FCM.AuthorizationStatus.AUTHORIZED || FCM.AuthorizationStatus.PROVISIONAL;
-      if(FCMEnabled){
-        //works
-      }
-    }
-    useEffect(()=>{
-      const received = FCM().onMessage(
-        async (receivedData)=>{
-        console.log(receivedData);
-    })
-  },[])
+  
+  // async function requestUserPermissions(){
+  //     const authRequest = FCM().requestUserPermissions()
+  //     const FCMEnabled = FCM.AuthorizationStatus.AUTHORIZED || FCM.AuthorizationStatus.PROVISIONAL;
+  //     if(FCMEnabled){
+  //       //works
+  //     }
+  //   }
+  // useEffect(()=>{
+  //     const received = FCM().onMessage(
+  //       async (receivedData)=>{
+  //       console.log(receivedData);
+  //   })
+  // },[])
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
       <AppNavigator isLoggedIn={isLoggedIn} />
