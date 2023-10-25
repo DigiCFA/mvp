@@ -76,7 +76,7 @@ router.post("/create_direct_transaction", async (req, res, next) => {
 
       const FCMtoken = req.body.FCMtoken
       const notification = {
-        data:{
+        notification:{
           title:"Payment Received",
           body:"$"+amountTransferred+" received from: " + sendUser.fullName
         },

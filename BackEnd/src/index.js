@@ -67,7 +67,7 @@ app.use((err, req, res, next) => {
 
 // import serviceAccount from ("path/to/serviceAccountKey.json");
 admin.initializeApp({
-  "credential": admin.credential.cert(JSON.stringify({
+  credential: admin.credential.cert({
     "type": process.env.FIREBASE_TYPE,
     "project_id": process.env.FIREBASE_PROJECT_ID,
     "private_key_id": process.env.FIREBASE_PRIVATE_KEY_ID,
@@ -77,8 +77,9 @@ admin.initializeApp({
     "auth_uri": process.env.FIREBASE_AUTH_URI,
     "token_uri": process.env.FIREBASE_TOKEN_URI,
     "auth_provider_x509_cert_url": process.env.FIREBASE_AUTH_PROVIDER,
-    "client_x509_cert_url": process.env.FIREBASE_CLIENT
-  }))
+    "client_x509_cert_url": process.env.FIREBASE_CLIENT,
+    "universe_domain": process.env.FIREBASE_UNIVERSE_DOMAIN,
+  })
 });
 
 
