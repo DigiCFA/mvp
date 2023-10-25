@@ -17,6 +17,8 @@ import * as ImagePicker from "expo-image-picker";
 const AccountInfoScreen = () => {
   const navigation = useNavigation();
 
+  const profilePicBaseURL = "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
+
   const {data: session} = useGetSessionQuery()
   const {data: user, isLoading: fetchUserIsLoading} = useFetchUserQuery(session.userId)
   const [uploadProfilePic, {isLoading: profileUploadIsLoading, isError: profileUploadIsError,

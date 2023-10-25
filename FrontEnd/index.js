@@ -6,6 +6,8 @@ import { AppRegistry } from 'react-native';
 
 import App from "./src/App";
 
+
+
 // FCM().setBackgroundMessageHandler(async (sentData)=>{
 //     console.log(sentData);
 // })
