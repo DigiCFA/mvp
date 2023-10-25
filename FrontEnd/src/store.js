@@ -1,5 +1,4 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import selfReducer from "./redux/api/selfSlice";
 import signUpReducer from "./redux/api/signUpSlice";
 import phoneVerificationReducer from "./redux/api/phoneVerificationSlice";
 import { apiSlice } from "./redux/api/apiIndexSlice";

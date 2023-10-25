@@ -11,7 +11,7 @@ export const extendedSessionSlice = apiSlice.injectEndpoints({
                     'password': user.password
                 }
             }),
-            invalidatesTags: (result, error, arg) => [{type: 'Session', userId: result.userId}]
+            invalidatesTags: (result, error, arg) => [{type: 'Session', userId: result.userId}, {type: 'Session', userId: 'GENERIC'}]
         }),
         signup: builder.mutation({
             query: (user) => ({
@@ -24,7 +24,7 @@ export const extendedSessionSlice = apiSlice.injectEndpoints({
                     'lastName': user.lastName
                 }
             }),
-            invalidatesTags: (result, error, arg) => [{type: 'Session', userId: result.userId}]
+            invalidatesTags: (result, error, arg) => [{type: 'Session', userId: result.userId}, {type: 'Session', userId: 'GENERIC'}]
         }),
         logout: builder.mutation({
             query: () => ({
@@ -38,7 +38,8 @@ export const extendedSessionSlice = apiSlice.injectEndpoints({
                 url: '/auth/obtain_session',
                 method: 'GET'
             }),
-            providesTags: (result, error, arg) => [{type: 'Session', userId: result.userId}]
+            providesTags: (result, error, arg) => (result.userId ? 
+                [{type: 'Session', userId: result.userId},{type: 'Session', userId: 'GENERIC'}] : [{type: 'Session', userId: 'GENERIC'}])
         }),
     })
 })
