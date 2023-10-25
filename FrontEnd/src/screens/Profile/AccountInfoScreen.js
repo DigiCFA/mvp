@@ -24,7 +24,6 @@ const AccountInfoScreen = () => {
   const [uploadProfilePic, {isLoading: profileUploadIsLoading, isError: profileUploadIsError,
     isFetching: profileUploadIsFetching, isSuccess: profileUploadIsSuccess}] = useUploadProfilePictureMutation()
   const profilePic = useSelector(selectProfilePicFromUser(session.userId));
-  console.log(profilePic)
 
   const pickPhoto = async () => {
     await ImagePicker.requestCameraPermissionsAsync();
@@ -45,6 +44,8 @@ const AccountInfoScreen = () => {
       }
     }
   };
+
+  console.log(profilePicBaseURL + profilePic)
 
   const addressSection = () => {
     if(Object.values(user?.addresses[0]).slice(0,-1).every(value => value === "Not set")){
@@ -87,7 +88,7 @@ const AccountInfoScreen = () => {
         <View className="flex-col items-center">
           <View className="p-6">
             <Image
-              source={{ uri: profilePicBaseURL + self.profilePic }}
+              source={{ uri: profilePic }}
               className="h-24 w-24 rounded-full"
               // style={{width: 100, height: 100}}
             />
