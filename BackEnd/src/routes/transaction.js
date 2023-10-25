@@ -8,7 +8,7 @@ import { ERROR_CODES, format_error } from "../utils/errorHandling.js";
 
 import admin from "firebase-admin";
 // import serviceAccount from ("path/to/serviceAccountKey.json");
-// import { getMessaging } from "firebase/messaging";
+import { getMessaging } from "firebase-admin/messaging";
 
 
 const router = express.Router();
