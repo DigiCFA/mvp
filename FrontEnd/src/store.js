@@ -2,7 +2,7 @@ import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import signUpReducer from "./redux/api/signUpSlice";
 import phoneVerificationReducer from "./redux/api/phoneVerificationSlice";
 import { apiSlice } from "./redux/api/apiIndexSlice";
-import { devToolsEnhancer } from "@redux-devtools/remote"
+//import { devToolsEnhancer } from "@redux-devtools/remote"
 
 export const createStoreWithPreloadedState = (preloadedState) =>
   configureStore({
@@ -16,11 +16,11 @@ export const createStoreWithPreloadedState = (preloadedState) =>
     preloadedState: preloadedState,
     devTools: true,
     enhancers: [
-      devToolsEnhancer({
-        name: Platform.OS,
-        port: 8000,
-        secure: false,
-        realtime: true,
-      }),
+      // devToolsEnhancer({
+      //   name: Platform.OS,
+      //   port: 8000,
+      //   secure: false,
+      //   realtime: true,
+      // }),
     ]
   });
