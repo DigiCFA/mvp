@@ -24,16 +24,16 @@ export const KNOWN_ERROR_CODES = Object.keys(ERROR_CODES).map((key) => ERROR_COD
 
 export const ERROR_MESSAGES = {
   [ERROR_CODES.DUPLICATE_KEY]: (field) => {return `${field} already exists`},
-  [ERROR_CODES.PHONE_NUMBER_NOT_FOUND]: "Phone number is invalid",
+  [ERROR_CODES.PHONE_NUMBER_NOT_FOUND]: "Phone number not found",
   [ERROR_CODES.PASSWORD_INCORRECT]: "Password is incorrect",
   [ERROR_CODES.CANNOT_REMOVE_PRIMARY_PHONE]: "Cannot remove the primary phone number. Please make another phone number the primary phone number first",
   [ERROR_CODES.INVALID_ID_FORMAT]: "Invalid userId format",
-  [ERROR_CODES.ID_NOT_FOUND]: "User can not be found with the provided id",
-  [ERROR_CODES.CANNOT_TRANSACT_TO_SELF]: "Cannot send transaction to yourself",
+  [ERROR_CODES.ID_NOT_FOUND]: "User ID not found",
+  [ERROR_CODES.CANNOT_TRANSACT_TO_SELF]: "Cannot send transaction to self",
   [ERROR_CODES.INSUFFICIENT_BALANCE]: (balance, amountTransferred) => 
     {return `Your balance ${balance} is insufficient to send ${amountTransferred}`},
   [ERROR_CODES.TRANSACTION_NOT_FOUND]: "Transaction not found",
-  [ERROR_CODES.CANNOT_ADD_SELF_TO_CONTACT]: "Cannot add yourself as contact",
+  [ERROR_CODES.CANNOT_ADD_SELF_TO_CONTACT]: "Cannot add self as contact",
   [ERROR_CODES.UNKNOWN_ERROR]: "An internal server error occured, please try again later"
 }
 
@@ -51,10 +51,10 @@ export const mapErrorCodeToHttpCode = (errorCode) => {
     case ERROR_CODES.DUPLICATE_KEY:
       return 422
     case ERROR_CODES.PHONE_NUMBER_NOT_FOUND:
-    case ERROR_CODES.USER_NOT_FOUND:
+    case ERROR_CODES.ID_NOT_FOUND:
       return 404
 
-    case ERROR_CODES.INVALID_ID:
+    case ERROR_CODES.INVALID_ID_FORMAT:
     case ERROR_CODES.PASSWORD_INCORRECT: 
     case ERROR_CODES.CANNOT_TRANSACT_TO_SELF:
     case ERROR_CODES.INSUFFICIENT_BALANCE:

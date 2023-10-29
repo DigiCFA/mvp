@@ -131,6 +131,6 @@
     "domainName": "xxxxxx.execute-api.us-east-1.amazonaws.com",
     "apiId": "xxxxxx"
   },
-  "body": "{\"phoneNumber\": \"2132180825\", \"password\": \"Daniel123!\"}",
+  "body": "{\"phoneNumber\": \"2132140825\", \"password\": \"Daniel123!\"}",
   "isBase64Encoded": false
 }
