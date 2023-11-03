@@ -14,9 +14,15 @@ Prerequisite: make sure to add the .env file to the root of the project
 
 
 
-# How to run
+# FrontEnd
 
-## FrontEnd
+We are using Expo SDK 49.0.0 [newest] - make sure to keep in mind and check compatibility.
+
+## EAS Builds
+
+--- In Progress ---
+
+## Classic Expo Builds
 
 Prerequisite: make sure Expo is properly setup. https://docs.expo.dev/get-started/installation/
 
