@@ -3,11 +3,11 @@
     "name": "DigiCFA",
     "slug": "mvp",
     "version": "1.0.0",
-    "scheme": "digicfa", 
+    "scheme": "digicfa",
     "orientation": "portrait",
     "icon": "./assets/DigiCFA.png",
     "userInterfaceStyle": "light",
-    "jsEngine": "hermes",  
+    "jsEngine": "hermes",
     "splash": {
       "image": "./assets/DigiCFA.png",
       "resizeMode": "contain",
@@ -25,7 +25,8 @@
         "UIBackgroundModes": [
           "fetch",
           "remote-notification"
-        ]
+        ],
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       },
       "jsEngine": "jsc"
     },
@@ -71,8 +72,9 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "4b0c3591-7e41-4461-ba92-37145109fe5b"
+        "projectId": "63ee103b-7540-4d82-94e2-6716ec1df088"
       }
-    }
+    },
+    "owner": "digicfa"
   }
 }
