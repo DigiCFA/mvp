@@ -3,6 +3,8 @@
 MVP for the FinTech startup DigiCFA, a digital payment solution for Central Africa. 
 
 ---
+<br>
+
 
 ## How to test the lambda BackEnd locally
 
@@ -12,17 +14,39 @@ Prerequisite: make sure to add the .env file to the root of the project
 
 2. ```npm run local```
 
-
+<br><br>
 
 # FrontEnd
 
 We are using Expo SDK 49.0.0 [newest] - make sure to keep in mind and check compatibility.
 
-## EAS Builds
+<br>
 
---- In Progress ---
+## Builds for Expo Application Services (EAS)
 
-## Classic Expo Builds
+Reference: https://docs.expo.dev/build/introduction/
+
+1. Make sure you have been added to the organization. Check here: https://expo.dev/accounts/digicfa. Make sure the secret and credential files have been uploaded (they should be so do not worry unless see errors). 
+
+2. Download the latest ios Simulator build called development-simulator.
+
+  
+3. If the build that you want to download doesn't exist, or you want to test with a new build, create your build following https://docs.expo.dev/build/setup/. For step 4, choose the platform and profile. We have generally just tested with ios and development-simulator profiles:
+
+   ```
+   eas build --platform ios --profile development-simulator
+   ```
+
+   Feel free to do whatever you want and alter the ```eas.json``` file for build details. 
+
+
+4. For app configuration, modify the ```app.config.js``` instead of ```app.json```. Doc on environment variables: https://docs.expo.dev/build-reference/variables/.
+
+
+---
+<br>
+
+## Builds for classic Expo Go
 
 Prerequisite: make sure Expo is properly setup. https://docs.expo.dev/get-started/installation/
 
@@ -46,6 +70,9 @@ npx expo start
 - If running multiple simulators, go to the Expo Go App home menu and copy in the >exp:// URL manually.
   
 - Can also choose to open on Web. For debugging, press **'j'**. By default the debugger opens in a Chrome window. (Can also set up VSCode React Debugger but that is slightly more complicated)
+
+<br><br>
+
 
 # Configure Redux Debugger
 
