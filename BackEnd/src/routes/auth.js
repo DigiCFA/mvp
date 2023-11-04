@@ -21,7 +21,7 @@ router.post("/signup", async (req, res, next) => {
       password: password,
       creationDate: Date.now(),
       addresses: [{}]
-    });
+    }); 
     const sessionUser = sessionizeUser(newUser);
     await newUser.save();
 
@@ -42,7 +42,7 @@ router.post("/login", async (req, res, next) => {
 
     const user = await User.findOne({ phoneNumber });
     if(!user){
-      throw format_error(ERROR_CODES.PHONE_NOT_FOUND)
+      throw format_error(ERROR_CODES.PHONE_NUMBER_NOT_FOUND)
     }
 
     if(!user.comparePasswords(password)){
@@ -129,7 +129,7 @@ router.patch("/delete_phone_number", async (req, res, next) => {
     console.log(phoneNumberNoWhitespace);
 
     if (!user.phoneNumbers.includes(phoneNumberNoWhitespace)) {
-      throw format_error(ERROR_CODES.PHONE_NOT_FOUND)
+      throw format_error(ERROR_CODES.PHONE_NOT_FOUND, "Phone number")
     } else if (user.phoneNumber === phoneNumberNoWhitespace) {
       throw format_error(ERROR_CODES.CANNOT_REMOVE_PRIMARY_PHONE)
     } else {
@@ -152,7 +152,7 @@ router.patch("/make_primary_phone_number", async (req, res) => {
     }
 
     if (!user.phoneNumbers.includes(phoneNumberNoWhitespace)) {
-      throw format_error(ERROR_CODES.PHONE_NOT_FOUND)
+      throw format_error(ERROR_CODES.PHONE_NUMBER_NOT_FOUND)
     } else {
       user.phoneNumber = phoneNumberNoWhitespace;
       // Moving the primary phone number to the first position
