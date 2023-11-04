@@ -13,7 +13,7 @@
         "buildConfiguration": "Debug"
       }
     },
-    "dev-simulator": {
+    "development-simulator": {
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
