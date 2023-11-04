@@ -18,7 +18,7 @@
     ],
     "ios": {
       "bundleIdentifier": "com.digicfa.app",
-      "googleServicesFile": "./GoogleService-Info.plist",
+      "googleServicesFile": "process.env.GOOGLE_SERVICE_INFO_PLIST",
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "DigiCFA needs access to your Camera.",
@@ -32,7 +32,7 @@
     },
     "android": {
       "package": "com.digicfa.app",
-      "googleServicesFile": "./google-services.json",
+      "googleServicesFile": "$process.env.GOOGLE_SERVICES_JSON",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
