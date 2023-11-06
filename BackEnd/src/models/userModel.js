@@ -73,22 +73,33 @@ const addressSchema = new mongoose.Schema({
   lineOne: {
     type: String,
     required: true,
-    default: "Not set"
+    default: "Not set",
   },
   lineTwo: {
     type: String,
     required: true,
-    default: "Not set"
+    default: "Not set",
   },
   city: {
     type: String,
     required: true,
-    default: "Not set"
+    default: "Not set",
   },
   zipCode: {
     type: String,
     required: true,
-    default: "Not set"
+    default: "Not set",
+  },
+});
+
+const tokenSchema = new mongoose.Schema({
+  token: {
+    type: String,
+    required: true,
+  },
+  timeStamp: {
+    type: Date,
+    required: true,
   },
 });
 
@@ -162,7 +173,7 @@ const userSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-
+    tokens: [tokenSchema],
     /*
     - NO TRANSACTIONS POINTER
     - Doc suggested that in one-to-many relationships, don't keep two pointers (i.e. user->transaction && transaction->user) as they may get out of sync or unusually large
@@ -207,8 +218,6 @@ userSchema.methods.comparePasswords = function (password) {
 // for the 'users' collection
 // Mongoose automatically looks for the all-case/plural named collection in the database
 const User = mongoose.model("User", userSchema);
-
-
 
 // OBSOLETE
 

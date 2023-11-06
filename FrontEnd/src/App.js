@@ -29,6 +29,7 @@ const App = () => {
         console.log('Authorization status:', authStatus);
       }
     }
+
     useEffect(()=>{
       if(requestUserPermission()){
         messaging().getToken().then((token)=>{
@@ -63,6 +64,7 @@ const App = () => {
       return unsubscribe;
       
   },[])
+  
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
       <AppNavigator isLoggedIn={isLoggedIn} />
