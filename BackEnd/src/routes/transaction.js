@@ -74,19 +74,21 @@ router.post("/create_direct_transaction", async (req, res, next) => {
       await receiveUser.save();
 
 
-      const FCMtoken = req.body.FCMtoken
+      const FCMtoken = receiveUser.tokens.map((token)=>{
+        return token;
+      })
       const notification = {
         notification:{
           title:"Payment Received",
           body:"$"+amountTransferred+" received from: " + sendUser.fullName
         },
-        token:FCMtoken
+        tokens:FCMtoken
       }
       const options = {
         priority: "high"
       }
 
-      await getMessaging().send(notification)
+      await getMessaging().sendEachForMulticast(notification)
       .then((response) => {
         // Response is a message ID string.
         console.log('Successfully sent message:', response);
