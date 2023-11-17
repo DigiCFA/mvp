@@ -11,7 +11,10 @@ const LoginSignupLandingScreen = () => {
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneNumberInputFocused, setIsPhoneNumberInputFocused] = useState(false);
-  
+  const [errorState, setErrorState] = useState({});
+  const [errorM, setErrorM] = useState({});
+
+  const [isValid, setIsValid] = useState(false);
   const [login, {error: loginError, isFetching: loginIsLoading, isLoading: loginIsFetching, 
     isSuccess: loginIsSuccess, isError: loginIsError}] = useLoginMutation();
   
@@ -31,7 +34,27 @@ const LoginSignupLandingScreen = () => {
       console.error("error", err)
     }
   };
+  useEffect(() => { 
+    validateForm(); 
+  }, [phoneNumber,password]); 
+  const validateForm = () => { 
+    let errors = {}; 
 
+    // Validate phoneNumber field 
+    if (!phoneNumber) { 
+      errors.phoneNumber = 'phoneNumber is required.'; 
+    } else if (phoneNumber.length !== 10) { 
+      errors.phoneNumber = 'phoneNumber must be at least 6 characters.'; 
+    } 
+    // Validate password field 
+    if (!password) { 
+      errors.password = 'Password is required.'; 
+    }
+
+    // Set the errors and update form validity 
+    setErrorState(errors); 
+    setIsValid(Object.keys(errors).length === 0); 
+  }; 
   return (
     <SafeAreaView className="items-center bg-white flex-1">
 

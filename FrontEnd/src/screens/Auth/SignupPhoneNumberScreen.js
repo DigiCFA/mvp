@@ -64,7 +64,7 @@ const SignupPhoneNumberScreen = () => {
   const validateForm = () => { 
     let error = {}; 
 
-    // Validate password field 
+    // Validate phoneNumber field 
     if (!phoneNumber) { 
       error.phoneNumber = 'phoneNumber is required.'; 
     } else if (phoneNumber.length !== 10) { 

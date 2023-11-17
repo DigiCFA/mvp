@@ -19,7 +19,6 @@ const PhoneVerificationScreen = () => {
   const phoneNumber = useSelector(selectFieldWithAttr("phoneNumber"));
   const navigation = useNavigation();
   
-  const [phoneNumberIsValid, setPhoneNumberIsValid] = useState(false);
   const onVerificationCodeReady = (verificationCode) => {
     navigation.navigate("Password");
   };
