@@ -22,7 +22,10 @@ const SetProfileScreen = () => {
 
   const [firstNameInputFocused, setFirstNameInputFocused] = useState(false);
   const [lastNameInputFocused, setLastNameInputFocused] = useState(false);
+  const [errorState, setErrorState] = useState({});
+  const [errorM, setErrorM] = useState({});
 
+  const [nameIsValid, setNameIsValid] = useState(false);
   const firstName = useSelector(selectFieldWithAttr("firstName"))
   const lastName = useSelector(selectFieldWithAttr("lastName"))
   const user = useSelector(state => state.signUp)
@@ -30,34 +33,36 @@ const SetProfileScreen = () => {
 
   const onPressButton = async () => {
     try {
-      console.log(user)
-      await signup(user).unwrap()
-      dispatch(clearAllField())
+      if(nameIsValid){
+        console.log(user)
+        await signup(user).unwrap()
+        dispatch(clearAllField())
+      }
+      else{
+        setErrorM(errorState)
+      }
     } catch (error) {
       console.error("error",error)
     }
   }
+  useEffect(() => { 
+    validateForm(); 
+  }, [firstName,lastName]); 
   const validateForm = () => { 
     let errors = {}; 
 
     // Validate name field 
     if (!firstName) { 
-        errors.name = 'firstName is required.'; 
+        errors.firstName = 'firstName is required.'; 
     } 
     if (!lastName) { 
-      errors.name = 'lastName is required.'; 
+      errors.lastName = 'lastName is required.'; 
   } 
 
-    // Validate password field 
-    if (!password) { 
-        errors.password = 'Password is required.'; 
-    } else if (password.length < 6) { 
-        errors.password = 'Password must be at least 6 characters.'; 
-    } 
 
     // Set the errors and update form validity 
-    setErrors(errors); 
-    setIsFormValid(Object.keys(errors).length === 0); 
+    setErrorState(errors); 
+    setNameIsValid(Object.keys(errors).length === 0); 
   }; 
   return (
     <SafeAreaView className="bg-white flex-1">
@@ -101,7 +106,9 @@ const SetProfileScreen = () => {
           }}
           onChangeText={(e) => {dispatch(setField({field: "firstName", content: e}))}}
         />
-
+        <Text className="" style={{ fontSize: 10 }}>
+          {errorM.firstName}
+          </Text>
         <TextInput
           placeholder="Last name"
           value={lastName}
@@ -117,6 +124,9 @@ const SetProfileScreen = () => {
           }}
           onChangeText={(e) => {dispatch(setField({field: "lastName", content: e}))}}
         />
+        <Text className="" style={{ fontSize: 10 }}>
+          {errorM.lastName}
+        </Text>
       </View>
 
       <HideKeyboardView>
