@@ -17,31 +17,35 @@ import { setField } from "../../redux/api/signUpSlice";
 const SetPasswordScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [errorState, setErrorState] = useState({});
+  const [errorM, setErrorM] = useState({});
 
+  const [passwordIsValid, setPasswordIsValid] = useState(false);
   const [password, setPassword] = useState("");
   const [retypedPassword, setRetypedPassword] = useState("");
+  useEffect(() => { 
+    validateForm(); 
+  }, [password,retypedPassword]); 
   const validateForm = () => { 
     let errors = {}; 
 
-    // Validate name field 
-    if (!firstName) { 
-        errors.name = 'firstName is required.'; 
-    } 
-    if (!lastName) { 
-      errors.name = 'lastName is required.'; 
-  } 
+    
 
     // Validate password field 
     if (!password) { 
         errors.password = 'Password is required.'; 
     } else if (password.length < 6) { 
         errors.password = 'Password must be at least 6 characters.'; 
-    } 
+    }
+    else if (password !== retypedPassword) { 
+      errors.retypedPassword = 'Passwords must match.';
+    }
 
     // Set the errors and update form validity 
-    setErrors(errors); 
-    setIsFormValid(Object.keys(errors).length === 0); 
+    setErrorState(errors); 
+    setPasswordIsValid(Object.keys(errors).length === 0); 
   }; 
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <HideKeyboardView>
@@ -72,10 +76,16 @@ const SetPasswordScreen = () => {
           placeHolder={"Password"}
           onChangeText={setPassword}
         />
+        <Text className="" style={{ fontSize: 10 }}>
+          {errorM.password}
+          </Text>
         <PasswordTextInput
           placeHolder={"Retype Password"}
           onChangeText={setRetypedPassword}
         />
+        <Text className="" style={{ fontSize: 10 }}>
+            {errorM.retypedPassword}
+          </Text>
       </View>
 
       <HideKeyboardView>
@@ -89,8 +99,14 @@ const SetPasswordScreen = () => {
         <TouchableOpacity
           className="bg-blue-800 rounded-full py-4 mx-3"
           onPress={() => {
-            dispatch(setField({field: "password", content: password}))
-            navigation.navigate("Profile");
+            if(passwordIsValid){
+              dispatch(setField({field: "password", content: password}))
+              navigation.navigate("Profile");
+            }
+            else{
+              setErrorM(errorState)
+
+            }
           }}
         >
           <Text
