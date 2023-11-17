@@ -37,7 +37,28 @@ const SetProfileScreen = () => {
       console.error("error",error)
     }
   }
+  const validateForm = () => { 
+    let errors = {}; 
 
+    // Validate name field 
+    if (!firstName) { 
+        errors.name = 'firstName is required.'; 
+    } 
+    if (!lastName) { 
+      errors.name = 'lastName is required.'; 
+  } 
+
+    // Validate password field 
+    if (!password) { 
+        errors.password = 'Password is required.'; 
+    } else if (password.length < 6) { 
+        errors.password = 'Password must be at least 6 characters.'; 
+    } 
+
+    // Set the errors and update form validity 
+    setErrors(errors); 
+    setIsFormValid(Object.keys(errors).length === 0); 
+  }; 
   return (
     <SafeAreaView className="bg-white flex-1">
       <Spinner visible={isLoading} />

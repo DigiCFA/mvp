@@ -18,11 +18,28 @@ const PhoneVerificationScreen = () => {
 
   const phoneNumber = useSelector(selectFieldWithAttr("phoneNumber"));
   const navigation = useNavigation();
-
+  const [errors, setErrors] = useState({});
+  const [phoneNumberIsValid, setPhoneNumberIsValid] = useState(false);
   const onVerificationCodeReady = (verificationCode) => {
     navigation.navigate("Password");
   };
+  useEffect(() => { 
+    validateForm(); 
+  }, [phoneNumber]); 
+  const validateForm = () => { 
+    let error = {}; 
 
+    // Validate password field 
+    if (!phoneNumber) { 
+      error.phoneNumber = 'phoneNumber is required.'; 
+    } else if (phoneNumber.length < 6) { 
+      error.phoneNumber = 'phoneNumber must be at least 6 characters.'; 
+    } 
+
+    // Set the errors and update form validity 
+    setErrors(error); 
+    setIsFormValid(Object.keys(errors).length === 0); 
+  }; 
   return (
     <HideKeyboardView>
       <SafeAreaView className="flex-1 bg-white">
