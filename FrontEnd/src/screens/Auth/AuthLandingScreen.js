@@ -29,7 +29,12 @@ const LoginSignupLandingScreen = () => {
       password: password,
     };
     try {
-      await login(user).unwrap()
+      if(isValid){
+        await login(user).unwrap()
+      }
+      else{
+        setErrorM(errorState)
+      }
     } catch (err) {
       console.error("error", err)
     }
@@ -85,12 +90,16 @@ const LoginSignupLandingScreen = () => {
           }}
           onChangeText={setPhoneNumber}
         />
-
+        <Text className="" style={{ fontSize: 10 }}>
+          {errorM.phoneNumber}
+        </Text>
         <PasswordTextInput
           placeHolder={"Password"}
           onChangeText={setPassword}
         />
-
+        <Text className="" style={{ fontSize: 10 }}>
+          {errorM.password}
+        </Text>
         <TouchableOpacity className="mt-1.5">
           <Text className=" text-blue-800 font-bold">
             Forgotten your password?
