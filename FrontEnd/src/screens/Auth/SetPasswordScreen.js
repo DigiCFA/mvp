@@ -76,14 +76,14 @@ const SetPasswordScreen = () => {
           placeHolder={"Password"}
           onChangeText={setPassword}
         />
-        <Text className="" style={{ fontSize: 10 }}>
+        <Text className="textRed700" style={{ fontSize: 10 }}>
           {errorM.password}
           </Text>
         <PasswordTextInput
           placeHolder={"Retype Password"}
           onChangeText={setRetypedPassword}
         />
-        <Text className="" style={{ fontSize: 10 }}>
+        <Text className="textRed700" style={{ fontSize: 10 }}>
             {errorM.retypedPassword}
           </Text>
       </View>

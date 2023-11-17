@@ -90,14 +90,14 @@ const LoginSignupLandingScreen = () => {
           }}
           onChangeText={setPhoneNumber}
         />
-        <Text className="" style={{ fontSize: 10 }}>
+        <Text className="textRed700" style={{ fontSize: 10 }}>
           {errorM.phoneNumber}
         </Text>
         <PasswordTextInput
           placeHolder={"Password"}
           onChangeText={setPassword}
         />
-        <Text className="" style={{ fontSize: 10 }}>
+        <Text className="textRed700" style={{ fontSize: 10 }}>
           {errorM.password}
         </Text>
         <TouchableOpacity className="mt-1.5">
