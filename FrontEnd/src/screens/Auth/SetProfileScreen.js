@@ -106,7 +106,7 @@ const SetProfileScreen = () => {
           }}
           onChangeText={(e) => {dispatch(setField({field: "firstName", content: e}))}}
         />
-        <Text className="textRed700" style={{ fontSize: 10 }}>
+        <Text className="text-red-700" style={{ fontSize: 10 }}>
           {errorM.firstName}
           </Text>
         <TextInput
@@ -124,7 +124,7 @@ const SetProfileScreen = () => {
           }}
           onChangeText={(e) => {dispatch(setField({field: "lastName", content: e}))}}
         />
-        <Text className="textRed700" style={{ fontSize: 10 }}>
+        <Text className="text-red-700" style={{ fontSize: 10 }}>
           {errorM.lastName}
         </Text>
       </View>
