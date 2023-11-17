@@ -6,7 +6,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from 'react-redux'
@@ -55,7 +55,7 @@ const SetProfileScreen = () => {
     if (!firstName) { 
         errors.firstName = 'firstName is required.'; 
     } 
-    if (!lastName) { 
+    else if (!lastName) { 
       errors.lastName = 'lastName is required.'; 
   } 
 

@@ -67,7 +67,7 @@ const SignupPhoneNumberScreen = () => {
     // Validate password field 
     if (!phoneNumber) { 
       error.phoneNumber = 'phoneNumber is required.'; 
-    } else if (phoneNumber.length < 10) { 
+    } else if (phoneNumber.length !== 10) { 
       error.phoneNumber = 'phoneNumber must be at least 6 characters.'; 
     } 
 
