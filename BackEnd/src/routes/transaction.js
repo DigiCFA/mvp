@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
 import { ERROR_CODES, format_error } from "../utils/errorHandling.js";
+import { dinero } from 'dinero.js';
 
 import admin from "firebase-admin";
 // import serviceAccount from ("path/to/serviceAccountKey.json");
@@ -51,13 +52,13 @@ router.post("/create_direct_transaction", async (req, res, next) => {
 
       let userBalance = sendUser.balance;
       let amountTransferred = newTransaction.amountTransferred;
-      if (userBalance < amountTransferred) {
+      if (lessThan(userBalance, amountTransferred)) {
         throw format_error(ERROR_CODES.INSUFFICIENT_BALANCE)
       }
+      sendUser.balance =	add(sendUser.balance,amountTransferred)
+      receiveUser.balance =	subtract(receiveUser.balance,amountTransferred)
 
       // console.log("TRANSACTION STUFF");
-      await sendUser.$inc("balance", -1.0 * amountTransferred);
-      await receiveUser.$inc("balance", amountTransferred);
       // console.log("Amount should be: ", newTransaction.amountTransferred);
       // console.log("Actual amount: ", transactionData.amountTransferred);
       console.log(transactionData);
@@ -74,7 +75,7 @@ router.post("/create_direct_transaction", async (req, res, next) => {
       await receiveUser.save();
 
 
-      const FCMtoken = req.body.FCMtoken
+      const FCMtoken = receiveUser.tokens
       const notification = {
         notification:{
           title:"Payment Received",
