@@ -5,7 +5,9 @@ import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
 import { ERROR_CODES, format_error } from "../utils/errorHandling.js";
-import { dinero } from 'dinero.js';
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
+
 
 import admin from "firebase-admin";
 // import serviceAccount from ("path/to/serviceAccountKey.json");
@@ -23,11 +25,12 @@ router.post("/create_direct_transaction", async (req, res, next) => {
   const newTransaction = req.body;
   const sendID = newTransaction.sender;
   const receiveID = newTransaction.receiver;
+  let amountTransferred = dinero(newTransaction.amountTransferred);
 
   try {
     await session.withTransaction(async () => {
       const transactionData = new Transaction({
-        amountTransferred: newTransaction.amountTransferred,
+        amountTransferred: amountTransferred,
         sender: newTransaction.sender,
         receiver: newTransaction.receiver,
         paymentMethod: "balance",
@@ -50,13 +53,14 @@ router.post("/create_direct_transaction", async (req, res, next) => {
         throw format_error(ERROR_CODES.CANNOT_TRANSACT_TO_SELF)
       }
 
-      let userBalance = sendUser.balance;
-      let amountTransferred = newTransaction.amountTransferred;
-      if (lessThan(userBalance, amountTransferred)) {
+      let sendUserBalance = dinero(sendUser.balance);
+      let receiveUserBalance = dinero(sendUser.balance);
+
+      if (lessThan(sendUserBalance, amountTransferred)) {
         throw format_error(ERROR_CODES.INSUFFICIENT_BALANCE)
       }
-      sendUser.balance =	add(sendUser.balance,amountTransferred)
-      receiveUser.balance =	subtract(receiveUser.balance,amountTransferred)
+      sendUser.balance =	toSnapshot(add(sendUserBalance,amountTransferred));
+      receiveUser.balance =	toSnapshot(subtract(receiveUserBalance,amountTransferred));
 
       // console.log("TRANSACTION STUFF");
       // console.log("Amount should be: ", newTransaction.amountTransferred);

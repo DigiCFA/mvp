@@ -6,6 +6,7 @@ import { format_error, ERROR_CODES } from "../utils/errorHandling.js";
 
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
+import { dinero } from 'dinero.js';
 
 //import {mongoose_fuzzy_searching} from "mongoose-fuzzy-searching"
 
@@ -337,8 +338,11 @@ router.patch("/add_balance", async (req, res, next) => {
     if (!user) {
       throw format_error(ERROR_CODES.ID_NOT_FOUND)
     }
+    
+    let userBalance = dinero(sendUser.balance);
+    let receiveBalance = dinero(req.body.amount);
 
-    user.balance += req.body.amount;
+    user.balance = toSnapshot(add(userBalance,receiveBalance));
 
     await user.save();
     res.status(200).json(user);
