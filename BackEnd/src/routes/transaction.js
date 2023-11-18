@@ -30,7 +30,7 @@ router.post("/create_direct_transaction", async (req, res, next) => {
   try {
     await session.withTransaction(async () => {
       const transactionData = new Transaction({
-        amountTransferred: amountTransferred,
+        amountTransferred: toSnapshot(amountTransferred),
         sender: newTransaction.sender,
         receiver: newTransaction.receiver,
         paymentMethod: "balance",
