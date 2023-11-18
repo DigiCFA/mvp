@@ -1,6 +1,9 @@
 import { apiSlice } from "./apiIndexSlice";
 import { createEntityAdapter, createSelector } from "@reduxjs/toolkit";
 import * as FileSystem from "expo-file-system";
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
+
 
 const contactsAdapter = createEntityAdapter({
     selectId: (contact) => contact._id,
@@ -68,12 +71,14 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
 
                 ({amountTransferred, sender, receiver, paymentMethod, 
                     isPayment, isApproved, message} = arg)
+                const dineroAmt = dinero({ amount: amountTransferred, currency: USD });
 
+                const amountTransferredOBJ = toSnapshot(dineroAmt);
                 return ({
                     url: '/transaction/create_direct_transaction',
                     method: 'POST',
                     body: {
-                        amountTransferred: amountTransferred,
+                        amountTransferred: amountTransferredOBJ,
                         sender: sender,
                         receiver: receiver,
                         paymentMethod: paymentMethod,

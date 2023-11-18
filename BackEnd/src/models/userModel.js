@@ -68,7 +68,51 @@ const cardSchema = new mongoose.Schema({
     trim: true,
   },
 });
+// Subdocument
+const moneySchema = new mongoose.Schema({
+  amount: {
+    type: Number,
+    default: 0,
+    min: 0,
+    required: true,
+    // index: true,
+    trim: true,
+  },
+  currency: {
+    type: currencySchema,
+    required: true,
+    trim: true,
+  },
+  scale: {
+    type: Number,
+    required: true,
+    // index: true,
+    trim: true,
+  },
+});
 
+// Subdocument
+const currencySchema = new mongoose.Schema({
+  code: {
+    type: String,
+    required: true,
+    // index: true,
+    trim: true,
+  },
+  base: {
+    type: Number,
+    required: true,
+    trim: true,
+  },
+  exponent: {
+    type: Number,
+    required: true,
+    // index: true,
+    trim: true,
+    
+  },
+  
+});
 const addressSchema = new mongoose.Schema({
   lineOne: {
     type: String,
@@ -161,9 +205,9 @@ const userSchema = new mongoose.Schema(
       get: (val) => `{root}${val}`,
     },
     balance: {
-      type: Number,
-      default: 0,
-      min: 0,
+      type: moneySchema,
+      required: true,
+      
     },
     cards: [cardSchema],
     privacyPreferences: [String],
