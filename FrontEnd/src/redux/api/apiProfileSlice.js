@@ -118,6 +118,27 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
                 }
             },
             invalidatesTags: (result, error, arg) => [{type: "Profile", userId: arg.userId}]
+        }),
+        uploadFcmToken: builder.mutation({
+            queryFn: async (args) => {
+                const {userId, fcm_token, timestamp} = args
+                
+                try {
+                    return ({
+                        url: '/profile/upload_fcm_token?',
+                        method: 'PATCH',
+                        body: {
+                            fcm_token: fcm_token,
+                            timestamp: timestamp,
+                            userId: userId,
+                        }
+                    })
+
+                } catch (error) {
+                    return {error: error}
+                }
+            },
+            invalidatesTags: (result, error, arg) => [{type: "Profile", userId: arg.userId}]
         })
     })
 })
