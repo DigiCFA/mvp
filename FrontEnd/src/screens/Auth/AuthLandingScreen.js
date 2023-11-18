@@ -1,4 +1,4 @@
-import { useLoginMutation, useGetSessionQuery } from "../../redux/api/apiAuthSlice";
+import { useLoginMutation, useGetSessionQuery ,useUploadFcmTokenMutation} from "../../redux/api/apiAuthSlice";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 
@@ -17,7 +17,7 @@ const LoginSignupLandingScreen = () => {
   const [isValid, setIsValid] = useState(false);
   const [login, {error: loginError, isFetching: loginIsLoading, isLoading: loginIsFetching, 
     isSuccess: loginIsSuccess, isError: loginIsError}] = useLoginMutation();
-  
+  const [uploadFcmToken, {}] = useUploadFcmTokenMutation();
   const {data: session, isFetching: sessionIsFetching, isLoading: sessionIsLoading, 
     isSuccess: sessionIsSuccess, isError: sessionIsError} = useGetSessionQuery()
 
@@ -31,6 +31,7 @@ const LoginSignupLandingScreen = () => {
     try {
       if(isValid){
         await login(user).unwrap()
+        uploadFcmToken(userId, fcm_token, timestamp)
       }
       else{
         setErrorM(errorState)

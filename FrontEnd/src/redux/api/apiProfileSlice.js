@@ -138,7 +138,7 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
                     return {error: error}
                 }
             },
-            invalidatesTags: (result, error, arg) => [{type: "Profile", userId: arg.userId}]
+            invalidatesTags: (result, error, arg)    => [{type: "Profile", userId: arg.userId}]
         })
     })
 })
@@ -146,8 +146,8 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
 export const {useFetchUserQuery, useFetchTransactionsQuery, 
     useFetchUserByPhoneNumberQuery, useFetchSearchResultsQuery,
     useFetchContactsByIdQuery, useLazyFetchSearchResultsQuery,
-    useCreateDirectTransactionMutation, useUploadProfilePictureMutation} = extendedProfileSlice
-
+    useCreateDirectTransactionMutation, useUploadProfilePictureMutation,useUploadFcmTokenMutation
+    } = extendedProfileSlice
 // CONTACT SELECTORS
 const selectContactsResult = (userId) => extendedProfileSlice.endpoints.fetchContactsById.select(userId)
 
