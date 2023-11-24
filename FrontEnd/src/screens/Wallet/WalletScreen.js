@@ -44,11 +44,11 @@ const WalletScreen = () => {
                   DigiCFA balance
                 </Text>
                 <Text className="pt-2 text-lg font-semibold">
-                  <Currency quantity={Number(balance)} currency="USD" />
+                  {dinero(balance).toFormat()}
                 </Text>
               </View>
               <Text className="px-4 text-5xl font-bold">
-                <Currency quantity={Number(balance)} currency="USD" />
+                  {dinero(balance).toFormat()}
               </Text>
               <View className="flex-1"></View>
             </View>

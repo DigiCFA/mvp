@@ -15,7 +15,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
 import PaymentMethodCard from "../../components/cards/PaymentMethodCard";
-
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
 import { useCreateDirectTransactionMutation } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 
@@ -62,7 +63,7 @@ const SendReviewScreen = () => {
     });
     try {
       const isPayment = true, isApproved = true
-      await createDirectTransaction({amountTransferred: amount, sender, receiver: receiverId, paymentMethod, isPayment, isApproved, message}).unwrap()
+      await createDirectTransaction({amountTransferred: toSnapshot(dinero({ amount: amount, currency: USD })), sender, receiver: receiverId, paymentMethod, isPayment, isApproved, message}).unwrap()
     } catch (error) {
       console.log(error)
     }
@@ -130,7 +131,7 @@ const SendReviewScreen = () => {
             <View className="flex-row mt-8">
               <Text className="text-lg font-bold flex-1">Total</Text>
               <Text className="text-lg font-bold">
-                <Currency quantity={Number(amount)} currency="USD" /> USD
+                {dinero(balance).toFormat()}
               </Text>
             </View>
 

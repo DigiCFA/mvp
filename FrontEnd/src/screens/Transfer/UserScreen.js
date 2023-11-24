@@ -11,7 +11,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
 import { onChange } from "react-native-reanimated";
-
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
 const numericRE = new RegExp("^[0-9.]*$");
 const startsWithTwoDigits = new RegExp("^[0-9]{2}.");
 

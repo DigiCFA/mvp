@@ -53,7 +53,7 @@ const TransactionCard = ({
           </View>
           <Text className={`text-xl font-medium ${userPays ? 'text-black' : 'text-green-800'}`}>
             {userPays ? "-" : "+"}
-            <Currency quantity={Number(amount)} currency="USD" />
+            {dinero(balance).toFormat()}
           </Text>
         </View>
         

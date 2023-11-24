@@ -17,7 +17,7 @@ const LoginSignupLandingScreen = () => {
   const [isValid, setIsValid] = useState(false);
   const [login, {error: loginError, isFetching: loginIsLoading, isLoading: loginIsFetching, 
     isSuccess: loginIsSuccess, isError: loginIsError}] = useLoginMutation();
-  const [uploadFcmToken, {}] = useUploadFcmTokenMutation();
+  //const [uploadFcmToken, {}] = useUploadFcmTokenMutation();
   const {data: session, isFetching: sessionIsFetching, isLoading: sessionIsLoading, 
     isSuccess: sessionIsSuccess, isError: sessionIsError} = useGetSessionQuery()
 
@@ -31,7 +31,7 @@ const LoginSignupLandingScreen = () => {
     try {
       if(isValid){
         await login(user).unwrap()
-        uploadFcmToken(userId, fcm_token, timestamp)
+        //uploadFcmToken(userId, fcm_token, timestamp)
       }
       else{
         setErrorM(errorState)

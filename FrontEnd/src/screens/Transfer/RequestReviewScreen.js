@@ -14,7 +14,8 @@ import { useCardAnimation } from "@react-navigation/stack";
 import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
-
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
 const SendReviewScreen = () => {
   const { height } = useWindowDimensions();
   const { current } = useCardAnimation();
@@ -86,7 +87,7 @@ const SendReviewScreen = () => {
             <View className="flex-row mt-8">
               <Text className='text-lg font-bold flex-1'>Total</Text>
               <Text className="text-lg font-bold">
-                <Currency quantity={Number(amount)} currency="USD"/> USD
+                {dinero(balance).toFormat()}
               </Text>
             </View>
 
