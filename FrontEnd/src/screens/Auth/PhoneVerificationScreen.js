@@ -4,7 +4,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
@@ -18,11 +18,11 @@ const PhoneVerificationScreen = () => {
 
   const phoneNumber = useSelector(selectFieldWithAttr("phoneNumber"));
   const navigation = useNavigation();
-
+  
   const onVerificationCodeReady = (verificationCode) => {
     navigation.navigate("Password");
   };
-
+  
   return (
     <HideKeyboardView>
       <SafeAreaView className="flex-1 bg-white">

@@ -6,7 +6,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from 'react-redux'
@@ -22,7 +22,10 @@ const SetProfileScreen = () => {
 
   const [firstNameInputFocused, setFirstNameInputFocused] = useState(false);
   const [lastNameInputFocused, setLastNameInputFocused] = useState(false);
+  const [errorState, setErrorState] = useState({});
+  const [errorM, setErrorM] = useState({});
 
+  const [nameIsValid, setNameIsValid] = useState(false);
   const firstName = useSelector(selectFieldWithAttr("firstName"))
   const lastName = useSelector(selectFieldWithAttr("lastName"))
   const user = useSelector(state => state.signUp)
@@ -30,14 +33,37 @@ const SetProfileScreen = () => {
 
   const onPressButton = async () => {
     try {
-      console.log(user)
-      await signup(user).unwrap()
-      dispatch(clearAllField())
+      if(nameIsValid){
+        console.log(user)
+        await signup(user).unwrap()
+        dispatch(clearAllField())
+      }
+      else{
+        setErrorM(errorState)
+      }
     } catch (error) {
       console.error("error",error)
     }
   }
+  useEffect(() => { 
+    validateForm(); 
+  }, [firstName,lastName]); 
+  const validateForm = () => { 
+    let errors = {}; 
 
+    // Validate name field 
+    if (!firstName) { 
+        errors.firstName = 'firstName is required.'; 
+    } 
+    else if (!lastName) { 
+      errors.lastName = 'lastName is required.'; 
+  } 
+
+
+    // Set the errors and update form validity 
+    setErrorState(errors); 
+    setNameIsValid(Object.keys(errors).length === 0); 
+  }; 
   return (
     <SafeAreaView className="bg-white flex-1">
       <Spinner visible={isLoading} />
@@ -80,7 +106,9 @@ const SetProfileScreen = () => {
           }}
           onChangeText={(e) => {dispatch(setField({field: "firstName", content: e}))}}
         />
-
+        <Text className="text-red-700" style={{ fontSize: 10 }}>
+          {errorM.firstName}
+          </Text>
         <TextInput
           placeholder="Last name"
           value={lastName}
@@ -96,6 +124,9 @@ const SetProfileScreen = () => {
           }}
           onChangeText={(e) => {dispatch(setField({field: "lastName", content: e}))}}
         />
+        <Text className="text-red-700" style={{ fontSize: 10 }}>
+          {errorM.lastName}
+        </Text>
       </View>
 
       <HideKeyboardView>

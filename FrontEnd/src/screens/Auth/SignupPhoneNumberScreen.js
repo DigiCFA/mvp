@@ -28,7 +28,8 @@ const SignupPhoneNumberScreen = () => {
   const [skip, setSkip] = useState(true)
 
   const phoneNumber = useSelector(selectFieldWithAttr("phoneNumber"));
-
+  const [errorM, setErrorM] = useState({});
+  const [phoneNumberIsValid, setPhoneNumberIsValid] = useState(false);
   const {isLoading, isSuccess, isError, data: registeredUser, error, isFetching} = useFetchUserByPhoneNumberQuery(phoneNumber, {
     skip: skip
   })
@@ -38,7 +39,9 @@ const SignupPhoneNumberScreen = () => {
   }, [skip])
 
   const onPressNext = () =>{
-    setSkip(false)
+    if(phoneNumberIsValid){
+      setSkip(false)
+    }
   }
 
   const onModalClosed = () => {
@@ -55,7 +58,23 @@ const SignupPhoneNumberScreen = () => {
     }
   }, [isSuccess, isError, isFetching])
 
+  useEffect(() => { 
+    validateForm(); 
+  }, [phoneNumber]); 
+  const validateForm = () => { 
+    let error = {}; 
 
+    // Validate phoneNumber field 
+    if (!phoneNumber) { 
+      error.phoneNumber = 'phoneNumber is required.'; 
+    } else if (phoneNumber.length !== 10) { 
+      error.phoneNumber = 'phoneNumber must be at least 6 characters.'; 
+    } 
+
+    // Set the errors and update form validity 
+    setErrorM(error); 
+    setPhoneNumberIsValid(Object.keys(error).length === 0); 
+  }; 
   const modalScreen = (user) => (
     <Modal animationType="slide" transparent={true} visible={modalVisible}
       onRequestClose={onModalClosed}>
@@ -163,8 +182,9 @@ const SignupPhoneNumberScreen = () => {
           keyboardVerticalOffset={10}
         >
           <TouchableOpacity
-            className="bg-blueDark rounded-full py-4 mx-3"
+            className={phoneNumberIsValid?"bg-blueDark rounded-full py-4 mx-3":"bg-blue-100 rounded-full py-4 mx-3"}
             onPress={onPressNext}
+            
           >
             <Text
               className="text-center font-bold text-white"
