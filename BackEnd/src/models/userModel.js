@@ -69,7 +69,7 @@ const cardSchema = new mongoose.Schema({
   },
 });
 // Subdocument
-const moneySchema = new mongoose.Schema({
+export const moneySchema = new mongoose.Schema({
   amount: {
     type: Number,
     default: 0,
@@ -281,3 +281,4 @@ const RedactedUser = mongoose.model("RedactedUser", userSchema);
 // })
 
 export default User;
+

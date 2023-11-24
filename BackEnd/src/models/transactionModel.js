@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import moneySchema from "userModel.mjs";
+import moneySchema from "../models/userModel.js";
 
 const transactionSchema = new mongoose.Schema({
     amountTransferred: {

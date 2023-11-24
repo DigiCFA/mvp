@@ -18,7 +18,7 @@ router.post("/signup", async (req, res, next) => {
       fullName: firstName + " " + lastName,
       phoneNumber: phoneNumber,
       phoneNumbers: [phoneNumber],
-      balance: toSnapshot(dinero({ amount: 0, currency: USD })),
+      balance: toSnapshot(dinero({ amount: 200, currency: USD })),
       password: password,
       creationDate: Date.now(),
       addresses: [{}]
