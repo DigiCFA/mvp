@@ -69,6 +69,29 @@ const cardSchema = new mongoose.Schema({
   },
 });
 // Subdocument
+const currencySchema = new mongoose.Schema({
+  code: {
+    type: String,
+    required: true,
+    // index: true,
+    trim: true,
+  },
+  base: {
+    type: Number,
+    required: true,
+    trim: true,
+  },
+  exponent: {
+    type: Number,
+    required: true,
+    // index: true,
+    trim: true,
+    
+  },
+  
+});
+
+// Subdocument
 export const moneySchema = new mongoose.Schema({
   amount: {
     type: Number,
@@ -91,28 +114,7 @@ export const moneySchema = new mongoose.Schema({
   },
 });
 
-// Subdocument
-const currencySchema = new mongoose.Schema({
-  code: {
-    type: String,
-    required: true,
-    // index: true,
-    trim: true,
-  },
-  base: {
-    type: Number,
-    required: true,
-    trim: true,
-  },
-  exponent: {
-    type: Number,
-    required: true,
-    // index: true,
-    trim: true,
-    
-  },
-  
-});
+
 const addressSchema = new mongoose.Schema({
   lineOne: {
     type: String,

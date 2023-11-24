@@ -4,7 +4,8 @@ import { sessionizeUser } from "../utils/helper.js";
 import { format_error, ERROR_CODES } from "../utils/errorHandling.js";
 
 import User from "../models/userModel.js";
-
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
 const router = express.Router();
 
 router.post("/signup", async (req, res, next) => {
@@ -33,6 +34,7 @@ router.post("/signup", async (req, res, next) => {
     if(err.message && err.message.includes("phoneNumber") && err.message.includes("unique")){
       err = format_error(ERROR_CODES.DUPLICATE_KEY, "Phone number")
     }
+    console.log(err);
     next(err)
   }
 });

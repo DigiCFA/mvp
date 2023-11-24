@@ -3,7 +3,7 @@ import moneySchema from "../models/userModel.js";
 
 const transactionSchema = new mongoose.Schema({
     amountTransferred: {
-        type: moneySchema,
+        type: moneySchema.schema,
         required: true
     },
     sender: {

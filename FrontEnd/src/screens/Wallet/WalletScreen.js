@@ -13,7 +13,8 @@ import BankCardCard from "../../components/cards/BankCardCard";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { selectCardsFromUser, selectBalanceFromUser } from "../../redux/api/apiProfileSlice";
 import ContentLoader from "react-native-easy-content-loader";
-
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
 const WalletScreen = () => {
 
   const {data: session, isLoading, isSuccess, isError, error} = useGetSessionQuery()
