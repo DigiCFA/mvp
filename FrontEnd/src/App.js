@@ -34,7 +34,11 @@ const App = () => {
       if(requestUserPermission()){
         messaging().getToken().then((token)=>{
           console.log(token);
+          
         })
+        // messaging().onTokenRefresh().then((token)=>{
+        //   console.log(token);
+        // })
   
       }
       messaging()

@@ -36,18 +36,19 @@ module.exports = {
   },
   plugins: [
 
-    // For supressing the "No saslprep library specified." ERROR
-    new CopyPlugin({
-      patterns: [
-        {
-          from: require.resolve("saslprep/code-points.mem"),
-          to: "../src/code-points.mem"
-        }
-      ]
-    })
+    // // For supressing the "No saslprep library specified." ERROR
+    // new CopyPlugin({
+    //   patterns: [
+    //     {
+    //       from: require.resolve("saslprep/code-points.mem"),
+    //       to: "../src/code-points.mem"
+    //     }
+    //   ]
+    // })
     // new BundleAnalyzerPlugin()
   ],
   externals: {
+    "saslprep": "require('saslprep')"
     // "saslprep": "require('saslprep')"
   }
 };

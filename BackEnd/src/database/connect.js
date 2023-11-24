@@ -7,11 +7,12 @@ let conn = null;
 
 export async function createMongooseConnection() {
 
-  // conn could be retained between function calls (due to callbackWaitsForEmptyEventLoop in Lambda.js)
-  // to increase efficiency
+  // If no existing connection
   if (conn == null) {
+    // conn could be retained between function calls (due to callbackWaitsForEmptyEventLoop in Lambda.js)
+    // to increase efficiency
 
-    console.log("CREATING NEW MONGOOSE CONNECTION")
+    console.log("Creating new MongoDB connection...")
     
     conn = mongoose.connect(
       // ATLAS_URI,

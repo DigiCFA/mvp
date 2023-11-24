@@ -1,0 +1,102 @@
+{
+    "Versions": [
+        {
+            "FunctionName": "DigiCFAStack-ExpressLambdaFunction-RE5DlOBZC419",
+            "FunctionArn": "arn:aws:lambda:af-south-1:346260284140:function:DigiCFAStack-ExpressLambdaFunction-RE5DlOBZC419:$LATEST",
+            "Runtime": "nodejs18.x",
+            "Role": "arn:aws:iam::346260284140:role/DigiCFAStack-ExpressLambdaFunctionRole-1VN2LSSSMR989",
+            "Handler": "main.handler",
+            "CodeSize": 7712596,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 1024,
+            "LastModified": "2023-11-06T07:06:06.000+0000",
+            "CodeSha256": "bJ77dXBIJmuzsPMzxy3EwrmJREu63X7Nv5SqSwGWG1c=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "SESSION_NAME": "sid",
+                    "FIREBASE_AUTH_URI": "https://accounts.google.com/o/oauth2/auth",
+                    "FIREBASE_PRIVATE_KEY_ID": "acd553cb65b14c1cb7de7f4101ea017935670343",
+                    "FIREBASE_UNIVERSE_DOMAIN": "googleapis.com",
+                    "SESSION_LIFETIME": "7200000",
+                    "FIREBASE_CLIENT": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-8szrg%40digicfa-2fd7f.iam.gserviceaccount.com",
+                    "FIREBASE_CLIENT_ID": "107379824115189739899",
+                    "FIREBASE_TYPE": "service_account",
+                    "FIREBASE_TOKEN_URI": "https://oauth2.googleapis.com/token",
+                    "FIREBASE_CLIENT_EMAIL": "firebase-adminsdk-8szrg@digicfa-2fd7f.iam.gserviceaccount.com",
+                    "FIREBASE_PRIVATE_KEY": "-----BEGIN PRIVATE KEY-----\\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCszAFzkzkLwzb3\\n4+DGW9jmZT2ZP3TVy4vojIQJXg7OH9/hTYNbHY6Md5to1z6X4B/7P+WmH+xofLeP\\n26vN/cG6LoL9+9jLV//5dgv0Q+Oamday17hyCi8eDGeoJDIevXfCn2v71TiUImyI\\naOFY/DIpuHay8RxuWLfhW7BXoa7hF4bbXz38C5Vr74pYlOxQv19k6EcXe9pPXgt3\\nsR1dtGHvIeEF9CtI7o4eec8PrhQANcsE4iZe4t7/ZbPy0LSD470W961s9umOEfMI\\nD9p2qU1F1mp2lgAd+yzcmA9RGTF7r3aY5swgY1Nm3cmRA2J8i75pfVx8n24iu3AH\\n07cVvc7tAgMBAAECggEAHBL+FmDARzK1ktNdgOTJye7/cc9PRHAQYF06E4qKVb90\\ngJa3JX3ZG+XP5Fn6Q7Mohwnj3hh4MKa4rSEH2g0lJUJqymiZWbpHrqhY+1vvVf4y\\nFXb6ct7INnXV/om48ekfFMoRgYYsLdck8om1uR8qaEBd2qdVUvFLmMvsi+RLNSs4\\nx5hzbU+9hpUsCltvoazW0HYSkO91juSYOL3R+5xEaSS3maDHtbMic79ZC3C91LKQ\\nu3lY9Uq/dfaZe8hK73H1l9y3RQ9ltnbobAKETLpixxZvCC788AA8tDA1hhTM9/Mp\\nr9ZcQ2HIaIwSQXkFfO58KMYpiZ3Cfjkp6Bcs5tHpqQKBgQDUG7jt2+R8+qIJZY+A\\nlZut1jaj34yRsEWjjJ56pDCOu/VawZV2cJKpOKm6+SNTS7/NUa34O7M/FFqIfswB\\nnBQFe7RTmcbmlCckroGnOGV8EJMg5RMtr2+7Kmbx9fuuUMebT9HW71Kfo1T+FIYo\\npCrhOqxAQUBZAoGttuxiCXVwFQKBgQDQjcqtS+mM3H36ChKXJ8VSCnGu+aO96sKF\\n2vOBzlLnWxTlkFRcJwAKpcGJpMPugGk88wFLrS4II01M4BPN7gLLfPAZnlNm3ucE\\nHHPcKrtYVZbPAhu0yyQGmx54c9digv0ed3P1uIU2PDqYTGc6VtfiiDrM3EgZ5IrB\\nbSVQd8zBeQKBgQCVuAvNOg4Keg+uelXU+cWt6yseeUmL/NTrIPMstoDf/6Ssr0CF\\nHekoMar9I6bfwPReRW17bwiTWhadioMOD9HCHROofz96utD2f4ddNd3MuRZhfdEP\\nymofv0pzOKKy5KpA4xLHmJ7FuFDiGDKqtVbfLL8xi92T9sT6jchFW0/eEQKBgQDH\\n99zpM0uaE+T69eODac/qbTc6FgWp2UpxPFKWGTYmvY+Y2j35KjABBZRAHWr86cV+\\nema4oDHt/aNl3ck/gELPyFkTx1qi3YHW0E1LQvHlrhNvI89bGBjP+LZLuo8/1udK\\n6jCW4Dlimnd4hnHIX3KatBLlUSYVJazh8HyB3ozGyQKBgAWzElASTGi4477lKZig\\nk54pBHsqCEEY+I6U3FQqK2VDWDOyAjf+4JZ5nOksgpXPA5KQk2KolcseX+k8im63\\nyx1oLOyT/fTUa7/yyeetdnhM7OffIVi7/j231PLkMRQ/h9KCQwA2s0uaLiZzdOl+\\ni/1yVMbXmb0cCvO+nXoIB8V6\\n-----END PRIVATE KEY-----\\n",
+                    "SESSION_SECRET": "session_secret",
+                    "NODE_ENV": "development",
+                    "FIREBASE_PROJECT_ID": "digicfa-2fd7f",
+                    "FIREBASE_AUTH_PROVIDER": "https://www.googleapis.com/oauth2/v1/certs",
+                    "MONGODB_CONNECTION_STRING": "mongodb+srv://SUPERSTRONGADMIN:-P-M_gC<<e_o1>N.rdz6_.hv>Yb<@cluster0.q5gxixi.mongodb.net/?retryWrites=true&w=majority"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "bb228437-cb7f-4435-a89a-23a683323045",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            }
+        },
+        {
+            "FunctionName": "DigiCFAStack-ExpressLambdaFunction-RE5DlOBZC419",
+            "FunctionArn": "arn:aws:lambda:af-south-1:346260284140:function:DigiCFAStack-ExpressLambdaFunction-RE5DlOBZC419:1",
+            "Runtime": "nodejs18.x",
+            "Role": "arn:aws:iam::346260284140:role/DigiCFAStack-ExpressLambdaFunctionRole-1VN2LSSSMR989",
+            "Handler": "main.handler",
+            "CodeSize": 7712479,
+            "Description": "Base Version",
+            "Timeout": 30,
+            "MemorySize": 1024,
+            "LastModified": "2023-10-29T06:20:42.507+0000",
+            "CodeSha256": "EyvbiSvNz7/nQaXIfec2/ybU4+WFcUjvJXnKa4R67Js=",
+            "Version": "1",
+            "Environment": {
+                "Variables": {
+                    "SESSION_NAME": "sid",
+                    "FIREBASE_AUTH_URI": "https://accounts.google.com/o/oauth2/auth",
+                    "FIREBASE_PRIVATE_KEY_ID": "acd553cb65b14c1cb7de7f4101ea017935670343",
+                    "FIREBASE_UNIVERSE_DOMAIN": "googleapis.com",
+                    "SESSION_LIFETIME": "7200000",
+                    "FIREBASE_CLIENT": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-8szrg%40digicfa-2fd7f.iam.gserviceaccount.com",
+                    "FIREBASE_CLIENT_ID": "107379824115189739899",
+                    "FIREBASE_TYPE": "service_account",
+                    "FIREBASE_TOKEN_URI": "https://oauth2.googleapis.com/token",
+                    "FIREBASE_CLIENT_EMAIL": "firebase-adminsdk-8szrg@digicfa-2fd7f.iam.gserviceaccount.com",
+                    "FIREBASE_PRIVATE_KEY": "-----BEGIN PRIVATE KEY-----\\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCszAFzkzkLwzb3\\n4+DGW9jmZT2ZP3TVy4vojIQJXg7OH9/hTYNbHY6Md5to1z6X4B/7P+WmH+xofLeP\\n26vN/cG6LoL9+9jLV//5dgv0Q+Oamday17hyCi8eDGeoJDIevXfCn2v71TiUImyI\\naOFY/DIpuHay8RxuWLfhW7BXoa7hF4bbXz38C5Vr74pYlOxQv19k6EcXe9pPXgt3\\nsR1dtGHvIeEF9CtI7o4eec8PrhQANcsE4iZe4t7/ZbPy0LSD470W961s9umOEfMI\\nD9p2qU1F1mp2lgAd+yzcmA9RGTF7r3aY5swgY1Nm3cmRA2J8i75pfVx8n24iu3AH\\n07cVvc7tAgMBAAECggEAHBL+FmDARzK1ktNdgOTJye7/cc9PRHAQYF06E4qKVb90\\ngJa3JX3ZG+XP5Fn6Q7Mohwnj3hh4MKa4rSEH2g0lJUJqymiZWbpHrqhY+1vvVf4y\\nFXb6ct7INnXV/om48ekfFMoRgYYsLdck8om1uR8qaEBd2qdVUvFLmMvsi+RLNSs4\\nx5hzbU+9hpUsCltvoazW0HYSkO91juSYOL3R+5xEaSS3maDHtbMic79ZC3C91LKQ\\nu3lY9Uq/dfaZe8hK73H1l9y3RQ9ltnbobAKETLpixxZvCC788AA8tDA1hhTM9/Mp\\nr9ZcQ2HIaIwSQXkFfO58KMYpiZ3Cfjkp6Bcs5tHpqQKBgQDUG7jt2+R8+qIJZY+A\\nlZut1jaj34yRsEWjjJ56pDCOu/VawZV2cJKpOKm6+SNTS7/NUa34O7M/FFqIfswB\\nnBQFe7RTmcbmlCckroGnOGV8EJMg5RMtr2+7Kmbx9fuuUMebT9HW71Kfo1T+FIYo\\npCrhOqxAQUBZAoGttuxiCXVwFQKBgQDQjcqtS+mM3H36ChKXJ8VSCnGu+aO96sKF\\n2vOBzlLnWxTlkFRcJwAKpcGJpMPugGk88wFLrS4II01M4BPN7gLLfPAZnlNm3ucE\\nHHPcKrtYVZbPAhu0yyQGmx54c9digv0ed3P1uIU2PDqYTGc6VtfiiDrM3EgZ5IrB\\nbSVQd8zBeQKBgQCVuAvNOg4Keg+uelXU+cWt6yseeUmL/NTrIPMstoDf/6Ssr0CF\\nHekoMar9I6bfwPReRW17bwiTWhadioMOD9HCHROofz96utD2f4ddNd3MuRZhfdEP\\nymofv0pzOKKy5KpA4xLHmJ7FuFDiGDKqtVbfLL8xi92T9sT6jchFW0/eEQKBgQDH\\n99zpM0uaE+T69eODac/qbTc6FgWp2UpxPFKWGTYmvY+Y2j35KjABBZRAHWr86cV+\\nema4oDHt/aNl3ck/gELPyFkTx1qi3YHW0E1LQvHlrhNvI89bGBjP+LZLuo8/1udK\\n6jCW4Dlimnd4hnHIX3KatBLlUSYVJazh8HyB3ozGyQKBgAWzElASTGi4477lKZig\\nk54pBHsqCEEY+I6U3FQqK2VDWDOyAjf+4JZ5nOksgpXPA5KQk2KolcseX+k8im63\\nyx1oLOyT/fTUa7/yyeetdnhM7OffIVi7/j231PLkMRQ/h9KCQwA2s0uaLiZzdOl+\\ni/1yVMbXmb0cCvO+nXoIB8V6\\n-----END PRIVATE KEY-----\\n",
+                    "SESSION_SECRET": "session_secret",
+                    "NODE_ENV": "development",
+                    "FIREBASE_PROJECT_ID": "digicfa-2fd7f",
+                    "FIREBASE_AUTH_PROVIDER": "https://www.googleapis.com/oauth2/v1/certs",
+                    "MONGODB_CONNECTION_STRING": "mongodb+srv://SUPERSTRONGADMIN:-P-M_gC<<e_o1>N.rdz6_.hv>Yb<@cluster0.q5gxixi.mongodb.net/?retryWrites=true&w=majority"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "501bd7b5-0b10-4873-b419-6f318e6bb418",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            }
+        }
+    ]
+}
