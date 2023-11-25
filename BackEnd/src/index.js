@@ -48,7 +48,7 @@ app.use("/api", routes);
 
 app.use((err, req, res, next) => {
   const recognised = KNOWN_ERROR_CODES.includes(err.code);
-
+  console.log(err);
   console.log(
     "Error has occured with code",
     err.code,

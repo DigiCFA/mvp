@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
 import { ERROR_CODES, format_error } from "../utils/errorHandling.js";
-import { dinero, toSnapshot } from 'dinero.js';
+import { dinero, toSnapshot ,lessThan,add,subtract} from 'dinero.js';
 import { USD } from '@dinero.js/currencies';
 
 
@@ -16,6 +16,21 @@ import { getMessaging } from "firebase-admin/messaging";
 
 const router = express.Router();
 
+// {
+//   "amountTransferred":
+//   {
+//     "amount": 500,
+//     "currency": 
+//       {"code": "USD","base": 10,"exponent": 2},
+//       "scale": 2
+//   },
+//   "sender":"65613204eb5c3dcf84cfdf70",
+//   "receiver":"65613f8c0e58d01b688d1086",
+//   "paymentMethod":"balance",
+//   "isPayment":true,
+//   "isApproved":true,
+//   "message":"isPayment"
+// }
 router.post("/create_direct_transaction", async (req, res, next) => {
 
   console.log(req.body)
@@ -26,6 +41,7 @@ router.post("/create_direct_transaction", async (req, res, next) => {
   const sendID = newTransaction.sender;
   const receiveID = newTransaction.receiver;
   let amountTransferred = dinero(newTransaction.amountTransferred);
+  console.log(toSnapshot(amountTransferred));
 
   try {
     await session.withTransaction(async () => {
@@ -54,7 +70,9 @@ router.post("/create_direct_transaction", async (req, res, next) => {
       }
 
       let sendUserBalance = dinero(sendUser.balance);
-      let receiveUserBalance = dinero(sendUser.balance);
+      let receiveUserBalance = dinero(receiveUser.balance);
+      console.log(transactionData);
+
 
       if (lessThan(sendUserBalance, amountTransferred)) {
         throw format_error(ERROR_CODES.INSUFFICIENT_BALANCE)
@@ -106,6 +124,7 @@ router.post("/create_direct_transaction", async (req, res, next) => {
     });
   } catch (error) {
     console.log("error catched")
+    console.log(error);
     next(error)
   } finally {
     await session.endSession();

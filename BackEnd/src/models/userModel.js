@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import pkg from "bcryptjs";
+import moneyModel from "../models/moneyModel.js";
 
 import { profilePicBaseURL } from "../config/awsConfig.js";
 
@@ -68,51 +69,7 @@ const cardSchema = new mongoose.Schema({
     trim: true,
   },
 });
-// Subdocument
-const currencySchema = new mongoose.Schema({
-  code: {
-    type: String,
-    required: true,
-    // index: true,
-    trim: true,
-  },
-  base: {
-    type: Number,
-    required: true,
-    trim: true,
-  },
-  exponent: {
-    type: Number,
-    required: true,
-    // index: true,
-    trim: true,
-    
-  },
-  
-});
 
-// Subdocument
-export const moneySchema = new mongoose.Schema({
-  amount: {
-    type: Number,
-    default: 0,
-    min: 0,
-    required: true,
-    // index: true,
-    trim: true,
-  },
-  currency: {
-    type: currencySchema,
-    required: true,
-    trim: true,
-  },
-  scale: {
-    type: Number,
-    required: true,
-    // index: true,
-    trim: true,
-  },
-});
 
 
 const addressSchema = new mongoose.Schema({
@@ -207,7 +164,7 @@ const userSchema = new mongoose.Schema(
       get: (val) => `{root}${val}`,
     },
     balance: {
-      type: moneySchema,
+      type: moneyModel,
       required: true,
       
     },
