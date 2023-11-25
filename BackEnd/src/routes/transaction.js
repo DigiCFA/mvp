@@ -77,8 +77,8 @@ router.post("/create_direct_transaction", async (req, res, next) => {
       if (lessThan(sendUserBalance, amountTransferred)) {
         throw format_error(ERROR_CODES.INSUFFICIENT_BALANCE)
       }
-      sendUser.balance =	toSnapshot(add(sendUserBalance,amountTransferred));
-      receiveUser.balance =	toSnapshot(subtract(receiveUserBalance,amountTransferred));
+      sendUser.balance =	toSnapshot(subtract(sendUserBalance,amountTransferred));
+      receiveUser.balance =	toSnapshot(add(receiveUserBalance,amountTransferred));
 
       // console.log("TRANSACTION STUFF");
       // console.log("Amount should be: ", newTransaction.amountTransferred);
@@ -109,14 +109,14 @@ router.post("/create_direct_transaction", async (req, res, next) => {
         priority: "high"
       }
 
-      await getMessaging().send(notification)
-      .then((response) => {
-        // Response is a message ID string.
-        console.log('Successfully sent message:', response);
-      })
-      .catch((error) => {
-        console.log('Error sending message:', error);
-      });
+      // await getMessaging().send(notification)
+      // .then((response) => {
+      //   // Response is a message ID string.
+      //   console.log('Successfully sent message:', response);
+      // })
+      // .catch((error) => {
+      //   console.log('Error sending message:', error);
+      // });
 
       await session.commitTransaction();
 
