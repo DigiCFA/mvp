@@ -18,8 +18,9 @@ import SettingsColumn from "../../components/SettingsColumn";
 import { InstagramLoader } from "react-native-easy-content-loader";
 import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
-import { profilePicBaseURL } from "../../utils/api";
-
+import { intlFormat } from "../../utils/currencyFormatter";
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
 const ProfileScreen = () => {
   const { data: session, isLoading: getSessionIsLoading } =
     useGetSessionQuery();
@@ -50,7 +51,7 @@ const ProfileScreen = () => {
         </View>
 
         <Text className="px-4 font-medium text-3xl">{user.fullName}</Text>
-        <Text className="px-4 font-medium">Balance: {user.balance}</Text>
+        <Text className="px-4 font-medium">Balance: {intlFormat(dinero(user.balance))}</Text>
       </View>
     );
   }

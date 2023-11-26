@@ -13,6 +13,7 @@ import BankCardCard from "../../components/cards/BankCardCard";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { selectCardsFromUser, selectBalanceFromUser } from "../../redux/api/apiProfileSlice";
 import ContentLoader from "react-native-easy-content-loader";
+import { intlFormat } from "../../utils/currencyFormatter";
 import { dinero, toSnapshot } from 'dinero.js';
 import { USD } from '@dinero.js/currencies';
 const WalletScreen = () => {
@@ -45,11 +46,11 @@ const WalletScreen = () => {
                   DigiCFA balance
                 </Text>
                 <Text className="pt-2 text-lg font-semibold">
-                  {dinero(balance).toFormat()}
+                  {intlFormat(dinero(balance))}
                 </Text>
               </View>
               <Text className="px-4 text-5xl font-bold">
-                  {dinero(balance).toFormat()}
+                  {intlFormat(dinero(balance))}
               </Text>
               <View className="flex-1"></View>
             </View>
