@@ -2,7 +2,6 @@
 // import 'source-map-support/register'
 // HOWEVER DOESN'T WORK
 
-
 import serverlessExpress from "@vendia/serverless-express";
 import app from "./index.js";
 import { createMongooseConnection } from "./database/connect.js";
@@ -20,7 +19,15 @@ async function setup(event, context) {
 }
 
 export function handler(event, context) {
-  console.log("Running lambda version: " + context.functionVersion);
+
+  // if (event.stageName) {
+  //   console.log("Calling from the " + event.stageName + " stage.");
+  // } else {
+  //   console.log("Not sure calling from which stage.");
+  // }
+
+  // console.log("Running lambda version: " + context.functionVersion);
+
 
   // If instance running, return
   if (serverlessExpressInstance)

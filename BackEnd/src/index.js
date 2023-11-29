@@ -4,6 +4,7 @@ import morgan, { format } from "morgan";
 import connectStore from "connect-mongo";
 import session from "express-session";
 import routes from "./routes/index.js";
+import 'saslprep'
 import "dotenv/config.js";
 import {
   ERROR_CODES,
