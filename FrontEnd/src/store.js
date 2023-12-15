@@ -7,7 +7,6 @@ import { apiSlice } from "./redux/api/apiIndexSlice";
 export const createStoreWithPreloadedState = (preloadedState) =>
   configureStore({
     reducer: {
-      // self: selfReducer,
       signUp: signUpReducer,
       phoneVerification: phoneVerificationReducer,
       // Adding the generated set of reducers as a specific top-level slice
