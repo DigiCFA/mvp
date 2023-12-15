@@ -28,7 +28,7 @@ export default {
           ],
           NSMicrophoneUsageDescription: "Allow $(PRODUCT_NAME) to access your microphone"
         },
-        jsEngine: "jsc"
+        // jsEngine: "jsc"
       },
       android: {
         package: "com.digicfa.app",

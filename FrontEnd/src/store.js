@@ -10,6 +10,7 @@ export const createStoreWithPreloadedState = (preloadedState) =>
       // self: selfReducer,
       signUp: signUpReducer,
       phoneVerification: phoneVerificationReducer,
+      // Adding the generated set of reducers as a specific top-level slice
       [apiSlice.reducerPath]: apiSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
@@ -24,3 +25,6 @@ export const createStoreWithPreloadedState = (preloadedState) =>
       // }),
     ]
   });
+
+// Optional but required for refetchOnFocus/refetchOnReconnect
+// setupListeners(store.dispatch)

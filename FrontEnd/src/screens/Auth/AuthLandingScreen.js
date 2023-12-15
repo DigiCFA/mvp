@@ -17,7 +17,7 @@ const LoginSignupLandingScreen = () => {
   const [isValid, setIsValid] = useState(false);
   const [login, {error: loginError, isFetching: loginIsLoading, isLoading: loginIsFetching, 
     isSuccess: loginIsSuccess, isError: loginIsError}] = useLoginMutation();
-  
+    
   const {data: session, isFetching: sessionIsFetching, isLoading: sessionIsLoading, 
     isSuccess: sessionIsSuccess, isError: sessionIsError} = useGetSessionQuery()
 
@@ -42,6 +42,13 @@ const LoginSignupLandingScreen = () => {
   useEffect(() => { 
     validateForm(); 
   }, [phoneNumber,password]); 
+
+  // useEffect(() => {
+  //   console.log(loginIsFetching);
+  //   console.log(loginIsSuccess);
+  //   console.log(sessionIsFetching);
+  // }, []);
+
   const validateForm = () => { 
     let errors = {}; 
 
@@ -64,11 +71,12 @@ const LoginSignupLandingScreen = () => {
     <SafeAreaView className="items-center bg-white flex-1">
 
       <Spinner visible={loginIsFetching || loginIsSuccess ||sessionIsFetching}/>
+      
 
       <HideKeyboardView>
         <View className="mt-5 w-full items-center">
           <Image 
-          source={require('../../../assets/DigiCFA.png')}
+          source={require('../../../assets/DClear.png')}
           className='h-24 w-20 ml-4' />
           {/* <FontAwesome name="paypal" size={50} color="blue" /> */}
         </View>
