@@ -3,6 +3,7 @@ import express from "express";
 import { upload } from "../middleware/multer.js";
 import { retrieveFromS3, uploadToS3 } from "../controllers/awsController.js";
 import { format_error, ERROR_CODES } from "../utils/errorHandling.js";
+import { profilePicBaseURL } from "../config/awsConfig.js";
 
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
@@ -11,8 +12,6 @@ import Transaction from "../models/transactionModel.js";
 
 const router = express.Router();
 
-const profilePicBaseURL =
-  "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
 
 router.get("/retrieve_user", async (req, res, next) => {
   let userId = req.query.userId;

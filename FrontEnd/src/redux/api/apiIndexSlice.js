@@ -24,7 +24,10 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 */
 
 
-const baseURL = "https://zs6sljffd3.execute-api.af-south-1.amazonaws.com/prod/api"
+export const baseURL = "https://zs6sljffd3.execute-api.af-south-1.amazonaws.com/prod/api"
+// export const profilePicBaseURL = "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
+// Do not need profilePicBaseURL in the frontend. Only call the backend function to upload.
+// Had this field before for fetching reasons - but now it's stored in MDB.
 
 // Define a service with the base URL and expected endpoints
 export const apiSlice = createApi({

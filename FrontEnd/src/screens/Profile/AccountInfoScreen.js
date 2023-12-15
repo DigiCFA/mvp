@@ -1,28 +1,34 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
-
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { selectProfilePicFromUser } from "../../redux/api/apiProfileSlice";
-import { useGetSessionQuery } from '../../redux/api/apiAuthSlice'
-import { useFetchUserQuery, useUploadProfilePictureMutation } from "../../redux/api/apiProfileSlice";
-
+import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
+import {
+  useFetchUserQuery,
+  useUploadProfilePictureMutation,
+} from "../../redux/api/apiProfileSlice";
 import * as ImagePicker from "expo-image-picker";
+import Spinner from "react-native-loading-spinner-overlay";
+
 const AccountInfoScreen = () => {
   const navigation = useNavigation();
 
-  const profilePicBaseURL = "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
-
-  const {data: session} = useGetSessionQuery()
-  const {data: user, isLoading: fetchUserIsLoading} = useFetchUserQuery(session.userId)
-  const [uploadProfilePic, {isLoading: profileUploadIsLoading, isError: profileUploadIsError,
-    isFetching: profileUploadIsFetching, isSuccess: profileUploadIsSuccess}] = useUploadProfilePictureMutation()
+  const { data: session } = useGetSessionQuery();
+  const { data: user, isLoading: fetchUserIsLoading } = useFetchUserQuery(
+    session.userId
+  );
+  const [
+    uploadProfilePic,
+    {
+      isLoading: profileUploadIsLoading,
+      isError: profileUploadIsError,
+      isFetching: profileUploadIsFetching,
+      isSuccess: profileUploadIsSuccess,
+    },
+  ] = useUploadProfilePictureMutation();
   const profilePic = useSelector(selectProfilePicFromUser(session.userId));
 
   const pickPhoto = async () => {
@@ -37,21 +43,24 @@ const AccountInfoScreen = () => {
 
     if (!result.canceled) {
       try {
-        const imageURI = result.assets[0].uri
-        await uploadProfilePic({userId: session.userId, imageURI: imageURI}).unwrap()
+        const imageURI = result.assets[0].uri;
+        await uploadProfilePic({
+          userId: session.userId,
+          imageURI: imageURI,
+        }).unwrap();
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
   };
 
-  console.log(profilePicBaseURL + profilePic)
-
   const addressSection = () => {
-    if(Object.values(user?.addresses[0]).slice(0,-1).every(value => value === "Not set")){
-      return (
-        <Text className="text-base font-medium">Not Set</Text>
-      )
+    if (
+      Object.values(user?.addresses[0])
+        .slice(0, -1)
+        .every((value) => value === "Not set")
+    ) {
+      return <Text className="text-base font-medium">Not Set</Text>;
     }
     return (
       <>
@@ -60,19 +69,23 @@ const AccountInfoScreen = () => {
         </Text>
         <View>
           {user?.addresses[0].lineTwo != "Not Set" && (
-          <Text className="text-base font-medium">
-            {user?.addresses[0].lineTwo}
-          </Text>)}
+            <Text className="text-base font-medium">
+              {user?.addresses[0].lineTwo}
+            </Text>
+          )}
           <Text className="text-base font-medium">
             {user?.addresses[0].city}, {user?.addresses[0].zipCode}
           </Text>
         </View>
       </>
-    )
-  }
+    );
+  };
 
   return (
     <View className="h-screen bg-white">
+
+      <Spinner visible={profileUploadIsFetching}/>
+
       <View className="bg-beige pb-8">
         {/* Top Bar */}
         <View className="flex-row justify-items-start items-center space-x-2 pt-12 px-4">

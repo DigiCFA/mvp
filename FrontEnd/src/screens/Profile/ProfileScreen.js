@@ -5,7 +5,7 @@ import {
   ScrollView,
   SafeAreaView,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { Image } from "expo-image";
 import { useSelector } from "react-redux";
 import {
@@ -18,7 +18,6 @@ import SettingsColumn from "../../components/SettingsColumn";
 import { InstagramLoader } from "react-native-easy-content-loader";
 import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
-import { profilePicBaseURL } from "../../utils/api";
 
 const ProfileScreen = () => {
   const { data: session, isLoading: getSessionIsLoading } =
@@ -32,9 +31,6 @@ const ProfileScreen = () => {
 
   let content = <InstagramLoader active />;
 
-  // if (getSessionIsLoading || fetchUserIsLoading) {
-  //   content = <InstagramLoader active loading={true} />;
-  // } else
   if (fetchUserIsSuccess) {
     content = (
       <View className="bg-white flex-col items-start space-y-1 pb-4">
