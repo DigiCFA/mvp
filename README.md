@@ -40,7 +40,7 @@ Reference: https://docs.expo.dev/build/introduction/
    Feel free to do whatever you want and alter the ```eas.json``` file for build details. 
 
 
-4. For app configuration, modify the ```app.config.js``` instead of ```app.json```. Doc on environment variables: https://docs.expo.dev/build-reference/variables/.
+4. For app configuration, modify the ```app.config.js``` instead of ```app.json```. Doc on environment variables: https://docs.expo.dev/build-reference/variables/. Note, the ios `buildConfiguration: Debug` would spin up a debugger in-app which may be useful.
 
 
 ---
