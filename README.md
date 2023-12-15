@@ -28,13 +28,13 @@ Reference: https://docs.expo.dev/build/introduction/
 
 1. Make sure you have been added to the organization. Check here: https://expo.dev/accounts/digicfa. Make sure the secret and credential files have been uploaded (they should be so do not worry unless see errors). 
 
-2. Download the latest ios Simulator build called development-simulator.
+2. Download the latest build. One way to do this is downloading it on your computer, and dragging it into the simulator (this has worked for IOS, not sure for Android). 
 
   
-3. If the build that you want to download doesn't exist, or you want to test with a new build, create your build following https://docs.expo.dev/build/setup/. For step 4, choose the platform and profile. We have generally just tested with ios and development-simulator profiles:
+3. If the build that you want to download doesn't exist, or you want to test with a new build, create your build following https://docs.expo.dev/build/setup/. For step 4, choose the platform and profile. We have generally just tested with the `development` (contains extra debugging for ios) and `ios-dev` profiles:
 
    ```
-   eas build --platform ios --profile development-simulator
+   eas build --platform ios --profile ios-dev
    ```
 
    Feel free to do whatever you want and alter the ```eas.json``` file for build details. 
