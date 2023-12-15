@@ -5,11 +5,11 @@ export default {
       version: "1.0.0",
       scheme: "digicfa",
       orientation: "portrait",
-      icon: "./assets/DigiCFA.png",
+      icon: "./assets/3white.png",
       userInterfaceStyle: "light",
       jsEngine: "hermes",
       splash: {
-        image: "./assets/DigiCFA.png",
+        image: "./assets/3clear.png",
         resizeMode: "contain",
         backgroundColor: "#ffffff"
       },
@@ -28,7 +28,8 @@ export default {
           ],
           NSMicrophoneUsageDescription: "Allow $(PRODUCT_NAME) to access your microphone"
         },
-        jsEngine: "jsc"
+        // jsEngine: "jsc"
+        // Hermes is default, and debugging with ChromeDevTools is only supported with Hermes
       },
       android: {
         package: "com.digicfa.app",
