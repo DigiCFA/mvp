@@ -46,7 +46,7 @@ const ProfileScreen = () => {
         </View>
 
         <Text className="px-4 font-medium text-3xl">{user.fullName}</Text>
-        <Text className="px-4 font-medium">Balance: {user.balance}</Text>
+        <Text className="px-4 font-medium text-xl"> {user.phoneNumber.trim()}</Text>
       </View>
     );
   }
@@ -54,7 +54,7 @@ const ProfileScreen = () => {
   return (
     <View className="grow">
       {/* Top Bar */}
-      <View className="flex-row self-center items-center space-x-2 pt-12 pb-6 px-4 bg-blueLight">
+      <View className="flex-row self-center items-center space-x-2 pt-16 pb-2 px-4 bg-blueLight">
         <View className="flex-1"></View>
         <Text className="font-extrabold text-lg text-white">Profile</Text>
         <TouchableOpacity className="flex-1 items-end">
