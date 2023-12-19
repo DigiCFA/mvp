@@ -50,6 +50,7 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
           userId: contactId,
         }));
       },
+      // 
       transformResponse: (responseData) => {
         return contactsAdapter.setAll(contactsInitialState, responseData);
       },
@@ -159,17 +160,15 @@ export const {
 } = extendedProfileSlice;
 
 
-/*
-What are selectors:
-
-
-
-*/
+// ----------------
+// SELECTORS
+// ----------------
 
 // CONTACT SELECTORS
 const selectContactsResult = (userId) =>
   extendedProfileSlice.endpoints.fetchContactsById.select(userId);
 
+// createSelector: selectors that only recompute when inputs change
 const selectContactsData = (userId) =>
   createSelector(
     selectContactsResult(userId),
