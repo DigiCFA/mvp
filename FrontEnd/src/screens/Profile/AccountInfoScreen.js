@@ -84,7 +84,7 @@ const AccountInfoScreen = () => {
   return (
     <View className="h-screen bg-white">
 
-      <Spinner visible={profileUploadIsFetching}/>
+      <Spinner visible={profileUploadIsLoading | fetchUserIsLoading}/>
 
       <View className="bg-beige pb-8">
         {/* Top Bar */}
@@ -140,7 +140,6 @@ const AccountInfoScreen = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate("Address")}
           className="flex-row items-center py-4 border-b border-gray-300"
         >
           <View className="flex-col flex-1 space-y-1">
