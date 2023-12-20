@@ -8,7 +8,7 @@ const contactsAdapter = createEntityAdapter({
 })
 const contactsInitialState = contactsAdapter.getInitialState()
 
-const baseURL = "https://zs6sljffd3.execute-api.af-south-1.amazonaws.com/prod/api"
+const baseURL = "https://zs6sljffd3.execute-api.af-south-1.amazonaws.com/dev/api"
 
 export const extendedProfileSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -123,7 +123,7 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
             query: (args) => {
                 const {userId, fcmToken, timestamp} = args
                 return ({
-                    url: '/profile/upload_fcm_token?',
+                    url: '/profile/upload_fcm_token',
                     method: 'PATCH',
                     body: {
                         "fcm_token": fcmToken,
