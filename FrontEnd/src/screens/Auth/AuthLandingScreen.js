@@ -105,7 +105,7 @@ const LoginSignupLandingScreen = () => {
       <HideKeyboardView>
         <View className="mt-5 w-full items-center">
           <Image
-            source={require("../../../assets/3clear.png")}
+            source={require("../../../assets/logo/3clear_bigger.png")}
             className="h-24 w-20 ml-4"
           />
           {/* <FontAwesome name="paypal" size={50} color="blue" /> */}
