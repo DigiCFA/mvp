@@ -17,6 +17,10 @@ import { useSelector } from "react-redux";
 import { selectSelf } from "../../redux/api/selfSlice";
 import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
+import QRCode from "react-native-qrcode-svg";
+
+import logo_D from "../../../assets/Dclear.png";
+import Spinner from "react-native-loading-spinner-overlay";
 
 const ScanScreen = () => {
   const navigation = useNavigation();
@@ -126,16 +130,21 @@ const ScanScreen = () => {
       {/* Pay Me */}
       {mode === 1 && (
         <View className="flex-col items-center">
-          <Text className="text-2xl font-semibold mt-12">{user.fullName}</Text>
 
-          <Text className="text-lg font-semibold">{user.phoneNumber}</Text>
+          <Spinner visible={fetchUserIsLoading}/>
+
+          <Text className="text-2xl font-semibold mt-12">{user?.fullName}</Text>
+
+          <Text className="text-lg font-semibold">{user?.phoneNumber}</Text>
 
           <View className="p-6">
             {/* Should be the QR code */}
             <Image
-              source={{ uri: user.profilePicture }}
+              source={{ uri: user?.profilePicture }}
               style={{ width: 240, height: 240 }}
             />
+
+            {/* <QRCode value="somerandom" /> */}
           </View>
 
           <View className="flex-row mx-20">
