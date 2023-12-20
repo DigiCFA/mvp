@@ -142,15 +142,20 @@ router.get("/search_users", async (req, res, next) => {
     next(error)
   }
 });
+
 router.patch("/upload_fcm_token", async (req, res, next) => {
   let userId = req.body.userId;
   let fcm_token = req.body.fcm_token;
   let timestamp = req.body.timestamp;
 
+  console.log('upload_fcm_token', userId, fcm_token, timestamp)
 
   try {
 
     let add_user = await User.findById(userId)
+    if (!add_user) {
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
+    }
     add_user.tokens.push({
       fcm_token:fcm_token,
       timestamp:timestamp
@@ -171,11 +176,6 @@ router.patch("/upload_fcm_token", async (req, res, next) => {
         }
       }
     );
-      if (!user) {
-        throw format_error(ERROR_CODES.ID_NOT_FOUND)
-      } else {
-        res.status(200).json(user);
-      }
     } catch (error) {
       next(error)
     }

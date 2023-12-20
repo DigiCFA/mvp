@@ -1,4 +1,4 @@
-import { useLoginMutation, useGetSessionQuery ,useUploadFcmTokenMutation} from "../../redux/api/apiAuthSlice";
+import { useLoginMutation, useGetSessionQuery} from "../../redux/api/apiAuthSlice";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 
@@ -17,9 +17,8 @@ const LoginSignupLandingScreen = () => {
   const [isValid, setIsValid] = useState(false);
   const [login, {error: loginError, isFetching: loginIsLoading, isLoading: loginIsFetching, 
     isSuccess: loginIsSuccess, isError: loginIsError}] = useLoginMutation();
-  const [uploadFcmToken, {}] = useUploadFcmTokenMutation();
   const {data: session, isFetching: sessionIsFetching, isLoading: sessionIsLoading, 
-    isSuccess: sessionIsSuccess, isError: sessionIsError} = useGetSessionQuery()
+    isSuccess: sessionIsSuccess, isError: sessionIsError} = useGetSessionQuery();
 
   const navigation = useNavigation();
 
@@ -31,7 +30,6 @@ const LoginSignupLandingScreen = () => {
     try {
       if(isValid){
         await login(user).unwrap()
-        uploadFcmToken(userId, fcm_token, timestamp)
       }
       else{
         setErrorM(errorState)
@@ -40,17 +38,23 @@ const LoginSignupLandingScreen = () => {
       console.error("error", err)
     }
   };
+  
   useEffect(() => { 
     validateForm(); 
   }, [phoneNumber,password]); 
+
+
   const validateForm = () => { 
+
+    //TODO - Error UI
+    
     let errors = {}; 
 
     // Validate phoneNumber field 
     if (!phoneNumber) { 
-      errors.phoneNumber = 'phoneNumber is required.'; 
+      errors.phoneNumber = 'Phone number is required.'; 
     } else if (phoneNumber.length !== 10) { 
-      errors.phoneNumber = 'phoneNumber must be at least 6 characters.'; 
+      errors.phoneNumber = 'Phone number must be at least 6 characters.'; 
     } 
     // Validate password field 
     if (!password) { 
@@ -61,10 +65,11 @@ const LoginSignupLandingScreen = () => {
     setErrorState(errors); 
     setIsValid(Object.keys(errors).length === 0); 
   }; 
+
   return (
     <SafeAreaView className="items-center bg-white flex-1">
 
-      <Spinner visible={loginIsFetching || loginIsSuccess ||sessionIsFetching}/>
+      <Spinner visible={loginIsFetching || sessionIsFetching}/>
 
       <HideKeyboardView>
         <View className="mt-5 w-full items-center">
@@ -91,14 +96,14 @@ const LoginSignupLandingScreen = () => {
           }}
           onChangeText={setPhoneNumber}
         />
-        <Text className="text-red-700" style={{ fontSize: 10 }}>
+        <Text className="text-red-800 font-bold">
           {errorM.phoneNumber}
         </Text>
         <PasswordTextInput
           placeHolder={"Password"}
           onChangeText={setPassword}
         />
-        <Text className="text-red-700" style={{ fontSize: 10 }}>
+        <Text className="text-red-800 font-bold" >
           {errorM.password}
         </Text>
         <TouchableOpacity className="mt-1.5">

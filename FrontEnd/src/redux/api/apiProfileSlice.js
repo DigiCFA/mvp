@@ -8,7 +8,7 @@ const contactsAdapter = createEntityAdapter({
 })
 const contactsInitialState = contactsAdapter.getInitialState()
 
-const baseURL = "https://o4gnaf7sce.execute-api.af-south-1.amazonaws.com/prod/api"
+const baseURL = "https://zs6sljffd3.execute-api.af-south-1.amazonaws.com/prod/api"
 
 export const extendedProfileSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -66,8 +66,8 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
         createDirectTransaction: builder.mutation({
             query: (arg) => { 
 
-                ({amountTransferred, sender, receiver, paymentMethod, 
-                    isPayment, isApproved, message} = arg)
+                const {amountTransferred, sender, receiver, paymentMethod, 
+                    isPayment, isApproved, message} = arg
 
                 return ({
                     url: '/transaction/create_direct_transaction',
@@ -120,25 +120,18 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
             invalidatesTags: (result, error, arg) => [{type: "Profile", userId: arg.userId}]
         }),
         uploadFcmToken: builder.mutation({
-            queryFn: async (args) => {
-                const {userId, fcm_token, timestamp} = args
-                
-                try {
-                    return ({
-                        url: '/profile/upload_fcm_token?',
-                        method: 'PATCH',
-                        body: {
-                            fcm_token: fcm_token,
-                            timestamp: timestamp,
-                            userId: userId,
-                        }
-                    })
-
-                } catch (error) {
-                    return {error: error}
-                }
-            },
-            invalidatesTags: (result, error, arg)    => [{type: "Profile", userId: arg.userId}]
+            query: (args) => {
+                const {userId, fcmToken, timestamp} = args
+                return ({
+                    url: '/profile/upload_fcm_token?',
+                    method: 'PATCH',
+                    body: {
+                        "fcm_token": fcmToken,
+                        "timestamp": timestamp,
+                        "userId": userId,
+                    }
+                })
+            }
         })
     })
 })
