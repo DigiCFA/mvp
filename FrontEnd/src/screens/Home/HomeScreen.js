@@ -114,7 +114,7 @@ const HomeScreen = () => {
             listSize={10}
             loading={fetchTransactionIsLoading}
           >
-            {transactions?.map((transaction) => (
+            {transactions?.slice(0).reverse().map((transaction) => (
               <TransactionCard
                 key={transaction._id}
                 id={transaction._id}

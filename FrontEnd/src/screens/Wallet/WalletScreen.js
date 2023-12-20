@@ -35,11 +35,11 @@ const WalletScreen = () => {
 
       <ScrollView>
         <View className="p-4 shadow-sm flex-1">
-          <TouchableOpacity className='py-3 px-4 bg-white rounded-lg flex-row space-x-2 shadow'>
+          <TouchableOpacity className='py-3 mb-4 px-4 bg-white rounded-lg flex-row space-x-2 shadow'>
             <Ionicons name="flash" size={40} color="#7152c7"/>
             <View className='flex-row flex-wrap mx-8'>
               <Text className='text-lg font-medium'>
-                This feature is currently under development. Soon you'll be able to link your credit card to the app!
+                This feature is currently under development. {'\n\n'}Soon you'll be able to link your credit cards to the app!
               </Text>
             </View>
           </TouchableOpacity>

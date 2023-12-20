@@ -35,11 +35,11 @@ const SettingsColumn = () => {
   }
 
   return (
-    <View className="mt-2">
+    <View className="mt-4">
       <Spinner visible={logoutIsLoading || logoutIsFetching || logoutIsSuccess || sessionIsFetching} />
       {preferenceRow("person", 24, "#192C88", "Account Info", ()=>{navigation.navigate("AccountInfo")})}
-      {preferenceRow("mail-unread", 24, "#192C88", "Message Center", ()=>{navigation.navigate("MessageCenter")})}
-      {preferenceRow("shield", 24, "#192C88", "Security", ()=>{navigation.navigate("Security")})}
+      {/* {preferenceRow("mail-unread", 24, "#192C88", "Message Center", ()=>{navigation.navigate("MessageCenter")})} */}
+      {/* {preferenceRow("shield", 24, "#192C88", "Security", ()=>{navigation.navigate("Security")})} */}
       {preferenceRow("log-out", 24, "#192C88", "Log Out", onPressLogout)}
     </View>
   );
