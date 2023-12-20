@@ -11,6 +11,7 @@ import {
 } from "./redux/api/apiProfileSlice";
 import { useEffect } from "react";
 import messaging from "@react-native-firebase/messaging";
+import "./localization/i18nConfig"
 
 const App = () => {
   const {
