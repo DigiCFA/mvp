@@ -5,11 +5,11 @@ export default {
       version: "1.0.0",
       scheme: "digicfa",
       orientation: "portrait",
-      icon: "./assets/3white.png",
+      icon: "./assets/logo/3clear_bigger.png",
       userInterfaceStyle: "light",
       jsEngine: "hermes",
       splash: {
-        image: "./assets/3clear.png",
+        image: "./assets/splash/Utah.png",
         resizeMode: "contain",
         backgroundColor: "#ffffff"
       },
