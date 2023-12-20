@@ -17,8 +17,12 @@ import { useSelector } from "react-redux";
 import { selectSelf } from "../../redux/api/selfSlice";
 import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const ScanScreen = () => {
+  const { t } = useTranslation();
+
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
@@ -61,6 +65,54 @@ const ScanScreen = () => {
     getBarCodeScannerPermissions();
   }, []);
 
+  const scanCode = (
+    <View>
+      {hasPermission === null && <LoadingView />}
+
+      {hasPermission === false && <Text>{t('noCameraAccess')}</Text>}
+
+      {hasPermission && (
+        <View className="w-4/5 aspect-square mx-10 rounded-xl border-4 border-black overflow-hidden">
+          <BarCodeScanner
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            // style={StyleSheet.absoluteFillObject}
+            className="flex-1"
+          />
+        </View>
+      )}
+    </View>
+  );
+
+  const getPaid = (
+    <View className="flex-col items-center">
+      <Text className="text-2xl font-semibold mt-12">{user.fullName}</Text>
+
+      <Text className="text-lg font-semibold">{user.phoneNumber}</Text>
+
+      <View className="p-6">
+        {/* Should be the QR code */}
+        <Image
+          source={{ uri: user.profilePicture }}
+          style={{ width: 240, height: 240 }}
+        />
+      </View>
+
+      <View className="flex-row mx-20">
+        <TouchableOpacity className="border p-3 rounded-full">
+          <Ionicons name="print" size={24} color="black" />
+        </TouchableOpacity>
+        <View className="flex-1"></View>
+        <TouchableOpacity className="border p-3 rounded-full">
+          <Ionicons name="mail" size={24} color="black" />
+        </TouchableOpacity>
+        <View className="flex-1"></View>
+        <TouchableOpacity className="border p-3 rounded-full">
+          <Ionicons name="cloud-upload" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
   return (
     <SafeAreaView>
       {/* Return Arrow*/}
@@ -85,7 +137,7 @@ const ScanScreen = () => {
                 mode === 0 ? "text-black" : "text-gray-500"
               }`}
             >
-              Scan code
+              {t("scanCode")}
             </Text>
           </TouchableOpacity>
 
@@ -98,61 +150,17 @@ const ScanScreen = () => {
                 mode === 1 ? "text-black" : "text-gray-500"
               }`}
             >
-              Get paid
+              {t('getPaid')}
             </Text>
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Scan Code */}
-      {mode === 0 && (
-        <View>
-          {hasPermission === null && <LoadingView />}
-
-          {hasPermission === false && <Text>No access to camera.</Text>}
-
-          {hasPermission && (
-            <View className="w-4/5 aspect-square mx-10 rounded-xl border-4 border-black overflow-hidden">
-              <BarCodeScanner
-                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                // style={StyleSheet.absoluteFillObject}
-                className="flex-1"
-              />
-            </View>
-          )}
-        </View>
-      )}
+      {mode === 0 && scanCode}
 
       {/* Pay Me */}
-      {mode === 1 && (
-        <View className="flex-col items-center">
-          <Text className="text-2xl font-semibold mt-12">{user.fullName}</Text>
-
-          <Text className="text-lg font-semibold">{user.phoneNumber}</Text>
-
-          <View className="p-6">
-            {/* Should be the QR code */}
-            <Image
-              source={{ uri: user.profilePicture }}
-              style={{ width: 240, height: 240 }}
-            />
-          </View>
-
-          <View className="flex-row mx-20">
-            <TouchableOpacity className="border p-3 rounded-full">
-              <Ionicons name="print" size={24} color="black" />
-            </TouchableOpacity>
-            <View className="flex-1"></View>
-            <TouchableOpacity className="border p-3 rounded-full">
-              <Ionicons name="mail" size={24} color="black" />
-            </TouchableOpacity>
-            <View className="flex-1"></View>
-            <TouchableOpacity className="border p-3 rounded-full">
-              <Ionicons name="cloud-upload" size={24} color="black" />
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
+      {mode === 1 && getPaid}
 
       {/* {device != null && hasPermission && (
       <>

@@ -14,8 +14,11 @@ import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { selectCardsFromUser, selectBalanceFromUser } from "../../redux/api/apiProfileSlice";
 import ContentLoader from "react-native-easy-content-loader";
 import { Ionicons } from "@expo/vector-icons"
+import { useTranslation } from "react-i18next";
 
 const WalletScreen = () => {
+
+  const { t } = useTranslation();
 
   const {data: session, isLoading, isSuccess, isError, error} = useGetSessionQuery()
   const cards = useSelector(selectCardsFromUser(session.userId))
@@ -25,7 +28,7 @@ const WalletScreen = () => {
     <SafeAreaView className="flex-1">
       <View className="flex-row p-4 items-center">
         <TouchableOpacity className="bg-white py-2 px-4 rounded-full">
-          <Text className="text-lg font-extrabold text-blueDark">Wallet</Text>
+          <Text className="text-lg font-extrabold text-blueDark">{t('wallet')}</Text>
         </TouchableOpacity>
         <View className="flex-1"></View>
         <TouchableOpacity>
@@ -39,7 +42,7 @@ const WalletScreen = () => {
             <Ionicons name="flash" size={40} color="#7152c7"/>
             <View className='flex-row flex-wrap mx-8'>
               <Text className='text-lg font-medium'>
-                This feature is currently under development. {'\n\n'}Soon you'll be able to link your credit cards to the app!
+                {t('walletFeature')}
               </Text>
             </View>
           </TouchableOpacity>

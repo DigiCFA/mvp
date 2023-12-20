@@ -14,9 +14,13 @@ import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import ContentLoader, { Bullets } from "react-native-easy-content-loader";
 import Currency from "react-currency-formatter";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 
 const HomeScreen = () => {
+
+  const { t } = useTranslation();
+
   const navigation = useNavigation();
   const {
     data: session,
@@ -60,7 +64,7 @@ const HomeScreen = () => {
             listSize={1}
             loading={fetchUserIsLoading}>
             <View className="py-3 px-4 bg-white rounded-lg flex-col space-x-4 shadow">
-              <Text className="text-xl text-gray-400 self-center">DigiCFA balance</Text>
+              <Text className="text-xl text-gray-400 self-center">{t('balance')}</Text>
               <View className='flex-row flex-wrap justify-center'>
                 <Text className='text-2xl font-bold self-center'>F.CFA {balance?.toString().split('.')[0]}</Text>
                 <Text className='text-2xl font-bold self-center text-gray-600'>.{balance?.toString().split('.')[1]}</Text>
@@ -104,7 +108,7 @@ const HomeScreen = () => {
         {/* Transactions */}
 
         <View className="bg-white mt-2 py-6 px-4 flex-1">
-          <Text className="text-xl text-gray-800 pb-2">Recent activity</Text>
+          <Text className="text-xl text-gray-800 pb-2">{t('recentActivity')}</Text>
 
           <ContentLoader
             active
@@ -136,7 +140,7 @@ const HomeScreen = () => {
 
           <TouchableOpacity className="pt-4">
             <Text className="text-center text-lg font-bold text-blue-600">
-              Show all
+              {t('showAll')}
             </Text>
           </TouchableOpacity>
         </View>
