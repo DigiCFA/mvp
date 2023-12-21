@@ -11,6 +11,8 @@ import {
 } from "./redux/api/apiProfileSlice";
 import { useUploadFcmTokenMutation } from "./redux/api/apiProfileSlice";
 import { useEffect, useState } from "react";
+import { useUploadFcmTokenMutation } from "./redux/api/apiProfileSlice";
+import { useEffect, useState } from "react";
 import messaging from "@react-native-firebase/messaging";
 
 import "expo-dev-client";
