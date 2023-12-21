@@ -88,7 +88,7 @@ router.post("/create_direct_transaction", async (req, res, next) => {
         priority: "high"
       }
 
-      await getMessaging().send(notifications)
+      await getMessaging().sendEachForMulticast(notifications)
       .then((response) => {
         // Response is a message ID string.
         console.log('Successfully sent message:', response);
