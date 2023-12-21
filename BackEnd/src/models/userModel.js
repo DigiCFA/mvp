@@ -92,16 +92,16 @@ const addressSchema = new mongoose.Schema({
   },
 });
 
-const tokenSchema = new mongoose.Schema({
-  token: {
-    type: String,
-    required: true,
-  },
-  timeStamp: {
-    type: Date,
-    required: true,
-  },
-});
+// const tokenSchema = new mongoose.Schema({
+//   token: {
+//     type: String,
+//     required: true,
+//   },
+//   timeStamp: {
+//     type: String,
+//     required: true,
+//   },
+// });
 
 const userSchema = new mongoose.Schema(
   {
@@ -173,7 +173,7 @@ const userSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-    tokens: [tokenSchema],
+    tokens: [String],
     /*
     - NO TRANSACTIONS POINTER
     - Doc suggested that in one-to-many relationships, don't keep two pointers (i.e. user->transaction && transaction->user) as they may get out of sync or unusually large

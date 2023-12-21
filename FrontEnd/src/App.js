@@ -9,8 +9,11 @@ import {
   useFetchUserQuery,
   useFetchTransactionsQuery,
 } from "./redux/api/apiProfileSlice";
-import { useEffect } from "react";
+import { useUploadFcmTokenMutation } from "./redux/api/apiProfileSlice";
+import { useEffect, useState } from "react";
 import messaging from "@react-native-firebase/messaging";
+
+import "expo-dev-client";
 
 const App = () => {
   const {
@@ -35,6 +38,19 @@ const App = () => {
     error: fetchTransactionsError,
   } = useFetchTransactionsQuery(session?.userId, { skip: !isLoggedIn });
 
+  const [
+    uploadFcmToken,
+    {
+      error: fcmError,
+      isFetching: fcmIsFetching,
+      isLoading: fcmIsLoading,
+      isSuccess: fcmIsSuccess,
+      isError: fcmIsError,
+    },
+  ] = useUploadFcmTokenMutation();
+
+  const [fcmToken, setFcmToken] = useState("");
+
   async function requestUserPermission() {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -42,7 +58,7 @@ const App = () => {
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
-      console.log("Authorization status:", authStatus ? "YES": "NO");
+      console.log("Authorization status:", authStatus);
     }
   }
 
@@ -51,7 +67,7 @@ const App = () => {
       messaging()
         .getToken()
         .then((token) => {
-          console.log(token);
+          setFcmToken(token);
         });
     }
     messaging()
@@ -80,6 +96,24 @@ const App = () => {
 
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    const uploadToken = async (userId, fcmToken) => {
+      try {
+        await uploadFcmToken({
+          userId: userId,
+          fcmToken: fcmToken,
+          timestamp: Date.now().toString(),
+        }).unwrap();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (isLoggedIn) {
+      uploadToken(session.userId, fcmToken);
+    }
+  }, [isLoggedIn]);
 
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
