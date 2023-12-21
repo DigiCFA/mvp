@@ -15,12 +15,19 @@ import LoadingView from "../../components/LoadingView";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useSelector } from "react-redux";
 import { selectSelf } from "../../redux/api/selfSlice";
+import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
+import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 
 const ScanScreen = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
-  const self = useSelector(selectSelf);
+  // const self = useSelector(selectSelf);
+
+  const { data: session } = useGetSessionQuery();
+  const { data: user, isLoading: fetchUserIsLoading } = useFetchUserQuery(
+    session.userId
+  );
 
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -119,14 +126,14 @@ const ScanScreen = () => {
       {/* Pay Me */}
       {mode === 1 && (
         <View className="flex-col items-center">
-          <Text className="text-2xl font-semibold mt-12">{self.fullName}</Text>
+          <Text className="text-2xl font-semibold mt-12">{user.fullName}</Text>
 
-          <Text className="text-lg font-semibold">{self.phoneNumber}</Text>
+          <Text className="text-lg font-semibold">{user.phoneNumber}</Text>
 
           <View className="p-6">
             {/* Should be the QR code */}
             <Image
-              source={{ uri: self.profilePicture }}
+              source={{ uri: user.profilePicture }}
               style={{ width: 240, height: 240 }}
             />
           </View>

@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 
-import mastercard from "../../../assets/mastercard.png";
+import mastercard from "../../../assets/cards/mastercard.png";
 import { useNavigation } from "@react-navigation/native";
 
 const BankCardCard = ({

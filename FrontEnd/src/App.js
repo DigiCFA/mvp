@@ -1,20 +1,27 @@
-import { Text , Alert} from "react-native";
+import { Text, Alert } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { Provider } from "react-redux";
-
+import { Provider, useDispatch } from "react-redux";
 import { createStoreWithPreloadedState } from "./store";
-
 import AppNavigator from "./navigation/AppNavigator";
 import linking from "./config/linking";
 import { useGetSessionQuery } from "./redux/api/apiAuthSlice";
-import { useFetchUserQuery, useFetchTransactionsQuery } from "./redux/api/apiProfileSlice";
+import {
+  useFetchUserQuery,
+  useFetchTransactionsQuery,
+} from "./redux/api/apiProfileSlice";
 import { useUploadFcmTokenMutation } from "./redux/api/apiProfileSlice";
 import { useEffect, useState } from "react";
-import messaging from '@react-native-firebase/messaging';
+import messaging from "@react-native-firebase/messaging";
+
 import 'expo-dev-client';
 
 const App = () => {
-  const {isLoading: sessionIsLoading, data: session, isFetching: sessionIsFetching, isError: sessionIsError} = useGetSessionQuery()
+  const {
+    isLoading: sessionIsLoading,
+    data: session,
+    isFetching: sessionIsFetching,
+    isError: sessionIsError,
+  } = useGetSessionQuery();
   const isLoggedIn = Boolean(session?.userId);
   const {isLoading: fetchUserIsLoading, data: user, 
     isSuccess: fetchUserIsSuccess, isError: fetchUserIsError,

@@ -1,26 +1,28 @@
 import { MongoClient } from "mongodb";
 import mongoose from "mongoose";
 
-
 // Mongoose automatically manages connection pool underneath the hood
 let conn = null;
 
 export async function createMongooseConnection() {
-
-  // conn could be retained between function calls (due to callbackWaitsForEmptyEventLoop in Lambda.js)
-  // to increase efficiency
+  // If no existing connection
   if (conn == null) {
+    // conn could be retained between function calls (due to callbackWaitsForEmptyEventLoop in Lambda.js)
+    // to increase efficiency
 
-    console.log("CREATING NEW MONGOOSE CONNECTION")
-    
-    conn = mongoose.connect(
-      // ATLAS_URI,
-      process.env.MONGODB_CONNECTION_STRING, 
-      {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 15000
-    }).then(() => mongoose);
+    console.log("Creating new MongoDB connection...");
+
+    conn = mongoose
+      .connect(
+        // ATLAS_URI,
+        process.env.MONGODB_CONNECTION_STRING,
+        {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          serverSelectionTimeoutMS: 15000,
+        }
+      )
+      .then(() => mongoose);
 
     // avoid multiple function calls creating new connections
     await conn;
@@ -29,7 +31,6 @@ export async function createMongooseConnection() {
   console.log("Connected to MongoDB");
   return conn;
 }
-
 
 // export async function closeMongooseConnection(connection) {
 //   if (connection) {

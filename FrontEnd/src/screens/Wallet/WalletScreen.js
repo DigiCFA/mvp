@@ -13,14 +13,13 @@ import BankCardCard from "../../components/cards/BankCardCard";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { selectCardsFromUser, selectBalanceFromUser } from "../../redux/api/apiProfileSlice";
 import ContentLoader from "react-native-easy-content-loader";
+import { Ionicons } from "@expo/vector-icons"
 
 const WalletScreen = () => {
 
   const {data: session, isLoading, isSuccess, isError, error} = useGetSessionQuery()
   const cards = useSelector(selectCardsFromUser(session.userId))
   const balance = useSelector(selectBalanceFromUser(session.userId))
-
-  console.log(balance)
 
   return (
     <SafeAreaView className="flex-1">
@@ -36,7 +35,16 @@ const WalletScreen = () => {
 
       <ScrollView>
         <View className="p-4 shadow-sm flex-1">
-          <View className="bg-white h-60 rounded-2xl">
+          <TouchableOpacity className='py-3 mb-4 px-4 bg-white rounded-lg flex-row space-x-2 shadow'>
+            <Ionicons name="flash" size={40} color="#7152c7"/>
+            <View className='flex-row flex-wrap mx-8'>
+              <Text className='text-lg font-medium'>
+                This feature is currently under development. {'\n\n'}Soon you'll be able to link your credit cards to the app!
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* <View className="bg-white h-60 rounded-2xl">
             <View className="flex-col flex-1">
               <View className="flex-row p-4 space-x-4 flex-1">
                 <FontAwesome name="paypal" size={30} color="#192C88" />
@@ -52,7 +60,7 @@ const WalletScreen = () => {
               </Text>
               <View className="flex-1"></View>
             </View>
-          </View>
+          </View> */}
 
           <ContentLoader active pRows={5} title={false} pHeight={250} 
             pWidth={"100%"} loading={!Boolean(cards)}>
