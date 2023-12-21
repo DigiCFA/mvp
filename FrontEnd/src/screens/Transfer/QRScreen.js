@@ -19,6 +19,12 @@ import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
+import QRCode from "react-native-qrcode-svg";
+import * as Linking from "expo-linking";
+
+import logo_D from "../../../assets/logo/Dclear.png";
+import Spinner from "react-native-loading-spinner-overlay";
+
 
 const ScanScreen = () => {
   const { t } = useTranslation();
@@ -69,7 +75,7 @@ const ScanScreen = () => {
     <View>
       {hasPermission === null && <LoadingView />}
 
-      {hasPermission === false && <Text>{t('noCameraAccess')}</Text>}
+      {hasPermission === false && <Text>No access to camera.</Text>}
 
       {hasPermission && (
         <View className="w-4/5 aspect-square mx-10 rounded-xl border-4 border-black overflow-hidden">
@@ -85,16 +91,30 @@ const ScanScreen = () => {
 
   const getPaid = (
     <View className="flex-col items-center">
-      <Text className="text-2xl font-semibold mt-12">{user.fullName}</Text>
+      <Spinner visible={fetchUserIsLoading} />
 
-      <Text className="text-lg font-semibold">{user.phoneNumber}</Text>
+      <Text className="text-2xl font-semibold mt-12">{user?.fullName}</Text>
+
+      <Text className="text-lg font-semibold">{user?.phoneNumber}</Text>
 
       <View className="p-6">
         {/* Should be the QR code */}
-        <Image
-          source={{ uri: user.profilePicture }}
+        {/* <Image
+          source={{ uri: user?.profilePicture }}
           style={{ width: 240, height: 240 }}
+        /> */}
+
+        <QRCode
+          value="http://awesome.link.qr"
+          size={200}
+          logo={logo_D}
+          logoSize={80}
+          logoBackgroundColor="white"
+          logoMargin={-4}
+          ecl="M"
         />
+
+        {/* <QRCode value="somerandom" /> */}
       </View>
 
       <View className="flex-row mx-20">
@@ -156,10 +176,7 @@ const ScanScreen = () => {
         </View>
       </View>
 
-      {/* Scan Code */}
       {mode === 0 && scanCode}
-
-      {/* Pay Me */}
       {mode === 1 && getPaid}
 
       {/* {device != null && hasPermission && (
