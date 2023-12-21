@@ -70,7 +70,6 @@ export default {
           }
         ],
         "@react-native-firebase/app",
-        "expo-localization"
       ],
       extra: {
         eas: {

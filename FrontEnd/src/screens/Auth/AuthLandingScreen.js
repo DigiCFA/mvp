@@ -16,8 +16,11 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 
 const LoginSignupLandingScreen = () => {
+  const { t } = useTranslation();
+
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneNumberInputFocused, setIsPhoneNumberInputFocused] =
@@ -81,15 +84,15 @@ const LoginSignupLandingScreen = () => {
   const validateForm = () => {
     let errors = {};
 
-    // Validate phoneNumber field 
-    if (!phoneNumber) { 
-      errors.phoneNumber = 'Phone number is required.'; 
-    } else if (phoneNumber.length !== 10) { 
-      errors.phoneNumber = 'Phone number must be at least 6 characters.'; 
-    } 
-    // Validate password field 
-    if (!password) { 
-      errors.password = 'Password is required.'; 
+    // Validate phoneNumber field
+    if (!phoneNumber) {
+      errors.phoneNumber = t('phoneError');
+    } else if (phoneNumber.length !== 10) {
+      errors.phoneNumber = t("phoneError2");
+    }
+    // Validate password field
+    if (!password) {
+      errors.password = t("passwordError1");
     }
 
     // Set the errors and update form validity
@@ -99,8 +102,7 @@ const LoginSignupLandingScreen = () => {
 
   return (
     <SafeAreaView className="items-center bg-white flex-1">
-
-      <Spinner visible={loginIsFetching || sessionIsFetching}/>
+      <Spinner visible={loginIsFetching || sessionIsFetching} />
 
       <HideKeyboardView>
         <View className="mt-5 w-full items-center">
@@ -114,7 +116,7 @@ const LoginSignupLandingScreen = () => {
 
       <View className="w-full px-10">
         <TextInput
-          placeholder="Phone number"
+          placeholder={t("phoneNumber")}
           style={{ fontSize: 18 }}
           className={`border px-3 py-5 rounded-md ${
             isPhoneNumberInputFocused ? "border-blue-500" : "border-gray-500"
@@ -128,19 +130,15 @@ const LoginSignupLandingScreen = () => {
           }}
           onChangeText={setPhoneNumber}
         />
-        <Text className="text-red-800 font-bold">
-          {errorM.phoneNumber}
-        </Text>
+        <Text className="text-red-800 font-bold">{errorM.phoneNumber}</Text>
         <PasswordTextInput
-          placeHolder={"Password"}
+          placeHolder={t("password")}
           onChangeText={setPassword}
         />
-        <Text className="text-red-800 font-bold" >
-          {errorM.password}
-        </Text>
+        <Text className="text-red-800 font-bold">{errorM.password}</Text>
         <TouchableOpacity className="mt-1.5">
           <Text className=" text-blue-800 font-bold">
-            Forgotten your password?
+            {t('forgottenPassword')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -155,7 +153,7 @@ const LoginSignupLandingScreen = () => {
               style={{ fontSize: 18 }}
               className="text-center text-white font-bold"
             >
-              Log In
+              {t('login')}
             </Text>
           </TouchableOpacity>
 
@@ -169,7 +167,7 @@ const LoginSignupLandingScreen = () => {
               style={{ fontSize: 18 }}
               className="text-center font-bold text-blue-800"
             >
-              Sign Up
+              {t('signup')}
             </Text>
           </TouchableOpacity>
         </View>

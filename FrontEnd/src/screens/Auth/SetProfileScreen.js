@@ -15,8 +15,10 @@ import HideKeyboardView from "../../components/HideKeyboardView";
 import { selectFieldWithAttr, setField, clearAllField } from "../../redux/api/signUpSlice";
 import { useSignupMutation } from "../../redux/api/apiAuthSlice";
 import Spinner from "react-native-loading-spinner-overlay";
+import { useTranslation } from "react-i18next";
 
 const SetProfileScreen = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -53,10 +55,10 @@ const SetProfileScreen = () => {
 
     // Validate name field 
     if (!firstName) { 
-        errors.firstName = 'firstName is required.'; 
+        errors.firstName = t("nameError1"); 
     } 
     else if (!lastName) { 
-      errors.lastName = 'lastName is required.'; 
+      errors.lastName = t("nameError2"); 
   } 
 
 
@@ -82,17 +84,17 @@ const SetProfileScreen = () => {
       <HideKeyboardView>
         <View className="mx-3">
           <Text className="font-semibold" style={{ fontSize: 30 }}>
-            Set up your profile
+            {t("setUpProfile")}
           </Text>
           <Text className="font-medium" style={{ fontSize: 18 }}>
-            This information needs to be accurate
+            {t("infoAccurate")}
           </Text>
         </View>
       </HideKeyboardView>
 
       <View className="mx-3 mt-10 space-y-6">
         <TextInput
-          placeholder="First name"
+          placeholder={t("firstName")}
           value={firstName}
           style={{ fontSize: 18 }}
           className={`border px-3 py-5 rounded-md ${
@@ -110,7 +112,7 @@ const SetProfileScreen = () => {
           {errorM.firstName}
           </Text>
         <TextInput
-          placeholder="Last name"
+          placeholder={t("lastName")}
           value={lastName}
           style={{ fontSize: 18 }}
           className={`border px-3 py-5 rounded-md ${
