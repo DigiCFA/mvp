@@ -3,6 +3,10 @@ import { initReactI18next } from "react-i18next";
 import en from "./languages/en.json";
 import fr from "./languages/frAuto.json";
 
+import { getLocales } from "expo-localization";
+
+const deviceLanguage = getLocales()[0].languageCode;
+
 const resources = {
     en: {
         translation: {
@@ -23,7 +27,7 @@ i18n
             en: { translation: en},
             fr: { translation: fr}
         },
-        lng: 'en',
+        lng: deviceLanguage,
         fallbackLng: 'en',
         interpolation: {
             escapeValue: false // react escapes by default
