@@ -201,3 +201,8 @@ export const selectProfilePicFromUser = (userId) =>
     selectUserResult(userId),
     (userResult) => userResult?.data?.profilePicture
   );
+
+export const selectNameFromUser = (userId) => createSelector(
+  selectUserResult(userId),
+  (userResult) => userResult?.data?.fullName
+)
