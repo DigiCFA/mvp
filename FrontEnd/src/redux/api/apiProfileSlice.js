@@ -50,7 +50,7 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
           userId: contactId,
         }));
       },
-      // 
+      //
       transformResponse: (responseData) => {
         return contactsAdapter.setAll(contactsInitialState, responseData);
       },
@@ -147,16 +147,16 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
     }),
     uploadFcmToken: builder.mutation({
       query: (args) => {
-          const {userId, fcmToken, timestamp} = args
-          return ({
-              url: '/profile/upload_fcm_token',
-              method: 'PATCH',
-              body: {
-                  "fcm_token": fcmToken,
-                  "timestamp": timestamp,
-                  "userId": userId,
-              }
-          })
+        const { userId, fcmToken, timestamp } = args;
+        return {
+          url: "/profile/upload_fcm_token",
+          method: "PATCH",
+          body: {
+            fcm_token: fcmToken,
+            timestamp: timestamp,
+            userId: userId,
+          },
+        };
       },
     }),
   }),
@@ -170,10 +170,9 @@ export const {
   useFetchContactsByIdQuery,
   useLazyFetchSearchResultsQuery,
   useCreateDirectTransactionMutation,
-  useUploadProfilePictureMutation,useUploadFcmTokenMutation
-    ,
+  useUploadProfilePictureMutation,
+  useUploadFcmTokenMutation,
 } = extendedProfileSlice;
-
 
 // ----------------
 // SELECTORS

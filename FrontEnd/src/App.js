@@ -11,9 +11,11 @@ import {
 } from "./redux/api/apiProfileSlice";
 import { useUploadFcmTokenMutation } from "./redux/api/apiProfileSlice";
 import { useEffect, useState } from "react";
+import { useUploadFcmTokenMutation } from "./redux/api/apiProfileSlice";
+import { useEffect, useState } from "react";
 import messaging from "@react-native-firebase/messaging";
 
-import 'expo-dev-client';
+import "expo-dev-client";
 
 const App = () => {
   const {
@@ -23,78 +25,98 @@ const App = () => {
     isError: sessionIsError,
   } = useGetSessionQuery();
   const isLoggedIn = Boolean(session?.userId);
-  const {isLoading: fetchUserIsLoading, data: user, 
-    isSuccess: fetchUserIsSuccess, isError: fetchUserIsError,
-    error: fetchUserError} = useFetchUserQuery(session?.userId, { skip: !isLoggedIn})
-  const {isLoading: fetchTransactionsIsLoading, data: transactions,
-    isSuccess: fetchTransactionsIsSuccess, isError: fetchTransactionsIsError,
-    error: fetchTransactionsError} = useFetchTransactionsQuery(session?.userId, {skip: !isLoggedIn})
-  
-  const [uploadFcmToken, {error: fcmError, isFetching: fcmIsFetching, isLoading: fcmIsLoading,
-    isSuccess: fcmIsSuccess, isError: fcmIsError}] = useUploadFcmTokenMutation();
+  const {
+    isLoading: fetchUserIsLoading,
+    data: user,
+    isSuccess: fetchUserIsSuccess,
+    isError: fetchUserIsError,
+    error: fetchUserError,
+  } = useFetchUserQuery(session?.userId, { skip: !isLoggedIn });
+  const {
+    isLoading: fetchTransactionsIsLoading,
+    data: transactions,
+    isSuccess: fetchTransactionsIsSuccess,
+    isError: fetchTransactionsIsError,
+    error: fetchTransactionsError,
+  } = useFetchTransactionsQuery(session?.userId, { skip: !isLoggedIn });
 
-  const [fcmToken, setFcmToken] = useState('')
+  const [
+    uploadFcmToken,
+    {
+      error: fcmError,
+      isFetching: fcmIsFetching,
+      isLoading: fcmIsLoading,
+      isSuccess: fcmIsSuccess,
+      isError: fcmIsError,
+    },
+  ] = useUploadFcmTokenMutation();
+
+  const [fcmToken, setFcmToken] = useState("");
 
   async function requestUserPermission() {
     const authStatus = await messaging().requestPermission();
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-  
+
     if (enabled) {
-      console.log('Authorization status:', authStatus);
+      console.log("Authorization status:", authStatus);
     }
   }
 
-  useEffect(()=>{
-    if(requestUserPermission()){
-      messaging().getToken().then((token)=>{
-        setFcmToken(token)
-      })
+  useEffect(() => {
+    if (requestUserPermission()) {
+      messaging()
+        .getToken()
+        .then((token) => {
+          setFcmToken(token);
+        });
     }
     messaging()
-    .getInitialNotification()
-    .then(async remoteMessage => {
-      if (remoteMessage) {
-        console.log(
-          'Notification caused app to open from quit state:',
-          remoteMessage.notification,
-        );
-      }
-    });
-    messaging().onNotificationOpenedApp(async remoteMessage => {
+      .getInitialNotification()
+      .then(async (remoteMessage) => {
+        if (remoteMessage) {
+          console.log(
+            "Notification caused app to open from quit state:",
+            remoteMessage.notification
+          );
+        }
+      });
+    messaging().onNotificationOpenedApp(async (remoteMessage) => {
       console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage.notification,
+        "Notification caused app to open from background state:",
+        remoteMessage.notification
       );
     });
 
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log("Message handled in the background!", remoteMessage);
     });
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
     });
 
     return unsubscribe;
-      
-  },[])
+  }, []);
 
   useEffect(() => {
-
     const uploadToken = async (userId, fcmToken) => {
-      try{
-        await uploadFcmToken({userId: userId, fcmToken: fcmToken, timestamp: Date.now().toString()}).unwrap()
-      } catch(error) {
-        console.error(error)
+      try {
+        await uploadFcmToken({
+          userId: userId,
+          fcmToken: fcmToken,
+          timestamp: Date.now().toString(),
+        }).unwrap();
+      } catch (error) {
+        console.error(error);
       }
-    }
+    };
 
-    if(isLoggedIn){
-      uploadToken(session.userId, fcmToken)
+    if (isLoggedIn) {
+      uploadToken(session.userId, fcmToken);
     }
-  }, [isLoggedIn])
-  
+  }, [isLoggedIn]);
+
   return (
     <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
       <AppNavigator isLoggedIn={isLoggedIn} />

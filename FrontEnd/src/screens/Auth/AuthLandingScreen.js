@@ -81,26 +81,26 @@ const LoginSignupLandingScreen = () => {
   const validateForm = () => {
     let errors = {};
 
-    // Validate phoneNumber field
-    if (!phoneNumber) {
-      errors.phoneNumber = "phoneNumber is required.";
-    } else if (phoneNumber.length !== 10) {
-      errors.phoneNumber = "phoneNumber must be at least 6 characters.";
-    }
-    // Validate password field
-    if (!password) {
-      errors.password = "Password is required.";
+    // Validate phoneNumber field 
+    if (!phoneNumber) { 
+      errors.phoneNumber = 'Phone number is required.'; 
+    } else if (phoneNumber.length !== 10) { 
+      errors.phoneNumber = 'Phone number must be at least 6 characters.'; 
+    } 
+    // Validate password field 
+    if (!password) { 
+      errors.password = 'Password is required.'; 
     }
 
     // Set the errors and update form validity
     setErrorState(errors);
     setIsValid(Object.keys(errors).length === 0);
   };
+
   return (
     <SafeAreaView className="items-center bg-white flex-1">
-      <Spinner
-        visible={loginIsFetching || loginIsSuccess || sessionIsFetching}
-      />
+
+      <Spinner visible={loginIsFetching || sessionIsFetching}/>
 
       <HideKeyboardView>
         <View className="mt-5 w-full items-center">
