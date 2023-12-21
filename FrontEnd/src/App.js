@@ -77,7 +77,7 @@ const App = () => {
 
     const uploadToken = async (userId, fcmToken) => {
       try{
-        await uploadFcmToken({userId: userId, fcmToken: fcmToken, timestamp: Date.now()}).unwrap()
+        await uploadFcmToken({userId: userId, fcmToken: fcmToken, timestamp: Date.now().toString()}).unwrap()
       } catch(error) {
         console.error(error)
       }
