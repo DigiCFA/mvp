@@ -143,21 +143,21 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: (result, error, arg) => [
         { type: "Profile", userId: arg.userId },
-        }),
-        uploadFcmToken: builder.mutation({
-            query: (args) => {
-                const {userId, fcmToken, timestamp} = args
-                return ({
-                    url: '/profile/upload_fcm_token',
-                    method: 'PATCH',
-                    body: {
-                        "fcm_token": fcmToken,
-                        "timestamp": timestamp,
-                        "userId": userId,
-                    }
-                })
-            }
       ],
+    }),
+    uploadFcmToken: builder.mutation({
+      query: (args) => {
+          const {userId, fcmToken, timestamp} = args
+          return ({
+              url: '/profile/upload_fcm_token',
+              method: 'PATCH',
+              body: {
+                  "fcm_token": fcmToken,
+                  "timestamp": timestamp,
+                  "userId": userId,
+              }
+          })
+      },
     }),
   }),
 });
