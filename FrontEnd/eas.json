@@ -30,12 +30,8 @@
         "simulator": true
       }
     },
-
     "preview": {
-      "distribution": "internal",
-      "ios": {
-        "simulator": true
-      }
+      "distribution": "internal"
     }
   },
 
