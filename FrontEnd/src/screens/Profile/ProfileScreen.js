@@ -5,7 +5,7 @@ import {
   ScrollView,
   SafeAreaView,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { Image } from "expo-image";
 import { useSelector } from "react-redux";
 import {
@@ -18,7 +18,6 @@ import SettingsColumn from "../../components/SettingsColumn";
 import { InstagramLoader } from "react-native-easy-content-loader";
 import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
-import { profilePicBaseURL } from "../../utils/api";
 
 const ProfileScreen = () => {
   const { data: session, isLoading: getSessionIsLoading } =
@@ -30,18 +29,17 @@ const ProfileScreen = () => {
     isError: fetchUserIsError,
   } = useFetchUserQuery(session.userId, { skip: getSessionIsLoading });
 
+
+  // I believe this is the standard way to deal with the Instagram Loader
   let content = <InstagramLoader active />;
 
-  // if (getSessionIsLoading || fetchUserIsLoading) {
-  //   content = <InstagramLoader active loading={true} />;
-  // } else
   if (fetchUserIsSuccess) {
     content = (
-      <View className="bg-white flex-col items-start space-y-1 pb-4">
+      <View className="bg-white flex-col items-start pb-4">
         <View className="px-4 pt-4">
           <Image
             source={{ uri: user.profilePicture }}
-            className="h-24 w-24 rounded-full"
+            className="h-24 w-24 rounded-full mb-6"
             // onLoadStart={()=>console.log("Started to load image")}
             // onProgress={()=>console.log("LOADING...")}
             // onLoadEnd={()=>console.log("Finished loading")}
@@ -49,8 +47,8 @@ const ProfileScreen = () => {
           />
         </View>
 
-        <Text className="px-4 font-medium text-3xl">{user.fullName}</Text>
-        <Text className="px-4 font-medium">Balance: {user.balance}</Text>
+        <Text className="px-4 font-bold text-2xl">{user.fullName}</Text>
+        <Text className="px-4 font-medium text-lg">{user.phoneNumber}</Text>
       </View>
     );
   }
@@ -58,7 +56,7 @@ const ProfileScreen = () => {
   return (
     <View className="grow">
       {/* Top Bar */}
-      <View className="flex-row self-center items-center space-x-2 pt-12 pb-6 px-4 bg-blueLight">
+      <View className="flex-row self-center items-center space-x-2 pt-16 pb-2 px-4 bg-blueLight">
         <View className="flex-1"></View>
         <Text className="font-extrabold text-lg text-white">Profile</Text>
         <TouchableOpacity className="flex-1 items-end">
