@@ -156,26 +156,9 @@ router.patch("/upload_fcm_token", async (req, res, next) => {
     if (!add_user) {
       throw format_error(ERROR_CODES.ID_NOT_FOUND)
     }
-    add_user.tokens.push({
-      fcm_token:fcm_token,
-      timestamp:timestamp
-    })
-    add_user.tokens.update()
-    User.updateOne(
-      { _id: userId }, 
-      { $push: { 
-          tokens:{fcm_token:fcm_token,timestamp:timestamp}
-        },
-      },
-      { $pull: 
-        { 
-          tokens:
-          {
-            $elemMatch: { token: fcm_token}
-          }
-        }
-      }
-    );
+    
+    add_user.tokens.addToSet(fcm_token)
+    add_user.save()
     } catch (error) {
       next(error)
     }
