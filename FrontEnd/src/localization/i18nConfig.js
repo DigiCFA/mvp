@@ -24,8 +24,9 @@ i18n
             fr: { translation: fr}
         },
         lng: 'en',
+        fallbackLng: 'en',
         interpolation: {
-            escapeValue: false
+            escapeValue: false // react escapes by default
         }
         // debug: true,
 });

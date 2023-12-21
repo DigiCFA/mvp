@@ -46,13 +46,13 @@ const AppNavigator = ({isLoggedIn}) => {
   // Whether normal screens or auth screens
   const navigationScreens = isLoggedIn ? (
     <NavBar.Group screenOptions={{ headerShown: false }}>
-      <NavBar.Screen name={t('home')} component={HomeNavigator} />
+      <NavBar.Screen name={'Home'} component={HomeNavigator} options={{tabBarLabel: t('home')}}/>
 
-      <NavBar.Screen name={t('transfer')} component={TransferNavigator} />
+      <NavBar.Screen name={"Transfer"} component={TransferNavigator} options={{tabBarLabel: t('transfer')}}/>
 
-      <NavBar.Screen name={t('wallet')} component={WalletNavigator} />
+      <NavBar.Screen name={"Wallet"} component={WalletNavigator} options={{tabBarLabel: t('wallet')}}/>
 
-      <NavBar.Screen name={t('me')} component={ProfileNavigator} />
+      <NavBar.Screen name={"Me"} component={ProfileNavigator}options={{tabBarLabel: t('me')}} />
     </NavBar.Group>
   ) : (
     <NavBar.Screen
