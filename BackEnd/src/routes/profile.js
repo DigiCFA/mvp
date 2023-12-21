@@ -157,9 +157,11 @@ router.patch("/upload_fcm_token", async (req, res, next) => {
       throw format_error(ERROR_CODES.ID_NOT_FOUND)
     }
     
-    add_user.tokens.addToSet(fcm_token)
-    add_user.save()
+    await add_user.tokens.addToSet(fcm_token)
+    await add_user.save()
+    res.status(200).send({userId, fcm_token, timestamp});
     } catch (error) {
+      console.log(error);
       next(error)
     }
   });

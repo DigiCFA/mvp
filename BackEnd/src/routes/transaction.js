@@ -16,6 +16,8 @@ const router = express.Router();
 router.post("/create_direct_transaction", async (req, res, next) => {
 
   console.log(req.body)
+  console.log(req.body)
+  console.log("create_direct_transaction")
 
   const session = await mongoose.startSession();
 
