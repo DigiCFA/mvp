@@ -17,6 +17,8 @@ import { useSelector } from "react-redux";
 import { selectSelf } from "../../redux/api/selfSlice";
 import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import QRCode from "react-native-qrcode-svg";
 import * as Linking from "expo-linking";
 
@@ -25,6 +27,8 @@ import Spinner from "react-native-loading-spinner-overlay";
 
 
 const ScanScreen = () => {
+  const { t } = useTranslation();
+
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
@@ -153,7 +157,7 @@ const ScanScreen = () => {
                 mode === 0 ? "text-black" : "text-gray-500"
               }`}
             >
-              Scan code
+              {t("scanCode")}
             </Text>
           </TouchableOpacity>
 
@@ -166,7 +170,7 @@ const ScanScreen = () => {
                 mode === 1 ? "text-black" : "text-gray-500"
               }`}
             >
-              Get paid
+              {t('getPaid')}
             </Text>
           </TouchableOpacity>
         </View>

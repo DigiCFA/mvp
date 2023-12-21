@@ -15,12 +15,12 @@ import UsersColumn from "../../components/UsersColumn";
 import { searchUsers } from "../../utils/api";
 import ResultsColumn from "../../components/ResultsColumn";
 import Spinner from "react-native-loading-spinner-overlay";
-import {
-  useLazyFetchSearchResultsQuery,
-} from "../../redux/api/apiProfileSlice";
+import { useLazyFetchSearchResultsQuery } from "../../redux/api/apiProfileSlice";
 import ContentLoader from "react-native-easy-content-loader";
+import { useTranslation } from "react-i18next";
 
 const SearchScreen = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
 
   const [query, setQuery] = useState("");
@@ -91,7 +91,7 @@ const SearchScreen = () => {
         {/* Search */}
         <View className="px-4 py-2 rounded-full border-2 border-blue-600 flex-1">
           <TextInput
-            placeholder="Phone number, name"
+            placeholder={t("search")}
             keyboardType="default"
             className="font-medium"
             style={{ fontSize: 18 }}
@@ -134,13 +134,13 @@ const SearchScreen = () => {
         {query === "" ? (
           <View>
             <Text className="text-xl text-gray-800 mb-2">
-              Suggested Contacts
+              {t("suggestedContacts")}
             </Text>
             <UsersColumn />
           </View>
         ) : (
           <View>
-            <Text className="text-xl text-gray-800 mb-2">Users on DigiCFA</Text>
+            <Text className="text-xl text-gray-800 mb-2">{t('searchResults')}</Text>
             {content}
           </View>
         )}

@@ -12,6 +12,7 @@ import {
 } from "../../redux/api/apiProfileSlice";
 import * as ImagePicker from "expo-image-picker";
 import Spinner from "react-native-loading-spinner-overlay";
+import { t } from "i18next";
 
 const AccountInfoScreen = () => {
   const navigation = useNavigation();
@@ -92,7 +93,7 @@ const AccountInfoScreen = () => {
           <TouchableOpacity onPress={navigation.goBack} className="flex-1">
             <Ionicons name="arrow-back" size={30} color="grey" />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold">Account info</Text>
+          <Text className="text-lg font-semibold">{t('accountInfo')}</Text>
 
           <View className="flex-1"></View>
         </View>
@@ -108,7 +109,7 @@ const AccountInfoScreen = () => {
           </View>
 
           <TouchableOpacity onPress={pickPhoto}>
-            <Text className=" text-gray-600 font-medium">Change Photo</Text>
+            <Text className=" text-gray-600 font-medium">{t('changePhoto')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -122,7 +123,7 @@ const AccountInfoScreen = () => {
       <View className="bg-white grow p-4">
         <View className="flex-row items-center pb-4 border-b border-gray-300">
           <View className="flex-col flex-1 space-y-1">
-            <Text className="text-gray-500">user ID</Text>
+            <Text className="text-gray-500">{t('userId')}</Text>
             <Text className="text-base font-medium">{user?._id}</Text>
           </View>
         </View>
@@ -132,7 +133,7 @@ const AccountInfoScreen = () => {
           className="flex-row items-center py-4 border-b border-gray-300"
         >
           <View className="flex-col flex-1 space-y-1">
-            <Text className="text-gray-500">Phone Numbers</Text>
+            <Text className="text-gray-500">{t('phoneNumbers')}</Text>
             <Text className="text-base font-medium">{user?.phoneNumber}</Text>
           </View>
 
@@ -143,7 +144,7 @@ const AccountInfoScreen = () => {
           className="flex-row items-center py-4 border-b border-gray-300"
         >
           <View className="flex-col flex-1 space-y-1">
-            <Text className="text-gray-500">Addresses</Text>
+            <Text className="text-gray-500">{t('addresses')}</Text>
             {/* {addressSection()} */}
           </View>
 

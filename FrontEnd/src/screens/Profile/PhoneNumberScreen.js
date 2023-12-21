@@ -12,8 +12,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice"
 import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
+import { useTranslation } from "react-i18next";
 
 const PhoneNumberScreen = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
 
   const {data: session} = useGetSessionQuery()
@@ -31,9 +33,9 @@ const PhoneNumberScreen = () => {
         </View>
 
         <View className="mx-10 mt-10 mb-6 flex-col space-y-2">
-          <Text className="text-xl font-bold">Phone Numbers</Text>
+          <Text className="text-xl font-bold">{t('phoneNumbers')}</Text>
           <Text className="text-gray-500 font-medium">
-            Manage your communication preferences.
+            {t('phoneNumbersText')}
           </Text>
 
           <TouchableOpacity
@@ -42,7 +44,7 @@ const PhoneNumberScreen = () => {
           >
             <Ionicons name="add" size={30} color="#3370E2" />
             <Text className="text-base font-semibold text-blueLight">
-              Add a phone number
+              {t('addPhoneNumber')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -63,8 +65,8 @@ const PhoneNumberScreen = () => {
             <View className="flex-col flex-1 space-y-1">
               <Text className="text-gray-500">
                 {index == 0
-                  ? "Primary Phone Number"
-                  : `Phone Number ${index + 1}`}
+                  ? t('primaryPhoneNumber')
+                  : t('otherPhoneNumber', {num: index+1})}
               </Text>
               <Text className="text-base font-medium">{phoneNumber}</Text>
             </View>

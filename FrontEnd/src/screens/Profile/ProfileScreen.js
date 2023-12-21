@@ -18,8 +18,10 @@ import SettingsColumn from "../../components/SettingsColumn";
 import { InstagramLoader } from "react-native-easy-content-loader";
 import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
+import { useTranslation } from "react-i18next";
 
 const ProfileScreen = () => {
+  const { t } = useTranslation();
   const { data: session, isLoading: getSessionIsLoading } =
     useGetSessionQuery();
   const {
@@ -58,7 +60,7 @@ const ProfileScreen = () => {
       {/* Top Bar */}
       <View className="flex-row self-center items-center space-x-2 pt-16 pb-2 px-4 bg-blueLight">
         <View className="flex-1"></View>
-        <Text className="font-extrabold text-lg text-white">Profile</Text>
+        <Text className="font-extrabold text-lg text-white">{t('profile')}</Text>
         <TouchableOpacity className="flex-1 items-end">
           <Ionicons name="notifications" size={24} color="white" />
         </TouchableOpacity>

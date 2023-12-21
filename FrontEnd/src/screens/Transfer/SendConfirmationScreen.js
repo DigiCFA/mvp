@@ -2,8 +2,10 @@ import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import React from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 const SendConfirmationScreen = () => {
+  const { t } = useTranslation();
   const {
     params: { name, amount, message },
   } = useRoute();
@@ -43,9 +45,9 @@ const SendConfirmationScreen = () => {
       </View>
 
       <View className="flex-1 flex-col items-center py-20">
-        <Text className="text-2xl font-medium">${amount} sent!</Text>
+        <Text className="text-2xl font-medium">{t('moneySent', { amount })}</Text>
         <Text className="text-lg font-medium">"{message}"</Text>
-        <Text className="text-lg font-medium">We'll let {firstName} know.</Text>
+        <Text className="text-lg font-medium">{t('confirmationMessage', { name: firstName })}</Text>
       </View>
     </SafeAreaView>
   );

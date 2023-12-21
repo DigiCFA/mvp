@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ScrollView
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 
 import { useCardAnimation } from "@react-navigation/stack";
 import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
@@ -17,8 +17,11 @@ import CardsColumn from "../../components/CardsColumn";
 import { useSelector } from "react-redux";
 import { selectCardsFromUser, selectBalanceFromUser} from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
+import { useTranslation } from "react-i18next";
 
 const PaymentMethodsScreen = () => {
+
+  const { t } = useTranslation();
   
   const {data: session} = useGetSessionQuery()
 
@@ -88,7 +91,7 @@ const PaymentMethodsScreen = () => {
                 <Ionicons name="arrow-back" size={30} color="grey" />
               </TouchableOpacity>
 
-              <Text className="text-lg font-semibold">Choose a way to pay</Text>
+              <Text className="text-lg font-semibold">{t('choosePayment')}</Text>
 
               <View className="flex-1"></View>
             </View>
@@ -111,8 +114,7 @@ const PaymentMethodsScreen = () => {
               <View className="mb-1">
                 {!balanceSufficient && (
                   <Text className="font-semibold text-base text-red-600 text-center">
-                    Insufficient balance! {"\n"}Please top up or choose a credit
-                    card.
+                    {t('insufficientBalance')}
                   </Text>
                 )}
               </View>
@@ -138,7 +140,7 @@ const PaymentMethodsScreen = () => {
                 }}
                 className="bg-blue-900 rounded-full py-3 px-14 items-center"
               >
-                <Text className="text-white text-xl font-extrabold">Send</Text>
+                <Text className="text-white text-xl font-extrabold">{t('send')}</Text>
               </TouchableOpacity>
             </View>
           </View>
