@@ -38,8 +38,10 @@ export const extendedSessionSlice = apiSlice.injectEndpoints({
                 url: '/auth/obtain_session',
                 method: 'GET'
             }),
-            providesTags: (result, error, arg) => (result.userId ? 
-                [{type: 'Session', userId: result.userId},{type: 'Session', userId: 'GENERIC'}] : [{type: 'Session', userId: 'GENERIC'}])
+            providesTags: (result, error, arg) => {
+                return (result.userId ? 
+                    [{type: 'Session', userId: result.userId},{type: 'Session', userId: 'GENERIC'}] : [{type: 'Session', userId: 'GENERIC'}])
+            }
         }),
     })
 })
