@@ -8,13 +8,17 @@ import {
 import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import {useDispatch} from 'react-redux'
+import { useDispatch } from "react-redux";
 
 import PasswordTextInput from "../../components/PasswordTextInput";
 import HideKeyboardView from "../../components/HideKeyboardView";
 import { setField } from "../../redux/api/signUpSlice";
+import { useTranslation } from "react-i18next";
 
 const SetPasswordScreen = () => {
+
+  const { t } = useTranslation();
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [errorState, setErrorState] = useState({});
@@ -23,28 +27,25 @@ const SetPasswordScreen = () => {
   const [passwordIsValid, setPasswordIsValid] = useState(false);
   const [password, setPassword] = useState("");
   const [retypedPassword, setRetypedPassword] = useState("");
-  useEffect(() => { 
-    validateForm(); 
-  }, [password,retypedPassword]); 
-  const validateForm = () => { 
-    let errors = {}; 
+  useEffect(() => {
+    validateForm();
+  }, [password, retypedPassword]);
+  const validateForm = () => {
+    let errors = {};
 
-    
-
-    // Validate password field 
-    if (!password) { 
-        errors.password = 'Password is required.'; 
-    } else if (password.length < 6) { 
-        errors.password = 'Password must be at least 6 characters.'; 
-    }
-    else if (password !== retypedPassword) { 
-      errors.retypedPassword = 'Passwords must match.';
+    // Validate password field
+    if (!password) {
+      errors.password = t("passwordError1");
+    } else if (password.length < 6) {
+      errors.password = t("passwordError2");
+    } else if (password !== retypedPassword) {
+      errors.retypedPassword = t("passwordError3");
     }
 
-    // Set the errors and update form validity 
-    setErrorState(errors); 
-    setPasswordIsValid(Object.keys(errors).length === 0); 
-  }; 
+    // Set the errors and update form validity
+    setErrorState(errors);
+    setPasswordIsValid(Object.keys(errors).length === 0);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -63,29 +64,29 @@ const SetPasswordScreen = () => {
       <HideKeyboardView>
         <View className="mx-3">
           <Text className="font-semibold" style={{ fontSize: 30 }}>
-            How you'll log in
+            {t("howYouLogIn")}
           </Text>
           <Text className="font-medium" style={{ fontSize: 18 }}>
-            Make sure you keep it secure.
+            {t("keepItSafe")}
           </Text>
         </View>
       </HideKeyboardView>
 
       <View className="mx-3">
         <PasswordTextInput
-          placeHolder={"Password"}
+          placeHolder={t("password")}
           onChangeText={setPassword}
         />
         <Text className="text-red-700" style={{ fontSize: 10 }}>
           {errorM.password}
-          </Text>
+        </Text>
         <PasswordTextInput
-          placeHolder={"Retype Password"}
+          placeHolder={t("passwordRetype")}
           onChangeText={setRetypedPassword}
         />
         <Text className="text-red-700" style={{ fontSize: 10 }}>
-            {errorM.retypedPassword}
-          </Text>
+          {errorM.retypedPassword}
+        </Text>
       </View>
 
       <HideKeyboardView>
@@ -99,13 +100,11 @@ const SetPasswordScreen = () => {
         <TouchableOpacity
           className="bg-blue-800 rounded-full py-4 mx-3"
           onPress={() => {
-            if(passwordIsValid){
-              dispatch(setField({field: "password", content: password}))
+            if (passwordIsValid) {
+              dispatch(setField({ field: "password", content: password }));
               navigation.navigate("Profile");
-            }
-            else{
-              setErrorM(errorState)
-
+            } else {
+              setErrorM(errorState);
             }
           }}
         >
@@ -113,7 +112,7 @@ const SetPasswordScreen = () => {
             className="text-center font-bold text-white"
             style={{ fontSize: 20 }}
           >
-            Next
+            {t("next")}
           </Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

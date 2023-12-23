@@ -1,28 +1,35 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
-
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { selectProfilePicFromUser } from "../../redux/api/apiProfileSlice";
-import { useGetSessionQuery } from '../../redux/api/apiAuthSlice'
-import { useFetchUserQuery, useUploadProfilePictureMutation } from "../../redux/api/apiProfileSlice";
-
+import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
+import {
+  useFetchUserQuery,
+  useUploadProfilePictureMutation,
+} from "../../redux/api/apiProfileSlice";
 import * as ImagePicker from "expo-image-picker";
+import Spinner from "react-native-loading-spinner-overlay";
+import { t } from "i18next";
+
 const AccountInfoScreen = () => {
   const navigation = useNavigation();
 
-  const profilePicBaseURL = "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
-
-  const {data: session} = useGetSessionQuery()
-  const {data: user, isLoading: fetchUserIsLoading} = useFetchUserQuery(session.userId)
-  const [uploadProfilePic, {isLoading: profileUploadIsLoading, isError: profileUploadIsError,
-    isFetching: profileUploadIsFetching, isSuccess: profileUploadIsSuccess}] = useUploadProfilePictureMutation()
+  const { data: session } = useGetSessionQuery();
+  const { data: user, isLoading: fetchUserIsLoading } = useFetchUserQuery(
+    session.userId
+  );
+  const [
+    uploadProfilePic,
+    {
+      isLoading: profileUploadIsLoading,
+      isError: profileUploadIsError,
+      isFetching: profileUploadIsFetching,
+      isSuccess: profileUploadIsSuccess,
+    },
+  ] = useUploadProfilePictureMutation();
   const profilePic = useSelector(selectProfilePicFromUser(session.userId));
 
   const pickPhoto = async () => {
@@ -37,21 +44,24 @@ const AccountInfoScreen = () => {
 
     if (!result.canceled) {
       try {
-        const imageURI = result.assets[0].uri
-        await uploadProfilePic({userId: session.userId, imageURI: imageURI}).unwrap()
+        const imageURI = result.assets[0].uri;
+        await uploadProfilePic({
+          userId: session.userId,
+          imageURI: imageURI,
+        }).unwrap();
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
   };
 
-  console.log(profilePicBaseURL + profilePic)
-
   const addressSection = () => {
-    if(Object.values(user?.addresses[0]).slice(0,-1).every(value => value === "Not set")){
-      return (
-        <Text className="text-base font-medium">Not Set</Text>
-      )
+    if (
+      Object.values(user?.addresses[0])
+        .slice(0, -1)
+        .every((value) => value === "Not set")
+    ) {
+      return <Text className="text-base font-medium">Not Set</Text>;
     }
     return (
       <>
@@ -60,26 +70,30 @@ const AccountInfoScreen = () => {
         </Text>
         <View>
           {user?.addresses[0].lineTwo != "Not Set" && (
-          <Text className="text-base font-medium">
-            {user?.addresses[0].lineTwo}
-          </Text>)}
+            <Text className="text-base font-medium">
+              {user?.addresses[0].lineTwo}
+            </Text>
+          )}
           <Text className="text-base font-medium">
             {user?.addresses[0].city}, {user?.addresses[0].zipCode}
           </Text>
         </View>
       </>
-    )
-  }
+    );
+  };
 
   return (
     <View className="h-screen bg-white">
+
+      <Spinner visible={profileUploadIsLoading | fetchUserIsLoading}/>
+
       <View className="bg-beige pb-8">
         {/* Top Bar */}
         <View className="flex-row justify-items-start items-center space-x-2 pt-12 px-4">
           <TouchableOpacity onPress={navigation.goBack} className="flex-1">
             <Ionicons name="arrow-back" size={30} color="grey" />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold">Account info</Text>
+          <Text className="text-lg font-semibold">{t('accountInfo')}</Text>
 
           <View className="flex-1"></View>
         </View>
@@ -95,7 +109,7 @@ const AccountInfoScreen = () => {
           </View>
 
           <TouchableOpacity onPress={pickPhoto}>
-            <Text className=" text-gray-600 font-medium">Change Photo</Text>
+            <Text className=" text-gray-600 font-medium">{t('changePhoto')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -109,7 +123,7 @@ const AccountInfoScreen = () => {
       <View className="bg-white grow p-4">
         <View className="flex-row items-center pb-4 border-b border-gray-300">
           <View className="flex-col flex-1 space-y-1">
-            <Text className="text-gray-500">user ID</Text>
+            <Text className="text-gray-500">{t('userId')}</Text>
             <Text className="text-base font-medium">{user?._id}</Text>
           </View>
         </View>
@@ -119,7 +133,7 @@ const AccountInfoScreen = () => {
           className="flex-row items-center py-4 border-b border-gray-300"
         >
           <View className="flex-col flex-1 space-y-1">
-            <Text className="text-gray-500">Phone Numbers</Text>
+            <Text className="text-gray-500">{t('phoneNumbers')}</Text>
             <Text className="text-base font-medium">{user?.phoneNumber}</Text>
           </View>
 
@@ -127,11 +141,10 @@ const AccountInfoScreen = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate("Address")}
           className="flex-row items-center py-4 border-b border-gray-300"
         >
           <View className="flex-col flex-1 space-y-1">
-            <Text className="text-gray-500">Addresses</Text>
+            <Text className="text-gray-500">{t('addresses')}</Text>
             {/* {addressSection()} */}
           </View>
 

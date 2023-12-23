@@ -12,7 +12,10 @@ import Currency from "react-currency-formatter";
 import { intlFormat } from "../../utils/currencyFormatter";
 import { dinero, toSnapshot } from 'dinero.js';
 import { USD } from '@dinero.js/currencies';
+import { useTranslation } from "react-i18next";
+
 const TransactionScreen = () => {
+  const { t } = useTranslation();
   const {
     params: { id, userPays, title, fullDate, message, paymentMethod, amount },
   } = useRoute();
@@ -26,7 +29,7 @@ const TransactionScreen = () => {
           <Ionicons name="arrow-back" size={30} color="grey" />
         </TouchableOpacity>
         <Text className="text-lg font-semibold">
-          Money {userPays ? "sent" : "received"}
+          {t("money", { action: userPays ? t("sent") : t("received") })}
         </Text>
 
         <View className="flex-1"></View>
@@ -54,7 +57,9 @@ const TransactionScreen = () => {
             </View>
             <Text className="font-medium">{fullDate}</Text>
             <TouchableOpacity>
-              <Text className="font-bold text-blue-600">Show history</Text>
+              <Text className="font-bold text-blue-600">
+                {t("showHistory")}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -62,13 +67,13 @@ const TransactionScreen = () => {
         <View className="p-4 bg-white space-y-2">
           <Text className="text-base font-medium">{message}</Text>
           <TouchableOpacity>
-            <Text className="font-bold text-blue-600">Show story</Text>
+            <Text className="font-bold text-blue-600">{t("showStory")}</Text>
           </TouchableOpacity>
         </View>
 
         <View className="mt-2 p-4 bg-white space-y-2">
           <Text className="text-base font-bold">
-            {userPays ? "From" : "To"}
+            {userPays ? t("from") : t("to")}
           </Text>
           <Text className="text-base font-medium">
             {paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1)}
@@ -76,15 +81,15 @@ const TransactionScreen = () => {
         </View>
 
         <View className="mt-2 p-4 bg-white space-y-2">
-          <Text className="text-base font-bold">Transaction ID</Text>
+          <Text className="text-base font-bold">{t("transactionID")}</Text>
           <Text className="text-base font-medium">{id}</Text>
         </View>
 
         <View className="mt-2 p-4 bg-white space-y-2">
-          <Text className="text-base font-bold">Need help?</Text>
+          <Text className="text-base font-bold">{t("needHelp")}</Text>
           <TouchableOpacity className="flex-row space-x-2">
             <Ionicons name="warning" size={24} color="#192C88" />
-            <Text className="text-base font-medium">Report a Problem</Text>
+            <Text className="text-base font-medium">{t("report")}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

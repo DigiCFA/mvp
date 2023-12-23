@@ -13,8 +13,11 @@ import VerificationCodeInput from "../../components/VerificationCodeInput";
 import HideKeyboardView from "../../components/HideKeyboardView";
 import { useSelector } from "react-redux";
 import { selectFieldWithAttr } from "../../redux/api/signUpSlice";
+import { useTranslation } from "react-i18next";
 
 const PhoneVerificationScreen = () => {
+
+  const { t } = useTranslation();
 
   const phoneNumber = useSelector(selectFieldWithAttr("phoneNumber"));
   const navigation = useNavigation();
@@ -38,10 +41,10 @@ const PhoneVerificationScreen = () => {
 
         <View className="mx-3 space-y-1">
           <Text style={{ fontSize: 27 }} className="font-semibold">
-            Confirm your phone number
+            {t("confirmNumber")}
           </Text>
           <Text style={{ fontSize: 16 }} className="font-semibold">
-            Code sent to {phoneNumber}
+            {t("codeSent", {number: phoneNumber})}
           </Text>
         </View>
 
@@ -55,7 +58,7 @@ const PhoneVerificationScreen = () => {
         <View className="items-center mt-10">
           <TouchableOpacity>
             <Text className="text-blue-800 font-bold" style={{ fontSize: 15 }}>
-              Send a new code
+              {t("newCode")}
             </Text>
           </TouchableOpacity>
         </View>

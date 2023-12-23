@@ -4,6 +4,7 @@ import morgan, { format } from "morgan";
 import connectStore from "connect-mongo";
 import session from "express-session";
 import routes from "./routes/index.js";
+import 'saslprep'
 import "dotenv/config.js";
 import {
   ERROR_CODES,
@@ -48,12 +49,7 @@ app.use("/api", routes);
 
 app.use((err, req, res, next) => {
   const recognised = KNOWN_ERROR_CODES.includes(err.code);
-  console.log(err);
-  console.log(
-    "Error has occured with code",
-    err.code,
-    recognised ? "ERROR CODE RECOGNISED" : "ERROR CODE UNRECOGNISED"
-  );
+
   if (err.code && !recognised) {
     err.code = ERROR_CODES.UNKNOWN_ERROR;
   }
@@ -64,17 +60,10 @@ app.use((err, req, res, next) => {
     : ERROR_MESSAGES[err.code];
 
   const httpStatus = mapErrorCodeToHttpCode(err.code);
-  // console.log("invoked");
-  // console.log("This is the full error: ", err);
-  // console.log(message)
+  console.log("invoked");
+  console.log("This is the full error: ", err);
+  console.log(message)
   res.status(httpStatus).send(message);
-
-  // error_response = {
-  //     status: "error",
-  //     errorCode: null,
-  //     message: null,
-  //     details: {}
-  // }
 });
 
 // import serviceAccount from ("path/to/serviceAccountKey.json");

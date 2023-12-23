@@ -5,9 +5,11 @@ import axios from "axios";
 
 import * as FileSystem from "expo-file-system";
 
+
+// THIS IS ALL WRONG - DO NOT USE
 const baseURL = "https://o4gnaf7sce.execute-api.af-south-1.amazonaws.com/prod/api"
-export const profilePicBaseURL =
-  "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
+// export const profilePicBaseURL =
+//   "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
 
 
 const instance = axios.create({

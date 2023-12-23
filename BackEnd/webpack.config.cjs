@@ -6,17 +6,14 @@ Gateway.
 This file specifies how the backend should be bundled. 
 */
 
-const path = require('path')
-const CopyPlugin = require("copy-webpack-plugin")
+const path = require("path");
+const CopyPlugin = require("copy-webpack-plugin");
 // import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-
 
 // import {fileURLToPath} from 'url';
 // const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
 
 module.exports = {
   entry: "./src/lambda.js",
@@ -27,27 +24,24 @@ module.exports = {
     path: path.join(__dirname, "dist"),
     filename: "[name].js",
     // library: 'serverlessExpressEdge',
-    libraryTarget: 'commonjs2'
+    libraryTarget: "commonjs2",
   },
   module: {
-    rules: [
-        { test: /\.node$/, use: "node-loader"}
-    ]
+    rules: [{ test: /\.node$/, use: "node-loader" }],
   },
   plugins: [
-
-    // For supressing the "No saslprep library specified." ERROR
     new CopyPlugin({
       patterns: [
         {
           from: require.resolve("saslprep/code-points.mem"),
-          to: "../src/code-points.mem"
-        }
-      ]
-    })
-    // new BundleAnalyzerPlugin()
+          to: "../code-points.mem",
+        },
+      ],
+    }),
+    // For supressing the "No saslprep library specified." ERROR
   ],
   externals: {
+    // DOES NOT WORK
     // "saslprep": "require('saslprep')"
-  }
+  },
 };

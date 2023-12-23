@@ -3,6 +3,7 @@ import express from "express";
 import { upload } from "../middleware/multer.js";
 import { retrieveFromS3, uploadToS3 } from "../controllers/awsController.js";
 import { format_error, ERROR_CODES } from "../utils/errorHandling.js";
+import { profilePicBaseURL } from "../config/awsConfig.js";
 
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
@@ -12,7 +13,6 @@ import { dinero } from 'dinero.js';
 
 const router = express.Router();
 
-const profilePicBaseURL = "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
 
 router.get("/retrieve_user", async (req, res, next) => {
   let userId = req.query.userId;
@@ -25,12 +25,12 @@ router.get("/retrieve_user", async (req, res, next) => {
     });
 
     if (!user) {
-      throw format_error(ERROR_CODES.ID_NOT_FOUND)
+      throw format_error(ERROR_CODES.ID_NOT_FOUND);
     } else {
       res.status(200).json(user);
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 
@@ -44,34 +44,33 @@ router.get("/retrieve_user_by_phone_number", async (req, res, next) => {
     });
 
     if (!user) {
-      throw format_error(ERROR_CODES.PHONE_NUMBER_NOT_FOUND)
+      throw format_error(ERROR_CODES.PHONE_NUMBER_NOT_FOUND);
     } else {
       res.status(200).json(user);
     }
   } catch (error) {
-    return next(error)
+    return next(error);
   }
 });
 
 router.get("/retrieve_contacts", async (req, res, next) => {
   let userId = req.query.userId;
-  try{
+  try {
     let user = await User.findById(userId).populate({
       path: "contacts",
       perDocumentLimit: 10,
-      select: ["_id", "fullName", "phoneNumber"]
+      select: ["_id", "fullName", "phoneNumber"],
     });
 
-    if(!user){
+    if (!user) {
       throw format_error(ERROR_CODES.ID_NOT_FOUND);
     } else {
-      res.status(200).json(user.contacts)
+      res.status(200).json(user.contacts);
     }
-
-  } catch (error){
-    return next(error)
+  } catch (error) {
+    return next(error);
   }
-})
+});
 
 router.get("/retrieve_transactions", async (req, res, next) => {
   let userId = req.query.userId;
@@ -87,7 +86,7 @@ router.get("/retrieve_transactions", async (req, res, next) => {
     if (transactions.length === 0) res.status(200).send([]);
     else res.status(200).send(transactions);
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 
@@ -104,28 +103,28 @@ router.get("/search_users", async (req, res, next) => {
               autocomplete: {
                 query: query,
                 path: "firstName",
-                fuzzy: {"maxEdits": 1},
+                fuzzy: { maxEdits: 1 },
               },
             },
             {
               autocomplete: {
                 query: query,
                 path: "lastName",
-                fuzzy: {"maxEdits": 1},
+                fuzzy: { maxEdits: 1 },
               },
             },
             {
               autocomplete: {
                 query: query,
                 path: "fullName",
-                fuzzy: {"maxEdits": 1},
+                fuzzy: { maxEdits: 1 },
               },
             },
             {
               autocomplete: {
                 query: query,
                 path: "phoneNumber",
-                fuzzy: {"maxEdits": 1},
+                fuzzy: { maxEdits: 1 },
               },
             },
           ],
@@ -140,44 +139,29 @@ router.get("/search_users", async (req, res, next) => {
       });
     res.status(200).send(result);
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
+
 router.patch("/upload_fcm_token", async (req, res, next) => {
   let userId = req.body.userId;
   let fcm_token = req.body.fcm_token;
   let timestamp = req.body.timestamp;
 
+  console.log('upload_fcm_token', userId, fcm_token, timestamp)
 
   try {
 
     let add_user = await User.findById(userId)
-    add_user.tokens.push({
-      fcm_token:fcm_token,
-      timestamp:timestamp
-    })
-    add_user.tokens.update()
-    User.updateOne(
-      { _id: userId }, 
-      { $push: { 
-          tokens:{fcm_token:fcm_token,timestamp:timestamp}
-        },
-      },
-      { $pull: 
-        { 
-          tokens:
-          {
-            $elemMatch: { token: fcm_token}
-          }
-        }
-      }
-    );
-      if (!user) {
-        throw format_error(ERROR_CODES.ID_NOT_FOUND)
-      } else {
-        res.status(200).json(user);
-      }
+    if (!add_user) {
+      throw format_error(ERROR_CODES.ID_NOT_FOUND)
+    }
+    
+    await add_user.tokens.addToSet(fcm_token)
+    await add_user.save()
+    res.status(200).send({userId, fcm_token, timestamp});
     } catch (error) {
+      console.log(error);
       next(error)
     }
   });
@@ -225,7 +209,7 @@ router.get("/retrieve_user_with_certain_fields", async (req, res, next) => {
     res.status(200).json(user);
     // res.status(200).send(transactions);
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 
@@ -235,7 +219,7 @@ router.patch("/add_card", async (req, res, next) => {
     let user = await User.findById(userId);
 
     if (!user) {
-      throw format_error(ERROR_CODES.ID_NOT_FOUND)
+      throw format_error(ERROR_CODES.ID_NOT_FOUND);
     }
 
     const newCard = await user.cards.create({
@@ -263,14 +247,14 @@ router.patch("/add_card", async (req, res, next) => {
     );
 
     if (card.cards.length != 0) {
-      throw format_error(ERROR_CODES.DUPLICATE_KEY, "Card")
+      throw format_error(ERROR_CODES.DUPLICATE_KEY, "Card");
     } else {
       await user.cards.addToSet(newCard);
       await user.save();
       res.status(200).json(newCard);
     }
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 
@@ -283,7 +267,7 @@ router.patch("/remove_card", async (req, res, next) => {
   try {
     let user = await User.findById(userId);
     if (!user) {
-      throw format_error(ERROR_CODES.ID_NOT_FOUND)
+      throw format_error(ERROR_CODES.ID_NOT_FOUND);
     }
 
     await user.cards.pull(cardId);
@@ -291,7 +275,7 @@ router.patch("/remove_card", async (req, res, next) => {
 
     res.status(200).json(user);
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 
@@ -299,10 +283,10 @@ router.patch(
   "/set_profile_pic",
   upload.single("profilePicture"),
   async (req, res, next) => {
-    console.log("head", req.headers)
-    console.log("body", req.body)
-    console.log("data", res.data)
-    console.log("file", req.file)
+    console.log("head", req.headers);
+    console.log("body", req.body);
+    console.log("data", res.data);
+    console.log("file", req.file);
     let userId = req.body.userId;
     const { originalname, buffer } = req.file;
 
@@ -315,7 +299,7 @@ router.patch(
     try {
       let user = await User.findById(userId);
       if (!user) {
-        throw format_error(ERROR_CODES.ID_NOT_FOUND)
+        throw format_error(ERROR_CODES.ID_NOT_FOUND);
       }
 
       await uploadToS3(params);
@@ -326,7 +310,7 @@ router.patch(
 
       res.status(200).json(user);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 );
@@ -336,7 +320,7 @@ router.patch("/add_balance", async (req, res, next) => {
   try {
     let user = await User.findById(userId);
     if (!user) {
-      throw format_error(ERROR_CODES.ID_NOT_FOUND)
+      throw format_error(ERROR_CODES.ID_NOT_FOUND);
     }
     
     let userBalance = dinero(sendUser.balance);
@@ -347,7 +331,7 @@ router.patch("/add_balance", async (req, res, next) => {
     await user.save();
     res.status(200).json(user);
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 

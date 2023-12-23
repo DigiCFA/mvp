@@ -13,6 +13,8 @@ import Currency from "react-currency-formatter";
 import { onChange } from "react-native-reanimated";
 import { dinero, toSnapshot } from 'dinero.js';
 import { USD } from '@dinero.js/currencies';
+import { useTranslation } from "react-i18next";
+
 const numericRE = new RegExp("^[0-9.]*$");
 const startsWithTwoDigits = new RegExp("^[0-9]{2}.");
 
@@ -34,6 +36,7 @@ const amountInvalid = (amount) =>
   countWhole(Number(amount)) > 5;
 
 const UserScreen = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const [amount, onChangeAmount] = useState("0.00");
   const [message, onChangeMessage] = useState("");
@@ -68,7 +71,7 @@ const UserScreen = () => {
                 amountValid ? "text-black" : "text-red-600"
               }`}
             >
-              $
+              CFA
             </Text>
           </View>
 
@@ -100,14 +103,14 @@ const UserScreen = () => {
             <View className="self-center flex-row space-x-2">
               <FontAwesome5 name="exclamation" size={20} color="red" />
               <Text className="font-medium text-base text-red-600">
-                Enter an amount more than $0
+                {t('amountError')}
               </Text>
             </View>
           )}
         </View>
 
         <View className="self-center bg-[#e9e7e2] rounded-lg">
-          <Text className="text-lg px-1">USD</Text>
+          <Text className="text-lg px-1">XAF</Text>
         </View>
       </View>
 
@@ -118,7 +121,7 @@ const UserScreen = () => {
         <View className="mt-auto">
           {/* Comments associated with the transaction */}
           <TextInput
-            placeholder="What's this for?"
+            placeholder={t('message')}
             keyboardType="default"
             placeholderTextColor={messageValid ? "gray" : "#dc2626"}
             multiline={true}
@@ -136,7 +139,7 @@ const UserScreen = () => {
             {!messageValid && (
               <View className="self-center flex-row space-x-2">
                 <Text className="font-medium text-base text-red-600">
-                  Please write a message. Ex: dinner, fruits.
+                  {t('messageError')}
                 </Text>
               </View>
             )}
@@ -163,7 +166,7 @@ const UserScreen = () => {
               }}
               className="bg-blueDark rounded-full py-3 px-8"
             >
-              <Text className="text-white text-xl font-extrabold">Request</Text>
+              <Text className="text-white text-xl font-extrabold">{t('request')}</Text>
             </TouchableOpacity>
 
             {/* Pay */}
@@ -186,7 +189,7 @@ const UserScreen = () => {
               }}
               className="bg-blue-900 rounded-full py-3 px-14"
             >
-              <Text className="text-white text-xl font-extrabold">Pay</Text>
+              <Text className="text-white text-xl font-extrabold">{t('pay')}</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -6,6 +6,7 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 
 import HomeNavigator from "./HomeNavigator";
@@ -19,6 +20,8 @@ const NavBar = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 
 const AppNavigator = ({isLoggedIn}) => {
+
+  const { t } = useTranslation();
 
   const tabHiddenRoutes = [
     "User",
@@ -43,13 +46,13 @@ const AppNavigator = ({isLoggedIn}) => {
   // Whether normal screens or auth screens
   const navigationScreens = isLoggedIn ? (
     <NavBar.Group screenOptions={{ headerShown: false }}>
-      <NavBar.Screen name="Home" component={HomeNavigator} />
+      <NavBar.Screen name={'Home'} component={HomeNavigator} options={{tabBarLabel: t('home')}}/>
 
-      <NavBar.Screen name="Transfer" component={TransferNavigator} />
+      <NavBar.Screen name={"Transfer"} component={TransferNavigator} options={{tabBarLabel: t('transfer')}}/>
 
-      <NavBar.Screen name="Wallet" component={WalletNavigator} />
+      <NavBar.Screen name={"Wallet"} component={WalletNavigator} options={{tabBarLabel: t('wallet')}}/>
 
-      <NavBar.Screen name="Me" component={ProfileNavigator} />
+      <NavBar.Screen name={"Me"} component={ProfileNavigator}options={{tabBarLabel: t('me')}} />
     </NavBar.Group>
   ) : (
     <NavBar.Screen

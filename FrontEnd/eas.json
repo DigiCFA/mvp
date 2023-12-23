@@ -13,7 +13,17 @@
         "buildConfiguration": "Debug"
       }
     },
-    "development-simulator": {
+
+    "production": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      },
+      "ios": {
+        "buildConfiguration": "Release"
+      }
+    },
+
+    "ios-dev": {
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
@@ -21,14 +31,12 @@
       }
     },
     "preview": {
-      "distribution": "internal",
-      "ios": {
-        "simulator": true
-      }
-    },
-    "production": {}
+      "distribution": "internal"
+    }
   },
+
   "submit": {
-    "production": {}
+    "production": {
+    }
   }
 }
