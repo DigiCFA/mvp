@@ -121,7 +121,7 @@ const PaymentMethodsScreen = () => {
 
               <TouchableOpacity
                 onPress={() => {
-                  if (balance < amount) {
+                  if (balance.lessThan(amount) ){
                     setBalanceSufficient(false);
                   } else {
                     navigation.goBack();

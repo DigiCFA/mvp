@@ -66,7 +66,7 @@ const SendReviewScreen = () => {
     });
     try {
       const isPayment = true, isApproved = true
-      await createDirectTransaction({amountTransferred: toSnapshot(dinero({ amount: amount, currency: USD })), sender, receiver: receiverId, paymentMethod, isPayment, isApproved, message}).unwrap()
+      await createDirectTransaction({amountTransferred: toSnapshot(amount), sender, receiver: receiverId, paymentMethod, isPayment, isApproved, message}).unwrap()
     } catch (error) {
       console.log(error)
     }
@@ -134,7 +134,7 @@ const SendReviewScreen = () => {
             <View className="flex-row mt-8">
               <Text className="text-lg font-bold flex-1">{t('total')}</Text>
               <Text className="text-lg font-bold">
-                {intlFormat(dinero(balance))}
+                {intlFormat(balance)}
               </Text>
             </View>
 
