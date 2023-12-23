@@ -132,7 +132,7 @@ const HomeScreen = () => {
                 date={transaction.transactionDate}
                 message={transaction.message}
                 paymentMethod={transaction.paymentMethod}
-                amount={transaction.amountTransferred}
+                amount={(transaction.amountTransferred)}
               />
             ))}
           </ContentLoader>

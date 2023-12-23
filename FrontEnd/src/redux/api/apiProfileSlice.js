@@ -92,14 +92,12 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
           isApproved,
           message,
         } = arg);
-        const dineroAmt = dinero({ amount: amountTransferred, currency: USD });
-
-        const amountTransferredOBJ = toSnapshot(dineroAmt);
+        
         return {
           url: "/transaction/create_direct_transaction",
           method: "POST",
           body: {
-            amountTransferred: amountTransferredOBJ,
+            amountTransferred: amountTransferred,
             sender: sender,
             receiver: receiver,
             paymentMethod: paymentMethod,
