@@ -9,6 +9,9 @@ import React from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
+import { intlFormat } from "../../utils/currencyFormatter";
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
 import { useTranslation } from "react-i18next";
 
 const TransactionScreen = () => {
@@ -49,7 +52,7 @@ const TransactionScreen = () => {
                 }`}
               >
                 {userPays ? "-" : "+"}
-                <Currency quantity={Number(amount)} currency="USD" />
+                {intlFormat(dinero(amount))}
               </Text>
             </View>
             <Text className="font-medium">{fullDate}</Text>

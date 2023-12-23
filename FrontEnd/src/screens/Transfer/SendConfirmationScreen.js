@@ -3,7 +3,9 @@ import React from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-
+import { intlFormat } from "../../utils/currencyFormatter";
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
 const SendConfirmationScreen = () => {
   const { t } = useTranslation();
   const {
@@ -45,7 +47,7 @@ const SendConfirmationScreen = () => {
       </View>
 
       <View className="flex-1 flex-col items-center py-20">
-        <Text className="text-2xl font-medium">{t('moneySent', { amount })}</Text>
+        <Text className="text-2xl font-medium">{intlFormat(dinero(amount))}</Text>
         <Text className="text-lg font-medium">"{message}"</Text>
         <Text className="text-lg font-medium">{t('confirmationMessage', { name: firstName })}</Text>
       </View>

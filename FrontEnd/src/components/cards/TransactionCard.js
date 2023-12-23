@@ -3,7 +3,9 @@ import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
 import Currency from "react-currency-formatter";
 import { useNavigation } from "@react-navigation/native";
-
+import { intlFormat } from "../../utils/currencyFormatter";
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
 
 const TransactionCard = ({
   id,
@@ -53,8 +55,8 @@ const TransactionCard = ({
           </View>
           <Text className={`text-xl font-medium ${userPays ? 'text-black' : 'text-green-800'}`}>
             {userPays ? "-" : "+"} 
-            {/* <Currency quantity={Number(amount)} currency="USD" /> */}
-            CFA {amount}
+            {intlFormat(dinero(amount))}
+            {/* CFA {amount} */}
           </Text>
         </View>
         

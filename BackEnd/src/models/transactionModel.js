@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
-// import User from "userModel.mjs";
+import moneyModel from "../models/moneyModel.js";
 
 const transactionSchema = new mongoose.Schema({
     amountTransferred: {
-        type: Number,
-        min: 0.01,
+        type: moneyModel,
         required: true
     },
     sender: {

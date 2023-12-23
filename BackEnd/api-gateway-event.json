@@ -1,6 +1,6 @@
 {
   "resource": "/{proxy+}",
-  "path": "/api/auth/login",
+  "path": "/api/transaction/create_direct_transaction",
   "httpMethod": "POST",
   "queryStringParameters": {
     "userId": "64c673c724782ec4c7fb2d8f"
@@ -131,6 +131,6 @@
     "domainName": "xxxxxx.execute-api.us-east-1.amazonaws.com",
     "apiId": "xxxxxx"
   },
-  "body": "{\"phoneNumber\": \"2132140824\", \"password\": \"Daniel123!\"}",
+  "body": "{\n\"amountTransferred\":\n{\n\"amount\": 500,\n\"currency\": \n{\"code\": \"USD\",\"base\": 10,\"exponent\": 2},\n\"scale\": 2\n            },\n            \"sender\":\"65613204eb5c3dcf84cfdf70\",\n            \"receiver\":\"65613f8c0e58d01b688d1086\",\n            \"paymentMethod\":\"balance\",\n            \"isPayment\":true,\n            \"isApproved\":true,\n            \"message\":\"isPayment\"\n          }",
   "isBase64Encoded": false
 }

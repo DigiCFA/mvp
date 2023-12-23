@@ -16,7 +16,9 @@ import Currency from "react-currency-formatter";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
-
+import { intlFormat } from "../../utils/currencyFormatter";
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
 const HomeScreen = () => {
 
   const { t } = useTranslation();
@@ -66,8 +68,7 @@ const HomeScreen = () => {
             <View className="py-3 px-4 bg-white rounded-lg flex-col space-x-4 shadow">
               <Text className="text-xl text-gray-400 self-center">{t('balance')}</Text>
               <View className='flex-row flex-wrap justify-center'>
-                <Text className='text-2xl font-bold self-center'>CFA {balance?.toString().split('.')[0]}</Text>
-                <Text className='text-2xl font-bold self-center text-gray-600'>.{balance?.toString().split('.')[1]}</Text>
+                <Text className='text-2xl font-bold self-center'>F.CFA {balance?intlFormat(dinero(balance)):""}</Text>
               </View>
             </View>
           </ContentLoader>
@@ -131,7 +132,7 @@ const HomeScreen = () => {
                 date={transaction.transactionDate}
                 message={transaction.message}
                 paymentMethod={transaction.paymentMethod}
-                amount={transaction.amountTransferred}
+                amount={(transaction.amountTransferred)}
               />
             ))}
           </ContentLoader>
