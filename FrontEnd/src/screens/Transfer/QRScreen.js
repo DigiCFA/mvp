@@ -14,7 +14,7 @@ import LoadingView from "../../components/LoadingView";
 
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useSelector } from "react-redux";
-import { selectSelf } from "../../redux/api/selfSlice";
+import { selectSelf } from "../../redux/client/selfSlice";
 import { useFetchUserQuery, useGenerateQRCodeLinkQuery } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { t } from "i18next";
