@@ -66,7 +66,7 @@ const HomeScreen = () => {
             <View className="py-3 px-4 bg-white rounded-lg flex-col space-x-4 shadow">
               <Text className="text-xl text-gray-400 self-center">{t('balance')}</Text>
               <View className='flex-row flex-wrap justify-center'>
-                <Text className='text-2xl font-bold self-center'>F.CFA {balance?.toString().split('.')[0]}</Text>
+                <Text className='text-2xl font-bold self-center'>CFA {balance?.toString().split('.')[0]}</Text>
                 <Text className='text-2xl font-bold self-center text-gray-600'>.{balance?.toString().split('.')[1]}</Text>
               </View>
             </View>

@@ -52,8 +52,9 @@ const TransactionCard = ({
             <Text className="text-xl font-medium">{title}</Text>
           </View>
           <Text className={`text-xl font-medium ${userPays ? 'text-black' : 'text-green-800'}`}>
-            {userPays ? "-" : "+"}
-            <Currency quantity={Number(amount)} currency="USD" />
+            {userPays ? "-" : "+"} 
+            {/* <Currency quantity={Number(amount)} currency="USD" /> */}
+            CFA {amount}
           </Text>
         </View>
         

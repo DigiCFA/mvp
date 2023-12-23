@@ -63,7 +63,7 @@
   "send": "Envoyer",
   "review": "Revoir",
   "total": "Total",
-  "moneySent": "{{amount}} CFA envoyé !",
+  "moneySent": "CFA {{amount}} envoyé!",
   "confirmationMessage": "Eh bien laissez {{name}} savoir.",
   "walletFeature": "Cette fonctionnalité est actuellement en cours de développement.\n\nBientôt, vous pourrez lier vos cartes de crédit à l'application!",
   "name": "Nom",

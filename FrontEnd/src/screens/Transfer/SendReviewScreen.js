@@ -132,7 +132,8 @@ const SendReviewScreen = () => {
             <View className="flex-row mt-8">
               <Text className="text-lg font-bold flex-1">{t('total')}</Text>
               <Text className="text-lg font-bold">
-                <Currency quantity={Number(amount)} currency="USD" /> CFA
+                {/* <Currency quantity={Number(amount)} currency="USD" />  */}
+                CFA {amount}
               </Text>
             </View>
 
@@ -151,7 +152,7 @@ const SendReviewScreen = () => {
               onPress={onPressCreateTransaction}
               className="bg-blue-900 rounded-full py-3 px-14 items-center"
             >
-              <Text className="text-white text-xl font-extrabold">Send</Text>
+              <Text className="text-white text-xl font-extrabold">{t("send")}</Text>
               {/* <Text>{senderId} + {receiverId}</Text> */}
             </TouchableOpacity>
           </View>
