@@ -46,7 +46,7 @@
     "report": "Report a Problem",
     "scanCode": "Scan code",
     "getPaid": "Get paid",
-    "noCameraAccess": "No access to camera.",
+    "noCameraAccess": "No access to camera. Please enable it in the settings",
     "QRError": "You might have scanned the wrong QR code!",
     "seller": "Make sure the seller is showing their QR code under 'Show to Pay'.",
     "search": "Phone number, name",

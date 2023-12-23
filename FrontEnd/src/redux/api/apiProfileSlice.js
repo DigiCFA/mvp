@@ -2,6 +2,7 @@ import { apiSlice } from "./apiIndexSlice";
 import { createEntityAdapter, createSelector } from "@reduxjs/toolkit";
 import * as FileSystem from "expo-file-system";
 import { baseURL } from "./apiIndexSlice";
+import * as Linking from "expo-linking"
 
 // Entity Adapter: a set of reusable reducers + selectors for CRUD operations
 const contactsAdapter = createEntityAdapter({
@@ -111,6 +112,18 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
         ];
       },
     }),
+    generateQRCodeLink: builder.query({
+      queryFn: async (userId, name) => {
+        try {
+          const url = Linking.createURL('/pay/user/${userId}/${name}');
+          console.log("Generating QR Link");
+          console.log(url);
+          return { data: url }
+        } catch (error) {
+          return { error: error };
+        }
+      }
+    }),
     uploadProfilePicture: builder.mutation({
       queryFn: async (args) => {
         const { userId, imageURI } = args;
@@ -171,6 +184,7 @@ export const {
   useLazyFetchSearchResultsQuery,
   useCreateDirectTransactionMutation,
   useUploadProfilePictureMutation,
+  useGenerateQRCodeLinkQuery,
   useUploadFcmTokenMutation,
 } = extendedProfileSlice;
 

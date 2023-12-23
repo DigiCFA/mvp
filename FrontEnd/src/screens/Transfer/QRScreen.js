@@ -15,7 +15,7 @@ import LoadingView from "../../components/LoadingView";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useSelector } from "react-redux";
 import { selectSelf } from "../../redux/api/selfSlice";
-import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
+import { useFetchUserQuery, useGenerateQRCodeLinkQuery } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
@@ -38,6 +38,7 @@ const ScanScreen = () => {
   const { data: user, isLoading: fetchUserIsLoading } = useFetchUserQuery(
     session.userId
   );
+  const { data: qrCodeURL, isError } = useGenerateQRCodeLinkQuery(user._id, user.fullName);
 
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -75,7 +76,7 @@ const ScanScreen = () => {
     <View>
       {hasPermission === null && <LoadingView />}
 
-      {hasPermission === false && <Text>No access to camera.</Text>}
+      {hasPermission === false && <Text>{t("noCameraAccess")}</Text>}
 
       {hasPermission && (
         <View className="w-4/5 aspect-square mx-10 rounded-xl border-4 border-black overflow-hidden">
@@ -105,7 +106,7 @@ const ScanScreen = () => {
         /> */}
 
         <QRCode
-          value="http://awesome.link.qr"
+          value={qrCodeURL}
           size={200}
           logo={logo_D}
           logoSize={80}
