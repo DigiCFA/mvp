@@ -39,7 +39,7 @@ const SendConfirmationScreen = () => {
     <SafeAreaView className="grow">
       <View className="flex-row mb-4">
         <TouchableOpacity
-          onPress={() => navigation.popToTop}
+          onPress={() => navigation.popToTop()}
           className="flex-1 items-end p-4"
         >
           <Ionicons name="close" size={40} color="grey" />

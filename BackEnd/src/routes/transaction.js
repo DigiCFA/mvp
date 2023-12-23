@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
 import { ERROR_CODES, format_error } from "../utils/errorHandling.js";
-import { dinero, toSnapshot ,lessThan,add,subtract} from 'dinero.js';
+import { dinero, toSnapshot ,lessThan,add,subtract,toDecimal} from 'dinero.js';
 import { USD } from '@dinero.js/currencies';
 
 
@@ -15,6 +15,13 @@ import { getMessaging } from "firebase-admin/messaging";
 
 
 const router = express.Router();
+function IntlFormatter({ value, currency }) {
+  return Number(value).toLocaleString('en-US', {
+    ...{},
+    style: 'currency',
+    currency: currency.code,
+  });
+};
 
 // {
 //   "amountTransferred":
@@ -103,7 +110,7 @@ router.post("/create_direct_transaction", async (req, res, next) => {
       const notifications = {
         notification:{
           title:"Payment Received",
-          body:"$"+amountTransferred+" received from: " + sendUser.fullName
+          body:toDecimal(amountTransferred, IntlFormatter)+" received from: " + sendUser.fullName
         },
         tokens:FCMtokens
       }
