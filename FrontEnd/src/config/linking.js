@@ -1,5 +1,12 @@
-
 import * as Linking from "expo-linking";
+import { selectCurrentUserID, useGetSessionQuery } from "../redux/api/apiAuthSlice";
+import { useSelector } from "react-redux";
+import { selectNameFromUser } from "../redux/api/apiProfileSlice";
+
+
+// const id = useSelector(selectCurrentUserID);
+// const name = useSelector(selectNameFromUser(id));
+
 
 const prefix = Linking.createURL("/");
 
@@ -33,9 +40,14 @@ const config = {
   },
 };
 
- const linking = {
+const linking = {
   prefixes: [prefix],
   config,
 };
+
+
+export const QRCodeURL = Linking.createURL('pay/user/app', {
+  queryParams: {hello: 'world'},
+})
 
 export default linking;

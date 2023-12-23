@@ -6,8 +6,10 @@ import { useSelector } from "react-redux";
 import { selectCardsFromUser } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice"
 import BankCardCard from "../../components/cards/BankCardCard";
+import { useTranslation } from "react-i18next";
 
 const CardDetailsScreen = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
 
   const {
@@ -45,27 +47,27 @@ const CardDetailsScreen = () => {
 
       <View className="bg-white p-4">
         <View className="flex-col">
-          <Text className="text-gray-600">Name</Text>
+          <Text className="text-gray-600">{t('name')}</Text>
           <Text className="text-black text-lg font-semibold">{card.name}</Text>
 
-          <Text className="text-gray-600 pt-8">Expires on</Text>
+          <Text className="text-gray-600 pt-8">{t('expires')}</Text>
           <Text className="text-black text-lg font-semibold">
             {card.expDate.substring(5, 7)}/{card.expDate.substring(2, 4)}
           </Text>
 
-          <Text className="text-gray-600 pt-8">Billing address</Text>
+          <Text className="text-gray-600 pt-8">{t('billingAddress')}</Text>
           <Text className="text-black text-lg font-semibold">
             {card.billingAddress}
           </Text>
 
           <TouchableOpacity className="pt-8 flex-row space-x-2">
             <FontAwesome5 name="pen" size={24} color="#3370E2" />
-            <Text className="text-[#3370E2] text-lg font-bold">Edit</Text>
+            <Text className="text-[#3370E2] text-lg font-bold">{t('edit')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity className="pt-8 flex-row space-x-2">
             <Ionicons name="trash" size={24} color="#3370E2" />
-            <Text className="text-[#3370E2] text-lg font-bold">Remove</Text>
+            <Text className="text-[#3370E2] text-lg font-bold">{t('remove')}</Text>
           </TouchableOpacity>
         </View>
       </View>

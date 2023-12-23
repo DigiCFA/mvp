@@ -20,8 +20,10 @@ import { dinero, toSnapshot } from 'dinero.js';
 import { USD } from '@dinero.js/currencies';
 import { useCreateDirectTransactionMutation } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
+import { useTranslation } from "react-i18next";
 
 const SendReviewScreen = () => {
+  const { t } = useTranslation();
   const { height } = useWindowDimensions();
   const { current } = useCardAnimation();
   const navigation = useNavigation();
@@ -103,7 +105,7 @@ const SendReviewScreen = () => {
             <View className="flex-row mb-4">
               <View className="flex-1"></View>
 
-              <Text className="text-lg font-semibold">Review</Text>
+              <Text className="text-lg font-semibold">{t('review')}</Text>
 
               <TouchableOpacity
                 onPress={navigation.goBack}
@@ -124,13 +126,13 @@ const SendReviewScreen = () => {
 
             <Text className="text-lg mt-4">
               <Text className="font-bold">
-                Send <Text className="italic">{name}</Text>:{" "}
+                {t('send')} <Text className="italic">{name}</Text>:{" "}
               </Text>
               "{message}"
             </Text>
 
             <View className="flex-row mt-8">
-              <Text className="text-lg font-bold flex-1">Total</Text>
+              <Text className="text-lg font-bold flex-1">{t('total')}</Text>
               <Text className="text-lg font-bold">
                 {intlFormat(dinero(balance))}
               </Text>

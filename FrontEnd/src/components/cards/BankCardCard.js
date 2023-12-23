@@ -2,8 +2,9 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
 
-import mastercard from "../../../assets/mastercard.png";
+import mastercard from "../../../assets/cards/mastercard.png";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 const BankCardCard = ({
   name,
@@ -14,6 +15,7 @@ const BankCardCard = ({
   expDate,
   cvv,
 }) => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
 
   return (

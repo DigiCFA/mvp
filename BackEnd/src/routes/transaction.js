@@ -34,6 +34,8 @@ const router = express.Router();
 router.post("/create_direct_transaction", async (req, res, next) => {
 
   console.log(req.body)
+  console.log(req.body)
+  console.log("create_direct_transaction")
 
   const session = await mongoose.startSession();
 
@@ -97,26 +99,26 @@ router.post("/create_direct_transaction", async (req, res, next) => {
       await receiveUser.save();
 
 
-      const FCMtoken = receiveUser.tokens
-      const notification = {
+      const FCMtokens = receiveUser.tokens
+      const notifications = {
         notification:{
           title:"Payment Received",
           body:"$"+amountTransferred+" received from: " + sendUser.fullName
         },
-        token:FCMtoken
+        tokens:FCMtokens
       }
       const options = {
         priority: "high"
       }
 
-      // await getMessaging().send(notification)
-      // .then((response) => {
-      //   // Response is a message ID string.
-      //   console.log('Successfully sent message:', response);
-      // })
-      // .catch((error) => {
-      //   console.log('Error sending message:', error);
-      // });
+      await getMessaging().sendEachForMulticast(notifications)
+      .then((response) => {
+        // Response is a message ID string.
+        console.log('Successfully sent message:', response);
+      })
+      .catch((error) => {
+        console.log('Error sending message:', error);
+      });
 
       await session.commitTransaction();
 

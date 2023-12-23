@@ -3,8 +3,10 @@ import React from "react";
 
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 const QRErrorScreen = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
 
   return (
@@ -12,10 +14,10 @@ const QRErrorScreen = () => {
       <View className="flex-1 justify-center items-center p-4">
         <Ionicons name="warning" size={96} color="red" />
         <Text className="text-3xl font-semibold text-center px-8 py-4">
-          You might have scanned the wrong QR code!
+          {t('QRError')}
         </Text>
         <Text className="text-base text-center">
-          Make sure the seller is showing their QR code under 'Show to Pay'.
+          {t('seller')}
         </Text>
       </View>
 

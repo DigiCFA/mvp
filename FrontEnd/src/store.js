@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import signUpReducer from "./redux/api/signUpSlice";
 import phoneVerificationReducer from "./redux/api/phoneVerificationSlice";
 import { apiSlice } from "./redux/api/apiIndexSlice";
@@ -7,9 +7,9 @@ import { apiSlice } from "./redux/api/apiIndexSlice";
 export const createStoreWithPreloadedState = (preloadedState) =>
   configureStore({
     reducer: {
-      // self: selfReducer,
       signUp: signUpReducer,
       phoneVerification: phoneVerificationReducer,
+      // Adding the generated set of reducers as a specific top-level slice
       [apiSlice.reducerPath]: apiSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
@@ -24,3 +24,6 @@ export const createStoreWithPreloadedState = (preloadedState) =>
       // }),
     ]
   });
+
+// Optional but required for refetchOnFocus/refetchOnReconnect
+// setupListeners(store.dispatch)
