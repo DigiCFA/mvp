@@ -5,6 +5,9 @@ import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
 import { ERROR_CODES, format_error } from "../utils/errorHandling.js";
+import { dinero, toSnapshot ,lessThan,add,subtract,toDecimal} from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
+
 
 import admin from "firebase-admin";
 // import serviceAccount from ("path/to/serviceAccountKey.json");
@@ -12,7 +15,29 @@ import { getMessaging } from "firebase-admin/messaging";
 
 
 const router = express.Router();
+function IntlFormatter({ value, currency }) {
+  return Number(value).toLocaleString('en-US', {
+    ...{},
+    style: 'currency',
+    currency: currency.code,
+  });
+};
 
+// {
+//   "amountTransferred":
+//   {
+//     "amount": 500,
+//     "currency": 
+//       {"code": "USD","base": 10,"exponent": 2},
+//       "scale": 2
+//   },
+//   "sender":"65613204eb5c3dcf84cfdf70",
+//   "receiver":"65613f8c0e58d01b688d1086",
+//   "paymentMethod":"balance",
+//   "isPayment":true,
+//   "isApproved":true,
+//   "message":"isPayment"
+// }
 router.post("/create_direct_transaction", async (req, res, next) => {
 
   console.log(req.body)
@@ -24,11 +49,13 @@ router.post("/create_direct_transaction", async (req, res, next) => {
   const newTransaction = req.body;
   const sendID = newTransaction.sender;
   const receiveID = newTransaction.receiver;
+  let amountTransferred = dinero(newTransaction.amountTransferred);
+  console.log(toSnapshot(amountTransferred));
 
   try {
     await session.withTransaction(async () => {
       const transactionData = new Transaction({
-        amountTransferred: newTransaction.amountTransferred,
+        amountTransferred: toSnapshot(amountTransferred),
         sender: newTransaction.sender,
         receiver: newTransaction.receiver,
         paymentMethod: "balance",
@@ -51,15 +78,18 @@ router.post("/create_direct_transaction", async (req, res, next) => {
         throw format_error(ERROR_CODES.CANNOT_TRANSACT_TO_SELF)
       }
 
-      let userBalance = sendUser.balance;
-      let amountTransferred = newTransaction.amountTransferred;
-      if (userBalance < amountTransferred) {
+      let sendUserBalance = dinero(sendUser.balance);
+      let receiveUserBalance = dinero(receiveUser.balance);
+      console.log(transactionData);
+
+
+      if (lessThan(sendUserBalance, amountTransferred)) {
         throw format_error(ERROR_CODES.INSUFFICIENT_BALANCE)
       }
+      sendUser.balance =	toSnapshot(subtract(sendUserBalance,amountTransferred));
+      receiveUser.balance =	toSnapshot(add(receiveUserBalance,amountTransferred));
 
       // console.log("TRANSACTION STUFF");
-      await sendUser.$inc("balance", -1.0 * amountTransferred);
-      await receiveUser.$inc("balance", amountTransferred);
       // console.log("Amount should be: ", newTransaction.amountTransferred);
       // console.log("Actual amount: ", transactionData.amountTransferred);
       console.log(transactionData);
@@ -80,7 +110,7 @@ router.post("/create_direct_transaction", async (req, res, next) => {
       const notifications = {
         notification:{
           title:"Payment Received",
-          body:"$"+amountTransferred+" received from: " + sendUser.fullName
+          body:toDecimal(amountTransferred, IntlFormatter)+" received from: " + sendUser.fullName
         },
         tokens:FCMtokens
       }
@@ -103,6 +133,7 @@ router.post("/create_direct_transaction", async (req, res, next) => {
     });
   } catch (error) {
     console.log("error catched")
+    console.log(error);
     next(error)
   } finally {
     await session.endSession();

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import pkg from "bcryptjs";
+import moneyModel from "../models/moneyModel.js";
 
 import { profilePicBaseURL } from "../config/awsConfig.js";
 
@@ -68,6 +69,8 @@ const cardSchema = new mongoose.Schema({
     trim: true,
   },
 });
+
+
 
 const addressSchema = new mongoose.Schema({
   lineOne: {
@@ -161,9 +164,9 @@ const userSchema = new mongoose.Schema(
       get: (val) => `{root}${val}`,
     },
     balance: {
-      type: Number,
-      default: 0,
-      min: 0,
+      type: moneyModel,
+      required: true,
+      
     },
     cards: [cardSchema],
     privacyPreferences: [String],
@@ -237,3 +240,4 @@ const RedactedUser = mongoose.model("RedactedUser", userSchema);
 // })
 
 export default User;
+

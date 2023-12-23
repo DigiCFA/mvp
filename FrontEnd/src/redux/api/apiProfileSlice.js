@@ -1,6 +1,9 @@
 import { apiSlice } from "./apiIndexSlice";
 import { createEntityAdapter, createSelector } from "@reduxjs/toolkit";
 import * as FileSystem from "expo-file-system";
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
+
 import { baseURL } from "./apiIndexSlice";
 
 // Entity Adapter: a set of reusable reducers + selectors for CRUD operations
@@ -89,7 +92,7 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
           isApproved,
           message,
         } = arg);
-
+        
         return {
           url: "/transaction/create_direct_transaction",
           method: "POST",
@@ -206,7 +209,7 @@ export const selectCardsFromUser = (userId) =>
 export const selectBalanceFromUser = (userId) =>
   createSelector(
     selectUserResult(userId),
-    (userResult) => userResult?.data?.balance
+    (userResult) => (userResult?.data)?toSnapshot(dinero(userResult?.data?.balance)): undefined
   );
 
 export const selectProfilePicFromUser = (userId) =>

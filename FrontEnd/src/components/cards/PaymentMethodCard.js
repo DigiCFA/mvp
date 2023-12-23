@@ -8,8 +8,9 @@ import {
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Currency from "react-currency-formatter";
-
-
+import { intlFormat } from "../../utils/currencyFormatter";
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
 const PaymentMethodCard = ({
   cardID,
   cardName,
@@ -46,7 +47,7 @@ const PaymentMethodCard = ({
         </View>
         {cardType === "balance" ? (
           <Text className={`${balanceSufficient ? 'font-medium text-gray-500' : 'font-semibold text-red-600'}`}>
-            Balance: <Currency quantity={Number(balance)} currency="USD" />
+            Balance:{intlFormat(dinero(balance))}
           </Text>
         ) : (
           <Text className="font-medium text-gray-500">

@@ -11,6 +11,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
 import { onChange } from "react-native-reanimated";
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD } from '@dinero.js/currencies';
 import { useTranslation } from "react-i18next";
 
 const numericRE = new RegExp("^[0-9.]*$");
@@ -157,7 +159,7 @@ const UserScreen = () => {
                   navigation.navigate("RequestReview", {
                     id,
                     name,
-                    amount,
+                    amount : toSnapshot(dinero({ amount: Number(amount), currency: USD }))  ,
                     message,
                   });
                 }
@@ -180,7 +182,7 @@ const UserScreen = () => {
                   navigation.navigate("PaymentMethods", {
                     receiverId: id,
                     name,
-                    amount,
+                    amount :toSnapshot(dinero({ amount: Number(amount), currency: USD }))  ,
                     message,
                   });
                 }
