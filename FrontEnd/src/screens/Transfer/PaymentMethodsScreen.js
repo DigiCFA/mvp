@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import { selectCardsFromUser, selectBalanceFromUser} from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { useTranslation } from "react-i18next";
+import { dinero, toSnapshot } from 'dinero.js';
 
 const PaymentMethodsScreen = () => {
 
@@ -121,7 +122,9 @@ const PaymentMethodsScreen = () => {
 
               <TouchableOpacity
                 onPress={() => {
-                  if (balance.lessThan(amount) ){
+
+                  console.log(amount);
+                  if (balance && balance.lessThan(balance) ){
                     setBalanceSufficient(false);
                   } else {
                     navigation.goBack();

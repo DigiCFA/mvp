@@ -159,7 +159,7 @@ const UserScreen = () => {
                   navigation.navigate("RequestReview", {
                     id,
                     name,
-                    amount : dinero({ amount: amount, currency: USD }),
+                    amount : toSnapshot(dinero({ amount: Number(amount), currency: USD }))  ,
                     message,
                   });
                 }
@@ -182,7 +182,7 @@ const UserScreen = () => {
                   navigation.navigate("PaymentMethods", {
                     receiverId: id,
                     name,
-                    amount : dinero({ amount: amount, currency: USD }),
+                    amount :toSnapshot(dinero({ amount: Number(amount), currency: USD }))  ,
                     message,
                   });
                 }

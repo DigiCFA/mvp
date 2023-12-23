@@ -211,7 +211,7 @@ export const selectCardsFromUser = (userId) =>
 export const selectBalanceFromUser = (userId) =>
   createSelector(
     selectUserResult(userId),
-    (userResult) => dinero(userResult?.data?.balance)
+    (userResult) => (userResult?.data)?toSnapshot(dinero(userResult?.data?.balance)): undefined
   );
 
 export const selectProfilePicFromUser = (userId) =>
