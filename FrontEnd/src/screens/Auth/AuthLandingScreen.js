@@ -172,13 +172,17 @@ const LoginSignupLandingScreen = () => {
 
           <View className="flex-1"></View>
           <View className="flex-col items-end mb-10">
-
             {Object.keys(languages).map((lng) => (
-              <TouchableOpacity 
-              key={lng}
-              className='w-24 rounded-lg p-2 bg-blueDark mt-2'
-              onPress={() => i18n.changeLanguage(lng)}>
-                <Text className={`text-white text-lg text-center ${i18n.resolvedLanguage === lng ? 'font-bold' : ''}`}>
+              <TouchableOpacity
+                key={lng}
+                className="w-24 rounded-lg p-2 bg-blueDark mt-2"
+                onPress={() => i18n.changeLanguage(lng)}
+              >
+                <Text
+                  className={`text-white text-lg text-center ${
+                    i18n.resolvedLanguage === lng ? "font-bold" : ""
+                  }`}
+                >
                   {languages[lng].nativeName}
                 </Text>
               </TouchableOpacity>

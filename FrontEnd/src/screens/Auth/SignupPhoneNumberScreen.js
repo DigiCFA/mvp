@@ -21,7 +21,7 @@ import {
   clearAllField,
   selectFieldWithAttr,
   setField,
-} from "../../redux/api/signUpSlice";
+} from "../../redux/client/signUpSlice";
 import { useTranslation } from "react-i18next";
 
 const SignupPhoneNumberScreen = () => {

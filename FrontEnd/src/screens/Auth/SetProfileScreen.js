@@ -9,11 +9,15 @@ import {
 import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 
 import HideKeyboardView from "../../components/HideKeyboardView";
-import { selectFieldWithAttr, setField, clearAllField } from "../../redux/api/signUpSlice";
-import { useSignupMutation } from "../../redux/api/apiAuthSlice";
+import {
+  selectFieldWithAttr,
+  setField,
+  clearAllField,
+  useSignupMutation,
+} from "../../redux/client/signUpSlice";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useTranslation } from "react-i18next";
 
@@ -28,44 +32,42 @@ const SetProfileScreen = () => {
   const [errorM, setErrorM] = useState({});
 
   const [nameIsValid, setNameIsValid] = useState(false);
-  const firstName = useSelector(selectFieldWithAttr("firstName"))
-  const lastName = useSelector(selectFieldWithAttr("lastName"))
-  const user = useSelector(state => state.signUp)
-  const [signup,{data, isLoading, isSuccess, isError, error}] = useSignupMutation()
+  const firstName = useSelector(selectFieldWithAttr("firstName"));
+  const lastName = useSelector(selectFieldWithAttr("lastName"));
+  const user = useSelector((state) => state.signUp);
+  const [signup, { data, isLoading, isSuccess, isError, error }] =
+    useSignupMutation();
 
   const onPressButton = async () => {
     try {
-      if(nameIsValid){
-        console.log(user)
-        await signup(user).unwrap()
-        dispatch(clearAllField())
-      }
-      else{
-        setErrorM(errorState)
+      if (nameIsValid) {
+        console.log(user);
+        await signup(user).unwrap();
+        dispatch(clearAllField());
+      } else {
+        setErrorM(errorState);
       }
     } catch (error) {
-      console.error("error",error)
+      console.error("error", error);
     }
-  }
-  useEffect(() => { 
-    validateForm(); 
-  }, [firstName,lastName]); 
-  const validateForm = () => { 
-    let errors = {}; 
+  };
+  useEffect(() => {
+    validateForm();
+  }, [firstName, lastName]);
+  const validateForm = () => {
+    let errors = {};
 
-    // Validate name field 
-    if (!firstName) { 
-        errors.firstName = t("nameError1"); 
-    } 
-    else if (!lastName) { 
-      errors.lastName = t("nameError2"); 
-  } 
+    // Validate name field
+    if (!firstName) {
+      errors.firstName = t("nameError1");
+    } else if (!lastName) {
+      errors.lastName = t("nameError2");
+    }
 
-
-    // Set the errors and update form validity 
-    setErrorState(errors); 
-    setNameIsValid(Object.keys(errors).length === 0); 
-  }; 
+    // Set the errors and update form validity
+    setErrorState(errors);
+    setNameIsValid(Object.keys(errors).length === 0);
+  };
   return (
     <SafeAreaView className="bg-white flex-1">
       <Spinner visible={isLoading} />
@@ -106,11 +108,13 @@ const SetProfileScreen = () => {
           onFocus={() => {
             setFirstNameInputFocused(true);
           }}
-          onChangeText={(e) => {dispatch(setField({field: "firstName", content: e}))}}
+          onChangeText={(e) => {
+            dispatch(setField({ field: "firstName", content: e }));
+          }}
         />
         <Text className="text-red-700" style={{ fontSize: 10 }}>
           {errorM.firstName}
-          </Text>
+        </Text>
         <TextInput
           placeholder={t("lastName")}
           value={lastName}
@@ -124,7 +128,9 @@ const SetProfileScreen = () => {
           onFocus={() => {
             setLastNameInputFocused(true);
           }}
-          onChangeText={(e) => {dispatch(setField({field: "lastName", content: e}))}}
+          onChangeText={(e) => {
+            dispatch(setField({ field: "lastName", content: e }));
+          }}
         />
         <Text className="text-red-700" style={{ fontSize: 10 }}>
           {errorM.lastName}
@@ -139,8 +145,10 @@ const SetProfileScreen = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={10}
       >
-        <TouchableOpacity className="bg-blue-800 rounded-full py-4 mx-3"
-          onPress={onPressButton}>
+        <TouchableOpacity
+          className="bg-blue-800 rounded-full py-4 mx-3"
+          onPress={onPressButton}
+        >
           <Text
             className="text-center font-bold text-white"
             style={{ fontSize: 20 }}

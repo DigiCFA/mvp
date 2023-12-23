@@ -12,7 +12,7 @@ import {
 import { useUploadFcmTokenMutation } from "./redux/api/apiProfileSlice";
 import { useEffect, useState } from "react";
 import messaging from "@react-native-firebase/messaging";
-//import "./localization/i18nConfig"
+// import "./localization/i18nConfig"
 
 import "expo-dev-client";
 

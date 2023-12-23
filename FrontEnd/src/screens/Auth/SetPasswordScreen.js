@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 
 import PasswordTextInput from "../../components/PasswordTextInput";
 import HideKeyboardView from "../../components/HideKeyboardView";
-import { setField } from "../../redux/api/signUpSlice";
+import { setField } from "../../redux/client/signUpSlice";
 import { useTranslation } from "react-i18next";
 
 const SetPasswordScreen = () => {
