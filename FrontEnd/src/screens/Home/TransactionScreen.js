@@ -52,7 +52,7 @@ const TransactionScreen = () => {
                 }`}
               >
                 {userPays ? "-" : "+"}
-                {intlFormat(dinero(balance))}
+                {intlFormat(dinero(amount))}
               </Text>
             </View>
             <Text className="font-medium">{fullDate}</Text>
