@@ -23,19 +23,23 @@ import {
   setField,
 } from "../../redux/client/signUpSlice";
 import { useTranslation } from "react-i18next";
+import { validateSingleField, phoneNumberValidation } from "../../utils/userValidation";
+import withFieldError from "../../components/withFieldError";
+import TextField from "../../components/TextField";
+
+const PhoneWithError = withFieldError(TextField)
 
 const SignupPhoneNumberScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const [isInputFocused, setIsInputFocused] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [skip, setSkip] = useState(true);
+  const [phoneNumberIsValid, setPhoneNumberIsValid] = useState(false);
+  const [displayError, setDisplayError] = useState(false);
 
   const phoneNumber = useSelector(selectFieldWithAttr("phoneNumber"));
-  const [errorM, setErrorM] = useState({});
-  const [phoneNumberIsValid, setPhoneNumberIsValid] = useState(false);
   const {
     isLoading,
     isSuccess,
@@ -47,11 +51,9 @@ const SignupPhoneNumberScreen = () => {
     skip: skip,
   });
 
-  useEffect(() => {
-    console.log("skip", skip);
-  }, [skip]);
 
   const onPressNext = () => {
+    setDisplayError(true)
     if (phoneNumberIsValid) {
       setSkip(false);
     }
@@ -71,23 +73,6 @@ const SignupPhoneNumberScreen = () => {
     }
   }, [isSuccess, isError, isFetching]);
 
-  useEffect(() => {
-    validateForm();
-  }, [phoneNumber]);
-  const validateForm = () => {
-    let error = {};
-
-    // Validate phoneNumber field
-    if (!phoneNumber) {
-      error.phoneNumber = t("phoneError1");
-    } else if (phoneNumber.length !== 10) {
-      error.phoneNumber = t("phoneError2");
-    }
-
-    // Set the errors and update form validity
-    setErrorM(error);
-    setPhoneNumberIsValid(Object.keys(error).length === 0);
-  };
   const modalScreen = (user) => (
     <Modal
       animationType="slide"
@@ -177,34 +162,14 @@ const SignupPhoneNumberScreen = () => {
           <Text className="text-3xl font-semibold">{t("phoneNumber")}</Text>
         </View>
 
-        <View className="mx-3 mt-6 flex-1">
-          <View
-            className={`border-2 p-2 rounded-md ${
-              isInputFocused ? "border-blue-500" : "border-gray-500"
-            }`}
-          >
-            <Text className="text-gray-400 my-1">{t("mobileNumber")}</Text>
-            <View className="flex-row items-center space-x-0.5 mt-1">
-              <Text style={{ fontSize: 20 }}>+1</Text>
-              <TextInput
-                style={{ fontSize: 20 }}
-                placeholder="000-000-0000"
-                value={phoneNumber}
-                autoFocus={true}
-                keyboardType="numeric"
-                className="pr-2 w-full"
-                onFocus={() => {
-                  setIsInputFocused(true);
-                }}
-                onBlur={() => {
-                  setIsInputFocused(false);
-                }}
-                onChangeText={(e) => {
-                  dispatch(setField({ field: "phoneNumber", content: e }));
-                }}
-              />
-            </View>
-          </View>
+        <View className="mx-3 flex-1">
+          <PhoneWithError style="phoneNumber" isSeparatePrompt={true} prompt={t("phoneNumber")}
+            onChangeText={(e) => {
+              dispatch(setField({ field: "phoneNumber", content: e }));
+            }}
+            value={phoneNumber} keyBoardType='numeric' onIsErrorChange={(e) => {setPhoneNumberIsValid(!e)}}
+            isDisplayError={displayError} validator={validateSingleField([phoneNumberValidation])}
+          />
 
           <Text className="mt-2 text-gray-400">
             {t('phoneNumberAuth')}
@@ -216,11 +181,7 @@ const SignupPhoneNumberScreen = () => {
           keyboardVerticalOffset={10}
         >
           <TouchableOpacity
-            className={
-              phoneNumberIsValid
-                ? "bg-blueDark rounded-full py-4 mx-3"
-                : "bg-blue-100 rounded-full py-4 mx-3"
-            }
+            className={"bg-blueDark rounded-full py-4 mx-3 mb-3"}
             onPress={onPressNext}
           >
             <Text

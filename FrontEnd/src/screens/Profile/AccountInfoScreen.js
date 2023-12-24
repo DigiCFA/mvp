@@ -12,10 +12,11 @@ import {
 } from "../../redux/api/apiProfileSlice";
 import * as ImagePicker from "expo-image-picker";
 import Spinner from "react-native-loading-spinner-overlay";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const AccountInfoScreen = () => {
   const navigation = useNavigation();
+  const { t, i18n } = useTranslation();
 
   const { data: session } = useGetSessionQuery();
   const { data: user, isLoading: fetchUserIsLoading } = useFetchUserQuery(

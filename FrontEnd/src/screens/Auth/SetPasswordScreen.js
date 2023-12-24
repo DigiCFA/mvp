@@ -14,6 +14,12 @@ import PasswordTextInput from "../../components/PasswordTextInput";
 import HideKeyboardView from "../../components/HideKeyboardView";
 import { setField } from "../../redux/client/signUpSlice";
 import { useTranslation } from "react-i18next";
+import withFieldError from "../../components/withFieldError";
+import { validateSingleField, signupPassword, validateRetypePassword } from "../../utils/userValidation";
+import TextField from "../../components/TextField";
+
+const PasswordWithError = withFieldError(TextField)
+const RetypeWithError = withFieldError(TextField)
 
 const SetPasswordScreen = () => {
 
@@ -21,31 +27,20 @@ const SetPasswordScreen = () => {
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [errorState, setErrorState] = useState({});
-  const [errorM, setErrorM] = useState({});
 
+  const [displayError, setDisplayError] = useState(false)
   const [passwordIsValid, setPasswordIsValid] = useState(false);
+  const [retypeIsValid, setRetypeIsValid] = useState(false)
   const [password, setPassword] = useState("");
   const [retypedPassword, setRetypedPassword] = useState("");
-  useEffect(() => {
-    validateForm();
-  }, [password, retypedPassword]);
-  const validateForm = () => {
-    let errors = {};
 
-    // Validate password field
-    if (!password) {
-      errors.password = t("passwordError1");
-    } else if (password.length < 6) {
-      errors.password = t("passwordError2");
-    } else if (password !== retypedPassword) {
-      errors.retypedPassword = t("passwordError3");
+  const onPressNext = () => {
+    setDisplayError(true)
+    if (retypeIsValid && passwordIsValid) {
+      dispatch(setField({ field: "password", content: password }));
+      navigation.navigate("Profile");
     }
-
-    // Set the errors and update form validity
-    setErrorState(errors);
-    setPasswordIsValid(Object.keys(errors).length === 0);
-  };
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -73,20 +68,16 @@ const SetPasswordScreen = () => {
       </HideKeyboardView>
 
       <View className="mx-3">
-        <PasswordTextInput
-          placeHolder={t("password")}
-          onChangeText={setPassword}
+        <PasswordWithError onChangeText={setPassword} placeholder={t('password')} 
+          onIsErrorChange={(e) => {setPasswordIsValid(!e)}} style="password"
+          isDisplayChecklist={true} isDisplayError={displayError} validator={validateSingleField(signupPassword)}
+          value={password}
         />
-        <Text className="text-red-700" style={{ fontSize: 10 }}>
-          {errorM.password}
-        </Text>
-        <PasswordTextInput
-          placeHolder={t("passwordRetype")}
-          onChangeText={setRetypedPassword}
+        <RetypeWithError onChangeText={setRetypedPassword} placeHolder={t('passwordRetype')}
+          onIsErrorChange={(e) => {setRetypeIsValid(!e)}} style="password"
+          isDisplayError={displayError} validator={validateRetypePassword(password)}
+          value={retypedPassword}
         />
-        <Text className="text-red-700" style={{ fontSize: 10 }}>
-          {errorM.retypedPassword}
-        </Text>
       </View>
 
       <HideKeyboardView>
@@ -98,15 +89,8 @@ const SetPasswordScreen = () => {
         keyboardVerticalOffset={10}
       >
         <TouchableOpacity
-          className="bg-blue-800 rounded-full py-4 mx-3"
-          onPress={() => {
-            if (passwordIsValid) {
-              dispatch(setField({ field: "password", content: password }));
-              navigation.navigate("Profile");
-            } else {
-              setErrorM(errorState);
-            }
-          }}
+          className="bg-blue-800 rounded-full py-4 mx-3 mb-3"
+          onPress={onPressNext}
         >
           <Text
             className="text-center font-bold text-white"
