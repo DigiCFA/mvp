@@ -16,56 +16,39 @@ import { selectFieldWithAttr, setField, clearAllField } from "../../redux/api/si
 import { useSignupMutation } from "../../redux/api/apiAuthSlice";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useTranslation } from "react-i18next";
+import withFieldError from "../../components/withFieldError";
+import TextField from "../../components/TextField";
+import { validateSingleField, firstName as firstNameValidation, lastName as lastNameValidation} from "../../utils/userValidation";
+
+const FirstNameWithError = withFieldError(TextField)
+const SecondNameWithError = withFieldError(TextField)
 
 const SetProfileScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const [firstNameInputFocused, setFirstNameInputFocused] = useState(false);
-  const [lastNameInputFocused, setLastNameInputFocused] = useState(false);
-  const [errorState, setErrorState] = useState({});
-  const [errorM, setErrorM] = useState({});
-
-  const [nameIsValid, setNameIsValid] = useState(false);
   const firstName = useSelector(selectFieldWithAttr("firstName"))
   const lastName = useSelector(selectFieldWithAttr("lastName"))
   const user = useSelector(state => state.signUp)
   const [signup,{data, isLoading, isSuccess, isError, error}] = useSignupMutation()
 
+  const [fNameIsError, setfNameIsError] = useState(true)
+  const [sNameIsError, setsNameIsError] = useState(true)
+  const [displayError, setDisplayError] = useState(false)
+
   const onPressButton = async () => {
+    setDisplayError(true)
     try {
-      if(nameIsValid){
-        console.log(user)
+      if(!fNameIsError && !sNameIsError){
         await signup(user).unwrap()
         dispatch(clearAllField())
-      }
-      else{
-        setErrorM(errorState)
       }
     } catch (error) {
       console.error("error",error)
     }
   }
-  useEffect(() => { 
-    validateForm(); 
-  }, [firstName,lastName]); 
-  const validateForm = () => { 
-    let errors = {}; 
-
-    // Validate name field 
-    if (!firstName) { 
-        errors.firstName = t("nameError1"); 
-    } 
-    else if (!lastName) { 
-      errors.lastName = t("nameError2"); 
-  } 
-
-
-    // Set the errors and update form validity 
-    setErrorState(errors); 
-    setNameIsValid(Object.keys(errors).length === 0); 
-  }; 
+  
   return (
     <SafeAreaView className="bg-white flex-1">
       <Spinner visible={isLoading} />
@@ -92,43 +75,15 @@ const SetProfileScreen = () => {
         </View>
       </HideKeyboardView>
 
-      <View className="mx-3 mt-10 space-y-6">
-        <TextInput
-          placeholder={t("firstName")}
-          value={firstName}
-          style={{ fontSize: 18 }}
-          className={`border px-3 py-5 rounded-md ${
-            firstNameInputFocused ? "border-blue-500" : "border-gray-500"
-          }`}
-          onBlur={() => {
-            setFirstNameInputFocused(false);
-          }}
-          onFocus={() => {
-            setFirstNameInputFocused(true);
-          }}
-          onChangeText={(e) => {dispatch(setField({field: "firstName", content: e}))}}
+      <View className="mx-3 space-y-6">
+        <FirstNameWithError onChangeText={(e) => dispatch(setField({field: "firstName", content: e}))} 
+          onIsErrorChange={setfNameIsError} isDisplayError={displayError} validator={validateSingleField([firstNameValidation])}
+          placeholder='First name' value={firstName}
         />
-        <Text className="text-red-700" style={{ fontSize: 10 }}>
-          {errorM.firstName}
-          </Text>
-        <TextInput
-          placeholder={t("lastName")}
-          value={lastName}
-          style={{ fontSize: 18 }}
-          className={`border px-3 py-5 rounded-md ${
-            lastNameInputFocused ? "border-blue-500" : "border-gray-500"
-          }`}
-          onBlur={() => {
-            setLastNameInputFocused(false);
-          }}
-          onFocus={() => {
-            setLastNameInputFocused(true);
-          }}
-          onChangeText={(e) => {dispatch(setField({field: "lastName", content: e}))}}
+        <SecondNameWithError onChangeText={(e) => {dispatch(setField({field: "lastName", content: e}))}}
+          onIsErrorChange={setsNameIsError} isDisplayError={displayError} validator={validateSingleField([lastNameValidation])}
+          placeholder='Last name' value={lastName}
         />
-        <Text className="text-red-700" style={{ fontSize: 10 }}>
-          {errorM.lastName}
-        </Text>
       </View>
 
       <HideKeyboardView>

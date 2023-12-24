@@ -1,53 +1,46 @@
 import Joi from 'joi'
 
-const phoneNumber = Joi.string()
+export const firstName = Joi.string()
+    .regex(/^[A-Za-z]+$/)
+    .required()
+    .error(() => Error("Please enter a valid first name"))
+
+export const lastName = Joi.string()
+    .regex(/^[A-Za-z]+$/)
+    .required()
+    .error(() => Error("Please enter a valid last name"))
+
+export const loginPassword = Joi.string()
+    .regex(/^.+$/)
+    .required()
+    .error(() => Error('Password is required'))
+
+export const phoneNumberValidation = Joi.string()
     .regex(/^[0-9 ]{8,16}$/)
     .required()
-    .messages({
-        'string.pattern.base': "Please enter a valid phone number"
-    })
+    .error(() => Error('Please enter a valid phone number'))
 
-const loginPassword = Joi.string()
-    .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/)
-    .required()
-    .messages({
-        'string.pattern.base': "Please enter a valid password"
-    })
+export const signupPassword = [
+    Joi.string().regex(/^.{6,20}$/).error(() => Error('Length must be between 6 - 20 characters')),
+    Joi.string().regex(/[A-Z]/).error(() => Error('Must contain at least one upper case letter')),
+    Joi.string().regex(/[a-z]/).error(() => Error('Must contain at least one lower case letter')),
+    Joi.string().regex(/[0-9]/).error(() => Error('Must contain one digit')),
+    Joi.string().regex(/[!@#$%&^]/).error(() => Error('Must contain one special character !@#$%^&*'))
+]
 
-const signupPasswordCriterion = {
-    length: Joi.string().regex(/^.{6,20}$/).message({'string.pattern.base': 'Length must be between 6 - 20 characters'}),
-    capitalLetter: Joi.string().regex(/[A-Z]/).message({'string.pattern.base': 'Must contain at least one upper case letter'}),
-    lowerLetter: Joi.string().regex(/[a-z]/).message({'string.pattern.base': 'Must contain at least one lower case letter'}),
-    digit: Joi.string().regex(/[0-9]/).message({'string.pattern.base': 'Must contain one digit'}),
-    specialChar: Joi.string().regex(/[!@#$%&^]/).message({'string.pattern.base': 'Must contain one special character !@#$%^&*'})
+export const validateRetypePassword = (password) => (retyped) => {
+    return {"Retyped password must be the same": !(password === retyped)}
 }
 
-const firstName = Joi.string()
-    .regex(/^[A-Za-z]+$/)
-    .required()
-    .messages({
-        'string.pattern.base': "Please enter a valid name"
+export const validateSingleField = (validators) => (value) => {
+    let errorStates  = validators.reduce((prev, validator) => {
+        prev[validator.validate('').error.message] = false
+        return prev
+    }, {})
+
+    Object.keys(errorStates).forEach((key,idx) => {
+        errorStates[key] |= (validators[idx].validate(value).error != undefined)
     })
 
-const lastName = Joi.string()
-    .regex(/^[A-Za-z]+$/)
-    .required()
-    .messages({
-        'string.pattern.base': "Please enter a valid name"
-    })
-
-export const signUpValidation = Joi.object().keys({
-    phoneNumber,
-    password,
-    firstName, //First name
-    lastName, //Last name
-})
-
-export const loginValidation = Joi.object().keys({
-    phoneNumber,
-    password,
-})
-
-export const phoneNumberValidation = Joi.object().keys({
-    phoneNumber
-})
+    return errorStates
+}
