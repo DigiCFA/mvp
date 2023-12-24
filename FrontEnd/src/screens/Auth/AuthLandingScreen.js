@@ -3,9 +3,8 @@ import {
   useGetSessionQuery,
 } from "../../redux/api/apiAuthSlice";
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 
-import PasswordTextInput from "../../components/PasswordTextInput";
 import HideKeyboardView from "../../components/HideKeyboardView";
 import Spinner from "react-native-loading-spinner-overlay";
 import {
@@ -17,22 +16,27 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useTranslation } from "react-i18next";
+import { loginPassword, phoneNumberValidation, validateSingleField } from "../../utils/userValidation";
+import withFieldError from "../../components/withFieldError";
+import TextField from "../../components/TextField";
 
 const languages = {
   en: { nativeName: "English" },
   fr: { nativeName: "Français" },
 };
 
+const PhoneWithError = withFieldError(TextField)
+const PasswordWithError = withFieldError(TextField)
+
 const LoginSignupLandingScreen = () => {
   const { t, i18n } = useTranslation();
 
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [isPhoneNumberInputFocused, setIsPhoneNumberInputFocused] =
-    useState(false);
-  const [errorState, setErrorState] = useState({});
-  const [errorM, setErrorM] = useState({});
-  const [isValid, setIsValid] = useState(false);
+
+  const [displayError, setDisplayError] = useState(false);
+  const [isPhoneError, setIsPhoneError] = useState(true);
+  const [isPasswordError, setIsPasswordError] = useState(true);
 
   const [
     login,
@@ -66,37 +70,15 @@ const LoginSignupLandingScreen = () => {
       phoneNumber: phoneNumber,
       password: password,
     };
+    const valid = !isPasswordError && !isPhoneError
+    setDisplayError(!valid)
     try {
-      if (isValid) {
+      if (valid) {
         await login(user).unwrap();
-      } else {
-        setErrorM(errorState);
       }
     } catch (err) {
       console.error("error", err);
     }
-  };
-  useEffect(() => {
-    validateForm();
-  }, [phoneNumber, password]);
-
-  const validateForm = () => {
-    let errors = {};
-
-    // Validate phoneNumber field
-    if (!phoneNumber) {
-      errors.phoneNumber = t("phoneError");
-    } else if (phoneNumber.length !== 10) {
-      errors.phoneNumber = t("phoneError2");
-    }
-    // Validate password field
-    if (!password) {
-      errors.password = t("passwordError1");
-    }
-
-    // Set the errors and update form validity
-    setErrorState(errors);
-    setIsValid(Object.keys(errors).length === 0);
   };
 
   return (
@@ -109,32 +91,16 @@ const LoginSignupLandingScreen = () => {
             source={require("../../../assets/logo/3clear_bigger.png")}
             className="h-24 w-20 ml-4"
           />
-          {/* <FontAwesome name="paypal" size={50} color="blue" /> */}
         </View>
       </HideKeyboardView>
 
       <View className="w-full px-10">
-        <TextInput
-          placeholder={t("phoneNumber")}
-          style={{ fontSize: 18 }}
-          className={`border px-3 py-5 rounded-md ${
-            isPhoneNumberInputFocused ? "border-blueLight" : "border-gray-500"
-          } mt-10`}
-          keyboardType="numeric"
-          onFocus={() => {
-            setIsPhoneNumberInputFocused(true);
-          }}
-          onBlur={() => {
-            setIsPhoneNumberInputFocused(false);
-          }}
-          onChangeText={setPhoneNumber}
+        <PhoneWithError onChangeText={setPhoneNumber} onIsErrorChange={setIsPhoneError} placeholder={t('phoneNumber')} 
+          isDisplayError={displayError} validator={validateSingleField([phoneNumberValidation])}
         />
-        <Text className="text-red-800 font-bold">{errorM.phoneNumber}</Text>
-        <PasswordTextInput
-          placeHolder={t("password")}
-          onChangeText={setPassword}
+        <PasswordWithError onChangeText={setPassword} onIsErrorChange={setIsPasswordError} placeholder={t('password')} 
+          isDisplayError={displayError} style={"password"} validator={validateSingleField([loginPassword])}
         />
-        <Text className="text-red-800 font-bold">{errorM.password}</Text>
         <TouchableOpacity className="mt-1.5">
           <Text className=" text-blue-800 font-bold">
             {t("forgottenPassword")}
