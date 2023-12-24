@@ -14,16 +14,15 @@ import LoadingView from "../../components/LoadingView";
 
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useSelector } from "react-redux";
-import { selectSelf } from "../../redux/api/selfSlice";
-import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
+import { useFetchUserQuery, useGenerateQRCodeLinkQuery } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 import QRCode from "react-native-qrcode-svg";
-import * as Linking from "expo-linking";
 
 import logo_D from "../../../assets/logo/Dclear.png";
 import Spinner from "react-native-loading-spinner-overlay";
+import { selectQRCodeLink } from "../../redux/client/qrCodeSlice";
 
 
 const ScanScreen = () => {
@@ -32,12 +31,15 @@ const ScanScreen = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
+  const qrCodeLink = useSelector(selectQRCodeLink);
+
   // const self = useSelector(selectSelf);
 
   const { data: session } = useGetSessionQuery();
   const { data: user, isLoading: fetchUserIsLoading } = useFetchUserQuery(
     session.userId
   );
+  // const { data: qrCodeURL, isError } = useGenerateQRCodeLinkQuery(user._id, user.fullName);
 
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -75,7 +77,7 @@ const ScanScreen = () => {
     <View>
       {hasPermission === null && <LoadingView />}
 
-      {hasPermission === false && <Text>No access to camera.</Text>}
+      {hasPermission === false && <Text>{t("noCameraAccess")}</Text>}
 
       {hasPermission && (
         <View className="w-4/5 aspect-square mx-10 rounded-xl border-4 border-black overflow-hidden">
@@ -105,7 +107,7 @@ const ScanScreen = () => {
         /> */}
 
         <QRCode
-          value="http://awesome.link.qr"
+          value={qrCodeLink}
           size={200}
           logo={logo_D}
           logoSize={80}

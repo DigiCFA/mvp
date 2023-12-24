@@ -8,6 +8,7 @@ import {
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Currency from "react-currency-formatter";
+import { useTranslation } from "react-i18next";
 import { intlFormat } from "../../utils/currencyFormatter";
 import { dinero, toSnapshot } from 'dinero.js';
 import { USD } from '@dinero.js/currencies';
@@ -21,6 +22,8 @@ const PaymentMethodCard = ({
   onPress,
   balance
 }) => {
+
+  const { t } = useTranslation();
 
   return (
     <TouchableOpacity
@@ -39,7 +42,7 @@ const PaymentMethodCard = ({
         <View className="flex-row">
           <View className="flex-1">
             {cardType === "balance" ? (
-              <Text className="text-lg font-medium">DigiCFA Balance</Text>
+              <Text className="text-lg font-medium">{t("balance")}</Text>
             ) : (
               <Text className="text-lg font-medium">{cardName}</Text>
             )}
@@ -47,7 +50,8 @@ const PaymentMethodCard = ({
         </View>
         {cardType === "balance" ? (
           <Text className={`${balanceSufficient ? 'font-medium text-gray-500' : 'font-semibold text-red-600'}`}>
-            Balance:{intlFormat(dinero(balance))}
+            {intlFormat(dinero(balance))}
+            {/* CFA {balance} */}
           </Text>
         ) : (
           <Text className="font-medium text-gray-500">

@@ -9,11 +9,15 @@ import {
 import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 
 import HideKeyboardView from "../../components/HideKeyboardView";
-import { selectFieldWithAttr, setField, clearAllField } from "../../redux/api/signUpSlice";
-import { useSignupMutation } from "../../redux/api/apiAuthSlice";
+import {
+  selectFieldWithAttr,
+  setField,
+  clearAllField,
+  useSignupMutation,
+} from "../../redux/client/signUpSlice";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useTranslation } from "react-i18next";
 import withFieldError from "../../components/withFieldError";
@@ -45,7 +49,7 @@ const SetProfileScreen = () => {
         dispatch(clearAllField())
       }
     } catch (error) {
-      console.error("error",error)
+      console.error("error", error);
     }
   }
   
@@ -94,8 +98,10 @@ const SetProfileScreen = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={10}
       >
-        <TouchableOpacity className="bg-blue-800 rounded-full py-4 mx-3"
-          onPress={onPressButton}>
+        <TouchableOpacity
+          className="bg-blue-800 rounded-full py-4 mx-3"
+          onPress={onPressButton}
+        >
           <Text
             className="text-center font-bold text-white"
             style={{ fontSize: 20 }}

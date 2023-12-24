@@ -54,8 +54,9 @@ const TransactionCard = ({
             <Text className="text-xl font-medium">{title}</Text>
           </View>
           <Text className={`text-xl font-medium ${userPays ? 'text-black' : 'text-green-800'}`}>
-            {userPays ? "-" : "+"}
+            {userPays ? "-" : "+"} 
             {intlFormat(dinero(amount))}
+            {/* CFA {amount} */}
           </Text>
         </View>
         
