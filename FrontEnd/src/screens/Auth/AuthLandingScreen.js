@@ -20,6 +20,7 @@ import { loginPassword, phoneNumberValidation, validateSingleField } from "../..
 import withFieldError from "../../components/withFieldError";
 import TextField from "../../components/TextField";
 
+
 const languages = {
   en: { nativeName: "English" },
   fr: { nativeName: "Français" },
@@ -85,6 +86,7 @@ const LoginSignupLandingScreen = () => {
     <SafeAreaView className="items-center bg-white flex-1">
       <Spinner visible={loginIsFetching || sessionIsFetching} />
 
+      {/* Logo at the top */}
       <HideKeyboardView>
         <View className="mt-5 w-full items-center">
           <Image
@@ -94,6 +96,7 @@ const LoginSignupLandingScreen = () => {
         </View>
       </HideKeyboardView>
 
+      {/* Phone Number + Password */}
       <View className="w-full px-10">
         <PhoneWithError onChangeText={setPhoneNumber} onIsErrorChange={setIsPhoneError} placeholder={t('phoneNumber')} 
           isDisplayError={displayError} validator={validateSingleField([phoneNumberValidation])}
@@ -109,7 +112,10 @@ const LoginSignupLandingScreen = () => {
       </View>
 
       <HideKeyboardView>
+
         <View className="w-full space-y-3 mt-10 px-10 flex-1">
+
+          {/* LOG IN */}
           <TouchableOpacity
             className="rounded-full bg-blueDark py-3"
             onPress={onPressLogin}
@@ -122,6 +128,7 @@ const LoginSignupLandingScreen = () => {
             </Text>
           </TouchableOpacity>
 
+          {/* SIGN UP */}
           <TouchableOpacity
             className="rounded-full border-blueDark border-2 py-3"
             onPress={() => {
@@ -136,6 +143,7 @@ const LoginSignupLandingScreen = () => {
             </Text>
           </TouchableOpacity>
 
+          {/* Language Switching Buttons */}
           <View className="flex-1"></View>
           <View className="flex-col items-end mb-10">
             {Object.keys(languages).map((lng) => (
