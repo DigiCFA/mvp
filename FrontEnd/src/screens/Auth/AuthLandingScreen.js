@@ -20,7 +20,6 @@ import { loginPassword, phoneNumberValidation, validateSingleField } from "../..
 import withFieldError from "../../components/withFieldError";
 import TextField from "../../components/TextField";
 
-
 const languages = {
   en: { nativeName: "English" },
   fr: { nativeName: "Français" },
