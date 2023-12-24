@@ -1,19 +1,35 @@
-
 import { createSlice } from "@reduxjs/toolkit";
+import * as Linking from "expo-linking";
+import { apiSlice } from "../api/apiIndexSlice";
 
 const initialState = {
-    qrCodeLink: "",
-}
+  qrCodeLink: "",
+};
 
 const qrCodeSlice = createSlice({
-    name: 'qrCode',
-    initialState,
-    reducers: {
-        generateQRCodeLink(state, action) {
-            state.qrCodeLink = action.payload;
-        }
-    }
-})
+  name: "qrCode",
+  initialState,
 
-export const { generateQRCodeLink } = qrCodeSlice.actions;
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      apiSlice.endpoints.login.matchFulfilled,
+      (state, action) => {
+        const { userId, userName } = action.payload;
+        const first = userName.split(" ")[0];
+        const last = userName.split(" ")[1];
+        const link = Linking.createURL("/pay/user/", {
+          queryParams: {
+            user: userId,
+            name: first + "_" + last,
+          },
+        });
+        console.log("Generating QR Link");
+        console.log(link);
+        state.qrCodeLink = link;
+      }
+    );
+  },
+});
+
+export const selectQRCodeLink = (state) => state.qrCode.qrCodeLink;
 export default qrCodeSlice.reducer;

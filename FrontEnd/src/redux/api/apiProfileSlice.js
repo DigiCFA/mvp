@@ -6,7 +6,7 @@ import { dinero, toSnapshot } from 'dinero.js';
 import { USD,XAF } from '@dinero.js/currencies';
 
 import { baseURL } from "./apiIndexSlice";
-import * as Linking from "expo-linking"
+import * as Linking from "expo-linking";
 
 // Entity Adapter: a set of reusable reducers + selectors for CRUD operations
 const contactsAdapter = createEntityAdapter({
@@ -94,7 +94,7 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
           isApproved,
           message,
         } = arg);
-        
+
         return {
           url: "/transaction/create_direct_transaction",
           method: "POST",
@@ -116,18 +116,18 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
         ];
       },
     }),
-    generateQRCodeLink: builder.query({
-      queryFn: async (userId, name) => {
-        try {
-          const url = Linking.createURL('/pay/user/${userId}/${name}');
-          console.log("Generating QR Link");
-          console.log(url);
-          return { data: url }
-        } catch (error) {
-          return { error: error };
-        }
-      }
-    }),
+    // generateQRCodeLink: builder.query({
+    //   queryFn: async (userId, name) => {
+    //     try {
+    //       const url = Linking.createURL("/pay/user/${userId}/${name}");
+    //       console.log("Generating QR Link");
+    //       console.log(url);
+    //       return { data: url };
+    //     } catch (error) {
+    //       return { error: error };
+    //     }
+    //   },
+    // }),
     uploadProfilePicture: builder.mutation({
       queryFn: async (args) => {
         const { userId, imageURI } = args;
@@ -222,9 +222,8 @@ export const selectCardsFromUser = (userId) =>
   );
 
 export const selectBalanceFromUser = (userId) =>
-  createSelector(
-    selectUserResult(userId),
-    (userResult) => (userResult?.data)?toSnapshot(dinero(userResult?.data?.balance)): undefined
+  createSelector(selectUserResult(userId), (userResult) =>
+    userResult?.data ? toSnapshot(dinero(userResult?.data?.balance)) : undefined
   );
 
 export const selectProfilePicFromUser = (userId) =>
@@ -233,7 +232,8 @@ export const selectProfilePicFromUser = (userId) =>
     (userResult) => userResult?.data?.profilePicture
   );
 
-export const selectNameFromUser = (userId) => createSelector(
-  selectUserResult(userId),
-  (userResult) => userResult?.data?.fullName
-)
+export const selectNameFromUser = (userId) =>
+  createSelector(
+    selectUserResult(userId),
+    (userResult) => userResult?.data?.fullName
+  );
