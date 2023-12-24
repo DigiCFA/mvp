@@ -50,8 +50,8 @@ const PaymentMethodCard = ({
         </View>
         {cardType === "balance" ? (
           <Text className={`${balanceSufficient ? 'font-medium text-gray-500' : 'font-semibold text-red-600'}`}>
-            {/*{intlFormat(dinero(balance))} */}
-            CFA {balance}
+            {intlFormat(dinero(balance))}
+            {/* CFA {balance} */}
           </Text>
         ) : (
           <Text className="font-medium text-gray-500">
