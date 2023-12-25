@@ -14,6 +14,7 @@ import HideKeyboardView from "../../components/HideKeyboardView";
 import { useSelector } from "react-redux";
 import { selectFieldWithAttr } from "../../redux/client/signUpSlice";
 import { useTranslation } from "react-i18next";
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
 const PhoneVerificationScreen = () => {
 
@@ -28,7 +29,7 @@ const PhoneVerificationScreen = () => {
   
   return (
     <HideKeyboardView>
-      <SafeAreaView className="flex-1 bg-white">
+      <CompatibleSafeAreaView componentStyle="flex-1 bg-white">
         <View className="mx-3 my-4 w-6">
           <TouchableOpacity
             onPress={() => {
@@ -62,7 +63,7 @@ const PhoneVerificationScreen = () => {
             </Text>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </CompatibleSafeAreaView>
     </HideKeyboardView>
   );
 };

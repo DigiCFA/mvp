@@ -13,6 +13,7 @@ import { intlFormat, converter } from "../../utils/currencyFormatter";
 import { dinero, toSnapshot } from 'dinero.js';
 import { USD,XAF } from '@dinero.js/currencies';
 import { useTranslation } from "react-i18next";
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
 const TransactionScreen = () => {
   const { t } = useTranslation();
@@ -22,7 +23,7 @@ const TransactionScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView className="grow">
+    <CompatibleSafeAreaView componentStyle="grow">
       {/* Top Bar */}
       <View className="flex-row justify-items-start items-center space-x-2 pt-1 mx-4">
         <TouchableOpacity onPress={navigation.goBack} className="flex-1">
@@ -93,7 +94,7 @@ const TransactionScreen = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </CompatibleSafeAreaView>
   );
 };
 

@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { intlFormat, converter } from "../../utils/currencyFormatter";
 import { dinero, toSnapshot } from 'dinero.js';
 import { USD,XAF } from '@dinero.js/currencies';
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 const SendConfirmationScreen = () => {
   const { t } = useTranslation();
   const {
@@ -36,7 +37,7 @@ const SendConfirmationScreen = () => {
   let firstName = name.substring(0, name.indexOf(" "));
 
   return (
-    <SafeAreaView className="grow">
+    <CompatibleSafeAreaView componentStyle="grow">
       <View className="flex-row mb-4">
         <TouchableOpacity
           onPress={() => navigation.popToTop()}
@@ -51,7 +52,7 @@ const SendConfirmationScreen = () => {
         <Text className="text-lg font-medium">"{message}"</Text>
         <Text className="text-lg font-medium">{t('confirmationMessage', { name: firstName })}</Text>
       </View>
-    </SafeAreaView>
+    </CompatibleSafeAreaView>
   );
 };
 

@@ -10,15 +10,18 @@ import Spinner from "react-native-loading-spinner-overlay";
 import {
   View,
   Text,
-  SafeAreaView,
   Image,
   TextInput,
   TouchableOpacity,
+  SafeAreaView,
+  Platform,
+  StatusBar
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { loginPassword, phoneNumberValidation, validateSingleField } from "../../utils/userValidation";
 import withFieldError from "../../components/withFieldError";
 import TextField from "../../components/TextField";
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
 
 const languages = {
@@ -83,7 +86,7 @@ const LoginSignupLandingScreen = () => {
   };
 
   return (
-    <SafeAreaView className="items-center bg-white flex-1">
+    <CompatibleSafeAreaView componentStyle="items-center bg-white flex-1">
       <Spinner visible={loginIsFetching || sessionIsFetching} />
 
       {/* Logo at the top */}
@@ -166,7 +169,7 @@ const LoginSignupLandingScreen = () => {
           </View>
         </View>
       </HideKeyboardView>
-    </SafeAreaView>
+    </CompatibleSafeAreaView>
   );
 };
 

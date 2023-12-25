@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import HideKeyboardView from "../../components/HideKeyboardView";
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
 // import { Input } from "react-native-elements";
 // import { Input } from "@rneui/themed";
@@ -25,7 +26,7 @@ const AddPhoneNumberScreen = () => {
 
   return (
     <HideKeyboardView>
-      <SafeAreaView className="flex-col flex-1">
+      <CompatibleSafeAreaView componentStyle="flex-col flex-1">
         <View className="flex-row justify-items-start items-center space-x-2 pt-1 mx-4">
           <TouchableOpacity onPress={navigation.goBack} className="flex-1">
             <Ionicons name="close" size={30} color="grey" />
@@ -103,7 +104,7 @@ const AddPhoneNumberScreen = () => {
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
-      </SafeAreaView>
+      </CompatibleSafeAreaView>
     </HideKeyboardView>
   );
 };

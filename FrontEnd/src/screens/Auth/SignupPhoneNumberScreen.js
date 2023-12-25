@@ -26,6 +26,7 @@ import { useTranslation } from "react-i18next";
 import { validateSingleField, phoneNumberValidation } from "../../utils/userValidation";
 import withFieldError from "../../components/withFieldError";
 import TextField from "../../components/TextField";
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
 const PhoneWithError = withFieldError(TextField)
 
@@ -142,7 +143,7 @@ const SignupPhoneNumberScreen = () => {
 
   return (
     <HideKeyboardView>
-      <SafeAreaView className="flex-1 bg-white relative">
+      <CompatibleSafeAreaView componentStyle="flex-1 bg-white relative">
         <Spinner visible={isLoading || isFetching} />
 
         {isSuccess ? modalScreen(registeredUser) : null}
@@ -196,7 +197,7 @@ const SignupPhoneNumberScreen = () => {
         {modalVisible && (
           <View className="absolute top-0 left-0 bg-gray-500/40 w-full h-full"></View>
         )}
-      </SafeAreaView>
+      </CompatibleSafeAreaView>
     </HideKeyboardView>
   );
 };

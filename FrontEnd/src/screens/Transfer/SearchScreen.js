@@ -17,6 +17,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { useLazyFetchSearchResultsQuery } from "../../redux/api/apiProfileSlice";
 import ContentLoader from "react-native-easy-content-loader";
 import { useTranslation } from "react-i18next";
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
 const SearchScreen = () => {
   const { t } = useTranslation();
@@ -77,7 +78,7 @@ const SearchScreen = () => {
   }
 
   return (
-    <SafeAreaView className="bg-white flex-1">
+    <CompatibleSafeAreaView componentStyle="bg-white flex-1">
       {/* Top Bar */}
       <View className="flex-row items-center space-x-2 pt-2 pb-6 mx-4">
         <TouchableOpacity
@@ -144,7 +145,7 @@ const SearchScreen = () => {
           </View>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </CompatibleSafeAreaView>
   );
 };
 

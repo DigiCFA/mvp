@@ -18,6 +18,7 @@ import { useTranslation } from "react-i18next";
 import { intlFormat, converter } from "../../utils/currencyFormatter";
 import { dinero, toSnapshot } from 'dinero.js';
 import { USD,XAF } from '@dinero.js/currencies';
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 const HomeScreen = () => {
 
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ const HomeScreen = () => {
   const balance = useSelector(selectBalanceFromUser(session.userId))
 
   return (
-    <SafeAreaView className="bg-beige flex-1">
+    <CompatibleSafeAreaView componentStyle="bg-beige flex-1">
       <ScrollView>
         {/* Header */}
         <View className="flex-row px-4 pb-4 space-x-3 self-end">
@@ -145,7 +146,7 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </CompatibleSafeAreaView>
   );
 };
 

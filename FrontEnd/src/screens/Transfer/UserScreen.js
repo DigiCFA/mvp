@@ -15,6 +15,7 @@ import { intlFormat, converter } from "../../utils/currencyFormatter";
 import { dinero, toSnapshot } from "dinero.js";
 import { USD, XAF } from "@dinero.js/currencies";
 import { useTranslation } from "react-i18next";
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
 const numericRE = new RegExp("^[0-9]*$");
 const startsWithTwoDigits = new RegExp("^[0-9]{2}");
@@ -50,7 +51,7 @@ const UserScreen = () => {
   } = useRoute();
 
   return (
-    <SafeAreaView className="flex-col flex-1">
+    <CompatibleSafeAreaView className="flex-col flex-1">
       {/* Upper Portion */}
       <View className="flex-1">
         {/* User Info */}
@@ -204,7 +205,7 @@ const UserScreen = () => {
           </View>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </CompatibleSafeAreaView>
   );
 };
 
