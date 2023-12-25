@@ -9,9 +9,9 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Currency from "react-currency-formatter";
 import { useTranslation } from "react-i18next";
-import { converter,intlFormat } from "../../utils/currencyFormatter";
-import { dinero, toSnapshot } from 'dinero.js';
-import { USD ,XAF} from '@dinero.js/currencies';
+import { converter, intlFormat } from "../../utils/currencyFormatter";
+import { dinero, toSnapshot } from "dinero.js";
+import { USD, XAF } from "@dinero.js/currencies";
 const PaymentMethodCard = ({
   cardID,
   cardName,
@@ -20,9 +20,8 @@ const PaymentMethodCard = ({
   balanceSufficient,
   isActive,
   onPress,
-  balance
+  balance,
 }) => {
-
   const { t } = useTranslation();
 
   return (
@@ -49,8 +48,14 @@ const PaymentMethodCard = ({
           </View>
         </View>
         {cardType === "balance" ? (
-          <Text className={`${balanceSufficient ? 'font-medium text-gray-500' : 'font-semibold text-red-600'}`}>
-            {intlFormat(converter(dinero(balance),XAF))}
+          <Text
+            className={`${
+              balanceSufficient
+                ? "font-medium text-gray-500"
+                : "font-semibold text-red-600"
+            }`}
+          >
+            {intlFormat(converter(dinero(balance), XAF))}
             {/* CFA {balance} */}
           </Text>
         ) : (
