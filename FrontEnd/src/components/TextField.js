@@ -8,8 +8,8 @@ const TextField = ({prompt, onChangeText, isError,
     const [isPhoneNumberInputFocused, setIsPhoneNumberInputFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false)
 
-    const borderColor = isError ? 'border-red-500' : (
-        isPhoneNumberInputFocused ? 'border-blue-500' : 'border-gray-500'
+    const borderColor = isError ? 'border-red-600' : (
+        isPhoneNumberInputFocused ? 'border-blue-500' : 'border-gray-600'
     )
     const borderDisplay = 'border-2'
     const keyboardType = (style==="password") ? 'ascii-capable' : keyboardType

@@ -1,46 +1,54 @@
-import Joi from 'joi'
+import Joi from "joi";
+import i18n from "../localization/i18nConfig";
 
 export const firstName = Joi.string()
-    .regex(/^[A-Za-z]+$/)
-    .required()
-    .error(() => Error("Please enter a valid first name"))
+  .regex(/^[A-Za-z]+$/)
+  .required()
+  .error(() => Error(i18n.t("nameError1")));
 
 export const lastName = Joi.string()
-    .regex(/^[A-Za-z]+$/)
-    .required()
-    .error(() => Error("Please enter a valid last name"))
+  .regex(/^[A-Za-z]+$/)
+  .required()
+  .error(() => Error(i18n.t("nameError2")));
 
 export const loginPassword = Joi.string()
-    .regex(/^.+$/)
-    .required()
-    .error(() => Error('Password is required'))
+  .regex(/^.+$/)
+  .required()
+  .error(() => Error(i18n.t("passwordError1")));
 
 export const phoneNumberValidation = Joi.string()
-    .regex(/^[0-9 ]{8,16}$/)
-    .required()
-    .error(() => Error('Please enter a valid phone number'))
+  .regex(/^[0-9 ]{8,16}$/)
+  .required()
+  .error(() => Error(i18n.t("phoneError1")));
 
 export const signupPassword = [
-    Joi.string().regex(/^.{6,20}$/).error(() => Error('Length must be between 6 - 20 characters')),
-    Joi.string().regex(/[A-Z]/).error(() => Error('Must contain at least one upper case letter')),
-    Joi.string().regex(/[a-z]/).error(() => Error('Must contain at least one lower case letter')),
-    Joi.string().regex(/[0-9]/).error(() => Error('Must contain one digit')),
-    Joi.string().regex(/[!@#$%&^]/).error(() => Error('Must contain one special character !@#$%^&*'))
-]
+  Joi.string()
+    .regex(/^.{6,20}$/)
+    .error(() => Error(i18n.t("passwordError2"))),
+  Joi.string()
+    .regex(/[A-Z]/)
+    .error(() => Error(i18n.t("passwordError3"))),
+  Joi.string()
+    .regex(/[a-z]/)
+    .error(() => Error(i18n.t("passwordError4"))),
+  Joi.string()
+    .regex(/[0-9]/)
+    .error(() => Error(i18n.t("passwordError5"))),
+];
 
 export const validateRetypePassword = (password) => (retyped) => {
-    return {"Retyped password must be the same": !(password === retyped)}
-}
+  return { [i18n.t("passwordError6")]: !(password === retyped) };
+};
 
 export const validateSingleField = (validators) => (value) => {
-    let errorStates  = validators.reduce((prev, validator) => {
-        prev[validator.validate('').error.message] = false
-        return prev
-    }, {})
+  let errorStates = validators.reduce((prev, validator) => {
+    prev[validator.validate("").error.message] = false;
+    return prev;
+  }, {});
 
-    Object.keys(errorStates).forEach((key,idx) => {
-        errorStates[key] |= (validators[idx].validate(value).error != undefined)
-    })
+  Object.keys(errorStates).forEach((key, idx) => {
+    errorStates[key] |= validators[idx].validate(value).error != undefined;
+  });
 
-    return errorStates
-}
+  return errorStates;
+};

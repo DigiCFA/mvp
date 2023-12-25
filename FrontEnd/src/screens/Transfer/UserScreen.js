@@ -34,12 +34,12 @@ const amountInvalid = (amount) =>
   (amount[0] == "0" && amount.match(startsWithTwoDigits)) ||
   (amount.match(/\./g) || []).length > 1 ||
   countFractional(Number(amount)) > 2 ||
-  countWhole(Number(amount)) > 5;
+  countWhole(Number(amount)) > 6;
 
 const UserScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const [amount, onChangeAmount] = useState("0.00");
+  const [amount, onChangeAmount] = useState("0");
   const [message, onChangeMessage] = useState("");
 
   const [amountValid, setAmountValid] = useState(true);
@@ -81,7 +81,7 @@ const UserScreen = () => {
               // inputMode="numeric"
               keyboardType="numeric"
               maxLength={8}
-              placeholder="0.00"
+              placeholder="0"
               contextMenuHidden={true}
               onChangeText={(newAmount) => {
                 if (Number(newAmount) != 0) setAmountValid(true);
@@ -89,10 +89,10 @@ const UserScreen = () => {
                 if (!amountInvalid(newAmount)) onChangeAmount(newAmount);
               }}
               onEndEditing={() => {
-                onChangeAmount(Number(amount).toFixed(2).toString());
+                // onChangeAmount(Number(amount).toFixed(2).toString());
               }}
               value={amount}
-              className={`text-7xl font-medium flex-1 ${
+              className={`text-6xl font-medium flex-1 ${
                 amountValid ? "text-black" : "text-red-600"
               }`}
             />

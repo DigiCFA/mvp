@@ -14,7 +14,10 @@ import LoadingView from "../../components/LoadingView";
 
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useSelector } from "react-redux";
-import { useFetchUserQuery, useGenerateQRCodeLinkQuery } from "../../redux/api/apiProfileSlice";
+import {
+  useFetchUserQuery,
+  useGenerateQRCodeLinkQuery,
+} from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
@@ -24,7 +27,6 @@ import logo_D from "../../../assets/logo/Dclear.png";
 import Spinner from "react-native-loading-spinner-overlay";
 import { selectQRCodeLink } from "../../redux/client/qrCodeSlice";
 import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
-
 
 const ScanScreen = () => {
   const { t } = useTranslation();
@@ -173,7 +175,7 @@ const ScanScreen = () => {
                 mode === 1 ? "text-black" : "text-gray-500"
               }`}
             >
-              {t('getPaid')}
+              {t("getPaid")}
             </Text>
           </TouchableOpacity>
         </View>

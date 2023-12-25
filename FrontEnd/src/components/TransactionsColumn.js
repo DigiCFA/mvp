@@ -4,6 +4,8 @@ import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import React from "react";
 import TransactionCard from "./cards/TransactionCard";
 
+// OBSOLETE -> NOT BEING USED
+
 const TransactionsColumn = () => {
   // Fetching the transactions from the backend
   // useEffect(() => {

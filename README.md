@@ -22,6 +22,10 @@ We are using Expo SDK 49.0.0 [newest] - make sure to keep in mind and check comp
 
 <br>
 
+## SafeAreaView
+
+Whenever you intend to use the SafeAreaView component from React Native, please import CompatibleSafeAreaView from `/Frontend/src/components/CompatibleSafeAreaView.js` instead. To apply Nativewind CSS styling on CompatibleSafeAreaView, please pass in the style through the attribute `componentStyle` instead of `className`. 
+
 ## Builds for Expo Application Services (EAS)
 
 Reference: https://docs.expo.dev/build/introduction/
