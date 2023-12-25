@@ -23,21 +23,21 @@ const TextField = ({prompt, onChangeText, isError,
         </TouchableOpacity>)
 
     const phoneComponent = (style === "phoneNumber" && 
-        <Text className="text-xl text-black mr-1">+1</Text>)
-    
+        <TextInput editable={false} style={{fontSize: 20}} className="text-black mr-1 h-full">+1</TextInput>)    
 
     return isSeparatePrompt ? (
         <View className={`p-2 rounded-md ${borderColor} ${borderDisplay} mt-5`}>
             <Text className="text-gray-400 my-1">{prompt}</Text>
             <View className="flex-row items-center">
                 {phoneComponent}
-                <TextInput keyboardType={keyBoardType} className="pr-2 w-full text-xl" 
+                <TextInput keyboardType={keyBoardType} className="pr-2 flex-1" 
                     onFocus={() => {
                         setIsPhoneNumberInputFocused(true);
                     }}
                     onBlur={() => {
                         setIsPhoneNumberInputFocused(false);
                     }}
+                    style={{fontSize: 20}}
                     onChangeText={onChangeText}
                     secureTextEntry={(style==="password") && !showPassword}
                     placeholder={phoneComponent ? '000-000-0000' : placeholder}
@@ -51,8 +51,8 @@ const TextField = ({prompt, onChangeText, isError,
             {phoneComponent}
             <TextInput
                 placeholder={phoneComponent ? '000-000-0000' : placeholder}
-                style={{ fontSize: 18 }}
-                className={`text-xl flex-1`}
+                style={{ fontSize: 20}}
+                className={`flex-1`}
                 keyboardType={keyBoardType}
                 onFocus={() => {
                 setIsPhoneNumberInputFocused(true);
