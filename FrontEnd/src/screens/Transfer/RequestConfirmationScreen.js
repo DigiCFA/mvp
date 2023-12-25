@@ -2,6 +2,7 @@ import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import React from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
 const SendConfirmationScreen = () => {
   const {
@@ -12,7 +13,7 @@ const SendConfirmationScreen = () => {
   let firstName = name.substring(0, name.indexOf(" "));
 
   return (
-    <SafeAreaView className="grow">
+    <CompatibleSafeAreaView componentStyle="grow">
       <View className="flex-1 flex-col items-center py-60 space-y-4">
         <Text className="text-3xl font-medium text-center px-20">
           You requested ${amount} from {name}
@@ -32,7 +33,7 @@ const SendConfirmationScreen = () => {
           <Text className="text-white text-xl font-extrabold">Done</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </CompatibleSafeAreaView>
   );
 };
 

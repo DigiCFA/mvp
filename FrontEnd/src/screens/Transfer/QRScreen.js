@@ -23,6 +23,7 @@ import QRCode from "react-native-qrcode-svg";
 import logo_D from "../../../assets/logo/Dclear.png";
 import Spinner from "react-native-loading-spinner-overlay";
 import { selectQRCodeLink } from "../../redux/client/qrCodeSlice";
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
 
 const ScanScreen = () => {
@@ -136,7 +137,7 @@ const ScanScreen = () => {
   );
 
   return (
-    <SafeAreaView>
+    <CompatibleSafeAreaView>
       {/* Return Arrow*/}
       <View className="mt-2 mx-6 flex-row">
         <TouchableOpacity
@@ -197,7 +198,7 @@ const ScanScreen = () => {
         })}
       </>
     )} */}
-    </SafeAreaView>
+    </CompatibleSafeAreaView>
   );
 };
 

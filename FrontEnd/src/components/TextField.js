@@ -19,11 +19,11 @@ const TextField = ({prompt, onChangeText, isError,
 
     const passwordComponent = (style === "password" && 
         <TouchableOpacity onPress={onPressShowPassword}>
-            <Entypo name={showPassword ? "eye" : "eye-with-line" } size={20} color="black"/>
+            <Entypo name={showPassword ? "eye" : "eye-with-line" } size={18} color="black"/>
         </TouchableOpacity>)
 
     const phoneComponent = (style === "phoneNumber" && 
-        <TextInput editable={false} style={{fontSize: 20}} className="text-black mr-1 h-full">+1</TextInput>)    
+        <TextInput editable={false} style={{fontSize: 18}} className="text-black mr-1 h-full">+1</TextInput>)    
 
     return isSeparatePrompt ? (
         <View className={`p-2 rounded-md ${borderColor} ${borderDisplay} mt-5`}>
@@ -37,7 +37,7 @@ const TextField = ({prompt, onChangeText, isError,
                     onBlur={() => {
                         setIsPhoneNumberInputFocused(false);
                     }}
-                    style={{fontSize: 20}}
+                    style={{fontSize: 18}}
                     onChangeText={onChangeText}
                     secureTextEntry={(style==="password") && !showPassword}
                     placeholder={phoneComponent ? '000-000-0000' : placeholder}
@@ -51,7 +51,7 @@ const TextField = ({prompt, onChangeText, isError,
             {phoneComponent}
             <TextInput
                 placeholder={phoneComponent ? '000-000-0000' : placeholder}
-                style={{ fontSize: 20}}
+                style={{ fontSize: 18}}
                 className={`flex-1`}
                 keyboardType={keyBoardType}
                 onFocus={() => {

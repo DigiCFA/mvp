@@ -7,6 +7,7 @@ import { selectCardsFromUser } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice"
 import BankCardCard from "../../components/cards/BankCardCard";
 import { useTranslation } from "react-i18next";
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
 const CardDetailsScreen = () => {
   const { t } = useTranslation();
@@ -20,7 +21,7 @@ const CardDetailsScreen = () => {
   const card = useSelector(selectCardsFromUser(session.userId))[index]
 
   return (
-    <SafeAreaView className="bg-[#e9e7e2]">
+    <CompatibleSafeAreaView componentStyle="bg-[#e9e7e2]">
       {/* Top Bar */}
       <View className="flex-row justify-items-start items-center space-x-2 pt-1 mx-4">
         <TouchableOpacity onPress={navigation.goBack} className="flex-1">
@@ -71,7 +72,7 @@ const CardDetailsScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </CompatibleSafeAreaView>
   );
 };
 
