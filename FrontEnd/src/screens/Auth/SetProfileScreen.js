@@ -23,6 +23,7 @@ import { useTranslation } from "react-i18next";
 import withFieldError from "../../components/withFieldError";
 import TextField from "../../components/TextField";
 import { validateSingleField, firstName as firstNameValidation, lastName as lastNameValidation} from "../../utils/userValidation";
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
 const FirstNameWithError = withFieldError(TextField)
 const SecondNameWithError = withFieldError(TextField)
@@ -54,7 +55,7 @@ const SetProfileScreen = () => {
   }
   
   return (
-    <SafeAreaView className="bg-white flex-1">
+    <CompatibleSafeAreaView componentStyle="bg-white flex-1">
       <Spinner visible={isLoading} />
       <HideKeyboardView>
         <View className="mx-3 my-4 w-6">
@@ -110,7 +111,7 @@ const SetProfileScreen = () => {
           </Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </CompatibleSafeAreaView>
   );
 };
 
