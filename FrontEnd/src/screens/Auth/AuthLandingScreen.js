@@ -106,11 +106,13 @@ const LoginSignupLandingScreen = () => {
         <PasswordWithError onChangeText={setPassword} onIsErrorChange={setIsPasswordError} placeholder={t('password')} 
           isDisplayError={displayError} style={"password"} validator={validateSingleField([loginPassword])}
         />
-        <TouchableOpacity className="mt-1.5">
+
+        {/* Forgotten your password button */}
+        {/* <TouchableOpacity className="mt-1.5">
           <Text className=" text-blue-800 font-bold">
             {t("forgottenPassword")}
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <HideKeyboardView>
