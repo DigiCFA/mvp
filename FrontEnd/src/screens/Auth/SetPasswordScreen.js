@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import withFieldError from "../../components/withFieldError";
 import { validateSingleField, signupPassword, validateRetypePassword } from "../../utils/userValidation";
 import TextField from "../../components/TextField";
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
 const PasswordWithError = withFieldError(TextField)
 const RetypeWithError = withFieldError(TextField)
@@ -43,7 +44,7 @@ const SetPasswordScreen = () => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <CompatibleSafeAreaView componentStyle="flex-1 bg-white">
       <HideKeyboardView>
         <View className="mx-3 my-4 w-6">
           <TouchableOpacity
@@ -100,7 +101,7 @@ const SetPasswordScreen = () => {
           </Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </CompatibleSafeAreaView>
   );
 };
 

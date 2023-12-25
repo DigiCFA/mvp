@@ -18,6 +18,7 @@ import { dinero, toSnapshot } from 'dinero.js';
 import { USD } from '@dinero.js/currencies';
 import { Ionicons } from "@expo/vector-icons"
 import { useTranslation } from "react-i18next";
+import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
 const WalletScreen = () => {
 
@@ -28,7 +29,7 @@ const WalletScreen = () => {
   const balance = useSelector(selectBalanceFromUser(session.userId))
 
   return (
-    <SafeAreaView className="flex-1">
+    <CompatibleSafeAreaView componentStyle="flex-1">
       <View className="flex-row p-4 items-center">
         <TouchableOpacity className="bg-white py-2 px-4 rounded-full">
           <Text className="text-lg font-extrabold text-blueDark">{t('wallet')}</Text>
@@ -85,7 +86,7 @@ const WalletScreen = () => {
           </ContentLoader>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </CompatibleSafeAreaView>
   );
 };
 
