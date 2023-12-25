@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
 const withFieldError = (WrappedComponent) => {
@@ -48,30 +48,24 @@ const withFieldError = (WrappedComponent) => {
       onChangeText(text);
     };
 
-    const errorLists = (
-      isDisplayChecklist
-        ? Object.keys(errorStates)
-        : Object.keys(errorStates).filter((key) => errorStates[key])
-    ).map((key, idx) => (
-      <View
-        className="flex-row justify-start items-center space-x-1 mt-1"
-        key={idx}
-      >
-        {errorStates[key] ? (
-          <FontAwesome5 name="exclamation" size={20} color="red" />
-        ) : (
-          <FontAwesome name="check-circle" size={24} color="green" />
-        )}
-        <Text
-          className={
-            (errorStates[key] ? "text-red-600" : "text-green-600") +
-            " font-bold"
-          }
-        >
-          {key}
-        </Text>
-      </View>
-    ));
+    const getErrorListsComponents = (errorList) => {
+      return (Object.keys(errorList)).map((key, idx) => {
+        const errorItemOpacity = ((!isDisplayError || !errorList[key]) && !isDisplayChecklist) ? "opacity-0" : "opacity-1"
+        return (
+          <View className={`flex-row justify-start items-center space-x-1 mt-1 ${errorItemOpacity}`} key={idx}>
+            {(errorList[key] || !isDisplayChecklist) ? (
+              <FontAwesome5 name="exclamation" size={24} color="red" />
+            ) : (
+              <FontAwesome name="check" size={24} color="green" />
+            )}
+            <Text className={(errorList[key] ? "text-red-600" : "text-green-600") +
+              " font-bold pl-1"}>
+              {key}
+            </Text>
+          </View>
+        )
+      })
+    }
 
     return (
       <View>
@@ -80,9 +74,7 @@ const withFieldError = (WrappedComponent) => {
           isError={isError && isDisplayError}
           {...props}
         />
-        {(isDisplayError || isDisplayChecklist) && (
-          <View className="flex-col">{errorLists}</View>
-        )}
+        <View className="flex-col">{getErrorListsComponents(errorStates)}</View>
       </View>
     );
   };

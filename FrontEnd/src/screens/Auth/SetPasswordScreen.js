@@ -74,7 +74,7 @@ const SetPasswordScreen = () => {
           isDisplayChecklist={true} isDisplayError={displayError} validator={validateSingleField(signupPassword)}
           value={password}
         />
-        <RetypeWithError onChangeText={setRetypedPassword} placeHolder={t('passwordRetype')}
+        <RetypeWithError onChangeText={setRetypedPassword} placeholder={t('passwordRetype')}
           onIsErrorChange={(e) => {setRetypeIsValid(!e)}} style="password"
           isDisplayError={displayError} validator={validateRetypePassword(password)}
           value={retypedPassword}

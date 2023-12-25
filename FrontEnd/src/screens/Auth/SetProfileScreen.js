@@ -1,9 +1,7 @@
 import {
   View,
   Text,
-  SafeAreaView,
   TouchableOpacity,
-  TextInput,
   KeyboardAvoidingView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -16,8 +14,8 @@ import {
   selectFieldWithAttr,
   setField,
   clearAllField,
-  useSignupMutation,
 } from "../../redux/client/signUpSlice";
+import { useSignupMutation } from "../../redux/api/apiAuthSlice"
 import Spinner from "react-native-loading-spinner-overlay";
 import { useTranslation } from "react-i18next";
 import withFieldError from "../../components/withFieldError";
