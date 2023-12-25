@@ -38,7 +38,7 @@ const amountInvalid = (amount) =>
 const UserScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const [amount, onChangeAmount] = useState("0.00");
+  const [amount, onChangeAmount] = useState("0");
   const [message, onChangeMessage] = useState("");
 
   const [amountValid, setAmountValid] = useState(true);
@@ -80,7 +80,7 @@ const UserScreen = () => {
               // inputMode="numeric"
               keyboardType="numeric"
               maxLength={8}
-              placeholder="0.00"
+              placeholder="0"
               contextMenuHidden={true}
               onChangeText={(newAmount) => {
                 if (Number(newAmount) != 0) setAmountValid(true);
