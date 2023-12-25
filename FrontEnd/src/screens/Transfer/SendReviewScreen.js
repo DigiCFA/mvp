@@ -134,7 +134,7 @@ const SendReviewScreen = () => {
             <View className="flex-row mt-8">
               <Text className="text-lg font-bold flex-1">{t('total')}</Text>
               <Text className="text-lg font-bold">
-                {intlFormat(dinero(amount))}
+                {intlFormat(dinero(amount))} CFA
               </Text>
             </View>
 
