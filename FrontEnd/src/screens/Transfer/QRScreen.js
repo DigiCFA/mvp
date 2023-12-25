@@ -15,13 +15,18 @@ import LoadingView from "../../components/LoadingView";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useSelector } from "react-redux";
 import {
+  selectNameFromUser,
   useFetchUserQuery,
   useGenerateQRCodeLinkQuery,
 } from "../../redux/api/apiProfileSlice";
-import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
+import {
+  selectCurrentUserID,
+  useGetSessionQuery,
+} from "../../redux/api/apiAuthSlice";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 import QRCode from "react-native-qrcode-svg";
+import * as Linking from "expo-linking";
 
 import logo_D from "../../../assets/logo/Dclear.png";
 import Spinner from "react-native-loading-spinner-overlay";
@@ -34,15 +39,10 @@ const ScanScreen = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
-  const qrCodeLink = useSelector(selectQRCodeLink);
-
-  // const self = useSelector(selectSelf);
-
   const { data: session } = useGetSessionQuery();
   const { data: user, isLoading: fetchUserIsLoading } = useFetchUserQuery(
     session.userId
   );
-  // const { data: qrCodeURL, isError } = useGenerateQRCodeLinkQuery(user._id, user.fullName);
 
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -53,6 +53,23 @@ const ScanScreen = () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
     setHasPermission(status === "granted");
   };
+
+  const generateQRCodeLink = (user) => {
+    const userId = user._id;
+    const first = user.firstName;
+    const last = user.lastName;
+
+    const link = Linking.createURL("/pay/user/", {
+      queryParams: {
+        user: userId,
+        name: first + "_" + last,
+      },
+    });
+    console.log(link);
+    return link;
+  };
+
+  const qrCodeLink = generateQRCodeLink(user);
 
   const handleBarCodeScanned = ({ type, data }) => {
     let usefulData = data.split("/user/")[1].split("/");
@@ -103,7 +120,7 @@ const ScanScreen = () => {
       <Text className="text-lg font-semibold">{user?.phoneNumber}</Text>
 
       <View className="p-6">
-        {/* Should be the QR code */}
+        {/* Placeholder if QR Doesn't work */}
         {/* <Image
           source={{ uri: user?.profilePicture }}
           style={{ width: 240, height: 240 }}
@@ -119,7 +136,6 @@ const ScanScreen = () => {
           ecl="M"
         />
 
-        {/* <QRCode value="somerandom" /> */}
       </View>
 
       <View className="flex-row mx-20">

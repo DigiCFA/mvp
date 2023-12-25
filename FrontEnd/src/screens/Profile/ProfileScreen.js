@@ -31,11 +31,11 @@ const ProfileScreen = () => {
 
 
   // I believe this is the standard way to deal with the Instagram Loader
-  let content = <InstagramLoader active />;
+  let content = <InstagramLoader active imageHeight={100}/>;
 
   if (fetchUserIsSuccess) {
     content = (
-      <View className="bg-white flex-col items-start pb-4">
+      <View className="bg-white flex-col items-start pb-4 h-100">
         <View className="px-4 pt-4">
           <Image
             source={{ uri: user.profilePicture }}
@@ -52,6 +52,9 @@ const ProfileScreen = () => {
       </View>
     );
   }
+
+  // content = <InstagramLoader active imageHeight={100}/>;
+
 
   return (
     <View className="grow">
