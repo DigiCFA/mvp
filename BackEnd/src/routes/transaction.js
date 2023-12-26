@@ -5,8 +5,8 @@ import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
 import { ERROR_CODES, format_error } from "../utils/errorHandling.js";
-import { dinero, toSnapshot ,lessThan,add,subtract,toDecimal} from 'dinero.js';
-import { USD } from '@dinero.js/currencies';
+import { dinero, toSnapshot ,lessThan,add,subtract,toDecimal,convert} from 'dinero.js';
+import { USD,XAF  } from '@dinero.js/currencies';
 
 
 import admin from "firebase-admin";
@@ -16,13 +16,20 @@ import { getMessaging } from "firebase-admin/messaging";
 
 const router = express.Router();
 function IntlFormatter({ value, currency }) {
-  return Number(value).toLocaleString('en-US', {
+  return Number(value).toLocaleString('fr', {
     ...{},
     style: 'currency',
     currency: currency.code,
   });
 };
+const rates = { XAF: { amount: 59598, scale: 2 }}
 
+function converter(dineroObject, newCurrency) {
+    if(newCurrency.code===toSnapshot(dineroObject).currency.code){
+      return dineroObject;
+    }
+    return convert(dineroObject, newCurrency, rates);
+};
 // {
 //   "amountTransferred":
 //   {
@@ -49,7 +56,7 @@ router.post("/create_direct_transaction", async (req, res, next) => {
   const newTransaction = req.body;
   const sendID = newTransaction.sender;
   const receiveID = newTransaction.receiver;
-  let amountTransferred = dinero(newTransaction.amountTransferred);
+  let amountTransferred = converter(dinero(newTransaction.amountTransferred),XAF);
   console.log(toSnapshot(amountTransferred));
 
   try {
@@ -78,8 +85,8 @@ router.post("/create_direct_transaction", async (req, res, next) => {
         throw format_error(ERROR_CODES.CANNOT_TRANSACT_TO_SELF)
       }
 
-      let sendUserBalance = dinero(sendUser.balance);
-      let receiveUserBalance = dinero(receiveUser.balance);
+      let sendUserBalance = converter(dinero(sendUser.balance),XAF);
+      let receiveUserBalance = converter(dinero(receiveUser.balance),XAF);
       console.log(transactionData);
 
 

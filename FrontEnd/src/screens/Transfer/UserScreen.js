@@ -11,13 +11,14 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
 import { onChange } from "react-native-reanimated";
-import { dinero, toSnapshot } from 'dinero.js';
-import { USD } from '@dinero.js/currencies';
+import { intlFormat, converter } from "../../utils/currencyFormatter";
+import { dinero, toSnapshot } from "dinero.js";
+import { USD, XAF } from "@dinero.js/currencies";
 import { useTranslation } from "react-i18next";
 import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
-const numericRE = new RegExp("^[0-9.]*$");
-const startsWithTwoDigits = new RegExp("^[0-9]{2}.");
+const numericRE = new RegExp("^[0-9]*$");
+const startsWithTwoDigits = new RegExp("^[0-9]{2}");
 
 const countFractional = (value) => {
   if (Math.floor(value) === value) return 0;
@@ -29,12 +30,12 @@ const countWhole = (value) => {
 };
 
 const amountInvalid = (amount) =>
+  countWhole(Number(amount)) > 6 ||
   !amount.match(numericRE) ||
   amount.match(/^\./) ||
   (amount[0] == "0" && amount.match(startsWithTwoDigits)) ||
   (amount.match(/\./g) || []).length > 1 ||
-  countFractional(Number(amount)) > 2 ||
-  countWhole(Number(amount)) > 6;
+  countFractional(Number(amount)) > 2;
 
 const UserScreen = () => {
   const { t } = useTranslation();
@@ -50,7 +51,7 @@ const UserScreen = () => {
   } = useRoute();
 
   return (
-    <CompatibleSafeAreaView className="flex-col flex-1">
+    <CompatibleSafeAreaView componentStyle="flex-col flex-1">
       {/* Upper Portion */}
       <View className="flex-1">
         {/* User Info */}
@@ -104,7 +105,7 @@ const UserScreen = () => {
             <View className="self-center flex-row space-x-2">
               <FontAwesome5 name="exclamation" size={20} color="red" />
               <Text className="font-medium text-base text-red-600">
-                {t('amountError')}
+                {t("amountError")}
               </Text>
             </View>
           )}
@@ -122,7 +123,7 @@ const UserScreen = () => {
         <View className="mt-auto">
           {/* Comments associated with the transaction */}
           <TextInput
-            placeholder={t('message')}
+            placeholder={t("message")}
             keyboardType="default"
             placeholderTextColor={messageValid ? "gray" : "#dc2626"}
             multiline={true}
@@ -140,7 +141,7 @@ const UserScreen = () => {
             {!messageValid && (
               <View className="self-center flex-row space-x-2">
                 <Text className="font-medium text-base text-red-600">
-                  {t('messageError')}
+                  {t("messageError")}
                 </Text>
               </View>
             )}
@@ -148,7 +149,7 @@ const UserScreen = () => {
 
           <View className="flex-row mb-4 space-x-4 justify-center">
             {/* Request */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 if (Number(amount) == 0) {
                   setAmountValid(false);
@@ -160,14 +161,19 @@ const UserScreen = () => {
                   navigation.navigate("RequestReview", {
                     id,
                     name,
-                    amount : toSnapshot(dinero({ amount: Number(amount), currency: USD }))  ,
+                    amount: toSnapshot(
+                      dinero({ amount: Number(amount), currency: XAF })
+                    ),
                     message,
                   });
                 }
               }}
               className="bg-blueDark rounded-full py-3 px-8"
-            >
-              <Text className="text-white text-xl font-extrabold">{t('request')}</Text>
+            > */}
+            <TouchableOpacity className="bg-blueDark rounded-full py-3 px-8">
+              <Text className="text-white text-xl font-extrabold">
+                {t("request")}
+              </Text>
             </TouchableOpacity>
 
             {/* Pay */}
@@ -183,14 +189,18 @@ const UserScreen = () => {
                   navigation.navigate("PaymentMethods", {
                     receiverId: id,
                     name,
-                    amount :toSnapshot(dinero({ amount: Number(amount), currency: USD }))  ,
+                    amount: toSnapshot(
+                      dinero({ amount: Number(amount), currency: XAF })
+                    ),
                     message,
                   });
                 }
               }}
               className="bg-blue-900 rounded-full py-3 px-14"
             >
-              <Text className="text-white text-xl font-extrabold">{t('pay')}</Text>
+              <Text className="text-white text-xl font-extrabold">
+                {t("pay")}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

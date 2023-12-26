@@ -23,7 +23,8 @@ const CardsColumn = (props) => {
     <View>
       {[defaultPayment, ...cards]?.map((card, index) => (
         <PaymentMethodCard
-          key={card._id}
+          // card._id is unreliable as there could be undefined, duplicate keys etc
+          key={`${card.name}-${card.cardNumber}`}
           cardID={card._id}
           cardName={card.name}
           cardNumber={card.cardNumber}

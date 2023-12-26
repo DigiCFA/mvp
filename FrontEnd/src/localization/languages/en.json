@@ -64,7 +64,7 @@
     "send": "Send",
     "review": "Review",
     "total": "Total",
-    "moneySent": "{{amount}} CFA sent!",
+    "moneySent": "{{amount}} sent!",
     "confirmationMessage": "We'll let {{name}} know.",
     "walletFeature": "This feature is currently under development. \n\nSoon you'll be able to link your credit cards to the app!",
     "name": "Name",
