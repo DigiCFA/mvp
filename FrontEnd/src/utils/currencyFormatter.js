@@ -13,13 +13,16 @@ function createIntlFormatter(locale, options = {}) {
     return toDecimal(dineroObject, transformer);
   };
 }
-import { dinero, convert } from 'dinero.js';
+import { dinero, convert,toSnapshot } from 'dinero.js';
 import { USD, XAF } from '@dinero.js/currencies';
 
-const rates = { XAF: { amount: 595.98, scale: 1 } }
+const rates = { XAF: { amount: 59598, scale: 2 }}
 
 function createConverter(rates) {
   return function converter(dineroObject, newCurrency) {
+    if(newCurrency.code===toSnapshot(dineroObject).currency.code){
+      return dineroObject;
+    }
     return convert(dineroObject, newCurrency, rates);
   };
 }

@@ -59,6 +59,7 @@ const PaymentMethodsScreen = () => {
     params: { receiverId, name, amount, message },
   } = useRoute();
 
+
   return (
     <View className="flex-1 items-center justify-center">
       <Pressable
@@ -133,7 +134,7 @@ const PaymentMethodsScreen = () => {
                     navigation.navigate("SendReview", {
                       receiverId,
                       name,
-                      amount:toSnapshot(converter(dinero(amount))),
+                      amount:toSnapshot(converter(dinero(amount),XAF)),
                       message,
                       cardID,
                       cardName,
