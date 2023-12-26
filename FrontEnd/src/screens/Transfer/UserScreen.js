@@ -6,11 +6,9 @@ import {
   TextInput,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
-import Currency from "react-currency-formatter";
-import { onChange } from "react-native-reanimated";
 import { dinero, toSnapshot } from 'dinero.js';
 import { USD } from '@dinero.js/currencies';
 import { useTranslation } from "react-i18next";
@@ -39,18 +37,42 @@ const amountInvalid = (amount) =>
 const UserScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const [amount, onChangeAmount] = useState("0");
+
+  const [amount, setAmount] = useState("000");
+  const [zeroPrefix, setZeroPrefix] = useState(3);
   const [message, onChangeMessage] = useState("");
 
-  const [amountValid, setAmountValid] = useState(true);
-  const [messageValid, setMessageValid] = useState(true);
+  const [amountValid, setAmountValid] = useState(false);
+  const [messageValid, setMessageValid] = useState(false);
+
+  const [displayError, setDisplayError] = useState(false);
 
   const {
     params: { id, name },
   } = useRoute();
 
+  const onChangeAmount = (e) => {
+    const key = e.nativeEvent.key 
+    let actualAmount = amount.slice(zeroPrefix)  
+    if(key >= '0' && key <= '9' && amount.length < 8){
+      actualAmount += key
+      setAmount("000".slice(Math.min(actualAmount.length, 3)) + actualAmount)
+      setZeroPrefix(Math.max(3 - actualAmount.length, 0))
+    }
+    else if (key === 'Backspace'){
+      const afterDelLength = Math.max(0, actualAmount.length - 1)
+      const afterDelAmount = actualAmount.slice(0, actualAmount.length-1)
+      setAmount("000".slice(Math.min(afterDelLength, 3)) + afterDelAmount)
+      setZeroPrefix(Math.max(3 - afterDelLength, 0))
+    }
+  }
+
+  useEffect(() => {
+    setAmountValid(Number(amount) != 0)
+  }, [amount])
+
   return (
-    <CompatibleSafeAreaView className="flex-col flex-1">
+    <CompatibleSafeAreaView componentStyle="flex-col flex-1">
       {/* Upper Portion */}
       <View className="flex-1">
         {/* User Info */}
@@ -66,41 +88,34 @@ const UserScreen = () => {
 
         {/* Payment Amount */}
         <View className="flex-row h-24 mt-6 justify-center">
-          <View className="self-start">
-            <Text
-              className={`text-5xl ${
-                amountValid ? "text-black" : "text-red-600"
-              }`}
-            >
+          <Text
+            className={`text-5xl ${
+              (!amountValid && displayError) ? "text-red-600" : "text-black"
+            }`}>
               CFA
-            </Text>
-          </View>
+          </Text>
 
-          <View className="">
+          <View className="flex-row">
             <TextInput
-              // inputMode="numeric"
               keyboardType="numeric"
               maxLength={8}
-              placeholder="0"
               contextMenuHidden={true}
-              onChangeText={(newAmount) => {
-                if (Number(newAmount) != 0) setAmountValid(true);
-
-                if (!amountInvalid(newAmount)) onChangeAmount(newAmount);
-              }}
-              onEndEditing={() => {
-                // onChangeAmount(Number(amount).toFixed(2).toString());
-              }}
-              value={amount}
-              className={`text-6xl font-medium flex-1 ${
-                amountValid ? "text-black" : "text-red-600"
-              }`}
+              placeholder={amount}
+              className={`font-medium opacity-0 z-10 `}
+              style={{fontSize: 60}}
+              selection={{start: amount.length, end: amount.length}}
+              onKeyPress={onChangeAmount}
             />
+            <Text style={{fontSize: 60}}
+              className={`font-medium text-black absolute h-full z-0  ${
+              (!amountValid && displayError) ? "text-red-600" : "text-black"}`}>
+              {amount}
+            </Text>
           </View>
         </View>
 
         <View className="h-8">
-          {!amountValid && (
+          {(!amountValid && displayError) && (
             <View className="self-center flex-row space-x-2">
               <FontAwesome5 name="exclamation" size={20} color="red" />
               <Text className="font-medium text-base text-red-600">
@@ -124,20 +139,20 @@ const UserScreen = () => {
           <TextInput
             placeholder={t('message')}
             keyboardType="default"
-            placeholderTextColor={messageValid ? "gray" : "#dc2626"}
+            placeholderTextColor={(!messageValid && displayError) ? "#dc2626" : "gray"}
             multiline={true}
             onChangeText={(newMessage) => {
-              if (newMessage.trim() != "") setMessageValid(true);
+              setMessageValid(newMessage.trim() != "")
               onChangeMessage(newMessage);
             }}
             value={message}
             className={`text-base font-medium mx-4 p-3 bg-[#e9e7e2] rounded-xl  ${
-              messageValid ? "border border-[#e9e7e2]" : "border border-red-600"
+              (!messageValid && displayError) ? "border border-red-600" : "border border-[#e9e7e2]" 
             }`}
           />
 
           <View className="mt-1 h-8">
-            {!messageValid && (
+            {(!messageValid && displayError) && (
               <View className="self-center flex-row space-x-2">
                 <Text className="font-medium text-base text-red-600">
                   {t('messageError')}
@@ -150,12 +165,7 @@ const UserScreen = () => {
             {/* Request */}
             <TouchableOpacity
               onPress={() => {
-                if (Number(amount) == 0) {
-                  setAmountValid(false);
-                }
-                if (message.trim() == "") {
-                  setMessageValid(false);
-                }
+                setDisplayError(true);
                 if (Number(amount) != 0 && message.trim() != "") {
                   navigation.navigate("RequestReview", {
                     id,
@@ -173,12 +183,7 @@ const UserScreen = () => {
             {/* Pay */}
             <TouchableOpacity
               onPress={() => {
-                if (Number(amount) == 0) {
-                  setAmountValid(false);
-                }
-                if (message.trim() == "") {
-                  setMessageValid(false);
-                }
+                setDisplayError(true)
                 if (Number(amount) != 0 && message.trim() != "") {
                   navigation.navigate("PaymentMethods", {
                     receiverId: id,
