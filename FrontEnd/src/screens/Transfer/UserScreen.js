@@ -51,7 +51,7 @@ const UserScreen = () => {
   } = useRoute();
 
   return (
-    <CompatibleSafeAreaView className="flex-col flex-1">
+    <CompatibleSafeAreaView componentStyle="flex-col flex-1">
       {/* Upper Portion */}
       <View className="flex-1">
         {/* User Info */}
