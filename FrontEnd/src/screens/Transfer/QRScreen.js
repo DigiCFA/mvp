@@ -32,6 +32,7 @@ import logo_D from "../../../assets/logo/Dclear.png";
 import Spinner from "react-native-loading-spinner-overlay";
 import { selectQRCodeLink } from "../../redux/client/qrCodeSlice";
 import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
+import ErrorPopup from "../../components/ErrorPopup";
 
 const ScanScreen = () => {
   const { t } = useTranslation();
@@ -46,6 +47,7 @@ const ScanScreen = () => {
 
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [QRError, setQRError] = useState(false);
 
   const [mode, setMode] = useState(0);
 
@@ -71,22 +73,36 @@ const ScanScreen = () => {
 
   const qrCodeLink = generateQRCodeLink(user);
 
-  const handleBarCodeScanned = ({ type, data }) => {
-    let usefulData = data.split("/user/")[1].split("/");
-    let id = usefulData[0];
+  const handleBarCodeScanned = async ({ type, data }) => {
+    try {
+      let usefulData = data.split("/user/")[1].split("/");
+      let id = usefulData[0];
 
-    let firstName = usefulData[1].split("_")[0];
-    let lastName = usefulData[1].split("_")[1];
-    let fullName =
-      firstName.charAt(0).toUpperCase() +
-      firstName.slice(1) +
-      " " +
-      lastName.charAt(0).toUpperCase() +
-      lastName.slice(1);
-    // alert(`ID: ${id}, name: ${fullName}`);
+      const {
+        data: scanUser,
+        isLoading: fetchScanUserIsLoading,
+        isError: fetchScanUserIsError,
+      } = useFetchUserQuery(id);
 
-    setScanned(true);
-    navigation.navigate("User", { id, name: fullName });
+      if (fetchScanUserIsError) {
+        setQRError(true);
+      } else {
+        // let firstName = usefulData[1].split("_")[0];
+        // let lastName = usefulData[1].split("_")[1];
+        // let fullName =
+        //   firstName.charAt(0).toUpperCase() +
+        //   firstName.slice(1) +
+        //   " " +
+        //   lastName.charAt(0).toUpperCase() +
+        //   lastName.slice(1);
+        alert(`ID: ${id}, name: ${scanUser.fullName}`);
+
+        setScanned(true);
+        navigation.navigate("User", { id, name: scanUser.fullName });
+      }
+    } catch (error) {
+      setQRError(true);
+    }
   };
 
   useEffect(() => {
@@ -94,7 +110,7 @@ const ScanScreen = () => {
   }, []);
 
   const scanCode = (
-    <View>
+    <View className="grow">
       {hasPermission === null && <LoadingView />}
 
       {hasPermission === false && <Text>{t("noCameraAccess")}</Text>}
@@ -108,6 +124,9 @@ const ScanScreen = () => {
           />
         </View>
       )}
+
+      <View className="flex-1"></View>
+      {QRError && <ErrorPopup text="QRError" color="blueDark" />}
     </View>
   );
 
@@ -135,7 +154,6 @@ const ScanScreen = () => {
           logoMargin={-4}
           ecl="M"
         />
-
       </View>
 
       <View className="flex-row mx-20">
@@ -155,7 +173,7 @@ const ScanScreen = () => {
   );
 
   return (
-    <CompatibleSafeAreaView>
+    <CompatibleSafeAreaView componentStyle={"grow"}>
       {/* Return Arrow*/}
       <View className="mt-2 mx-6 flex-row">
         <TouchableOpacity
