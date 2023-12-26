@@ -15,9 +15,9 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
 import PaymentMethodCard from "../../components/cards/PaymentMethodCard";
-import { intlFormat } from "../../utils/currencyFormatter";
+import { intlFormat, converter } from "../../utils/currencyFormatter";
 import { dinero, toSnapshot } from 'dinero.js';
-import { USD } from '@dinero.js/currencies';
+import { USD,XAF } from '@dinero.js/currencies';
 import { useCreateDirectTransactionMutation } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { useTranslation } from "react-i18next";
@@ -134,7 +134,7 @@ const SendReviewScreen = () => {
             <View className="flex-row mt-8">
               <Text className="text-lg font-bold flex-1">{t('total')}</Text>
               <Text className="text-lg font-bold">
-                {intlFormat(dinero(amount))}
+                {intlFormat(converter(dinero(amount),XAF))}
               </Text>
             </View>
 

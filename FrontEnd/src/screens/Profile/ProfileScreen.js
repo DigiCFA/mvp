@@ -13,9 +13,9 @@ import SettingsColumn from "../../components/SettingsColumn";
 import { InstagramLoader } from "react-native-easy-content-loader";
 import { useFetchUserQuery } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
-import { intlFormat } from "../../utils/currencyFormatter";
+import { intlFormat, converter } from "../../utils/currencyFormatter";
 import { dinero, toSnapshot } from 'dinero.js';
-import { USD } from '@dinero.js/currencies';
+import { USD,XAF } from '@dinero.js/currencies';
 import { useTranslation } from "react-i18next";
 
 const ProfileScreen = () => {

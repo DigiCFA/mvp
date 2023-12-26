@@ -19,7 +19,8 @@ import { selectCardsFromUser, selectBalanceFromUser} from "../../redux/api/apiPr
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { useTranslation } from "react-i18next";
 import { dinero, toSnapshot ,lessThan} from 'dinero.js';
-import { USD } from '@dinero.js/currencies';
+import { intlFormat, converter } from "../../utils/currencyFormatter";
+import { USD,XAF } from '@dinero.js/currencies';
 
 const PaymentMethodsScreen = () => {
 
@@ -125,20 +126,20 @@ const PaymentMethodsScreen = () => {
                 onPress={() => {
 
                   console.log(balance);
-                  if (balance && lessThan(dinero(balance),dinero(amount))){
+                  if (balance && lessThan(converter(dinero(balance),XAF),converter(dinero(amount),XAF))){
                     setBalanceSufficient(false);
                   } else {
                     navigation.goBack();
                     navigation.navigate("SendReview", {
                       receiverId,
                       name,
-                      amount:toSnapshot(dinero(amount)),
+                      amount:toSnapshot(converter(dinero(amount))),
                       message,
                       cardID,
                       cardName,
                       cardType,
                       cardNumber,
-                      balance:toSnapshot(dinero(balance)),
+                      balance:toSnapshot(converter(dinero(balance),XAF)),
                     });
                   }
                 }}
