@@ -49,7 +49,7 @@
   "scanCode": "Scannez le code",
   "getPaid": "Etre payé",
   "noCameraAccess": "Pas d'accès à la caméra.",
-  "QRError": "Vous avez scanné le mauvais code QR!",
+  "QRError": "Quelque chose n'a pas fonctionné ! Veuillez vous assurer que le code QR est valide.",
   "seller": "Assurez-vous que le vendeur affiche son code QR sous « Afficher pour payer ».",
   "search": "Numéro de téléphone, nom",
   "suggestedContacts": "Contacts suggérés",

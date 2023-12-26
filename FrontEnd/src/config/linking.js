@@ -46,8 +46,4 @@ const linking = {
 };
 
 
-export const QRCodeURL = Linking.createURL('pay/user/app', {
-  queryParams: {hello: 'world'},
-})
-
 export default linking;
