@@ -7,7 +7,8 @@ import { profilePicBaseURL } from "../config/awsConfig.js";
 
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
-import { dinero } from 'dinero.js';
+import { dinero, toSnapshot } from 'dinero.js';
+import { USD,XAF } from '@dinero.js/currencies';
 
 //import {mongoose_fuzzy_searching} from "mongoose-fuzzy-searching"
 
@@ -323,8 +324,8 @@ router.patch("/add_balance", async (req, res, next) => {
       throw format_error(ERROR_CODES.ID_NOT_FOUND);
     }
     
-    let userBalance = dinero(sendUser.balance);
-    let receiveBalance = dinero(req.body.amount);
+    let userBalance = converter(dinero(user.balance),XAF);
+    let receiveBalance = converter(dinero(req.body.amount),XAF);
 
     user.balance = toSnapshot(add(userBalance,receiveBalance));
 

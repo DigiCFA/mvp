@@ -5,7 +5,7 @@ import { format_error, ERROR_CODES } from "../utils/errorHandling.js";
 
 import User from "../models/userModel.js";
 import { dinero, toSnapshot } from 'dinero.js';
-import { USD } from '@dinero.js/currencies';
+import { USD,XAF } from '@dinero.js/currencies';
 const router = express.Router();
 
 router.post("/signup", async (req, res, next) => {
@@ -19,7 +19,7 @@ router.post("/signup", async (req, res, next) => {
       fullName: firstName + " " + lastName,
       phoneNumber: phoneNumber,
       phoneNumbers: [phoneNumber],
-      balance: toSnapshot(dinero({ amount: 200, currency: USD })),
+      balance: toSnapshot(dinero({ amount: 0, currency: XAF })),
       password: password,
       creationDate: Date.now(),
       addresses: [{}]
