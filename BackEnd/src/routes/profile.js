@@ -100,32 +100,23 @@ router.get("/search_users", async (req, res, next) => {
         index: "default",
         compound: {
           should: [
-            {
-              autocomplete: {
-                query: query,
-                path: "firstName",
-                fuzzy: { maxEdits: 1 },
-              },
-            },
-            {
-              autocomplete: {
-                query: query,
-                path: "lastName",
-                fuzzy: { maxEdits: 1 },
-              },
-            },
+            
             {
               autocomplete: {
                 query: query,
                 path: "fullName",
-                fuzzy: { maxEdits: 1 },
+                fuzzy: { maxEdits: 1 ,
+                  prefixLength: 1,
+                  maxExpansions: 16 },
               },
             },
             {
               autocomplete: {
                 query: query,
                 path: "phoneNumber",
-                fuzzy: { maxEdits: 1 },
+                fuzzy: { maxEdits: 1,
+                  prefixLength: 1,
+                  maxExpansions: 16 },
               },
             },
           ],
