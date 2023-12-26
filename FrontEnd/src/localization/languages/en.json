@@ -49,7 +49,7 @@
     "scanCode": "Scan code",
     "getPaid": "Get paid",
     "noCameraAccess": "No access to camera. Please enable it in the settings",
-    "QRError": "You might have scanned the wrong QR code!",
+    "QRError": "Something went wrong! Please make sure the QR Code is valid.",
     "seller": "Make sure the seller is showing their QR code under 'Show to Pay'.",
     "search": "Phone number, name",
     "suggestedContacts": "Suggested contacts",

@@ -1,12 +1,12 @@
 import * as Linking from "expo-linking";
-import { selectCurrentUserID, useGetSessionQuery } from "../redux/api/apiAuthSlice";
+import {
+  selectCurrentUserID,
+  useGetSessionQuery,
+} from "../redux/api/apiAuthSlice";
 import { useSelector } from "react-redux";
 import { selectNameFromUser } from "../redux/api/apiProfileSlice";
 
-
-// const id = useSelector(selectCurrentUserID);
-// const name = useSelector(selectNameFromUser(id));
-
+// I am actually confused right now, what's the point of this? Just for camera scanning of code and it being directed to here? Shouldn't we manually fetch the link and restrict the scanning functionality only to the QR scanning from within the app?
 
 const prefix = Linking.createURL("/");
 
@@ -34,7 +34,7 @@ const config = {
           },
         },
         // Catch all
-        QRError: "*",
+        // QRError: "*",
       },
     },
   },
@@ -44,10 +44,5 @@ const linking = {
   prefixes: [prefix],
   config,
 };
-
-
-export const QRCodeURL = Linking.createURL('pay/user/app', {
-  queryParams: {hello: 'world'},
-})
 
 export default linking;

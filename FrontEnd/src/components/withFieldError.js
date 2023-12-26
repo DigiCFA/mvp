@@ -49,23 +49,33 @@ const withFieldError = (WrappedComponent) => {
     };
 
     const getErrorListsComponents = (errorList) => {
-      return (Object.keys(errorList)).map((key, idx) => {
-        const errorItemOpacity = ((!isDisplayError || !errorList[key]) && !isDisplayChecklist) ? "opacity-0" : "opacity-1"
+      return Object.keys(errorList).map((key, idx) => {
+        const errorItemOpacity =
+          (!isDisplayError || !errorList[key]) && !isDisplayChecklist
+            ? "opacity-0"
+            : "opacity-1";
         return (
-          <View className={`flex-row justify-start items-center space-x-1 mt-1 ${errorItemOpacity}`} key={idx}>
-            {(errorList[key] || !isDisplayChecklist) ? (
+          <View
+            className={`flex-row justify-start items-center space-x-1 mt-1 ${errorItemOpacity}`}
+            key={idx}
+          >
+            {errorList[key] || !isDisplayChecklist ? (
               <FontAwesome5 name="exclamation" size={24} color="red" />
             ) : (
               <FontAwesome name="check" size={24} color="green" />
             )}
-            <Text className={(errorList[key] ? "text-red-600" : "text-green-600") +
-              " font-bold pl-1"}>
+            <Text
+              className={
+                (errorList[key] ? "text-red-600" : "text-green-600") +
+                " font-bold pl-1"
+              }
+            >
               {key}
             </Text>
           </View>
-        )
-      })
-    }
+        );
+      });
+    };
 
     return (
       <View>
