@@ -67,7 +67,7 @@ const HomeScreen = () => {
             <View className="py-3 px-4 bg-white rounded-lg flex-col space-x-4 shadow">
               <Text className="text-xl text-gray-400 self-center">{t('balance')}</Text>
               <View className='flex-row flex-wrap justify-center'>
-                <Text className='text-2xl font-bold self-center'>F.CFA {balance?intlFormat(converter(dinero(balance),XAF)):""}</Text>
+                <Text className='text-2xl font-bold self-center'>{balance?intlFormat(converter(dinero(balance),XAF)):""}</Text>
               </View>
             </View>
           </ContentLoader>

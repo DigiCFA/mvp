@@ -47,7 +47,7 @@ const SendConfirmationScreen = () => {
       </View>
 
       <View className="flex-1 flex-col items-center py-20">
-        <Text className="text-2xl font-medium">{intlFormat(converter(dinero(amount),XAF))}</Text>
+        <Text className="text-2xl font-medium">{t("moneySent", {amount: intlFormat(converter(dinero(amount),XAF))} )}</Text>
         <Text className="text-lg font-medium">"{message}"</Text>
         <Text className="text-lg font-medium">{t('confirmationMessage', { name: firstName })}</Text>
       </View>
