@@ -12,7 +12,6 @@ import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import UsersColumn from "../../components/UsersColumn";
-import { searchUsers } from "../../utils/api";
 import ResultsColumn from "../../components/ResultsColumn";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useLazyFetchSearchResultsQuery } from "../../redux/api/apiProfileSlice";
@@ -107,7 +106,7 @@ const SearchScreen = () => {
           onPress={() => navigation.navigate("Scan")}
           className=""
         >
-          <Ionicons name="qr-code" size={24} color="#192C88" />
+          <Ionicons name="qr-code" size={33} color="#192C88" />
         </TouchableOpacity>
       </View>
 

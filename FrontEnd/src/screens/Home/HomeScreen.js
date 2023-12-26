@@ -46,10 +46,10 @@ const HomeScreen = () => {
     <SafeAreaView className="bg-beige flex-1">
       <ScrollView>
         {/* Header */}
-        <View className="flex-row px-4 pb-6 space-x-3 self-end">
+        <View className="flex-row px-4 pb-4 space-x-3 self-end">
           <TouchableOpacity
             onPress={() => navigation.navigate("Scan")}
-            className="p-1.5 rounded-full bg-white"
+            className="p-2 rounded-lg bg-white"
           >
             <Ionicons name="qr-code" size={40} color="#192C88" />
           </TouchableOpacity>
