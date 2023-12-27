@@ -107,7 +107,7 @@ const SearchScreen = () => {
           onPress={() => navigation.navigate("Scan")}
           className=""
         >
-          <Ionicons name="qr-code" size={24} color="#192C88" />
+          <Ionicons name="qr-code" size={33} color="#192C88" />
         </TouchableOpacity>
       </View>
 

@@ -9,9 +9,9 @@ import React from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
-import { intlFormat } from "../../utils/currencyFormatter";
+import { intlFormat, converter } from "../../utils/currencyFormatter";
 import { dinero, toSnapshot } from 'dinero.js';
-import { USD } from '@dinero.js/currencies';
+import { USD,XAF } from '@dinero.js/currencies';
 import { useTranslation } from "react-i18next";
 import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
@@ -53,7 +53,7 @@ const TransactionScreen = () => {
                 }`}
               >
                 {userPays ? "-" : "+"}
-                {intlFormat(dinero(amount))}
+                {intlFormat(converter(dinero(amount),XAF))}
               </Text>
             </View>
             <Text className="font-medium">{fullDate}</Text>

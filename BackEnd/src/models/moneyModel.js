@@ -25,7 +25,7 @@ const currencySchema = new mongoose.Schema({
       
     },
     
-  });
+  },{_id:false});
   
 const moneyModel = new mongoose.Schema({
     amount: {
@@ -47,7 +47,7 @@ const moneyModel = new mongoose.Schema({
       // index: true,
       trim: true,
     },
-  });
+  },{_id:false});
   
 
 export default moneyModel

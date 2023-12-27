@@ -15,9 +15,9 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
 import PaymentMethodCard from "../../components/cards/PaymentMethodCard";
-import { intlFormat } from "../../utils/currencyFormatter";
-import { dinero, toSnapshot } from 'dinero.js';
-import { USD } from '@dinero.js/currencies';
+import { intlFormat, converter } from "../../utils/currencyFormatter";
+import { dinero, toSnapshot } from "dinero.js";
+import { USD, XAF } from "@dinero.js/currencies";
 import { useCreateDirectTransactionMutation } from "../../redux/api/apiProfileSlice";
 import { useGetSessionQuery } from "../../redux/api/apiAuthSlice";
 import { useTranslation } from "react-i18next";
@@ -28,13 +28,24 @@ const SendReviewScreen = () => {
   const { current } = useCardAnimation();
   const navigation = useNavigation();
 
-  const {data: session, isLoading: sessionIsLoading, 
-    isSuccess: sessionIsSuccess, isError: sessionIsError} = useGetSessionQuery()
+  const {
+    data: session,
+    isLoading: sessionIsLoading,
+    isSuccess: sessionIsSuccess,
+    isError: sessionIsError,
+  } = useGetSessionQuery();
 
-  const [createDirectTransaction, {data: transaciton, isLoading: transactionIsLoading,
-    isSuccess: transactionIsSuccess, isError: transactionIsError}] = useCreateDirectTransactionMutation()
+  const [
+    createDirectTransaction,
+    {
+      data: transaciton,
+      isLoading: transactionIsLoading,
+      isSuccess: transactionIsSuccess,
+      isError: transactionIsError,
+    },
+  ] = useCreateDirectTransactionMutation();
 
-  const sender = session.userId
+  const sender = session.userId;
 
   const {
     params: {
@@ -61,16 +72,25 @@ const SendReviewScreen = () => {
   onPressCreateTransaction = async () => {
     navigation.navigate("SendConfirmation", {
       name,
-      amount:amount,
+      amount: amount,
       message,
     });
     try {
-      const isPayment = true, isApproved = true
-      await createDirectTransaction({amountTransferred: amount, sender, receiver: receiverId, paymentMethod, isPayment, isApproved, message}).unwrap()
+      const isPayment = true,
+        isApproved = true;
+      await createDirectTransaction({
+        amountTransferred: amount,
+        sender,
+        receiver: receiverId,
+        paymentMethod,
+        isPayment,
+        isApproved,
+        message,
+      }).unwrap();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <View className="flex-1 items-center justify-center">
@@ -105,7 +125,7 @@ const SendReviewScreen = () => {
             <View className="flex-row mb-4">
               <View className="flex-1"></View>
 
-              <Text className="text-lg font-semibold">{t('review')}</Text>
+              <Text className="text-lg font-semibold">{t("review")}</Text>
 
               <TouchableOpacity
                 onPress={navigation.goBack}
@@ -126,15 +146,15 @@ const SendReviewScreen = () => {
 
             <Text className="text-lg mt-4">
               <Text className="font-bold">
-                {t('send')} <Text className="italic">{name}</Text>:{" "}
+                {t("send")} <Text className="italic">{name}</Text>:{" "}
               </Text>
               "{message}"
             </Text>
 
             <View className="flex-row mt-8">
-              <Text className="text-lg font-bold flex-1">{t('total')}</Text>
+              <Text className="text-lg font-bold flex-1">{t("total")}</Text>
               <Text className="text-lg font-bold">
-                {intlFormat(dinero(amount))} CFA
+                {intlFormat(converter(dinero(amount), XAF))}
               </Text>
             </View>
 
@@ -153,7 +173,9 @@ const SendReviewScreen = () => {
               onPress={onPressCreateTransaction}
               className="bg-blue-900 rounded-full py-3 px-14 items-center"
             >
-              <Text className="text-white text-xl font-extrabold">{t("send")}</Text>
+              <Text className="text-white text-xl font-extrabold">
+                {t("send")}
+              </Text>
               {/* <Text>{senderId} + {receiverId}</Text> */}
             </TouchableOpacity>
           </View>

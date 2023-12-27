@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
 const withFieldError = (WrappedComponent) => {
@@ -74,6 +74,7 @@ const withFieldError = (WrappedComponent) => {
           isError={isError && isDisplayError}
           {...props}
         />
+        <View className="flex-col">{getErrorListsComponents(errorStates)}</View>
         <View className="flex-col">{getErrorListsComponents(errorStates)}</View>
       </View>
     );

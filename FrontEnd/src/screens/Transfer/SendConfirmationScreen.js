@@ -3,9 +3,9 @@ import React from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import { intlFormat } from "../../utils/currencyFormatter";
-import { dinero, toSnapshot } from 'dinero.js';
-import { USD } from '@dinero.js/currencies';
+import { intlFormat, converter } from "../../utils/currencyFormatter";
+import { dinero, toSnapshot } from "dinero.js";
+import { USD, XAF } from "@dinero.js/currencies";
 import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 const SendConfirmationScreen = () => {
   const { t } = useTranslation();
@@ -48,9 +48,15 @@ const SendConfirmationScreen = () => {
       </View>
 
       <View className="flex-1 flex-col items-center py-20">
-        <Text className="text-2xl font-medium">{intlFormat(dinero(amount))}</Text>
+        <Text className="text-2xl font-medium">
+          {t("moneySent", {
+            amount: intlFormat(converter(dinero(amount), XAF)),
+          })}
+        </Text>
         <Text className="text-lg font-medium">"{message}"</Text>
-        <Text className="text-lg font-medium">{t('confirmationMessage', { name: firstName })}</Text>
+        <Text className="text-lg font-medium">
+          {t("confirmationMessage", { name: firstName })}
+        </Text>
       </View>
     </CompatibleSafeAreaView>
   );
