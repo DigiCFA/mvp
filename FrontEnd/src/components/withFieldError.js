@@ -75,7 +75,6 @@ const withFieldError = (WrappedComponent) => {
           {...props}
         />
         <View className="flex-col">{getErrorListsComponents(errorStates)}</View>
-        <View className="flex-col">{getErrorListsComponents(errorStates)}</View>
       </View>
     );
   };
