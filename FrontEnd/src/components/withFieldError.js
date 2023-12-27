@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
 const withFieldError = (WrappedComponent) => {
