@@ -2,11 +2,10 @@ import {
   View,
   Text,
   TouchableOpacity,
-  SafeAreaView,
   TextInput,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import Currency from "react-currency-formatter";
@@ -41,6 +40,8 @@ const UserScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
 
+  const [amountInputWidth, setAmountInputWidth] = useState(0)
+
   const [amount, setAmount] = useState("000");
   const [zeroPrefix, setZeroPrefix] = useState(3);
   const [message, onChangeMessage] = useState("");
@@ -74,6 +75,11 @@ const UserScreen = () => {
     setAmountValid(Number(amount) != 0)
   }, [amount])
 
+  const handleAmountDisplayLayout = (e) => {
+    const width = e.nativeEvent.layout.width
+    setAmountInputWidth(width)
+  }
+
   return (
     <CompatibleSafeAreaView componentStyle="flex-col flex-1">
       {/* Upper Portion */}
@@ -99,17 +105,18 @@ const UserScreen = () => {
           </Text>
 
           <View className="flex-row">
-            <TextInput
-              keyboardType="numeric"
-              maxLength={8}
-              contextMenuHidden={true}
-              placeholder={amount}
-              className={`font-medium opacity-0 z-10 `}
-              style={{fontSize: 60}}
-              selection={{start: amount.length, end: amount.length}}
-              onKeyPress={onChangeAmount}
-            />
-            <Text style={{fontSize: 60}}
+            <View style={{width: amountInputWidth}}>
+              <TextInput
+                keyboardType="numeric"
+                maxLength={8}
+                contextMenuHidden={true}
+                className={`font-medium opacity-0 z-10 w-full`}
+                style={{fontSize: 60}}
+                selection={{start: amount.length, end: amount.length}}
+                onKeyPress={onChangeAmount}
+              />
+            </View>
+            <Text style={{fontSize: 60}} onLayout={handleAmountDisplayLayout}
               className={`font-medium text-black absolute h-full z-0  ${
               (!amountValid && displayError) ? "text-red-600" : "text-black"}`}>
               {amount}
