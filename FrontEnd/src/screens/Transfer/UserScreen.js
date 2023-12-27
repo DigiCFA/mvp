@@ -42,8 +42,8 @@ const UserScreen = () => {
 
   const [amountInputWidth, setAmountInputWidth] = useState(0)
 
-  const [amount, setAmount] = useState("000");
-  const [zeroPrefix, setZeroPrefix] = useState(3);
+  const [amount, setAmount] = useState("0");
+  const [zeroPrefix, setZeroPrefix] = useState(1);
   const [message, onChangeMessage] = useState("");
 
   const [amountValid, setAmountValid] = useState(false);
@@ -58,16 +58,16 @@ const UserScreen = () => {
   const onChangeAmount = (e) => {
     const key = e.nativeEvent.key 
     let actualAmount = amount.slice(zeroPrefix)  
-    if(key >= '0' && key <= '9' && amount.length < 8){
+    if(key >= '0' && key <= '9' && amount.length < 6){
       actualAmount += key
-      setAmount("000".slice(Math.min(actualAmount.length, 3)) + actualAmount)
-      setZeroPrefix(Math.max(3 - actualAmount.length, 0))
+      setAmount("0".slice(Math.min(actualAmount.length, 1)) + actualAmount)
+      setZeroPrefix(Math.max(1 - actualAmount.length, 0))
     }
     else if (key === 'Backspace'){
       const afterDelLength = Math.max(0, actualAmount.length - 1)
       const afterDelAmount = actualAmount.slice(0, actualAmount.length-1)
-      setAmount("000".slice(Math.min(afterDelLength, 3)) + afterDelAmount)
-      setZeroPrefix(Math.max(3 - afterDelLength, 0))
+      setAmount("0".slice(Math.min(afterDelLength, 1)) + afterDelAmount)
+      setZeroPrefix(Math.max(1 - afterDelLength, 0))
     }
   }
 
@@ -105,10 +105,10 @@ const UserScreen = () => {
           </Text>
 
           <View className="flex-row">
-            <View style={{width: amountInputWidth}}>
+            <View style={{width: amountInputWidth}} className="z-10">
               <TextInput
                 keyboardType="numeric"
-                maxLength={8}
+                maxLength={6}
                 contextMenuHidden={true}
                 className={`font-medium opacity-0 z-10 w-full`}
                 style={{fontSize: 60}}
