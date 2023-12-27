@@ -58,6 +58,9 @@ const UserScreen = () => {
   const onChangeAmount = (e) => {
     const key = e.nativeEvent.key 
     let actualAmount = amount.slice(zeroPrefix)  
+    if(Number(actualAmount) === 0 && key === '0'){
+      return 
+    }
     if(key >= '0' && key <= '9' && amount.length < 6){
       actualAmount += key
       setAmount("0".slice(Math.min(actualAmount.length, 1)) + actualAmount)
