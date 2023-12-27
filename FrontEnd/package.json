@@ -35,7 +35,6 @@
     "firebase": "^10.5.0",
     "formdata-node": "^5.0.1",
     "i18next": "^23.7.11",
-    "joi": "^17.11.0",
     "json5": "^2.2.3",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
@@ -59,7 +58,6 @@
     "react-redux": "^8.1.1",
     "redux": "^4.2.1",
     "rn-fetch-blob": "^0.12.0",
-    "text-encoding": "^0.7.0",
     "uri-scheme": "^1.1.0"
   },
   "devDependencies": {

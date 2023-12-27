@@ -1,39 +1,28 @@
-import Joi from "joi";
 import i18n from "../localization/i18nConfig";
 
-export const firstName = Joi.string()
-  .regex(/^[A-Za-z]+$/)
-  .required()
-  .error(() => Error(i18n.t("nameError1")));
+const createValidator = (regex, errorMessage) => {
+  return {
+    regex: regex,
+    errorMessage: errorMessage,
+    validate(value) {
+      return regex.test(value) ? {} : {error: Error(errorMessage)}
+    }
+  }
+}
 
-export const lastName = Joi.string()
-  .regex(/^[A-Za-z]+$/)
-  .required()
-  .error(() => Error(i18n.t("nameError2")));
+export const firstName = createValidator(/^[A-Za-z]+$/, i18n.t("nameError1"))
 
-export const loginPassword = Joi.string()
-  .regex(/^.+$/)
-  .required()
-  .error(() => Error(i18n.t("passwordError1")));
+export const lastName = createValidator(/^[A-Za-z]+$/,i18n.t("nameError2"))
 
-export const phoneNumberValidation = Joi.string()
-  .regex(/^[0-9 ]{8,16}$/)
-  .required()
-  .error(() => Error(i18n.t("phoneError1")));
+export const loginPassword = createValidator(/^.+$/, i18n.t("passwordError1"))
+
+export const phoneNumberValidation = createValidator(/^[0-9 ]{8,16}$/,i18n.t("phoneError1"))
 
 export const signupPassword = [
-  Joi.string()
-    .regex(/^.{6,20}$/)
-    .error(() => Error(i18n.t("passwordError2"))),
-  Joi.string()
-    .regex(/[A-Z]/)
-    .error(() => Error(i18n.t("passwordError3"))),
-  Joi.string()
-    .regex(/[a-z]/)
-    .error(() => Error(i18n.t("passwordError4"))),
-  Joi.string()
-    .regex(/[0-9]/)
-    .error(() => Error(i18n.t("passwordError5"))),
+  createValidator(/^.{6,20}$/, i18n.t("passwordError2")),
+  createValidator(/[A-Z]/, i18n.t("passwordError3")),
+  createValidator(/[a-z]/,i18n.t("passwordError4")),
+  createValidator(/[0-9]/, i18n.t("passwordError5"))
 ];
 
 export const validateRetypePassword = (password) => (retyped) => {
