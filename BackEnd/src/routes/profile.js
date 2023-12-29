@@ -1,19 +1,24 @@
 import express from "express";
 
 import { upload } from "../middleware/multer.js";
-import { retrieveFromS3, uploadToS3 } from "../controllers/awsController.js";
+import {
+  PROFILE_BUCKET_NAME,
+  retrieveFromS3,
+  uploadToS3,
+} from "../controllers/awsController.js";
 import { format_error, ERROR_CODES } from "../utils/errorHandling.js";
 import { profilePicBaseURL } from "../config/awsConfig.js";
 
 import User from "../models/userModel.js";
 import Transaction from "../models/transactionModel.js";
-import { dinero, toSnapshot } from 'dinero.js';
-import { USD,XAF } from '@dinero.js/currencies';
+import { dinero, toSnapshot } from "dinero.js";
+import { USD, XAF } from "@dinero.js/currencies";
+import multer from "multer";
+
 
 //import {mongoose_fuzzy_searching} from "mongoose-fuzzy-searching"
 
 const router = express.Router();
-
 
 router.get("/retrieve_user", async (req, res, next) => {
   let userId = req.query.userId;
@@ -100,23 +105,18 @@ router.get("/search_users", async (req, res, next) => {
         index: "default",
         compound: {
           should: [
-            
             {
               autocomplete: {
                 query: query,
                 path: "fullName",
-                fuzzy: { maxEdits: 1 ,
-                  prefixLength: 1,
-                  maxExpansions: 16 },
+                fuzzy: { maxEdits: 1, prefixLength: 1, maxExpansions: 16 },
               },
             },
             {
               autocomplete: {
                 query: query,
                 path: "phoneNumber",
-                fuzzy: { maxEdits: 1,
-                  prefixLength: 1,
-                  maxExpansions: 16 },
+                fuzzy: { maxEdits: 1, prefixLength: 1, maxExpansions: 16 },
               },
             },
           ],
@@ -140,23 +140,22 @@ router.patch("/upload_fcm_token", async (req, res, next) => {
   let fcm_token = req.body.fcm_token;
   let timestamp = req.body.timestamp;
 
-  console.log('upload_fcm_token', userId, fcm_token, timestamp)
+  console.log("upload_fcm_token", userId, fcm_token, timestamp);
 
   try {
-
-    let add_user = await User.findById(userId)
+    let add_user = await User.findById(userId);
     if (!add_user) {
-      throw format_error(ERROR_CODES.ID_NOT_FOUND)
+      throw format_error(ERROR_CODES.ID_NOT_FOUND);
     }
-    
-    await add_user.tokens.addToSet(fcm_token)
-    await add_user.save()
-    res.status(200).send({userId, fcm_token, timestamp});
-    } catch (error) {
-      console.log(error);
-      next(error)
-    }
-  });
+
+    await add_user.tokens.addToSet(fcm_token);
+    await add_user.save();
+    res.status(200).send({ userId, fcm_token, timestamp });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
 
 // NOT DONE
 router.get("/retrieve_user_with_certain_fields", async (req, res, next) => {
@@ -271,21 +270,25 @@ router.patch("/remove_card", async (req, res, next) => {
   }
 });
 
-router.patch(
+router.post(
   "/set_profile_pic",
   upload.single("profilePicture"),
   async (req, res, next) => {
-    console.log("head", req.headers);
-    console.log("body", req.body);
-    console.log("data", res.data);
-    console.log("file", req.file);
+    console.log("Headers: ", req.headers);
+    console.log("Body: ", req.body);
+    console.log("Data: ", res.data);
+    console.log("File: ", req.file);
+    // console.log("File Size at first: ", req.file.size);
+    // console.log("File buffer snippet at first: ", req.file.buffer.slice(0, 100));
     let userId = req.body.userId;
     const { originalname, buffer } = req.file;
+    const fileName = `${Date.now()}-${originalname}`;
 
     const params = {
-      Bucket: "digicfa-profilepics",
-      Key: originalname,
+      Bucket: PROFILE_BUCKET_NAME,
+      Key: fileName,
       Body: buffer,
+      ContentType: req.file.mimetype,
     };
 
     try {
@@ -294,10 +297,14 @@ router.patch(
         throw format_error(ERROR_CODES.ID_NOT_FOUND);
       }
 
-      await uploadToS3(params);
+      try {
+        await uploadToS3(params);
+      } catch (error) {
+        throw format_error(ERROR_CODES.UPLOAD_PROFILE_ERROR);
+      }
 
       // console.log("Unique key: ", originalname);
-      user.profilePicture = profilePicBaseURL + originalname;
+      user.profilePicture = profilePicBaseURL + fileName;
       await user.save();
 
       res.status(200).json(user);
@@ -314,11 +321,11 @@ router.patch("/add_balance", async (req, res, next) => {
     if (!user) {
       throw format_error(ERROR_CODES.ID_NOT_FOUND);
     }
-    
-    let userBalance = converter(dinero(user.balance),XAF);
-    let receiveBalance = converter(dinero(req.body.amount),XAF);
 
-    user.balance = toSnapshot(add(userBalance,receiveBalance));
+    let userBalance = converter(dinero(user.balance), XAF);
+    let receiveBalance = converter(dinero(req.body.amount), XAF);
+
+    user.balance = toSnapshot(add(userBalance, receiveBalance));
 
     await user.save();
     res.status(200).json(user);

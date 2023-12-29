@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image } from "expo-image";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -33,6 +33,8 @@ const AccountInfoScreen = () => {
   ] = useUploadProfilePictureMutation();
   const profilePic = useSelector(selectProfilePicFromUser(session.userId));
 
+  const [picLoading, setPicLoading] = useState(false);
+
   const pickPhoto = async () => {
     await ImagePicker.requestCameraPermissionsAsync();
 
@@ -46,6 +48,8 @@ const AccountInfoScreen = () => {
     if (!result.canceled) {
       try {
         const imageURI = result.assets[0].uri;
+        // This line is to prevent the pause between the load caused by uploadProfilePic and the load caused by Expo Image loading the pic
+        setPicLoading(true);
         await uploadProfilePic({
           userId: session.userId,
           imageURI: imageURI,
@@ -85,8 +89,14 @@ const AccountInfoScreen = () => {
 
   return (
     <View className="h-screen bg-white">
-
-      <Spinner visible={profileUploadIsLoading | fetchUserIsLoading}/>
+      <Spinner
+        visible={
+          profileUploadIsLoading ||
+          profileUploadIsFetching ||
+          fetchUserIsLoading ||
+          picLoading
+        }
+      />
 
       <View className="bg-beige pb-8">
         {/* Top Bar */}
@@ -94,7 +104,7 @@ const AccountInfoScreen = () => {
           <TouchableOpacity onPress={navigation.goBack} className="flex-1">
             <Ionicons name="arrow-back" size={30} color="grey" />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold">{t('accountInfo')}</Text>
+          <Text className="text-lg font-semibold">{t("accountInfo")}</Text>
 
           <View className="flex-1"></View>
         </View>
@@ -105,12 +115,16 @@ const AccountInfoScreen = () => {
             <Image
               source={{ uri: profilePic }}
               className="h-24 w-24 rounded-full"
+              onLoadStart={() => setPicLoading(true)}
+              onLoadEnd={() => setPicLoading(false)}
               // style={{width: 100, height: 100}}
             />
           </View>
 
           <TouchableOpacity onPress={pickPhoto}>
-            <Text className=" text-gray-600 font-medium">{t('changePhoto')}</Text>
+            <Text className=" text-gray-600 font-medium">
+              {t("changePhoto")}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -124,7 +138,7 @@ const AccountInfoScreen = () => {
       <View className="bg-white grow p-4">
         <View className="flex-row items-center pb-4 border-b border-gray-300">
           <View className="flex-col flex-1 space-y-1">
-            <Text className="text-gray-500">{t('userId')}</Text>
+            <Text className="text-gray-500">{t("userId")}</Text>
             <Text className="text-base font-medium">{user?._id}</Text>
           </View>
         </View>
@@ -134,18 +148,16 @@ const AccountInfoScreen = () => {
           className="flex-row items-center py-4 border-b border-gray-300"
         >
           <View className="flex-col flex-1 space-y-1">
-            <Text className="text-gray-500">{t('phoneNumbers')}</Text>
+            <Text className="text-gray-500">{t("phoneNumbers")}</Text>
             <Text className="text-base font-medium">{user?.phoneNumber}</Text>
           </View>
 
           <Ionicons name="chevron-forward" size={30} color="black" />
         </TouchableOpacity>
 
-        <TouchableOpacity
-          className="flex-row items-center py-4 border-b border-gray-300"
-        >
+        <TouchableOpacity className="flex-row items-center py-4 border-b border-gray-300">
           <View className="flex-col flex-1 space-y-1">
-            <Text className="text-gray-500">{t('addresses')}</Text>
+            <Text className="text-gray-500">{t("addresses")}</Text>
             {/* {addressSection()} */}
           </View>
 

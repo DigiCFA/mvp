@@ -18,6 +18,9 @@ import { dinero, toSnapshot } from 'dinero.js';
 import { USD,XAF } from '@dinero.js/currencies';
 import { useTranslation } from "react-i18next";
 
+export const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
 const ProfileScreen = () => {
   const { t } = useTranslation();
   const { data: session, isLoading: getSessionIsLoading } =
@@ -40,6 +43,7 @@ const ProfileScreen = () => {
           <Image
             source={{ uri: user.profilePicture }}
             className="h-24 w-24 rounded-full mb-6"
+            placeholder={blurhash}
             // onLoadStart={()=>console.log("Started to load image")}
             // onProgress={()=>console.log("LOADING...")}
             // onLoadEnd={()=>console.log("Finished loading")}
