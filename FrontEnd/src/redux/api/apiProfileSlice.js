@@ -2,8 +2,8 @@ import { apiSlice } from "./apiIndexSlice";
 import { createEntityAdapter, createSelector } from "@reduxjs/toolkit";
 import * as FileSystem from "expo-file-system";
 import { intlFormat, converter } from "../../utils/currencyFormatter";
-import { dinero, toSnapshot } from 'dinero.js';
-import { USD,XAF } from '@dinero.js/currencies';
+import { dinero, toSnapshot } from "dinero.js";
+import { USD, XAF } from "@dinero.js/currencies";
 
 import { baseURL } from "./apiIndexSlice";
 import * as Linking from "expo-linking";
@@ -133,6 +133,9 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
         const { userId, imageURI } = args;
         let uriArray = imageURI.split(".");
         let fileType = "image/" + uriArray[uriArray.length - 1];
+        // console.log("User: ", userId);
+        // console.log("File type: ", fileType);
+        // console.log("uriArray: ", uriArray);
 
         try {
           const result = await FileSystem.uploadAsync(
@@ -142,7 +145,7 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
               headers: {
                 "Content-Type": fileType,
               },
-              httpMethod: "PATCH",
+              httpMethod: "POST",
               uploadType: FileSystem.FileSystemUploadType.MULTIPART,
               fieldName: "profilePicture",
               parameters: {
@@ -150,6 +153,8 @@ export const extendedProfileSlice = apiSlice.injectEndpoints({
               },
             }
           );
+
+          // console.log(result);
 
           if (result.status === 200) {
             return { data: result };
