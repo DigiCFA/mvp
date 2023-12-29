@@ -71,6 +71,9 @@ const SettingsColumn = () => {
       {preferenceRow("person", 24, "#192C88", t("accountInfo"), () => {
         navigation.navigate("AccountInfo");
       })}
+      {preferenceRow("call", 24, "#192C88", t("support"), () => {
+        navigation.navigate("Support");
+      })}
       {/* {preferenceRow("mail-unread", 24, "#192C88", "Message Center", ()=>{navigation.navigate("MessageCenter")})} */}
       {/* {preferenceRow("shield", 24, "#192C88", "Security", ()=>{navigation.navigate("Security")})} */}
       {preferenceRow("log-out", 24, "#192C88", t("logout"), onPressLogout)}

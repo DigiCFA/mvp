@@ -91,5 +91,7 @@
   "delete": "Supprimez-le",
   "permission": "S'il s'agit de votre numéro de mobile, vous nous autorisez à vous contacter au sujet de vos comptes de marque DigiCFA en utilisant des appels ou des SMS automatisés pour gérer vos comptes, enquêter sur une fraude ou recouvrer une dette, mais pas à des fins de télémarketing.",
   "automatedCalls": "Vous contactez via des appels automatisés",
-  "sendTextMessages": "Vous envoyer des SMS"
+  "sendTextMessages": "Vous envoyer des SMS",
+  "support": "Soutien",
+  "supportText": "Si vous avez des questions ou si vous souhaitez signaler un problème. \n\nNous offrons l'assistance la plus personnalisée possible en répondant directement à toutes vos questions. Veuillez utiliser les méthodes ci-dessous pour nous contacter, mais laissez-nous le temps de traiter vos demandes correctement."
 }
