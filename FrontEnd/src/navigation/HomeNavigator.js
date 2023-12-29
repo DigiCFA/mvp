@@ -5,6 +5,7 @@ import SearchScreen from "../screens/Transfer/SearchScreen";
 import QRScreen from "../screens/Transfer/QRScreen";
 import TransactionScreen from "../screens/Home/TransactionScreen";
 import QRErrorScreen from "../screens/Transfer/QRErrorScreen";
+import SupportScreen from "../screens/Profile/SupportScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ const HomeNavigator = () => (
         }}
       />
       <Stack.Screen name="Transaction" component={TransactionScreen} />
+      <Stack.Screen name="Support" component={SupportScreen} />
     </Stack.Group>
 
     <Stack.Screen name="Scan" component={QRScreen} />

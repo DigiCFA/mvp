@@ -39,19 +39,21 @@ const SupportScreen = () => {
           </Text>
 
           {/* Contact Us */}
-          <View className='flex-col space-y-2 pt-12'>
-            <Text className="">
-              <Text className="text-blueLight text-xl font-medium">
+          <View className='flex-col space-y-2 pt-10'>
+            <View className="flex-row">
+              <Text className="text-blueLight text-xl font-medium self-start">
                 WhatsApp: 
               </Text>
-              <Text className="text-lg font-medium"> +241 22 22 22 22</Text>
-            </Text>
-            <Text>
+              <View className='flex-1'></View>
+              <Text className="text-lg font-medium"> +241 06 08 68 17</Text>
+            </View>
+            <View className='flex-row'>
               <Text className="text-blueLight text-xl font-medium">
                 Email: 
               </Text>
+              <View className='flex-1'></View>
               <Text className="text-lg font-medium"> support@digicfa.com</Text>
-            </Text>
+            </View>
           </View>
 
           {/* <TouchableOpacity
