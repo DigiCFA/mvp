@@ -9,3 +9,5 @@ export const client = new S3Client({region: REGION});
 
 export const profilePicBaseURL =
   "https://digicfa-profilepics.s3.af-south-1.amazonaws.com/";
+
+  
