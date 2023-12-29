@@ -274,12 +274,12 @@ router.post(
   "/set_profile_pic",
   upload.single("profilePicture"),
   async (req, res, next) => {
-    console.log("HEADERS: ", req.headers);
-    // console.log("body", req.body);
-    // console.log("data", res.data);
-    // console.log("file", req.file);
-    console.log("File Size at first: ", req.file.size);
-    console.log("File buffer snipper at first: ", req.file.buffer.slice(0, 100));
+    console.log("Headers: ", req.headers);
+    console.log("Body: ", req.body);
+    console.log("Data: ", res.data);
+    console.log("File: ", req.file);
+    // console.log("File Size at first: ", req.file.size);
+    // console.log("File buffer snippet at first: ", req.file.buffer.slice(0, 100));
     let userId = req.body.userId;
     const { originalname, buffer } = req.file;
     const fileName = `${Date.now()}-${originalname}`;
