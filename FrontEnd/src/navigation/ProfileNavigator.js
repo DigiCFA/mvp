@@ -9,6 +9,7 @@ import AddressScreen from "../screens/Profile/AddressScreen";
 import PhoneNumberDetailsScreen from "../screens/Profile/PhoneNumberDetailsScreen";
 import AddPhoneNumberScreen from "../screens/Profile/AddPhoneNumberScreen";
 import PhoneVerificationScreen from "../screens/Auth/PhoneVerificationScreen";
+import SupportScreen from "../screens/Profile/SupportScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,7 @@ const ProfileNavigator = () => (
         name="PhoneVerification"
         component={PhoneVerificationScreen}
       />
+      <Stack.Screen name="Support" component={SupportScreen} />
     </Stack.Group>
     <Stack.Screen name="MessageCenter" component={MessageCenterScreen} />
     <Stack.Screen name="Security" component={SecurityScreen} />

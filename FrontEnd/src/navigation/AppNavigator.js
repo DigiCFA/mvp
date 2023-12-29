@@ -41,6 +41,7 @@ const AppNavigator = ({isLoggedIn}) => {
     "PhoneNumberDetails",
     "AddPhoneNumber",
     "Addresses",
+    "Support"
   ];
 
   // Whether normal screens or auth screens

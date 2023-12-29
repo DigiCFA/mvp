@@ -58,18 +58,20 @@ const TransactionScreen = () => {
             </View>
             <Text className="font-medium">{fullDate}</Text>
             <TouchableOpacity>
-              <Text className="font-bold text-blue-600">
+              {/* When we implement the feature that we can show all histories between two users */}
+              {/* <Text className="font-bold text-blue-600">
                 {t("showHistory")}
-              </Text>
+              </Text> */}
             </TouchableOpacity>
           </View>
         </View>
 
         <View className="p-4 bg-white space-y-2">
+          <Text className="text-base font-bold">Message</Text>
           <Text className="text-base font-medium">{message}</Text>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Text className="font-bold text-blue-600">{t("showStory")}</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         <View className="mt-2 p-4 bg-white space-y-2">
@@ -88,7 +90,7 @@ const TransactionScreen = () => {
 
         <View className="mt-2 p-4 bg-white space-y-2">
           <Text className="text-base font-bold">{t("needHelp")}</Text>
-          <TouchableOpacity className="flex-row space-x-2">
+          <TouchableOpacity className="flex-row space-x-2" onPress={() => navigation.navigate("Support")}>
             <Ionicons name="warning" size={24} color="#192C88" />
             <Text className="text-base font-medium">{t("report")}</Text>
           </TouchableOpacity>
