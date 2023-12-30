@@ -2,7 +2,7 @@ import express from "express";
 
 import { sessionizeUser } from "../utils/helper.js";
 import { format_error, ERROR_CODES } from "../utils/errorHandling.js";
-import sendpulse from "sendpulse-api";
+import {init,smsSend,} from "sendpulse-api";
 
 import User from "../models/userModel.js";
 import { dinero, toSnapshot } from 'dinero.js';
@@ -120,7 +120,7 @@ router.patch("/add_phone_number", async (req, res, next) => {
 
 router.post("/validate_phone_number", async (req, res, next) => {
   const { userId, phoneNumber } = req.body;
-  let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
+  //let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
   try {
     // let user = await User.findById(userId);
     // if (!user) {
@@ -130,21 +130,29 @@ router.post("/validate_phone_number", async (req, res, next) => {
     // await phoneNumberValidation.validateAsync({ phoneNumberNoWhitespace });
     var API_USER_ID = "";
     var API_SECRET = "";
-    var TOKEN_STORAGE = "/tmp/";
-    sendpulse.init(API_USER_ID,API_SECRET,TOKEN_STORAGE,function() {
+    var TOKEN_STORAGE = undefined;
+    console.log('your token: ' + phoneNumber);
+
+    init(API_USER_ID,API_SECRET,TOKEN_STORAGE,function(token) {
       if (token && token.is_error) {
         console.log('your token: ' + token);
 
       }
 
-      var answerGetter = function(data) {
-        console.log(data);
-      }
+      
       console.log('your token: ' + token);
-      var status = sendpulse.smsSend(answerGetter, 'test', [phoneNumberNoWhitespace], 'test sms');
-      res.status(200).json(status);
+
 
     });
+    var answerGetter = function(data) {
+      console.log('your data: ');      console.log(data);
+
+    }
+    console.log('your token: ' + phoneNumber);
+
+    var status = await smsSend(answerGetter, 'test', [phoneNumber], 'test sms');
+    console.log(status);
+    res.status(200).json(status);
 
   } catch (error) {
     console.log(error);
