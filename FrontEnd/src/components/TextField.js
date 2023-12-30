@@ -33,6 +33,7 @@ const TextField = ({
         name={showPassword ? "eye" : "eye-with-line"}
         size={20}
         color="black"
+        style={{paddingLeft: 8}}
       />
     </TouchableOpacity>
   );
@@ -44,7 +45,7 @@ const TextField = ({
   // If there is prompt above the text
   return isSeparatePrompt ? (
     <View className={`p-2 rounded-md ${borderColor} ${borderDisplay} mt-2`}>
-      <Text className="text-gray-400 my-1">{prompt}</Text>
+      <Text className="text-gray-500 text-base font-semibold">{prompt}</Text>
       <View className="flex-row items-center">
         {phoneComponent}
         <TextInput

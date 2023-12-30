@@ -5,22 +5,32 @@ import {
   TouchableOpacity,
   StyleSheet,
   KeyboardAvoidingView,
-  TextInput
+  TextInput,
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import HideKeyboardView from "../../components/HideKeyboardView";
 import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
+import withFieldError from "../../components/withFieldError";
+import TextField from "../../components/TextField";
+import { useTranslation } from "react-i18next";
+import { phoneNumberValidation, validateSingleField } from "../../utils/userValidation";
 
 // import { Input } from "react-native-elements";
 // import { Input } from "@rneui/themed";
 
+const PhoneWithError = withFieldError(TextField);
+
 const AddPhoneNumberScreen = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
 
   const [focus, setFocus] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
+
+  const [phoneNumberIsValid, setPhoneNumberIsValid] = useState(false);
+  const [displayError, setDisplayError] = useState(false);
 
   const [phoneNumber, setPhoneNumber] = useState();
 
@@ -32,7 +42,7 @@ const AddPhoneNumberScreen = () => {
             <Ionicons name="close" size={30} color="grey" />
           </TouchableOpacity>
 
-          <Text className="text-lg font-semibold">Add a phone number</Text>
+          <Text className="text-lg font-semibold">{t("addPhoneNumber")}</Text>
 
           <View className="flex-1"></View>
         </View>
@@ -86,6 +96,24 @@ const AddPhoneNumberScreen = () => {
                 }}
               />
             </View>
+          </View>
+
+          <View>
+            <PhoneWithError
+              style="phoneNumber"
+              isSeparatePrompt={true}
+              prompt={t("phoneNumber")}
+              onChangeText={(e) => {
+                setPhoneNumber(e)
+              }}
+              value={phoneNumber}
+              keyboardType="numeric"
+              onIsErrorChange={(e) => {
+                setPhoneNumberIsValid(!e);
+              }}
+              isDisplayError={displayError}
+              validator={validateSingleField([phoneNumberValidation])}
+            />
           </View>
         </View>
 
