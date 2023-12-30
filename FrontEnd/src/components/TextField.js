@@ -38,7 +38,7 @@ const TextField = ({
   );
 
   const phoneComponent = style === "phoneNumber" && (
-    <Text className="text-xl text-black mr-1">+1</Text>
+    <Text className="text-black mr-2" style={{fontSize: 18}}>+241</Text>
   );
 
   return isSeparatePrompt ? (
@@ -58,7 +58,7 @@ const TextField = ({
           }}
           onChangeText={onChangeText}
           secureTextEntry={style === "password" && !showPassword}
-          placeholder={phoneComponent ? "000-000-0000" : placeholder}
+          placeholder={phoneComponent ? "00-00-00-00" : placeholder}
           {...props}
         />
         {passwordComponent}
@@ -70,7 +70,7 @@ const TextField = ({
     >
       {phoneComponent}
       <TextInput
-        placeholder={phoneComponent ? "000-000-0000" : placeholder}
+        placeholder={placeholder ? placeholder : style==="phoneNumber" ? "00-00-00-00" : ""}
         style={{ fontSize: 18 }}
         className={`flex-1`}
         keyboardType={keyBoardType}

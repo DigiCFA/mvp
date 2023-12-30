@@ -101,7 +101,7 @@ const LoginSignupLandingScreen = () => {
 
       {/* Phone Number + Password */}
       <View className="w-full px-10">
-        <PhoneWithError onChangeText={setPhoneNumber} onIsErrorChange={setIsPhoneError} placeholder={t('phoneNumber')} 
+        <PhoneWithError style="phoneNumber" onChangeText={setPhoneNumber} onIsErrorChange={setIsPhoneError} placeholder={t('phoneNumber')} 
           isDisplayError={displayError} validator={validateSingleField([phoneNumberValidation])}
         />
         <PasswordWithError onChangeText={setPassword} onIsErrorChange={setIsPasswordError} placeholder={t('password')} 
