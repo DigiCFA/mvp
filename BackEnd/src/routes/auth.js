@@ -117,6 +117,53 @@ router.patch("/add_phone_number", async (req, res, next) => {
   }
 });
 
+router.post("/validate_phone_number", async (req, res, next) => {
+  const { userId, phoneNumber } = req.body;
+  //let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
+  try {
+    // let user = await User.findById(userId);
+    // if (!user) {
+    //   throw format_error(ERROR_CODES.ID_NOT_FOUND)
+    // }
+    // Need to add validation
+    // await phoneNumberValidation.validateAsync({ phoneNumberNoWhitespace });
+    var API_USER_ID = "";
+    var API_SECRET = "";
+    var TOKEN_STORAGE = undefined;
+    console.log('your token: ' + phoneNumber);
+    let oauthresponse = await axios.post("https://api.sendpulse.com/oauth/access_token",{
+      "grant_type":"client_credentials",
+      "client_id":API_USER_ID,
+      "client_secret":API_SECRET
+   })
+   let access_token = response.access_token
+   let smsresponse= await axios.post("https://api.sendpulse.com/sms/send",{
+    
+    "sender":"Sender",
+    "phones":[
+      phoneNumber
+    ],
+    "body":"body",
+    "stat_link_tracking":true,
+    "stat_link_need_protocol":true
+    },
+    {
+      headers: {
+      'Authorization': 'Bearer ' + access_token
+    }},)
+
+    res.status(200).json(smsresponse);
+
+  } catch (error) {
+    console.log(error);
+    console.log(error);
+    console.log(error);
+    console.log(error);
+    res.status(400).json(error);
+
+    return next(error)
+  }
+});
 router.patch("/delete_phone_number", async (req, res, next) => {
   const { userId, phoneNumber } = req.body;
   let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
