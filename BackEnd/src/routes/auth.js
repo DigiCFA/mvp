@@ -3,6 +3,7 @@ import express from "express";
 import { sessionizeUser } from "../utils/helper.js";
 import { format_error, ERROR_CODES } from "../utils/errorHandling.js";
 import {init,smsSend,} from "sendpulse-api";
+import axios from "axios";
 
 import User from "../models/userModel.js";
 import { dinero, toSnapshot } from 'dinero.js';
@@ -128,31 +129,32 @@ router.post("/validate_phone_number", async (req, res, next) => {
     // }
     // Need to add validation
     // await phoneNumberValidation.validateAsync({ phoneNumberNoWhitespace });
-    var API_USER_ID = "";
-    var API_SECRET = "";
+    var API_USER_ID = "9155b731212fc83b13a03343e23fa856";
+    var API_SECRET = "1dde935ea11bc8b5f4cac254359e9a3b";
     var TOKEN_STORAGE = undefined;
     console.log('your token: ' + phoneNumber);
+    let oauthresponse = await axios.post("https://api.sendpulse.com/oauth/access_token",{
+      "grant_type":"client_credentials",
+      "client_id":API_USER_ID,
+      "client_secret":API_SECRET
+   })
+   let access_token = response.access_token
+   let smsresponse= await axios.post("https://api.sendpulse.com/sms/send",{
+    
+    "sender":"Sender",
+    "phones":[
+      phoneNumber
+    ],
+    "body":"body",
+    "stat_link_tracking":true,
+    "stat_link_need_protocol":true
+    },
+    {
+      headers: {
+      'Authorization': 'Bearer ' + access_token
+    }},)
 
-    init(API_USER_ID,API_SECRET,TOKEN_STORAGE,function(token) {
-      if (token && token.is_error) {
-        console.log('your token: ' + token);
-
-      }
-
-      
-      console.log('your token: ' + token);
-
-
-    });
-    var answerGetter = function(data) {
-      console.log('your data: ');      console.log(data);
-
-    }
-    console.log('your token: ' + phoneNumber);
-
-    var status = await smsSend(answerGetter, 'test', [phoneNumber], 'test sms');
-    console.log(status);
-    res.status(200).json(status);
+    res.status(200).json(smsresponse);
 
   } catch (error) {
     console.log(error);
