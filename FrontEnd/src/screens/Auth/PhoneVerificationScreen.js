@@ -36,7 +36,7 @@ const PhoneVerificationScreen = () => {
               navigation.goBack();
             }}
           >
-            <Ionicons name="arrow-back-outline" size={30} color="gray" />
+            <Ionicons name="arrow-back" size={30} color="gray" />
           </TouchableOpacity>
         </View>
 

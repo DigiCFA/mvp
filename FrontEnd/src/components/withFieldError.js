@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { Ionicons, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
 const withFieldError = (WrappedComponent) => {
   return ({
@@ -60,9 +60,9 @@ const withFieldError = (WrappedComponent) => {
             key={idx}
           >
             {errorList[key] || !isDisplayChecklist ? (
-              <FontAwesome5 name="exclamation" size={24} color="red" />
+              <Ionicons name="warning" size={24} color="red" />
             ) : (
-              <FontAwesome name="check" size={24} color="green" />
+              <Ionicons name="check" size={24} color="green" />
             )}
             <Text
               className={

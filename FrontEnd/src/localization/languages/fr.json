@@ -1,5 +1,6 @@
 {
   "phoneNumber": "Numéro de téléphone",
+  "enterNumber": "Enter your phone number",
   "password": "Mot de passe",
   "passwordRetype": "Réinsérer le mot de passe",
   "forgottenPassword": "Mot de passe oublié?",

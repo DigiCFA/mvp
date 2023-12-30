@@ -99,9 +99,9 @@ const LoginSignupLandingScreen = () => {
         </View>
       </HideKeyboardView>
 
-      {/* Phone Number + Password */}
-      <View className="w-full px-10">
-        <PhoneWithError onChangeText={setPhoneNumber} onIsErrorChange={setIsPhoneError} placeholder={t('phoneNumber')} 
+      {/* Phone Number + Password textfields */}
+      <View className="w-full px-10 mt-2">
+        <PhoneWithError style="phoneNumber" onChangeText={setPhoneNumber} onIsErrorChange={setIsPhoneError} placeholder={t('phoneNumber')} 
           isDisplayError={displayError} validator={validateSingleField([phoneNumberValidation])}
         />
         <PasswordWithError onChangeText={setPassword} onIsErrorChange={setIsPasswordError} placeholder={t('password')} 
@@ -118,7 +118,7 @@ const LoginSignupLandingScreen = () => {
 
       <HideKeyboardView>
 
-        <View className="w-full space-y-3 mt-10 px-10 flex-1">
+        <View className="w-full space-y-3 mt-4 px-10 flex-1">
 
           {/* LOG IN */}
           <TouchableOpacity

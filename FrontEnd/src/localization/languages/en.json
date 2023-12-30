@@ -1,5 +1,6 @@
 {
-  "phoneNumber": "Phone number",
+  "phoneNumber": "Mobile number",
+  "enterNumber": "Enter your phone number",
   "password": "Password",
   "passwordRetype": "Retype Password",
   "forgottenPassword": "Forgotten your password?",
@@ -16,7 +17,7 @@
   "loginWithNumber": "Log in with this number",
   "signupWithAnotherNumber": "Sign up with another number",
   "mobileNumber": "Mobile number",
-  "phoneNumberAuth": "By continuing, you confirm that you are authorized to use this phone number and agree to receive text messages. Carrier fees may apply",
+  "phoneNumberAuth": "By continuing, you confirm that you are authorized to use this phone number and agree to receive text messages. Carrier fees may apply.",
   "next": "Next",
   "confirmNumber": "Confirm your phone number",
   "codeSent": "Code sent to {{number}}.",

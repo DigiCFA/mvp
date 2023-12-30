@@ -23,12 +23,15 @@ import {
   setField,
 } from "../../redux/client/signUpSlice";
 import { useTranslation } from "react-i18next";
-import { validateSingleField, phoneNumberValidation } from "../../utils/userValidation";
+import {
+  validateSingleField,
+  phoneNumberValidation,
+} from "../../utils/userValidation";
 import withFieldError from "../../components/withFieldError";
 import TextField from "../../components/TextField";
 import CompatibleSafeAreaView from "../../components/CompatibleSafeAreaView";
 
-const PhoneWithError = withFieldError(TextField)
+const PhoneWithError = withFieldError(TextField);
 
 const SignupPhoneNumberScreen = () => {
   const { t } = useTranslation();
@@ -52,9 +55,8 @@ const SignupPhoneNumberScreen = () => {
     skip: skip,
   });
 
-
   const onPressNext = () => {
-    setDisplayError(true)
+    setDisplayError(true);
     if (phoneNumberIsValid) {
       setSkip(false);
     }
@@ -148,6 +150,7 @@ const SignupPhoneNumberScreen = () => {
 
         {isSuccess ? modalScreen(registeredUser) : null}
 
+        {/* Header */}
         <View className="mx-3 my-4 w-6">
           <TouchableOpacity
             onPress={() => {
@@ -155,26 +158,33 @@ const SignupPhoneNumberScreen = () => {
               navigation.goBack();
             }}
           >
-            <Ionicons name="arrow-back-outline" size={24} color="gray" />
+            <Ionicons name="arrow-back" size={30} color="gray" />
           </TouchableOpacity>
         </View>
 
-        <View className="px-3">
-          <Text className="text-3xl font-semibold">{t("phoneNumber")}</Text>
+        <View className="px-4">
+          <Text className="text-2xl font-semibold">{t("enterNumber")}</Text>
         </View>
 
-        <View className="mx-3 flex-1">
-          <PhoneWithError style="phoneNumber" isSeparatePrompt={true} prompt={t("phoneNumber")}
+        {/* Phone number textfield */}
+        <View className="mx-4 flex-1">
+          <PhoneWithError
+            style="phoneNumber"
+            isSeparatePrompt={true}
+            prompt={t("phoneNumber")}
             onChangeText={(e) => {
               dispatch(setField({ field: "phoneNumber", content: e }));
             }}
-            value={phoneNumber} keyBoardType='numeric' onIsErrorChange={(e) => {setPhoneNumberIsValid(!e)}}
-            isDisplayError={displayError} validator={validateSingleField([phoneNumberValidation])}
+            value={phoneNumber}
+            keyBoardType="numeric"
+            onIsErrorChange={(e) => {
+              setPhoneNumberIsValid(!e);
+            }}
+            isDisplayError={displayError}
+            validator={validateSingleField([phoneNumberValidation])}
           />
 
-          <Text className="mt-2 text-gray-400">
-            {t('phoneNumberAuth')}
-          </Text>
+          <Text className="mt-2 text-gray-400">{t("phoneNumberAuth")}</Text>
         </View>
 
         <KeyboardAvoidingView
@@ -189,7 +199,7 @@ const SignupPhoneNumberScreen = () => {
               className="text-center font-bold text-white"
               style={{ fontSize: 20 }}
             >
-              {t('next')}
+              {t("next")}
             </Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>
