@@ -15,6 +15,8 @@ import {
 } from "./utils/errorHandling.js";
 import admin from "firebase-admin";
 
+import sendpulse from "sendpulse-api";
+
 const app = express();
 
 // For logging/debugging
@@ -82,5 +84,14 @@ admin.initializeApp({
     universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
   }),
 });
+/*
+ * https://login.sendpulse.com/settings/#api
+ */
+var API_USER_ID = "";
+var API_SECRET = "";
+var TOKEN_STORAGE = "/tmp/";
 
+sendpulse.init(API_USER_ID,API_SECRET,TOKEN_STORAGE,function() {
+    sendpulse.listAddressBooks(console.log);
+});
 export default app;
