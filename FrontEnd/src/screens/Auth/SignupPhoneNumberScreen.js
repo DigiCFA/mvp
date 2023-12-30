@@ -148,6 +148,7 @@ const SignupPhoneNumberScreen = () => {
 
         {isSuccess ? modalScreen(registeredUser) : null}
 
+        {/* Header */}
         <View className="mx-3 my-4 w-6">
           <TouchableOpacity
             onPress={() => {
@@ -163,6 +164,7 @@ const SignupPhoneNumberScreen = () => {
           <Text className="text-3xl font-semibold">{t("phoneNumber")}</Text>
         </View>
 
+        {/* Phone number textfield */}
         <View className="mx-3 flex-1">
           <PhoneWithError style="phoneNumber" isSeparatePrompt={true} prompt={t("phoneNumber")}
             onChangeText={(e) => {

@@ -41,8 +41,9 @@ const TextField = ({
     <Text className="text-black mr-2" style={{fontSize: 18}}>+241</Text>
   );
 
+  // If there is prompt above the text
   return isSeparatePrompt ? (
-    <View className={`p-2 rounded-md ${borderColor} ${borderDisplay} mt-5`}>
+    <View className={`p-2 rounded-md ${borderColor} ${borderDisplay} mt-2`}>
       <Text className="text-gray-400 my-1">{prompt}</Text>
       <View className="flex-row items-center">
         {phoneComponent}
@@ -64,13 +65,15 @@ const TextField = ({
         {passwordComponent}
       </View>
     </View>
+
+  // If not prompt above the text
   ) : (
     <View
-      className={`flex-row items-center px-3 py-5 rounded-md ${borderColor} ${borderDisplay} mt-5`}
+      className={`flex-row items-center px-3 py-5 rounded-md ${borderColor} ${borderDisplay} mt-2`}
     >
       {phoneComponent}
       <TextInput
-        placeholder={placeholder ? placeholder : style==="phoneNumber" ? "00-00-00-00" : ""}
+        placeholder={placeholder ? placeholder : phoneComponent ? "00-00-00-00" : ""}
         style={{ fontSize: 18 }}
         className={`flex-1`}
         keyboardType={keyBoardType}
