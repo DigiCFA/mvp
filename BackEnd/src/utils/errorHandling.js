@@ -13,6 +13,7 @@ export const ERROR_CODES = {
   CANNOT_REMOVE_PRIMARY_PHONE: 1003,
   INVALID_ID_FORMAT: 2000,
   ID_NOT_FOUND: 2001,
+  UPLOAD_PROFILE_ERROR: 2002,
   CANNOT_TRANSACT_TO_SELF: 3000,
   INSUFFICIENT_BALANCE: 3001,
   TRANSACTION_NOT_FOUND: 3002,
@@ -29,6 +30,7 @@ export const ERROR_MESSAGES = {
   [ERROR_CODES.CANNOT_REMOVE_PRIMARY_PHONE]: "Cannot remove the primary phone number. Please make another phone number the primary phone number first",
   [ERROR_CODES.INVALID_ID_FORMAT]: "Invalid userId format",
   [ERROR_CODES.ID_NOT_FOUND]: "User ID not found",
+  [ERROR_CODES.UPLOAD_PROFILE_ERROR]: "Something went wrong. Please ensure the picture is of jpg/png type and below 5mb",
   [ERROR_CODES.CANNOT_TRANSACT_TO_SELF]: "Cannot send transaction to self",
   [ERROR_CODES.INSUFFICIENT_BALANCE]: (balance, amountTransferred) => 
     {return `Your balance ${balance} is insufficient to send ${amountTransferred}`},
@@ -59,6 +61,7 @@ export const mapErrorCodeToHttpCode = (errorCode) => {
     case ERROR_CODES.CANNOT_TRANSACT_TO_SELF:
     case ERROR_CODES.INSUFFICIENT_BALANCE:
     case ERROR_CODES.CANNOT_REMOVE_PRIMARY_PHONE:
+    case ERROR_CODES.UPLOAD_PROFILE_ERROR:
       return 400
 
     case ERROR_CODES.UNKNOWN_ERROR:

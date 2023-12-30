@@ -46,8 +46,8 @@ const LoginSignupLandingScreen = () => {
     login,
     {
       error: loginError,
-      isFetching: loginIsLoading,
-      isLoading: loginIsFetching,
+      isFetching: loginIsFetching,
+      isLoading: loginIsLoading,
       isSuccess: loginIsSuccess,
       isError: loginIsError,
     },
@@ -87,7 +87,7 @@ const LoginSignupLandingScreen = () => {
 
   return (
     <CompatibleSafeAreaView componentStyle="items-center bg-white flex-1">
-      <Spinner visible={loginIsFetching || sessionIsFetching} />
+      <Spinner visible={loginIsLoading || sessionIsFetching} />
 
       {/* Logo at the top */}
       <HideKeyboardView>

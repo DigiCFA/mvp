@@ -1,7 +1,7 @@
 import { PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { client } from "../config/awsConfig.js";
 
-const BUCKET_NAME = "digicfa-profilepics";
+export const PROFILE_BUCKET_NAME = "digicfa-profilepics";
 
 export const uploadToS3 = async (params) => {
   // const params = {
@@ -11,6 +11,9 @@ export const uploadToS3 = async (params) => {
   // };
   const command = new PutObjectCommand(params);
   console.log(params);
+
+  console.log("File Size before S3 upload: ", params.Body.length);
+  console.log("File buffer snipper before S3 upload: ", params.Body.slice(0, 100));
 
   try {
     const response = await client.send(command);
@@ -22,13 +25,14 @@ export const uploadToS3 = async (params) => {
         "/" +
         params.Key
     );
-    // console.log(response)
+    console.log(response)
     return response;
   } catch (error) {
     console.error(error);
   }
 };
 
+// This is not actually used ever
 export const retrieveFromS3 = async (bucketName, key) => {
   const params = {
     Bucket: bucketName,
