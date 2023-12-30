@@ -2,6 +2,7 @@ import express from "express";
 
 import { sessionizeUser } from "../utils/helper.js";
 import { format_error, ERROR_CODES } from "../utils/errorHandling.js";
+import sendpulse from "sendpulse-api";
 
 import User from "../models/userModel.js";
 import { dinero, toSnapshot } from 'dinero.js';
@@ -113,6 +114,45 @@ router.patch("/add_phone_number", async (req, res, next) => {
       res.status(200).json(user);
     }
   } catch (error) {
+    return next(error)
+  }
+});
+
+router.post("/validate_phone_number", async (req, res, next) => {
+  const { userId, phoneNumber } = req.body;
+  let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
+  try {
+    // let user = await User.findById(userId);
+    // if (!user) {
+    //   throw format_error(ERROR_CODES.ID_NOT_FOUND)
+    // }
+    // Need to add validation
+    // await phoneNumberValidation.validateAsync({ phoneNumberNoWhitespace });
+    var API_USER_ID = "";
+    var API_SECRET = "";
+    var TOKEN_STORAGE = "/tmp/";
+    sendpulse.init(API_USER_ID,API_SECRET,TOKEN_STORAGE,function() {
+      if (token && token.is_error) {
+        console.log('your token: ' + token);
+
+      }
+
+      var answerGetter = function(data) {
+        console.log(data);
+      }
+      console.log('your token: ' + token);
+      var status = sendpulse.smsSend(answerGetter, 'test', [phoneNumberNoWhitespace], 'test sms');
+      res.status(200).json(status);
+
+    });
+
+  } catch (error) {
+    console.log(error);
+    console.log(error);
+    console.log(error);
+    console.log(error);
+    res.status(400).json(error);
+
     return next(error)
   }
 });
