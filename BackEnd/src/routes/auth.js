@@ -2,6 +2,7 @@ import express from "express";
 
 import { sessionizeUser } from "../utils/helper.js";
 import { format_error, ERROR_CODES } from "../utils/errorHandling.js";
+import axios from "axios";
 
 import User from "../models/userModel.js";
 import { dinero, toSnapshot } from 'dinero.js';
@@ -128,14 +129,13 @@ router.post("/validate_phone_number", async (req, res, next) => {
     // }
     // Need to add validation
     // await phoneNumberValidation.validateAsync({ phoneNumberNoWhitespace });
-    var API_USER_ID = "";
-    var API_SECRET = "";
-    var TOKEN_STORAGE = undefined;
+    var SMS_API_USER_ID = process.env.SMS_API_USER_ID
+    var SMS_API_SECRET = process.env.SMS_API_SECRET
     console.log('your token: ' + phoneNumber);
     let oauthresponse = await axios.post("https://api.sendpulse.com/oauth/access_token",{
       "grant_type":"client_credentials",
-      "client_id":API_USER_ID,
-      "client_secret":API_SECRET
+      "client_id":SMS_API_USER_ID,
+      "client_secret":SMS_API_SECRET
    })
    let access_token = String(oauthresponse.data.access_token)
    console.log(oauthresponse);
@@ -156,7 +156,7 @@ router.post("/validate_phone_number", async (req, res, next) => {
     }
    let smsresponse= await axios.post("https://api.sendpulse.com/sms/send",body,options)
 
-    res.status(200).json(smsresponse);
+    res.status(200).json(smsresponse.data);
 
   } catch (error) {
     console.log(error);
