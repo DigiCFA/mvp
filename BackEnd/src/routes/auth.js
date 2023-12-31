@@ -138,8 +138,14 @@ router.post("/validate_phone_number", async (req, res, next) => {
       "client_id":API_USER_ID,
       "client_secret":API_SECRET
    })
-   let access_token = response.access_token
-   let smsresponse= await axios.post("https://api.sendpulse.com/sms/send",{
+   let access_token = String(oauthresponse.data.access_token)
+   console.log(oauthresponse);
+   console.log(access_token);
+   let options = {
+    headers: {
+    'Authorization': 'Bearer ' + access_token
+  }}
+  let body = {
     
     "sender":"Sender",
     "phones":[
@@ -148,11 +154,8 @@ router.post("/validate_phone_number", async (req, res, next) => {
     "body":"body",
     "stat_link_tracking":true,
     "stat_link_need_protocol":true
-    },
-    {
-      headers: {
-      'Authorization': 'Bearer ' + access_token
-    }},)
+    }
+   let smsresponse= await axios.post("https://api.sendpulse.com/sms/send",body,options)
 
     res.status(200).json(smsresponse);
 
@@ -166,7 +169,6 @@ router.post("/validate_phone_number", async (req, res, next) => {
     return next(error)
   }
 });
-
 router.patch("/delete_phone_number", async (req, res, next) => {
   const { userId, phoneNumber } = req.body;
   let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
