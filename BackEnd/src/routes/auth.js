@@ -123,23 +123,20 @@ router.post("/validate_phone_number", async (req, res, next) => {
   const { userId, phoneNumber } = req.body;
   //let phoneNumberNoWhitespace = phoneNumber.replace(/\s/g, "");
   try {
-    // let user = await User.findById(userId);
-    // if (!user) {
-    //   throw format_error(ERROR_CODES.ID_NOT_FOUND)
-    // }
-    // Need to add validation
-    // await phoneNumberValidation.validateAsync({ phoneNumberNoWhitespace });
+    let random = '0123456789';
+    let OTP = '';
+    for (let i = 0; i < 6; i++) {
+        OTP += random[Math.floor(Math.random() * 10)];
+    }
     var SMS_API_USER_ID = process.env.SMS_API_USER_ID
     var SMS_API_SECRET = process.env.SMS_API_SECRET
-    console.log('your token: ' + phoneNumber);
+    console.log('your token: ' + OTP);
     let oauthresponse = await axios.post("https://api.sendpulse.com/oauth/access_token",{
       "grant_type":"client_credentials",
       "client_id":SMS_API_USER_ID,
       "client_secret":SMS_API_SECRET
    })
-   let access_token = String(oauthresponse.data.access_token)
-   console.log(oauthresponse);
-   console.log(access_token);
+   let access_token =oauthresponse.data.access_token
    let options = {
     headers: {
     'Authorization': 'Bearer ' + access_token
@@ -150,13 +147,13 @@ router.post("/validate_phone_number", async (req, res, next) => {
     "phones":[
       phoneNumber
     ],
-    "body":"body",
+    "body":"Your access code is: "+OTP,
     "stat_link_tracking":true,
     "stat_link_need_protocol":true
     }
    let smsresponse= await axios.post("https://api.sendpulse.com/sms/send",body,options)
 
-    res.status(200).json(smsresponse.data);
+    res.status(200).json({OTP:OTP,phoneNumber:phoneNumber});
 
   } catch (error) {
     console.log(error);
